@@ -369,3 +369,38 @@ Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`, Pa
 and `Multiplicative ℤ`, no `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.
+
+### Pass 9 (2026-05-30) — rung L1: the Galois-side level subfields `𝔽_{q^n}` (`≅ Ẑ` sub-plan, infra)
+
+Introduced **zero** axioms; **added no second `FOUNDATIONAL`**. Executed Pass 9 of the `≅ Ẑ` sub-plan:
+built the one absent Galois-side ingredient (`𝔽_{q^n} ⊆ K̄` + level projection `r_n` + Frobenius-aligned
+generator). **Graded as infrastructure, not a closed whole** — `≅ Ẑ` is **not** closed (injectivity =
+the Pass-10 cofinality/diagram chase) and **nothing was posited**. Every piece is finite-field-concrete
+and built from scratch.
+
+`Anabelian/FiniteFieldLevel.lean` (standard axioms only — in-file `#print axioms`):
+
+```
+'Anabelian.levelField_finrank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.levelRestrict_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.levelRestrict_frobenius' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.orderOf_levelRestrict_frobenius' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `levelField K n` (= `fixedField (zpowers (Frob^n))`), `mem_levelField`, `levelField_finite`,
+  `levelField_finrank` (degree exactly `n`, via carrier = rootSet of separable `X^(q^n)−X`, card `q^n`),
+  `levelFGIF K n` (the `FiniteGaloisIntermediateField` bundle).
+- `levelRestrict K n` (= `restrictNormalHom`, the `r_n`), `levelRestrict_surjective`.
+- **Frobenius alignment (the trap, handled):** `levelRestrict_frobenius`:
+  `r_n (Frob) = frobeniusAlgEquivOfAlgebraic K (levelField K n)`; `orderOf_levelRestrict_frobenius`:
+  `orderOf (r_n Frob) = n`. So `r_n` sends the *absolute* Frobenius (`= zhatToGalois (η (ofAdd 1))`,
+  Pass 6) to the Frobenius generator of `Gal(𝔽_{q^n}/K)`, **not** an arbitrary `zmodCyclicMulEquiv`
+  generator — exactly what Pass 10's commuting square consumes.
+
+Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`, Pass 5, unused here),
+**0 `DEBT`**. Reclassification log stays empty. D1 (ℚ-diamond) did **not** recur (finite fields and
+their algebraic closure; no `Algebra ℚ (AlgebraicClosure ℚ)`). Load-bearing hypothesis `NeZero n` is
+genuine (for `n = 0` the level field is all of `K̄`, infinite) but is not a rule-2 come-apart claim
+(no `structure`/`class`); no owed witness.
+
+Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.

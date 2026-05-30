@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 8 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 9 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -37,7 +37,7 @@ This rung asserts nothing anabelian. It establishes that the *precondition* of r
 
 ## Foundational Mathlib gaps (L1–L4) — prerequisites, below the targets
 
-### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–8)   ·   DEBT 0, FOUNDATIONAL 1
+### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–9)   ·   DEBT 0, FOUNDATIONAL 1
 
 Mathlib **has** `IsNonarchimedeanLocalField` (definition, DVR, finite residue field, completeness),
 abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgroup`,
@@ -79,6 +79,12 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   to *close* `≅ Ẑ`; inventory found closure blocked on the absent Galois-side level subfield `𝔽_{q^n}`
   and the iso was **NOT posited** — instead, real on-path injective-half machinery + a numbered
   Pass 9–11 sub-plan (below).
+- Pass 9 (`Anabelian/FiniteFieldLevel.lean`): the **Galois-side level subfields** of `≅ Ẑ`, axiom-free
+  (sub-plan rung Pass 9, **infrastructure**) — `levelField K n` = `𝔽_{q^n} ⊆ K̄` as a degree-`n`
+  `FiniteGaloisIntermediateField`, the restriction `r_n` (`levelRestrict`, surjective), and the
+  **Frobenius-aligned** generator (`levelRestrict_frobenius`: `r_n (Frob) = frobeniusAlgEquivOfAlgebraic`;
+  `orderOf (r_n Frob) = n`). Graded as infrastructure (not the closed whole); the iso is **NOT** closed
+  and **NOT** posited. Sets up Pass 10 (injectivity).
 
 **Sub-target IN-PROGRESS — the residue surjection (FOUNDATIONAL, Pass 5):**
 - The surjectivity half `Gal(K̄/K) ↠ Gal(𝔽_q̄/𝔽_q)` is imported as the classified `FOUNDATIONAL` axiom
@@ -90,7 +96,7 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   (i) build the maximal-unramified construction to discharge it (`FOUNDATIONAL → DEBT`, multi-pass);
   (ii) tie `N` to Pass 4's `inertiaSubgroup` (needs the valuation on `K̄`).
 
-**Sub-target IN-PROGRESS — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (Passes 6–8):** the closest-to-closure L1 whole; still
+**Sub-target IN-PROGRESS — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (Passes 6–9):** the closest-to-closure L1 whole; still
 **open** (not closed, not posited). Pieces in hand, all axiom-free:
 - **Surjective half DONE** (Pass 6): `zhatToGalois_surjective`.
 - **Per-level data DONE** (Pass 7): `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` (`galoisFiniteField_mulEquivZMod`).
@@ -98,6 +104,9 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   **procyclic** (`zhat_topologicalClosure_eq_top`) and its finite quotients are **cyclic**
   (`zhat_quotient_isCyclic`); with `ProfiniteGrp.toLimit_injective` (point-separating projections),
   `Ẑ` is the inverse limit of finite cyclic groups — the `Ẑ`-side of the injectivity square.
+- **Galois-side level subfields DONE** (Pass 9, `Anabelian/FiniteFieldLevel.lean`): `𝔽_{q^n} ⊆ K̄` of
+  degree `n` (`levelField`/`levelFGIF`), the restriction `r_n` (`levelRestrict`, surjective), and the
+  **Frobenius-aligned** generator (`levelRestrict_frobenius`, `orderOf (r_n Frob) = n`).
 
 **Inventory correction (Pass 8) to Pass 7's "absent" claim.** The general profinite-as-inverse-limit
 machinery is **PRESENT**, not absent: `Mathlib.Topology.Algebra.Category.ProfiniteGrp.Limits` has
@@ -116,17 +125,22 @@ index systems must be matched cofinally: `FiniteIndexNormalSubgroup (Multiplicat
 (for `Gal`, via `mulEquivToLimit` / `asProfiniteGaloisGroupFunctor`).
 
 **Numbered multi-pass sub-plan to close `≅ Ẑ` (axiom-free):**
-- **Pass 9 — the Galois-side level subfield.** Construct `𝔽_{q^n} ⊆ AlgebraicClosure K` as a
-  `FiniteGaloisIntermediateField K (AlgebraicClosure K)` (e.g. `IntermediateField.adjoin K` of the
-  roots of `X^(q^n) − X`, or `fixedField (Frob^n)`), prove it finite + Galois of degree `n`, and
-  identify `Gal(𝔽_{q^n}/K) ≅ ℤ/n` compatibly with Pass 7 (`galoisFiniteField_mulEquivZMod`). Build the
-  restriction `r_n : Gal(K̄/K) → Gal(𝔽_{q^n}/K)` (`AlgEquiv.restrictNormalHom`, `restrictNormalHom_surjective`).
-- **Pass 10 — the commuting square + injectivity.** Define the `Ẑ`-side level map `Ẑ → ℤ/n` (completion
-  universal property, or the `FiniteIndexNormalSubgroup nℤ` projection). Prove the square
-  `r_n ∘ zhatToGalois = (level iso) ∘ (Ẑ → ℤ/n)` on the dense `η(ℤ)` image (both sides continuous into
-  the discrete `ℤ/n`, so dense-agreement ⟹ equality — using Pass 8's procyclicity + Pass 6's
-  `zhatToGalois_etaFn`). Conclude `ker zhatToGalois = ⊥` via separation (`toLimit_injective`-style) +
-  the level isos.
+- **Pass 9 — the Galois-side level subfield. ✅ DONE** (`Anabelian/FiniteFieldLevel.lean`).
+  `levelField K n = fixedField (zpowers (Frob^n))` = `𝔽_{q^n} ⊆ K̄`, proved finite + Galois of **degree
+  exactly `n`** (carrier = rootSet of the separable `X^(q^n)−X`, card `q^n`, `q^n = q^(finrank)`),
+  bundled as `levelFGIF K n : FiniteGaloisIntermediateField`. Restriction
+  `levelRestrict K n = r_n : Gal(K̄/K) →* Gal(𝔽_{q^n}/K)` (`restrictNormalHom`) with
+  `levelRestrict_surjective`. **Frobenius alignment (the compatibility trap) handled:**
+  `levelRestrict_frobenius` — `r_n (Frob) = frobeniusAlgEquivOfAlgebraic K (levelField K n)` — and
+  `orderOf_levelRestrict_frobenius` — `orderOf (r_n Frob) = n`. So `r_n` sends the absolute Frobenius
+  (`= zhatToGalois (η (ofAdd 1))`, Pass 6) to the Frobenius generator of `Gal(𝔽_{q^n}/K)`, **not** an
+  arbitrary `zmodCyclicMulEquiv` generator. *Graded as infrastructure*, not the closed whole.
+- **Pass 10 — injectivity (NEXT).** With `χ_n := r_n ∘ zhatToGalois : Ẑ → Gal(𝔽_{q^n}/K)` (surjective;
+  `χ_n (η (ofAdd 1)) = r_n (Frob)` generates, order `n`, by Pass 9 + Pass 6 `zhatToGalois_etaFn`), show
+  `⋂_n ker χ_n = ⊥` ⟹ `ker zhatToGalois = ⊥`. The argument: each `ker χ_n` is open of index `n`; each
+  finite quotient of `Ẑ` is cyclic (Pass 8); a procyclic group has a *unique* subgroup of each finite
+  index, and these are cofinal, so `⋂ = ⊥` (Pass-8 separation). The needed new group-theory:
+  "procyclic ⟹ unique index-`n` subgroup" + cofinality. **Likely substantial — may itself be a pass.**
 - **Pass 11 (or end of 10) — package the iso.** `zhatToGalois` bijective ⟹ `ContinuousMulEquiv` via
   `Continuous.homeoOfEquivCompactToT2` + `MulEquiv.ofBijective` (both PRESENT). This **closes `≅ Ẑ`** —
   the first L1 whole of depth. No `FOUNDATIONAL`, no `DEBT` at any step.
@@ -136,17 +150,16 @@ index systems must be matched cofinally: `FiniteIndexNormalSubgroup (Multiplicat
 - ~~Discharge owed witness W1 (`Gal(ℚ̄/ℚ)` non-abelian)~~ — **DONE, Pass 3**.
 - Depends on: L0 + Mathlib's local-field/ramification/finite-field API.
 
-**Honest read on L1 completeness (updated Pass 8).** The easy/finite fruit is harvested (P1–4); Pass 5
-took the one honest `FOUNDATIONAL` boundary; Passes 6–8 made axiom-free progress on `≅ Ẑ` (surjective
-half + per-level data + the `Ẑ`-side inverse-system presentation) **without** stacking boundaries.
-**Caveat, still true after Pass 8: no L1 *whole* of real depth is closed yet** — `≅ Ẑ` now has all
-three of its component halves but the **iso itself remains open**, blocked precisely on the
-Galois-side level subfield `𝔽_{q^n} ⊆ K̄` (absent from Mathlib) and the cofinal matching of the three
-index systems. Pass 8 turned "genuinely multi-pass" from a hand-wave into the **named, numbered
-Pass 9–11 sub-plan** above; that is the disciplined way to finally *close* the whole rather than
-accumulate a fourth half. The residue-surjection discharge (route (A)) stays blocked on the absent
-valuation-on-`K̄`. Honest next step: **execute Pass 9** (the Galois-side level subfield) — the first
-rung of the sub-plan, axiom-free, no fresh boundary.
+**Honest read on L1 completeness (updated Pass 9).** The easy/finite fruit is harvested (P1–4); Pass 5
+took the one honest `FOUNDATIONAL` boundary; Passes 6–9 made axiom-free progress on `≅ Ẑ` (surjective
+half + per-level data + `Ẑ`-side inverse-system + Galois-side level subfields) **without** stacking
+boundaries. **Caveat, still true after Pass 9: no L1 *whole* of real depth is closed yet** — `≅ Ẑ`
+remains **open**. But the picture is now strong: Pass 9 *built* the previously-absent `𝔽_{q^n} ⊆ K̄`
+(the blocker Pass 8 named), with the Frobenius alignment that the closure depends on, leaving exactly
+one rung — **Pass 10's injectivity** (`⋂_n ker χ_n = ⊥`, needing "procyclic ⟹ unique index-`n`
+subgroup" + cofinality, on Pass 8's separation) — then trivial packaging (Pass 11). The
+residue-surjection discharge (route (A)) stays blocked on the absent valuation-on-`K̄`. Honest next
+step: **execute Pass 10** (injectivity) — the last substantive rung before `≅ Ẑ` closes.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -158,8 +171,8 @@ we owe before sustained work in a sub-area):**
   agree definitionally, and provide a reusable lemma/instance — rather than dodging per-theorem.
   Trigger: the *second* recurrence of the diamond is when to attempt the structural fix instead of a
   second band-aid. Status: tracked, not yet triggered (Pass 3 = first appearance; Passes 4–5 did not
-  recur — Passes 4–8 worked over abstract/local/finite fields (and `Ẑ`/`Multiplicative ℤ`) with no
-  `Algebra ℚ (AlgebraicClosure ℚ)`).
+  recur — Passes 4–9 worked over abstract/local/finite fields, their algebraic closures, and
+  `Ẑ`/`Multiplicative ℤ` — no `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 ### L2 — Higher ramification groups (lower & upper numbering)   ·   **NOT-STARTED**   ·   DEBT: medium-high
 

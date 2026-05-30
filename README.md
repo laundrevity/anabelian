@@ -19,11 +19,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 8)
+## Current state (Pass 9)
 
 Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
 classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
-Passes 6, 7 and 8 each deliberately added **no** second boundary).
+Passes 6–9 each deliberately added **no** second boundary).
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -51,6 +51,12 @@ Passes 6, 7 and 8 each deliberately added **no** second boundary).
   job was to *close* `≅ Ẑ`; closure is blocked on the absent Galois-side level subfield `𝔽_{q^n} ⊆ K̄`,
   so the iso is **not** closed and **not** posited — instead a numbered Pass 9–11 sub-plan (in
   `ROADMAP.md`) sharpens the remainder. No new boundary.
+- `Anabelian/FiniteFieldLevel.lean` (L1) — Pass 9 builds, axiom-free, the **Galois-side level
+  subfields** for `≅ Ẑ` (sub-plan rung 9, **infrastructure**): `𝔽_{q^n} ⊆ K̄` of degree `n`
+  (`levelField`/`levelFGIF`), the restriction `r_n : Gal(K̄/K) → Gal(𝔽_{q^n}/K)` (`levelRestrict`,
+  surjective), and the **Frobenius-aligned** generator (`levelRestrict_frobenius`:
+  `r_n(Frob) = frobeniusAlgEquivOfAlgebraic`; `orderOf (r_n Frob) = n`). Graded as infrastructure: the
+  iso is **not** closed and **not** posited; injectivity is Pass 10. No new boundary.
 
 Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
 other file rests on standard axioms only. All touch the project's subject (absolute Galois

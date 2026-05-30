@@ -911,3 +911,97 @@ converted the vague remainder into the concrete **Pass 9–11 sub-plan** (`ROADM
 commuting square (on the dense `η`-image, via Pass 8 procyclicity + Pass 6 `zhatToGalois_etaFn`) ⟹
 `ker zhatToGalois = ⊥`; **Pass 11** package the `ContinuousMulEquiv` — **closing `≅ Ẑ`**, the first L1
 whole of depth. All axiom-free, no fresh boundary. Honest next step: **execute Pass 9**.
+
+---
+
+# Pass 9 — rung L1: the Galois-side level subfields `𝔽_{q^n}` of `≅ Ẑ` (2026-05-30)
+
+## Honest scope + grading (governs this pass)
+
+Rung **L1**, **no reconstruction (R1–R3)**. Executed **Pass 9** of the resolved `≅ Ẑ` sub-plan: built
+the one absent Galois-side ingredient. **Graded as infrastructure, not a closed whole** — a
+`FiniteGaloisIntermediateField` term + a `restrictNormalHom` + the Frobenius-alignment equation are the
+*means* to Pass 10's injectivity, not the iso. `≅ Ẑ` is **NOT** closed and **NOT** posited. The
+half-accumulation pressure is satisfied only by the *eventual* `≅ Ẑ`. Ledger delta: **0 / 0**.
+
+## The decision: execute the sub-plan rung; no pivot, no posit, no padding
+
+Pass 8 had reduced `≅ Ẑ` to a single named blocker. This pass executes that rung. A pivot (to the
+`K̄`-valuation/residue boundary), a posit (of `𝔽_{q^n}` or `r_n` as `FOUNDATIONAL` — barred), or
+padding with adjacent finite-field lemmas would all be the disallowed money-pit move. Everything built
+is a Pass-9 component or directly on the closure path. Closure did **not** fall out — injectivity is
+the separate Pass-10 cofinality/diagram chase (see setup) — so this is graded infrastructure.
+
+## Construction route + deepened inventory (real names; verify, don't guess)
+
+**Route chosen for `𝔽_{q^n}`: `fixedField (zpowers (Frob^n))`** (not `adjoin (rootSet)`), because the
+membership `x ∈ levelField K n ↔ x^(q^n) = x` is then clean, and the carrier coincides with the
+rootSet of `X^(q^n)−X` for the degree count.
+
+- **PRESENT (used):** `IntermediateField.fixedField` + `mem_fixedField_iff`;
+  `FiniteField.frobeniusAlgEquivOfAlgebraic` + `coe_frobeniusAlgEquivOfAlgebraic_iterate` +
+  `AlgEquiv.coe_pow` (giving `(Frob^n) x = x^(q^n)`); `FiniteField.X_pow_card_pow_sub_X_natDegree_eq` /
+  `_ne_zero`; `card_rootSet_eq_natDegree` (`Mathlib.FieldTheory.Separable`) + `IsAlgClosed.splits` +
+  the inline separability of `X^(q^n)−X` (derivative `= −1`); `Module.card_eq_pow_finrank` +
+  `Nat.pow_right_injective` (degree from card); `IsGalois K (AlgebraicClosure K)` instance;
+  `FiniteGaloisIntermediateField` (`Mathlib.FieldTheory.Galois.GaloisClosure`);
+  `AlgEquiv.restrictNormalHom` + `restrictNormalHom_apply` + `restrictNormalHom_surjective`
+  (`Mathlib.FieldTheory.Normal`); `FiniteField.orderOf_frobeniusAlgEquivOfAlgebraic`.
+- **The `IsGalois K L` instance for finite `L` lives in `Mathlib.FieldTheory.Finite.GaloisField`** —
+  had to be imported (the Pass-3/7 specific-imports lesson recurred, exactly as the instruction warned).
+- **ABSENT (so built from scratch, confirming Pass 8):** `𝔽_{q^n}` as a `FiniteGaloisIntermediateField`
+  of `AlgebraicClosure K`; no fixed-points-of-Frobenius subfield API; no "irreducible of degree `n`
+  over a finite field" existence lemma. The degree count is bespoke (carrier = rootSet, card `q^n`).
+
+### Pre-search expectation vs. reality (points ii–iv)
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| `fixedField (Frob^n)` clean for membership | yes — membership iff `x^(q^n)=x` is short | ✓ |
+| degree `n` would be the linchpin/hard part | yes — bespoke card-of-rootSet argument, several steps | ✓ |
+| Frobenius alignment (the trap) tractable | **easier than feared** — `restrictNormalHom_apply` + both maps `·^q` ⟹ `simp only` closes it | ✓ (better) |
+| closure would NOT fall out (injectivity separate) | confirmed — this is the infrastructure rung | ✓ |
+| ledger stays `1 FOUNDATIONAL / 0 DEBT` | confirmed | ✓ |
+
+## The Frobenius-alignment check (the trap, explicitly confirmed)
+
+The level iso is pinned to **Frobenius**, not an arbitrary generator: `levelRestrict_frobenius` proves
+`r_n (Frob) = frobeniusAlgEquivOfAlgebraic K (levelField K n)` (both are `x ↦ x^q`; via
+`restrictNormalHom_apply` + `coe_frobeniusAlgEquivOfAlgebraic` + `IntermediateField.coe_pow`), and
+`orderOf_levelRestrict_frobenius` proves `orderOf (r_n Frob) = n` (= `finrank`, via
+`orderOf_frobeniusAlgEquivOfAlgebraic`). Since `Frob = zhatToGalois (η (ofAdd 1))` (Pass 6), the
+generator Pass 10 needs — `r_n (zhatToGalois (η (ofAdd 1)))` = the Frobenius of `𝔽_{q^n}`, generating
+`Gal(𝔽_{q^n}/K)` — is exactly what landed. **No unaligned-iso landmine for Pass 10.** (Note: Pass 7's
+`galoisFiniteField_mulEquivZMod` via `zmodCyclicMulEquiv` was *deliberately not used* here, since it
+picks an arbitrary generator; Pass 10 should use this Frobenius-aligned generator instead.)
+
+## What was proved (Step 2 self-audit)
+
+`Anabelian/FiniteFieldLevel.lean`, standard axioms only (in-file `#print axioms`):
+`levelField`, `mem_levelField`, `separable_X_pow_card_pow_sub_X`, `levelField_coe_eq_rootSet`,
+`levelField_finite` (instance, `[NeZero n]`), `levelField_finrank` (= `n`), `levelFGIF`,
+`levelRestrict`, `levelRestrict_surjective`, `levelRestrict_frobenius`,
+`orderOf_levelRestrict_frobenius`.
+
+**Did `≅ Ẑ` close? NO** — infrastructure rung; injectivity is Pass 10. **Nothing posited.** **Recovers
+nothing from an abstract group** (structure of *given* finite fields' subextensions). Load-bearing
+hypothesis `NeZero n` is genuine (`n = 0` ⟹ level field = all of `K̄`, infinite) but is not a rule-2
+come-apart claim (no `structure`/`class`); no owed witness. **D1 did not recur** (no
+`Algebra ℚ (AlgebraicClosure ℚ)`).
+
+## Ledger delta
+
+- **0 `DEBT` / 0 new `FOUNDATIONAL`.** Active axioms unchanged: 1 `FOUNDATIONAL`
+  (`residueReduction_surjective`, Pass 5, unused here), 0 `DEBT`. 0 open owed witnesses.
+
+## Scope: progress toward `≅ Ẑ`, remaining sub-plan, pointer to Pass 10
+
+`≅ Ẑ` now has all four ingredients (surjective P6, per-level P7, `Ẑ`-side inverse-system P8,
+Galois-side level subfields P9). **Remaining:** Pass 10 — injectivity of `zhatToGalois`. Precise setup:
+with `χ_n := levelRestrict K n ∘ zhatToGalois : Ẑ → Gal(𝔽_{q^n}/K)`, `χ_n` is surjective and
+`χ_n (η (ofAdd 1)) = r_n (Frob)` generates (order `n`); show `⋂_n ker χ_n = ⊥` ⟹ `ker zhatToGalois = ⊥`.
+The argument needs new group-theory on `Ẑ`: **"procyclic ⟹ unique subgroup of each finite index" +
+cofinality of those subgroups** (on Pass 8's `zhat_quotient_isCyclic` + `toLimit_injective` separation).
+Then Pass 11 packages the `ContinuousMulEquiv` (`homeoOfEquivCompactToT2` + `MulEquiv.ofBijective`,
+both PRESENT) — closing `≅ Ẑ`, the first L1 whole of depth. Honest next step: **execute Pass 10**
+(likely substantial — the cofinality/diagram chase may itself fill a pass).
