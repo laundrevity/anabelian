@@ -1097,3 +1097,93 @@ valuation-on-`K̄` construction toward discharging the one `FOUNDATIONAL` (`FOUN
 multi-pass, the only way to drive `FOUNDATIONAL` down); or (b) open a fresh L1 sub-target (e.g. the
 unramified/tame/wild ramification filtration, L2-adjacent). With `≅ Ẑ` closed, the bar (a deep whole)
 is met once; the climb up the ladder continues.
+
+---
+
+# Pass 11 — rung L1 inflection: route (a), begin discharging the one boundary (2026-05-30)
+
+## The inflection decision (the primary deliverable, documented before code)
+
+Rung **L1**, **no reconstruction (R1–R3)**. Pass 10 banked `≅ Ẑ`; the danger this introduces is
+**breadth-without-depth** — opening clean axiom-free fragments while the one boundary
+`residueReduction_surjective` (Pass 5) sits undischarged forever, the IUT-Stage-1 replay at project
+scale. So this pass's primary deliverable is a **reasoned fork decision**, not a default target.
+
+**The fork:** (a) begin discharging the boundary, vs (b) open an independent deep sub-target (e.g. the
+ramification filtration). **Decision: (a)**, driven by two findings:
+
+1. **Common-prerequisite finding** (the question that collapses the fork): the **valuation on `K̄` is
+   the common gate** for both. (a) needs it for the residue field `𝓀[K̄]` and the reduction map; (b)'s
+   lower-numbering ramification groups `G_i` are defined *via* the valuation, and the
+   unramified/tame/wild filtration sits *on* the residue reduction (the L1 boundary). And the
+   filtration machinery itself (`G_i`, Herbrand `ψ/φ`) is **ABSENT** (re-confirmed). So (b) is **not**
+   an independent escape from (a) — it needs the same absent valuation. Beginning the valuation on `K̄`
+   is the **highest-leverage** move (unblocks the most).
+2. **Tractability correction to Pass 6.** Pass 6 called the valuation on `K̄` "irreducibly absent."
+   **Wrong.** `spectralNorm.normedField` + `NormedField.toValued` give `Valued K̄ ℝ≥0` (cf.
+   `NumberTheory/Padics/Complex.lean`, which builds exactly this for `ℂ_p`), whence `𝒪[K̄]`/`𝓀[K̄]`;
+   `Krasner.lean`'s `IsKrasner` is the lifting machinery. Only the final maximal-unramified lifting
+   assembly is genuinely absent.
+
+(b) declined as breadth-drift-relative-to-(a): it cannot escape the valuation gate, and pure
+finite-field fragments would be exactly the clean-build padding the inflection warns against.
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT (used / for the route):** `spectralNorm` (`Analysis/Normed/Unbundled/SpectralNorm.lean`):
+  `spectralNorm_mul` (submult, `≤`), `isNonarchimedean_spectralNorm`, `spectralNorm_one/zero/neg`,
+  `spectralNorm_nonneg`, **`spectralNorm_eq_of_equiv`** (Galois ⟹ isometry — the invariance),
+  `spectralNorm.normedField`/`spectralNorm.normedAlgebra` (the `NormedField K̄`);
+  `NormedField.toValued` + `Valued.toNormedField` (`Topology/Algebra/Valued/NormedValued.lean`, the
+  rank-one bridges); `𝒪[K]`/`𝓂[K]`/`𝓀[K]` notation (`Topology/Algebra/Valued/ValuativeRel.lean`);
+  **`IsKrasner`** (`Analysis/Normed/Field/Krasner.lean`, `of_completeSpace`/`of_completeSpace_of_normal`
+  — the lifting). `NumberTheory/Padics/Complex.lean` is the worked precedent (`Valued (PadicAlgCl p)`).
+- **ABSENT (the genuine remainder):** `spectralNorm → Valuation/ValuativeRel` as a *named* bridge (one
+  goes via `NormedField.toValued`); the ramification filtration `G_i`/Herbrand (L2); the
+  maximal-unramified / lifting assembly that proves surjectivity (the `DEBT`'s heart).
+- **Typeclass gap:** `IsNonarchimedeanLocalField K` (the boundary's setting) is `ValuativeRel`-based
+  and does **not** directly give `NormedField K`; the bridge is
+  `ValuativeRel → Valued → RankOne → Valued.toNormedField` (route step 2). So Pass 11's brick is built
+  over the natural complete-nonarch-normed setting and connected to the exact statement later.
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| valuation-on-`K̄` is the common gate for (a) & (b) | confirmed (filtration sits on residue reduction + needs the valuation) | ✓ |
+| Pass 6's "valuation absent" still holds | **corrected** — `spectralNorm.normedField`/`toValued`/`IsKrasner` PRESENT | ✗→fixed |
+| (a) is highest-leverage; (b) not independent | confirmed | ✓ |
+| can build the valuation-ring brick axiom-free this pass | confirmed (`spectralIntegers`) | ✓ |
+
+## What was built (Step 2 self-audit)
+
+`Anabelian/SpectralValuation.lean`, standard axioms only (in-file `#print axioms`):
+- `spectralIntegers K : Subring (AlgebraicClosure K)` — the spectral valuation ring
+  `𝒪[K̄] = {x | spectralNorm K K̄ x ≤ 1}` (subring via nonarch + submult). `mem_spectralIntegers`.
+- `spectralIntegers_mem_iff_galois` — `Gal(K̄/K)` preserves `𝒪[K̄]` (isometry, `spectralNorm_eq_of_equiv`).
+
+**Strictly-lower, axiom-free, on the discharge path** (the valuation on `K̄` is route step 1 and the
+common gate — not adjacent). **Nothing posited:** the lifting/surjectivity (the irreducible heart) is
+untouched — positing it would be the cardinal sin. Honest grade: the **first brick**, not the discharge.
+
+## Ledger move (the first pass to legitimately *raise* `DEBT`)
+
+**Reclassified `residueReduction_surjective` `FOUNDATIONAL → DEBT`** (Reclassification log, first entry)
+— a **genuine** commitment backed by begun construction (step 1) + a corrected, probe-verified route,
+**not paper**. Count: **`1 FOUNDATIONAL / 0 DEBT` → `0 FOUNDATIONAL / 1 DEBT`.** This is the *good*
+direction for route (a): you cannot discharge what you never commit to, and the metric is net `DEBT`
+reduction over time (the boundary is now a committed-and-under-construction debt, not a static posit).
+**No second `FOUNDATIONAL`; nothing cardinal-sin posited.** Pass 11 file itself adds **0 axioms**.
+
+D1 (ℚ-diamond) did **not** recur (abstract nonarch normed field + its algebraic closure; no
+`Algebra ℚ (AlgebraicClosure ℚ)`). No new `structure`/`class` (no rule-2 obligation). No owed witness.
+Recovers nothing from an abstract group.
+
+## Scope: pointer to Pass 12
+
+Route (a) continues: **Pass 12** should advance the bridge `IsNonarchimedeanLocalField → NormedField`
+(step 2) and/or the residue field `𝓀[K̄]` + reduction map (step 3), toward the lifting (step 4, the
+`DEBT`'s heart, via `IsKrasner` + maximal-unramified). The same valuation-on-`K̄` infrastructure also
+unblocks L2 (ramification filtration) — so route (a) is the project's current spine. The one `DEBT` is
+now committed and under construction; driving it to a theorem (net `DEBT` → 0) is the standing
+objective, and it is no longer deferrable.

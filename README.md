@@ -13,22 +13,30 @@ The discipline matters more than any single file. Read these in order:
 
 - **`CLAUDE.md`** — the constitution: the axiom-budget discipline, rule-2, the honest scope.
 - **`AXIOM_LEDGER.md`** — every non-standard axiom, classified `FOUNDATIONAL` (honest boundary) vs
-  `DEBT` (a hole to fill). Currently **one `FOUNDATIONAL` entry, zero `DEBT`** (the residue surjection,
-  Pass 5). This, not `#print axioms` alone, is the source of truth for what is assumed.
+  `DEBT` (a hole we intend to fill). Currently **zero `FOUNDATIONAL`, one `DEBT`** (the residue
+  surjection; introduced Pass 5 as `FOUNDATIONAL`, reclassified to `DEBT` Pass 11 once its discharge
+  was begun). This, not `#print axioms` alone, is the source of truth for what is assumed.
 - **`ROADMAP.md`** — the dependency ladder from the current Mathlib floor up to mono-anabelian
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 10)
+## Current state (Pass 11)
 
-Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
-classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
-Passes 6–10 each deliberately added **no** second boundary).
+Clean cached build on Mathlib `v4.30.0`. **Zero `FOUNDATIONAL`, one `DEBT`** (the residue surjection,
+reclassified from `FOUNDATIONAL` once its discharge began — Pass 11), zero open owed witnesses, and no
+second boundary ever stacked.
 
 **Milestone (Pass 10): the first L1 *whole of depth* is closed.** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` — the absolute
 Galois group of a finite field is the profinite completion of `ℤ`, as a topological group — is proved
 as a complete axiom-free `ContinuousMulEquiv` (`Anabelian.galoisContinuousMulEquivZHat`), earned across
 Passes 6–10 with **nothing posited** in the chain.
+
+**Inflection (Pass 11): begin discharging the one boundary.** Rather than harvest more breadth, Pass 11
+committed to *driving the single boundary down*: it built the valuation-on-`K̄` foundational brick (the
+spectral valuation ring `𝒪[K̄]` + Galois-invariance, `Anabelian.spectralIntegers`, axiom-free) and
+reclassified `residueReduction_surjective` `FOUNDATIONAL → DEBT` — a committed, under-construction debt,
+not a static posit. The valuation on `K̄` is the common prerequisite for both the residue discharge and
+any ramification-filtration work.
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -66,9 +74,14 @@ Passes 6–10 with **nothing posited** in the chain.
   **first L1 whole of depth**: `zhatToGalois_injective` (`ker zhatToGalois = ⊥`, via
   `ker χ_m = closure⟨zhatGen^m⟩` + separation + Lagrange) and the topological-group isomorphism
   `galoisContinuousMulEquivZHat : Gal(𝔽_q̄/𝔽_q) ≃ₜ* Ẑ`. Nothing posited; no new boundary.
+- `Anabelian/SpectralValuation.lean` (L1) — Pass 11 begins discharging the one boundary, axiom-free:
+  the **spectral valuation ring `𝒪[K̄]`** (`spectralIntegers`, the closed unit ball of `spectralNorm`,
+  a `Subring`) and that **`Gal(K̄/K)` preserves it** (`spectralIntegers_mem_iff_galois`). The
+  foundational brick of the residue-surjection discharge route; the lifting (its heart) is untouched.
 
-Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
-other file rests on standard axioms only. All touch the project's subject (absolute Galois
+Only `UnramifiedQuotient.lean` rests on the one `DEBT` entry (`residueReduction_surjective`, see
+`AXIOM_LEDGER.md` — `FOUNDATIONAL` Passes 5–10, reclassified `DEBT` Pass 11 with its discharge begun);
+every other file rests on standard axioms only. All touch the project's subject (absolute Galois
 groups) while recovering nothing from an abstract group — the reconstruction targets (R1–R3 in
 `ROADMAP.md`) remain distant and untouched.
 

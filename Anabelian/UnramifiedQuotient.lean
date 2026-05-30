@@ -81,7 +81,13 @@ structural fact about a *given* local field's Galois group, not a reconstruction
 as a `FOUNDATIONAL` input for R1 per the per-target list. This posits the *existence* of a
 surjection — weaker than, and implied by, the full classical statement (specific continuous map,
 kernel = inertia). The maximal-unramified construction that would *prove* it is absent from
-Mathlib. -/
+Mathlib.
+
+**Update (Pass 11): reclassified `FOUNDATIONAL → DEBT`.** The "construction absent" assessment was
+corrected (`spectralNorm`-valuation on `K̄` and `IsKrasner` lifting are present), and the discharge
+is now begun in `Anabelian/SpectralValuation.lean` (the spectral valuation ring `𝒪[K̄]` +
+Galois-invariance, route step 1). This is now a `DEBT` we intend to discharge in-project, not an
+external boundary; see `AXIOM_LEDGER.md` (Reclassification log + full route). -/
 axiom residueReduction_surjective :
     ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ
 

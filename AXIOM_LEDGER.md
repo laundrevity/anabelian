@@ -56,11 +56,13 @@ Each entry uses this schema:
 
 | name | class | rung | introduced | status |
 |------|-------|------|-----------|--------|
-| `Anabelian.residueReduction_surjective` | `FOUNDATIONAL` | L1 (below R1) | Pass 5 | active |
+| `Anabelian.residueReduction_surjective` | `DEBT` | L1 (below R1) | Pass 5 | active (discharge begun Pass 11) |
 
-**Count: 1 `FOUNDATIONAL`, 0 `DEBT`.**
+**Count: 0 `FOUNDATIONAL`, 1 `DEBT`.** (Reclassified `FOUNDATIONAL → DEBT` in Pass 11 — see the
+Reclassification log — on the strength of the begun discharge construction in
+`Anabelian/SpectralValuation.lean` and a corrected tractability assessment.)
 
-### `Anabelian.residueReduction_surjective`   [FOUNDATIONAL]
+### `Anabelian.residueReduction_surjective`   [DEBT]   *(was `FOUNDATIONAL`, Passes 5–10)*
 - Statement: `∀ (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K]`
   `[IsNonarchimedeanLocalField K], ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K],`
   `Function.Surjective φ`.
@@ -72,23 +74,38 @@ Each entry uses this schema:
 - Rung (ROADMAP): **L1**, strictly **below R1**. It is a structural fact *about* a given local
   field's Galois group, not a recovery of the field from an abstract group — so it does not approach
   R1/R2/R3. Permitted as a `FOUNDATIONAL` input for R1 per the per-target list in `ROADMAP.md`.
-- Why `FOUNDATIONAL` not `DEBT`: the maximal-unramified-extension Galois edifice that would *prove*
-  it is **absent from Mathlib** (only ingredients — `HenselianLocalRing`, residue functoriality,
-  `Algebra.IsUnramified` — are present), and is a substantial classical construction (Serre ch. I–III).
-  Consciously taken as an external boundary, not a hole we are mid-proving. (Reclassifying it to
-  `DEBT` later — i.e. committing to construct it in-project — is allowed via the Reclassification log.)
-- Introduced: Pass 5.   Discharged: —
+- Was `FOUNDATIONAL` (Passes 5–10): taken as an external boundary because the maximal-unramified
+  edifice that proves it was assessed absent. **Pass 11 corrected that assessment** and reclassified to
+  `DEBT` (committing to discharge in-project) — see below and the Reclassification log.
+- **Discharge path (DEBT; multi-pass; route-first-step probe-verified Pass 11):**
+  1. **Valuation on `K̄`. ✅ begun Pass 11** (`Anabelian/SpectralValuation.lean`, axiom-free): the
+     spectral valuation ring `spectralIntegers K = 𝒪[K̄] = {x | spectralNorm K K̄ x ≤ 1}` (a `Subring`),
+     and `spectralIntegers_mem_iff_galois` (`Gal(K̄/K)` preserves `𝒪[K̄]`, the isometry property
+     `spectralNorm_eq_of_equiv`). Probe-verified the route's first concrete step
+     (`spectralNorm.normedField` typechecks on `AlgebraicClosure K` for a complete nonarch normed `K`).
+  2. **Bridge** `IsNonarchimedeanLocalField K` (`ValuativeRel`) → `NormedField K` via
+     `ValuativeRel → Valued → RankOne → Valued.toNormedField` (rank-one valued ⟹ normed; PRESENT,
+     `Topology/Algebra/Valued/NormedValued.lean`). Connects this construction to the exact statement.
+  3. **Residue field** `𝓀[K̄]` via `NormedField.toValued` (PRESENT; cf. `NumberTheory/Padics/Complex.lean`
+     for `ℂ_p`) and `IsLocalRing.ResidueField 𝒪[K̄]`; then the reduction map `Gal(K̄/K) → Aut 𝓀[K̄]`.
+  4. **Lifting / surjectivity** via `Krasner.lean`'s `IsKrasner` + the maximal-unramified construction.
+     This is the irreducible heart and the genuinely-multi-pass remainder. **NOT posited** (positing it
+     would be the cardinal sin — it *is* the surjection). Discharging it yields the theorem.
+- **Not the cardinal sin:** `residueReduction_surjective` is L1, strictly **below** R1/R2/R3 (a fact
+  about a given field's Galois group, not recovery from an abstract group). As a `DEBT` stub it is a
+  hole-we-intend-to-fill, and the strictly-lower infrastructure built Pass 11 (step 1) is genuinely
+  below it; step 4 (the lifting that *is* the surjection) is the target of the discharge, never stubbed.
+- Introduced: Pass 5 (`FOUNDATIONAL`).   Reclassified `→ DEBT`: Pass 11.   Discharged: — (in progress).
 
 ---
 
 ## Reclassification log
 
 Dated record of every `DEBT ⇄ FOUNDATIONAL` class change (see the Reclassification rule above).
-Empty so far — no axioms exist yet, so none have been reclassified.
 
 | date | axiom | old class | new class | reason |
 |------|-------|-----------|-----------|--------|
-| *(none)* | — | — | — | — |
+| 2026-05-30 (Pass 11) | `Anabelian.residueReduction_surjective` | `FOUNDATIONAL` | `DEBT` | Pass 11 chose route (a) — discharge the boundary — and **began the construction** axiom-free (`Anabelian/SpectralValuation.lean`: the spectral valuation ring `𝒪[K̄]` + Galois-invariance, the foundational strictly-lower brick of the discharge route). The Pass-6 "valuation on `K̄` irreducibly absent" assessment was **corrected**: `spectralNorm.normedField` + `NormedField.toValued` (`Valued K̄`) and `IsKrasner` (lifting) are PRESENT. This is the legitimate `FOUNDATIONAL → DEBT` direction (committing to prove in-project, not relabeling a debt as a boundary); it is **not** paper — construction is begun and the route's first step is probe-verified. Genuinely below R1, so not the cardinal sin. |
 
 ---
 
@@ -436,3 +453,38 @@ unused here), **0 `DEBT`**. **Sub-target `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`: DONE.**
 D1 (ℚ-diamond) did **not** recur (finite fields). No new `structure`/`class`; no owed witness.
 
 Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.
+
+### Pass 11 (2026-05-30) — rung L1 inflection: route (a), begin discharging the one boundary
+
+**The inflection decision (the deliverable).** Pass 10 banked `≅ Ẑ`; the danger was breadth-without-depth
+(opening clean fragments while the one boundary sat undischarged — the IUT-Stage-1 replay). The fork was
+**(a) begin discharging `residueReduction_surjective`** vs **(b) open an independent deep sub-target**.
+Resolved by the **common-prerequisite finding**: the valuation on `K̄` gates *both* — (a) needs it for
+`𝓀[K̄]`/the reduction map; (b)'s ramification filtration is defined *via* the valuation and sits *on* the
+residue reduction (and is itself absent). So (b) is no independent escape. Combined with a **tractability
+correction** (Pass 6's "valuation on `K̄` absent" was wrong: `spectralNorm.normedField`/`NormedField.toValued`
+give `Valued K̄`, and `IsKrasner` is the lifting machinery — all PRESENT), **(a) is the highest-leverage
+move.** Chose (a).
+
+**Built (axiom-free, strictly-lower):** `Anabelian/SpectralValuation.lean` —
+
+```
+'Anabelian.spectralIntegers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.spectralIntegers_mem_iff_galois' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+the spectral valuation ring `𝒪[K̄]` (closed unit ball, a `Subring (AlgebraicClosure K)`) and the fact
+`Gal(K̄/K)` preserves it — the foundational brick of the discharge route (route step 1).
+
+**Ledger move:** **reclassified `residueReduction_surjective` `FOUNDATIONAL → DEBT`** (Reclassification
+log, first entry) — a genuine commitment backed by begun construction, not paper. **Count: `1 FOUNDATIONAL
+/ 0 DEBT` → `0 FOUNDATIONAL / 1 DEBT`.** This is the first pass to *raise* `DEBT`, which is the intended
+*good* direction for route (a) (you cannot discharge what you never commit to). **No second `FOUNDATIONAL`;
+nothing cardinal-sin posited** (the lifting/surjectivity — the irreducible heart — is untouched, never
+stubbed; only strictly-lower valuation infrastructure was built).
+
+D1 (ℚ-diamond) did **not** recur (the work is over an abstract nonarch normed field and its algebraic
+closure; no `Algebra ℚ (AlgebraicClosure ℚ)`). No new `structure`/`class` (no rule-2 obligation). No owed
+witness. Recovers nothing from an abstract group.
+
+Ledger delta: **`DEBT` +1 (via `FOUNDATIONAL → DEBT` reclassification), `FOUNDATIONAL` −1; no new axiom.**
