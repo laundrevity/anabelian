@@ -19,11 +19,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 6)
+## Current state (Pass 7)
 
 Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
 classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
-Pass 6 deliberately added **no** second boundary).
+Passes 6 and 7 each deliberately added **no** second boundary).
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -41,6 +41,10 @@ Pass 6 deliberately added **no** second boundary).
 - `Anabelian/FiniteFieldZHat.lean` (L1) — Pass 6 proves, axiom-free, the **surjective half of
   `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`**: the canonical map `Ẑ → Gal(K̄/K)` (profinite-completion universal property) is
   surjective. No new boundary (the anti-`FOUNDATIONAL`-stacking discipline).
+- `Anabelian/FiniteGaloisCyclic.lean` (L1) — Pass 7 closes, axiom-free, the **per-level ingredient of
+  `≅ Ẑ`'s injective half**: `Gal(L/K) ≃* Multiplicative (ZMod (finrank K L))` for finite `L/K` (the
+  level `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`). A *complete* theorem, not another half — but modest; the full `≅ Ẑ`
+  remains open (needs `Ẑ = lim ℤ/n` + cofinal matching) and is **not** posited. No new boundary.
 
 Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
 other file rests on standard axioms only. All touch the project's subject (absolute Galois

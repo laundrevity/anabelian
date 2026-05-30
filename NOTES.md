@@ -728,3 +728,82 @@ by building the maximal-unramified construction (`FOUNDATIONAL → DEBT`, then p
 valuation on `K̄` first). **Pass 7**: continue *without stacking boundaries* — begin (i) (finite
 quotients `≅ ℤ/n`) or begin (ii)'s construction, both axiom-free-or-committed-`DEBT`, never a second
 posit.
+
+---
+
+# Pass 7 — rung L1: the finite levels of `≅ Ẑ` (`Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`) (2026-05-30)
+
+## Honest scope (governs this pass)
+
+Stays at **rung L1**, proves **no reconstruction (R1–R3)**. The result is the structure of the Galois
+group of *given* finite fields; nothing recovered from an abstract group. The pass's organizing risk:
+**half-accumulation** — six passes hold several *halves* but no L1 whole of depth, the project-level
+relocate-and-never-close pattern. Preferred move: **close a whole**. Ledger delta: **0 / 0**.
+
+## The decision (i vs ii) and the tractability call
+
+**Chose route (i)'s fallback.** (i) = CLOSE `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (finish Pass 6's surjective half with
+injectivity). Inventory found **(i)-full not closable axiom-free this pass**: injectivity of
+`zhatToGalois` needs `Ẑ`'s presentation as `lim ℤ/n`, but Mathlib's `Ẑ = ProfiniteGrp.completion`
+`(Multiplicative ℤ)` is indexed by `FiniteIndexNormalSubgroup`, *not* `ℤ/n`, and no off-the-shelf
+cofinal matching exists — genuinely multi-pass. Per the route-(i) fallback ("real axiom-free progress
+on the injective half"), proved its **per-level ingredient** `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`, a *complete*
+theorem, **without positing the iso** (closing-by-positing = the stacking trap). Did not switch to
+(ii) (begin valuation-on-`K̄`) — it adds `DEBT` and opens new multi-pass work; the (i)-fallback keeps
+the ledger clean and is the more on-target progress toward `≅ Ẑ`.
+
+## Deepened inventory (real names; verify, don't guess)
+
+- **PRESENT (used):** `IsGalois.card_aut_eq_finrank (F E) [FiniteDimensional] [IsGalois] :`
+  `Nat.card Gal(E/F) = Module.finrank F E`; the finite-field `IsCyclic Gal(L/K)` instance (`[Finite L]`,
+  Pass 1); `zmodCyclicMulEquiv (h : IsCyclic G) : Multiplicative (ZMod (Nat.card G)) ≃* G`. **`IsGalois K L`
+  is automatic for finite fields** — but its instance lives in `Mathlib.FieldTheory.Finite.GaloisField`,
+  which had to be imported (the Pass-3 specific-imports lesson recurred).
+- **PRESENT (iso-packaging, for the eventual close):** `Continuous.homeoOfEquivCompactToT2`
+  (compact→T2 continuous bijection ⟹ homeomorphism), `MulEquiv.ofBijective`, `ContinuousMulEquiv`,
+  `etaFn_injective_iff_residuallyFinite`. So once injectivity lands, the iso is clean to package.
+- **ABSENT (the genuine multi-pass remainder):** `Ẑ` as `lim ℤ/n` (no named `Ẑ`/`ZHat`; the only
+  presentation is `completion (Multiplicative ℤ)` over `FiniteIndexNormalSubgroup`); the cofinal
+  matching of that with `Gal`'s `FiniteGaloisIntermediateField` inverse system; hence injectivity of
+  `zhatToGalois`. (For route (ii): `SpectralNorm` present, but the valuation-on-`K̄` assembly absent.)
+
+### Pre-search expectation vs. reality (points iii/iv)
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| "continuous bijection compact→T2 ⟹ homeo" present | present (`Continuous.homeoOfEquivCompactToT2`) | ✓ |
+| injectivity of `zhatToGalois` heavy/absent | confirmed — needs absent `Ẑ = lim ℤ/n` + cofinal matching | ✓ |
+| `≅ Ẑ` may not fully close; finite-level iso lands | confirmed — only the per-level ingredient closed | ✓ |
+| ledger stays `1 FOUNDATIONAL / 0 DEBT` | confirmed | ✓ |
+
+## What was proved (Step 2 self-audit)
+
+`Anabelian/FiniteGaloisCyclic.lean`, standard axioms only (in-file `#print axioms`):
+- `galoisFiniteField_mulEquivZMod` — `Gal(L/K) ≃* Multiplicative (ZMod (Module.finrank K L))` for a
+  finite extension `L/K` of finite fields. The per-level datum `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` of `≅ Ẑ`'s
+  injective half.
+
+**Did `≅ Ẑ` fully close? NO** — only the injective-half *per-level ingredient* landed; the full iso
+remains open (gap: `Ẑ = lim ℤ/n` + cofinal matching, absent). **The iso was NOT posited as
+`FOUNDATIONAL`** (explicitly: closing-by-positing is the stacking trap). **Honest on depth:** this is a
+*complete* theorem but **modest** (short proof assembling existing API), matching the Pass-1/4 "genuine
+but light" bar — it is a closed whole at the finite level, not another half, but it is **not** the deep
+L1 whole the pass aimed to close.
+
+**Recovers nothing from an abstract group** (file docstring). No load-bearing hypothesis / owed
+witness; no new `structure`/`class`. **D1 did not recur** (finite fields).
+
+## Ledger delta
+
+- **0 `DEBT` / 0 new `FOUNDATIONAL`.** Active axioms unchanged: 1 `FOUNDATIONAL`
+  (`residueReduction_surjective`, Pass 5, unused here), 0 `DEBT`. 0 open owed witnesses.
+
+## Scope: toward R1, what remains on L1, pointer to Pass 8
+
+Toward R1: `≅ Ẑ` now has both its surjective half (Pass 6) and the injective half's per-level data
+(Pass 7) — the residue-side structure R1 exploits, *nearly* whole. **Honest caveat: no deep L1 whole is
+closed yet.** Pass 8 should aim to **close one whole** (not accumulate another half): either (a) build
+`Ẑ = lim ℤ/n` and the cofinal inverse-system matching to **close `≅ Ẑ`** (the satisfying whole, via the
+iso-packaging API confirmed present), or (b) begin route (ii) — assemble the valuation on `K̄` (from
+`SpectralNorm`) toward discharging `residueReduction_surjective` (`FOUNDATIONAL → DEBT`). Both
+multi-pass; neither a fresh boundary.

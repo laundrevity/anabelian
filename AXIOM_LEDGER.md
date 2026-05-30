@@ -306,3 +306,32 @@ honestly, because (A) is blocked, not avoided). D1 (ℚ-diamond) did **not** rec
 no `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 Ledger delta: **0 / 0** (no `DEBT`, no new `FOUNDATIONAL`); axiom-free structural progress toward `≅ Ẑ`.
+
+### Pass 7 (2026-05-30) — rung L1, finite levels of `≅ Ẑ`: `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`
+
+Introduced **zero** axioms; **added no second `FOUNDATIONAL`**. The preferred move was to **close the
+whole** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (route (i)), finishing Pass 6's surjective half with injectivity. Inventory
+found this **not closable axiom-free this pass**: injectivity of `zhatToGalois` needs `Ẑ`'s presentation
+as `lim ℤ/n` (Mathlib's `Ẑ = completion (Multiplicative ℤ)` is indexed by `FiniteIndexNormalSubgroup`,
+not `ℤ/n`) and the cofinal inverse-system matching — genuinely multi-pass, absent off the shelf. Per
+the route-(i) fallback, made **real axiom-free progress on the injective half** by closing its
+per-level ingredient — and did **not** posit the iso as `FOUNDATIONAL` (closing-by-positing is the
+stacking trap).
+
+`Anabelian/FiniteGaloisCyclic.lean` (standard axioms only — in-file `#print axioms`):
+
+```
+'Anabelian.galoisFiniteField_mulEquivZMod' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `galoisFiniteField_mulEquivZMod` — for a finite extension `L/K` of finite fields,
+  `Gal(L/K) ≃* Multiplicative (ZMod (Module.finrank K L))` (cyclic of order the degree). A **complete**
+  theorem (not a half); the per-level datum `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` of `≅ Ẑ`'s injective half.
+
+Honest: this is **genuine but modest** (short proof assembling `IsGalois.card_aut_eq_finrank` + the
+finite-field `IsCyclic` instance + `zmodCyclicMulEquiv`); the **targeted whole `≅ Ẑ` is NOT closed**
+this pass — only its per-level ingredient is, with the remaining gap (`Ẑ = lim ℤ/n` + cofinal matching)
+logged in `ROADMAP.md`. Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`,
+unused here), **0 `DEBT`**. Reclassification log stays empty. D1 did **not** recur (finite fields).
+
+Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.
