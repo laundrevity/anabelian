@@ -644,3 +644,87 @@ the valuation on `K̄`, absent); (iii) tame/wild filtration; (iv) `Gal(𝔽_q̄/
 should take one of these with the same (A)/(B) discipline — e.g. begin option (A) on
 `residueReduction_surjective` now that its boundary role is explicit, scaffolding the construction
 over several passes.
+
+---
+
+# Pass 6 — rung L1 discipline-inversion: `Ẑ ↠ Gal(𝔽_q̄/𝔽_q)`, no new boundary (2026-05-30)
+
+## Honest scope (governs this pass)
+
+Stays at **rung L1**, proves **no reconstruction (R1–R3)**. The result is the structure of a *given*
+finite field's absolute Galois group; nothing is recovered from an abstract group. The pass's defining
+constraint: **no second `FOUNDATIONAL`** — the `FOUNDATIONAL`-stacking trap (a tower of accepted
+boundaries, a slow IUT-Stage-1 replay). Ledger delta: **0 / 0** (no `DEBT`, no new `FOUNDATIONAL`).
+
+## The decision (A vs Z) and the tractability call
+
+**Chose (Z): the `≅ Ẑ` residue-side identification, axiom-free, no boundary.** Reasoning:
+
+- **(A) (discharge `residueReduction_surjective`) is blocked this pass.** The surjection's content *is*
+  the unramified↔residue correspondence, and its heart is the **lifting** step (every residue
+  automorphism lifts). A `DEBT` axiom asserting lifting *is* the surjection in disguise (cardinal sin).
+  The legitimate strictly-lower infrastructure (`K^ur` existence, residue `= 𝓀̄`, reduction
+  well-definedness) needs the **valuation on `K̄`**, which is **absent** (only `SpectralNorm` exists, in
+  Analysis, not assembled into `𝒪[K̄]`/residue/reduction). So (A) has no clean strictly-lower `DEBT`
+  and its infrastructure is not axiom-free this pass → blocked. (Per the mandate, when lifting is
+  irreducibly absent, do not fake a cardinal-sin `DEBT`.)
+- **(Z) is genuinely achievable axiom-free**, using Mathlib's profinite-completion functor + Pass 2.
+
+## Deepened inventory (real names; verify, don't guess)
+
+- **(A) side — confirmed ABSENT:** maximal unramified extension / `K^ur` / residue Galois iso /
+  Frobenius lift (zero hits). `RingTheory/Henselian.lean` has `HenselianLocalRing` + the
+  `HenselianLocalRing.TFAE` and `IsAdicComplete.henselianRing` (so Hensel is *available* as a
+  characterization), but the unramified-correspondence assembly is absent. Valuation on `K̄`: only
+  `Analysis/Normed/Unbundled/SpectralNorm.lean` (`spectralNorm`, extends the norm to algebraic exts,
+  automorphisms are isometries) — not assembled into a `ValuativeRel`/residue-field/reduction-map.
+- **(Z) side — PRESENT:** `ProfiniteGrp.ProfiniteCompletion.{completion, etaFn, eta, denseRange, lift,
+  lift_eta, homEquiv, adjunction}` and the functor `ProfiniteGrp.profiniteCompletion`
+  (`Topology/Algebra/Category/ProfiniteGrp/Completion.lean`); `InfiniteGalois.profiniteGalGrp =`
+  `ProfiniteGrp.of Gal(K/k)`; `zpowersHom (α) : α ≃ (Multiplicative ℤ →* α)`; `GrpCat.ofHom`;
+  `Subgroup.topologicalClosure_coe`, `dense_iff_closure_eq`, `isCompact_range`. **ABSENT:** a named
+  `Ẑ`/`ZHat` (constructed here as `completion (GrpCat.of (Multiplicative ℤ))`); the iso `≅ Ẑ` itself.
+
+### Pre-search expectation vs. reality (points iii/iv)
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| (A) lifting irreducibly absent (not reducible to Hensel API) | confirmed (no `K^ur`; valuation on `K̄` absent) | ✓ |
+| (Z) profinite-completion functor present, no named `Ẑ` | confirmed | ✓ |
+| full `≅ Ẑ` not finished this pass; surjective half reachable | confirmed — surjective half proved, injective half remains | ✓ |
+| ledger stays `1 FOUNDATIONAL / 0 DEBT` | confirmed | ✓ |
+
+## What was proved (Step 2 self-audit)
+
+`Anabelian/FiniteFieldZHat.lean`, standard axioms only (in-file `#print axioms`):
+- `ZHat := completion (GrpCat.of (Multiplicative ℤ))` (Ẑ).
+- `zhatToGalois` — the canonical `Ẑ → Gal(K̄/K)` (finite `K`), via the profinite-completion universal
+  property `lift` applied to `n ↦ Frobⁿ`. `zhatToGalois_etaFn` characterizes it on the image of `ℤ`.
+- `zhatToGalois_surjective` — **surjective** (range closed [compact image] ⊇ dense Frobenius powers
+  [Pass 2]). The **surjective half** of `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`.
+
+**Genuine, not a fragment, not avoidance:** it is the actual map of the classical iso, built via the
+profinite-completion universal property — genuinely beyond Pass 2's procyclic generation. It is **not**
+a Pass-2 restatement (which was `topologicalClosure (zpowers φ) = ⊤`); it constructs the map from the
+completion object `Ẑ` and proves surjectivity of *that*. The proof took real categorical work (the
+GrpCat/ProfiniteGrp coercions, the pointwise `lift_eta` via `DFunLike.congr_fun`), the kind the
+easy-fruit era did not require.
+
+**Recovers nothing from an abstract group** (file docstring). **No load-bearing hypothesis / owed
+witness** (holds for any finite `K`). No new `structure`/`class`. **D1 did not recur** (finite fields).
+
+## Ledger delta
+
+- **0 `DEBT` / 0 new `FOUNDATIONAL`.** Active axioms unchanged: 1 `FOUNDATIONAL`
+  (`residueReduction_surjective`, Pass 5, unused here), 0 `DEBT`. 0 open owed witnesses.
+
+## Scope: toward R1, what remains on L1, pointer to Pass 7
+
+Advanced toward R1: `Gal(𝔽_q̄/𝔽_q)` is now known to be a *continuous quotient of `Ẑ`* (surjective half),
+the residue-side structure R1 exploits. Remaining L1 (both genuinely multi-pass, no light fragments):
+(i) the **injective half** of `≅ Ẑ` — the canonical map is injective, equivalently the finite quotients
+`Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` match `Ẑ`'s inverse system; (ii) **discharge** `residueReduction_surjective`
+by building the maximal-unramified construction (`FOUNDATIONAL → DEBT`, then prove — needs the
+valuation on `K̄` first). **Pass 7**: continue *without stacking boundaries* — begin (i) (finite
+quotients `≅ ℤ/n`) or begin (ii)'s construction, both axiom-free-or-committed-`DEBT`, never a second
+posit.

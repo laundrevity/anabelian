@@ -274,3 +274,35 @@ field `𝓀[K]`, with no `Algebra ℚ (AlgebraicClosure ℚ)` in play; D1 stays 
 
 Ledger delta: **`FOUNDATIONAL` +1** (`residueReduction_surjective`), **`DEBT` +0**; Owed witnesses
 0 added, 0 open.
+
+### Pass 6 (2026-05-30) — rung L1 discipline-inversion: `Ẑ ↠ Gal(𝔽_q̄/𝔽_q)`, no new boundary
+
+Introduced **zero** axioms; **added no second `FOUNDATIONAL`** — the explicitly disallowed outcome of
+this pass (the `FOUNDATIONAL`-stacking trap). After the Pass-5 first boundary, the metric guard binds:
+a rising `FOUNDATIONAL` count is not progress. Of the two permitted routes — (A) discharge
+`residueReduction_surjective` into a theorem on strictly-lower `DEBT`, (Z) the `≅ Ẑ` residue-side
+axiom-free — inventory found **(A) blocked** (the surjection's content *is* the unramified↔residue
+correspondence; its lifting step is irreducibly absent from Mathlib, and the infrastructure below it
+needs the absent valuation on `K̄`), so any "strictly-lower" `DEBT` would be the cardinal sin. Chose
+**(Z)**.
+
+`Anabelian/FiniteFieldZHat.lean` proves (standard axioms only — in-file `#print axioms` confirm):
+
+```
+'Anabelian.zhatToGalois_etaFn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.zhatToGalois_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `zhatToGalois` — the canonical continuous hom `Ẑ → Gal(K̄/K)` (finite `K`), from the
+  profinite-completion universal property (`ProfiniteGrp.ProfiniteCompletion.lift`) applied to
+  `n ↦ Frobⁿ`.
+- `zhatToGalois_surjective` — **it is surjective** (closed range ⊇ dense Frobenius powers, via Pass 2):
+  the **surjective half** of `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`. The injective half (full iso) is genuinely
+  multi-pass and logged as remaining L1 work in `ROADMAP.md`.
+
+Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`, Pass 5, untouched and
+unused here), **0 `DEBT`**. Reclassification log stays empty (the boundary was not discharged —
+honestly, because (A) is blocked, not avoided). D1 (ℚ-diamond) did **not** recur (finite fields,
+no `Algebra ℚ (AlgebraicClosure ℚ)`).
+
+Ledger delta: **0 / 0** (no `DEBT`, no new `FOUNDATIONAL`); axiom-free structural progress toward `≅ Ẑ`.

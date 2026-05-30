@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 5 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 6 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -37,7 +37,7 @@ This rung asserts nothing anabelian. It establishes that the *precondition* of r
 
 ## Foundational Mathlib gaps (L1–L4) — prerequisites, below the targets
 
-### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–5)   ·   DEBT 0, FOUNDATIONAL 1
+### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–6)   ·   DEBT 0, FOUNDATIONAL 1
 
 Mathlib **has** `IsNonarchimedeanLocalField` (definition, DVR, finite residue field, completeness),
 abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgroup`,
@@ -64,31 +64,39 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   (option (B), the inflection point), then real structure built on it — `unramifiedQuotient_iso`
   (`G_K ⧸ N ≃* Gal(𝓀̄/𝓀)`) and `unramifiedQuotient_procyclic` (that quotient is procyclic, via Pass 2).
   **First non-empty ledger: `FOUNDATIONAL` +1** (`Anabelian.residueReduction_surjective`).
+- Pass 6 (`Anabelian/FiniteFieldZHat.lean`): the **surjective half of `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`**, axiom-free
+  — `zhatToGalois` (the canonical `Ẑ → Gal(K̄/K)` via the profinite-completion universal property) and
+  `zhatToGalois_surjective` (closed range ⊇ dense Frobenius powers, via Pass 2). **No new boundary**;
+  ledger stays `1 FOUNDATIONAL / 0 DEBT` (the anti-`FOUNDATIONAL`-stacking discipline).
 
 **Sub-target IN-PROGRESS — the residue surjection (FOUNDATIONAL, Pass 5):**
-- The surjectivity half `Gal(K̄/K) ↠ Gal(𝔽_q̄/𝔽_q)` is now imported as the classified `FOUNDATIONAL`
-  axiom `Anabelian.residueReduction_surjective` (cost: **FOUNDATIONAL 1**; below R1; Serre I–II /
-  Neukirch II). Pass 4 proved the *injective* half axiom-free. Remaining to make this fully honest:
-  (i) optionally **discharge** the axiom by formalizing the maximal-unramified construction (would
-  reclassify it `FOUNDATIONAL → DEBT` via the Reclassification log, then prove it — multi-pass); and
-  (ii) **tie `N` to Pass 4's `inertiaSubgroup`** (needs the valuation on `K̄`, still absent).
+- The surjectivity half `Gal(K̄/K) ↠ Gal(𝔽_q̄/𝔽_q)` is imported as the classified `FOUNDATIONAL` axiom
+  `Anabelian.residueReduction_surjective` (cost: **FOUNDATIONAL 1**; below R1; Serre I–II / Neukirch II);
+  Pass 4 proved the *injective* half axiom-free. **Discharge (option (A)) was assessed BLOCKED in
+  Pass 6**: the surjection's content *is* the unramified↔residue correspondence, whose lifting step is
+  irreducibly absent from Mathlib (no `K^ur`), so no clean strictly-lower `DEBT` exists without the
+  cardinal sin, and the infrastructure below it needs the (absent) valuation on `K̄`. Remaining:
+  (i) build the maximal-unramified construction to discharge it (`FOUNDATIONAL → DEBT`, multi-pass);
+  (ii) tie `N` to Pass 4's `inertiaSubgroup` (needs the valuation on `K̄`).
+
+**Sub-target IN-PROGRESS — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (Pass 6):**
+- **Surjective half DONE** (Pass 6, axiom-free): `zhatToGalois_surjective`. Remaining: the **injective
+  half** (the canonical `Ẑ → Gal` is injective, equivalently the finite quotients
+  `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` match `Ẑ`'s inverse system) — genuinely multi-pass; gives the full iso.
 
 **Sub-targets, NOT-STARTED:**
-- `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` as **topological groups** (procyclic generation proved Pass 2; the `Ẑ = lim ℤ/n`
-  identification remains — general profinite-completion functor present, this iso absent).
 - The unramified ⟶ tame ⟶ wild filtration of `Gal(K̄/K)` for local `K`.
 - ~~Discharge owed witness W1 (`Gal(ℚ̄/ℚ)` non-abelian)~~ — **DONE, Pass 3**.
 - Depends on: L0 + Mathlib's local-field/ramification/finite-field API.
 
-**Honest read on L1 completeness (updated Pass 5).** The *easy/finite* L1 fruit is harvested (P1–4),
-and Pass 5 made the inflection-point decision the Pass-4 read called for: the residue surjection is
-**taken as a `FOUNDATIONAL` boundary** (option (B)) because the maximal-unramified Galois edifice is
-absent from Mathlib and is a substantial classical construction, with real structure (procyclic
-unramified quotient) built on it. L1 is now *honestly* advanced toward R1 with one explicit external
-input. Remaining L1 work is genuine structure theory (discharge the boundary if desired; tie `N` to
-inertia; tame/wild; `≅ Ẑ`) — **not** light fragments. Pass 6 should pick one of: begin discharging
-`residueReduction_surjective` (option (A) now, with the construction scaffolded over several passes),
-or start a *new* L1 sub-target (tame/wild, or `≅ Ẑ`) with the same (A)/(B) discipline.
+**Honest read on L1 completeness (updated Pass 6).** The easy/finite fruit is harvested (P1–4); Pass 5
+took the one honest `FOUNDATIONAL` boundary (residue surjection); Pass 6 confirmed the discipline has
+inverted — it added **no** second boundary and instead did axiom-free structural work (the surjective
+half of `≅ Ẑ`). Both remaining big L1 items (discharge `residueReduction_surjective`; full `≅ Ẑ`) are
+genuinely multi-pass: the first needs the absent maximal-unramified construction, the second the
+injective half (matching inverse systems). Pass 7 should continue **without stacking boundaries** —
+e.g. begin the `≅ Ẑ` injective half (finite quotients `≅ ℤ/n`), or begin (A)'s maximal-unramified
+construction (scaffolded over several passes, sharpening the boundary into committed `DEBT`).
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -100,7 +108,7 @@ we owe before sustained work in a sub-area):**
   agree definitionally, and provide a reusable lemma/instance — rather than dodging per-theorem.
   Trigger: the *second* recurrence of the diamond is when to attempt the structural fix instead of a
   second band-aid. Status: tracked, not yet triggered (Pass 3 = first appearance; Passes 4–5 did not
-  recur — both worked over abstract/local fields with no `Algebra ℚ (AlgebraicClosure ℚ)`).
+  recur — Passes 4–6 worked over abstract/local/finite fields with no `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 ### L2 — Higher ramification groups (lower & upper numbering)   ·   **NOT-STARTED**   ·   DEBT: medium-high
 

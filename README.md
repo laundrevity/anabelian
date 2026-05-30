@@ -19,10 +19,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 5 — the inflection point)
+## Current state (Pass 6)
 
-Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and — as of Pass 5 —
-the **first classified `FOUNDATIONAL` entry** (the honest sign the project reached its real work).
+Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
+classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
+Pass 6 deliberately added **no** second boundary).
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -37,9 +38,12 @@ the **first classified `FOUNDATIONAL` entry** (the honest sign the project reach
 - `Anabelian/UnramifiedQuotient.lean` (L1) — Pass 5 takes the residue **surjectivity** as a classified
   `FOUNDATIONAL` boundary (`residueReduction_surjective`, Serre/Neukirch, strictly below R1) and proves
   real structure on it: the **unramified quotient `G_K ⧸ N ≅ Gal(𝓀̄/𝓀)` is procyclic** (via Pass 2).
+- `Anabelian/FiniteFieldZHat.lean` (L1) — Pass 6 proves, axiom-free, the **surjective half of
+  `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`**: the canonical map `Ẑ → Gal(K̄/K)` (profinite-completion universal property) is
+  surjective. No new boundary (the anti-`FOUNDATIONAL`-stacking discipline).
 
-The first four files rest on standard axioms only; the Pass-5 structure rests on standard axioms plus
-the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`). All touch the project's subject (absolute Galois
+Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
+other file rests on standard axioms only. All touch the project's subject (absolute Galois
 groups) while recovering nothing from an abstract group — the reconstruction targets (R1–R3 in
 `ROADMAP.md`) remain distant and untouched.
 
