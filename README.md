@@ -13,17 +13,22 @@ The discipline matters more than any single file. Read these in order:
 
 - **`CLAUDE.md`** — the constitution: the axiom-budget discipline, rule-2, the honest scope.
 - **`AXIOM_LEDGER.md`** — every non-standard axiom, classified `FOUNDATIONAL` (honest boundary) vs
-  `DEBT` (a hole to fill). Currently **empty** — zero debt. This, not `#print axioms` alone, is the
-  source of truth for what is assumed.
+  `DEBT` (a hole to fill). Currently **one `FOUNDATIONAL` entry, zero `DEBT`** (the residue surjection,
+  Pass 5). This, not `#print axioms` alone, is the source of truth for what is assumed.
 - **`ROADMAP.md`** — the dependency ladder from the current Mathlib floor up to mono-anabelian
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 9)
+## Current state (Pass 10)
 
 Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
 classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
-Passes 6–9 each deliberately added **no** second boundary).
+Passes 6–10 each deliberately added **no** second boundary).
+
+**Milestone (Pass 10): the first L1 *whole of depth* is closed.** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` — the absolute
+Galois group of a finite field is the profinite completion of `ℤ`, as a topological group — is proved
+as a complete axiom-free `ContinuousMulEquiv` (`Anabelian.galoisContinuousMulEquivZHat`), earned across
+Passes 6–10 with **nothing posited** in the chain.
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -57,6 +62,10 @@ Passes 6–9 each deliberately added **no** second boundary).
   surjective), and the **Frobenius-aligned** generator (`levelRestrict_frobenius`:
   `r_n(Frob) = frobeniusAlgEquivOfAlgebraic`; `orderOf (r_n Frob) = n`). Graded as infrastructure: the
   iso is **not** closed and **not** posited; injectivity is Pass 10. No new boundary.
+- `Anabelian/FiniteFieldZHatIso.lean` (L1) — Pass 10 **closes `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`** axiom-free, the
+  **first L1 whole of depth**: `zhatToGalois_injective` (`ker zhatToGalois = ⊥`, via
+  `ker χ_m = closure⟨zhatGen^m⟩` + separation + Lagrange) and the topological-group isomorphism
+  `galoisContinuousMulEquivZHat : Gal(𝔽_q̄/𝔽_q) ≃ₜ* Ẑ`. Nothing posited; no new boundary.
 
 Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
 other file rests on standard axioms only. All touch the project's subject (absolute Galois

@@ -404,3 +404,35 @@ genuine (for `n = 0` the level field is all of `K̄`, infinite) but is not a rul
 (no `structure`/`class`); no owed witness.
 
 Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.
+
+### Pass 10 (2026-05-30) — rung L1: **`Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` CLOSED** (first L1 whole of depth)
+
+Introduced **zero** axioms; **added no second `FOUNDATIONAL`**. This pass **closes** the
+topological-group isomorphism `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`, axiom-free — the capstone of the Pass 6–9 sub-plan
+and the project's **first closed L1 whole of real depth**. Nothing was posited anywhere in the
+Pass 6–10 chain; the iso is earned.
+
+`Anabelian/FiniteFieldZHatIso.lean` (standard axioms only — in-file `#print axioms`):
+
+```
+'Anabelian.zhatToGalois_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisContinuousMulEquivZHat' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `zhatToGalois_injective` — `ker zhatToGalois = ⊥`. Via the **cofinality core** `ker_levelComp_le`:
+  for `χ_m := r_m ∘ zhatToGalois` (`levelComp`), the dense `⟨zhatGen⟩` meets the *open* `ker χ_m` in
+  exactly `⟨zhatGen^m⟩` (`χ_m (zhatGen^k) = 1 ↔ m ∣ k`, using Pass 9's `orderOf (r_m Frob) = m`), so
+  `ker χ_m = closure⟨zhatGen^m⟩` (`IsOpen.inter_closure` + Pass 8 density). Then separation
+  (`exist_openNormalSubgroup_sub_open_nhds_of_one`) + Lagrange (`pow_card_eq_one'`) finish.
+- `galoisContinuousMulEquivZHat` — **`Gal(𝔽_q̄/𝔽_q) ≃ₜ* Ẑ`**: `zhatToGalois` bijective (injective +
+  Pass 6 surjective) ⟹ homeomorphism (`Continuous.homeoOfEquivCompactToT2`) ⟹ `ContinuousMulEquiv`.
+
+The uniqueness/cofinality "crux" the Pass-9 setup flagged needed **no absent machinery**: the
+`DiscreteTopology Gal(𝔽_{q^m}/K)` instance (`krullTopology_discreteTopology_of_finiteDimensional`)
+makes `ker χ_m` open, and `ker χ_m = closure⟨zhatGen^m⟩` replaces an explicit unique-subgroup lemma.
+
+Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`, Pass 5, untouched and
+unused here), **0 `DEBT`**. **Sub-target `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`: DONE.** Reclassification log stays empty.
+D1 (ℚ-diamond) did **not** recur (finite fields). No new `structure`/`class`; no owed witness.
+
+Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.

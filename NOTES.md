@@ -1005,3 +1005,95 @@ cofinality of those subgroups** (on Pass 8's `zhat_quotient_isCyclic` + `toLimit
 Then Pass 11 packages the `ContinuousMulEquiv` (`homeoOfEquivCompactToT2` + `MulEquiv.ofBijective`,
 both PRESENT) — closing `≅ Ẑ`, the first L1 whole of depth. Honest next step: **execute Pass 10**
 (likely substantial — the cofinality/diagram chase may itself fill a pass).
+
+---
+
+# Pass 10 — rung L1: **`Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` CLOSED** — first L1 whole of depth (2026-05-30)
+
+## Honest scope + grading
+
+Rung **L1**, **no reconstruction (R1–R3)**. This pass **closes** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` as a complete
+axiom-free `ContinuousMulEquiv` — the project's **first closed L1 whole of real depth**, the capstone
+of the Pass 6–10 chain. Graded as the **genuine whole** it is (not a half, not infrastructure):
+nothing posited anywhere in the chain; the iso is earned. Ledger delta: **0 / 0**.
+
+## The decision: prove injectivity, close the iso; no posit/pivot/pad
+
+The setup was fully resolved by Pass 9. This pass proved the one substantive remaining rung
+(injectivity) and the packaging fell out the same pass, so the iso closed. A posit (of injectivity /
+the iso), a pivot (to the residue boundary), or padding would each have been the disallowed outcome.
+Every lemma is on the injectivity/closure path.
+
+## The injectivity argument (and the crux that dissolved)
+
+`ker zhatToGalois = ⊥` via:
+- `χ_m := r_m ∘ zhatToGalois` (`levelComp`); `χ_m zhatGen = r_m (Frob)` of **order `m`** (Pass 9
+  `orderOf_levelRestrict_frobenius` + Pass 6 `zhatToGalois_etaFn`, the latter giving
+  `zhatToGalois zhatGen = Frob`).
+- **`ker_levelComp_le` (the cofinality core):** for closed `S ∋ zhatGen^m`, `ker χ_m ≤ S`. `ker χ_m`
+  is **open** (`χ_m` continuous to the discrete `Gal(𝔽_{q^m}/K)`), the dense `⟨zhatGen⟩` (Pass 8)
+  meets it in exactly `⟨zhatGen^m⟩` (`χ_m (zhatGen^k) = 1 ↔ m ∣ k`), so by `IsOpen.inter_closure`
+  `ker χ_m = closure⟨zhatGen^m⟩ ⊆ S`.
+- Then: `zhatToGalois x = 1`, `x ≠ 1` ⟹ separation gives open normal `H ∌ x`; `m := |Ẑ ⧸ H|`;
+  Lagrange (`pow_card_eq_one'`) puts `zhatGen^m ∈ H`; so `x ∈ ker χ_m ≤ H` — contradiction.
+
+**The Pass-9-flagged "procyclic ⟹ unique open subgroup of each finite index" lemma was NOT needed.**
+The realization `ker χ_m = closure⟨zhatGen^m⟩` (an *equation*, from openness + density) replaced the
+uniqueness/cofinality lemma entirely — a cleaner route than the one set up. This is the inventory
+correction this pass: the crux dissolved into `IsOpen.inter_closure` + Pass 8 density, no new
+group-theory.
+
+## Deepened inventory (real names; verify, don't guess)
+
+- **PRESENT (the decisive ones):** `krullTopology_discreteTopology_of_finiteDimensional`
+  (`DiscreteTopology Gal(𝔽_{q^m}/K)`, makes `ker χ_m` open — the linchpin);
+  `InfiniteGalois.restrictNormalHom_continuous` (`r_m` continuous);
+  `exist_openNormalSubgroup_sub_open_nhds_of_one` (separation; the engine of Pass 8
+  `toLimit_injective`); `IsOpen.inter_closure` (`s ∩ closure t ⊆ closure (s ∩ t)`);
+  `orderOf_dvd_iff_zpow_eq_one`, `pow_card_eq_one'`, `QuotientGroup.eq_one_iff`,
+  `injective_iff_map_eq_one`; `Continuous.homeoOfEquivCompactToT2`, `Equiv.ofBijective`,
+  `ContinuousMulEquiv` (the packaging, as Pass 8 inventory predicted).
+- **My-side reused:** `zhatToGalois`/`_surjective`/`_etaFn` (P6), `zhatGen`/
+  `zhat_topologicalClosure_eq_top` (P8), `levelRestrict`/`orderOf_levelRestrict_frobenius`/
+  `levelField`+`FiniteDimensional` (P9).
+- **ABSENT / not needed:** no "unique index-`n` subgroup of `Ẑ`" lemma (dissolved, see above); the
+  `≅ Ẑ` iso itself was the gap, now filled.
+
+### Pre-search expectation vs. reality
+
+| I expected (pre-search) | Reality | Verdict |
+|-------------------------|---------|---------|
+| injectivity is the one substantive rung | yes | ✓ |
+| needs "procyclic ⟹ unique index-`n` subgroup" (maybe a pass) | **not needed** — `ker χ_m = closure⟨zhatGen^m⟩` replaces it | ✗→better |
+| `DiscreteTopology Gal(𝔽_{q^m}/K)` present (for ker open) | confirmed (`krullTopology_discreteTopology_of_finiteDimensional`) | ✓ |
+| packaging falls out if injectivity lands | confirmed — iso closed same pass | ✓ |
+| ledger stays `1 FOUNDATIONAL / 0 DEBT`, nothing posited | confirmed | ✓ |
+
+## What was proved (Step 2 self-audit)
+
+`Anabelian/FiniteFieldZHatIso.lean`, standard axioms only (in-file `#print axioms`):
+`zhatToGalois_zhatGen`, `levelComp`, `levelComp_zhatGen`, `ker_levelComp_le`,
+**`zhatToGalois_injective`**, **`galoisContinuousMulEquivZHat : galoisProfinite K ≃ₜ* ZHat`** (the
+classical `Gal(𝔽_q̄/𝔽_q) ≃ₜ* Ẑ`).
+
+**Did `≅ Ẑ` CLOSE? YES** — the full topological-group iso, standard-axioms-only, nothing posited.
+**Recovers nothing from an abstract group** (structure of a *given* finite field's `Gal`). No new
+`structure`/`class` (no rule-2 obligation); no load-bearing hypothesis beyond `K` finite; no owed
+witness. **D1 did not recur** (finite fields).
+
+## Ledger delta
+
+- **0 `DEBT` / 0 new `FOUNDATIONAL`.** Active axioms unchanged: 1 `FOUNDATIONAL`
+  (`residueReduction_surjective`, Pass 5, unused here), 0 `DEBT`. 0 open owed witnesses.
+  **`≅ Ẑ` sub-target: DONE.**
+
+## Scope: what closing `≅ Ẑ` means for L1, pointer to Pass 11
+
+The project now has its **first deep L1 whole** — a genuine anabelian-flavored complete theorem, the
+calibration target. **Remaining open L1 item:** the residue-surjection boundary discharge
+(`residueReduction_surjective`, Pass 5 `FOUNDATIONAL`), still blocked on the absent valuation on `K̄`
+(no `K^ur`/`𝒪[K̄]` assembled from `SpectralNorm`). **Pass 11 options (honest):** (a) begin the
+valuation-on-`K̄` construction toward discharging the one `FOUNDATIONAL` (`FOUNDATIONAL → DEBT`,
+multi-pass, the only way to drive `FOUNDATIONAL` down); or (b) open a fresh L1 sub-target (e.g. the
+unramified/tame/wild ramification filtration, L2-adjacent). With `≅ Ẑ` closed, the bar (a deep whole)
+is met once; the climb up the ladder continues.
