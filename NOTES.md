@@ -1272,3 +1272,475 @@ exact hypotheses), connecting `IsNonarchimedeanLocalField K`'s `𝒪[K]`/`Valuat
 Then Pass 14: step 3 (residue identification + `stabilizer = ⊤`), Pass 15: step 4 (apply the keystone,
 **delete the axiom** — discharge). The discharge is now a concrete, bounded, keystone-anchored
 sub-plan; net `DEBT` → 0 is genuinely in sight, no longer a static boundary.
+
+---
+
+# Pass 13 — rung L1, route (a): keystone fit-verdict + route pivot to `integralClosure` (2026-05-30)
+
+## Primary deliverable: the keystone's exact-hypothesis fit-verdict
+
+Rung **L1**, **no reconstruction (R1–R3)**. The discharge of `residueReduction_surjective` applies
+`Ideal.Quotient.stabilizerHom_surjective_of_profinite` (Pass 12). Per the route-first-step discipline,
+I probed its **exact hypotheses**: `A B : CommRing`, `Algebra A B`, `[MulSemiringAction G B]
+[SMulCommClass G A B]`, `G` profinite (`CompactSpace` + `TotallyDisconnectedSpace` + `IsTopologicalGroup`),
+`B` with `[TopologicalSpace B] [DiscreteTopology B] [ContinuousSMul G B]`, `(P) (Q) [Q.IsPrime]
+[Q.LiesOver P] [Algebra.IsInvariant A B G]`; conclusion `stabilizer G Q ↠ Aut((B/Q)/(A/P))`.
+
+**Two findings (the verdict):**
+1. **`B` must be `DiscreteTopology`** — the keystone's `B`-topology is the *algebraic/Krull* (discrete)
+   one, `ContinuousSMul G B` meaning open stabilizers, **not** the valuation topology on `𝒪[K̄]`. So `B`
+   is given the discrete topology (free on the ring); the Pass-11/12 spectral/valuation topology is not
+   what the keystone consumes. Reframing, not a wall.
+2. **`G = Gal(K̄/K)` profinite needs `IsGalois K (AlgebraicClosure K)`** — probe-verified ABSENT for a
+   general field (`CompactSpace Gal(K̄/K)` and `IsGalois K (AlgebraicClosure K)` both fail to synthesize
+   without perfectness). Holds for perfect `K` (char-0 / mixed-char local fields); fails for imperfect
+   equal-char (`𝔽_q((t))`, `K̄/K` inseparable). A **genuine route prerequisite**, now tracked: the
+   keystone discharge needs `Gal(K̄/K)` profinite (via `[IsGalois K K̄]`), the imperfect case via the
+   separable-closure framing (`Aut(K̄/K) ≅ Gal(K^sep/K)`) — deferred.
+
+## Route pivot (correcting Pass 11's spectralNorm route): use `integralClosure 𝒪[K] K̄`
+
+The keystone wants `B` a `CommRing` with `Algebra A B` + `Algebra.IsInvariant A B G` + the action — i.e.
+`B = integralClosure 𝒪[K] K̄` over `A = 𝒪[K]`, **native to `IsNonarchimedeanLocalField`'s `ValuativeRel`**.
+This pivots off the `spectralNorm` route and **avoids the `IsNonarchimedeanLocalField → NormedField`
+bridge entirely — so the watched bridge-diamond (D2) is NOT incurred** (`ROADMAP.md` D2). `spectralNorm`
+(`𝒪[K̄] = spectralIntegers K`, P11–12) is a valid identification of the same ring but off the critical
+path.
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT (used):** `IsNonarchimedeanLocalField` + `𝒪[K]` (`ValuativeRel`; the `CommRing ↥𝒪[K]`,
+  `Algebra ↥𝒪[K] (AlgebraicClosure K)`, `IsScalarTower ↥𝒪[K] K (AlgebraicClosure K)` instances all
+  synthesize); `integralClosure` + `.toSubring`; `IsIntegral.map` + `AlgHom.restrictScalars`
+  (integrality preservation under a `K`-linear, hence `𝒪[K]`-linear, σ); `IsInvariantSubring` +
+  `IsInvariantSubring.toMulSemiringAction`; `MulSemiringAction (K̄ ≃ₐ[K] K̄) K̄`;
+  `AlgEquiv.mapIntegralClosure` / `integralClosure_map_algEquiv`.
+- **ABSENT / remaining (steps 2–3):** `Algebra.IsInvariant 𝒪[K] (integralClosure 𝒪[K] K̄) Gal` (the
+  fixed-points-= base theorem); `DiscreteTopology`/`ContinuousSMul` setup; `IsGalois K K̄` profinite
+  prerequisite; `𝒪[K̄]/𝔪 ≅ AlgebraicClosure 𝓀[K]` (residue of `K̄` = alg closure of `𝓀`) + the `Aut`
+  identification; `stabilizer = ⊤` (unique prime over `𝔪[K]`, Henselian).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| `𝒪[K̄]`/`Gal` may not literally fit; bridge/reframing needed | confirmed — `B` discrete + `Gal` profinite-needs-`IsGalois` | ✓ |
+| not reach axiom-removal (discharge) this pass | confirmed — steps 2–3 substantial; partway with tracker | ✓ |
+| identification lemmas substantial | confirmed; but the **action** brick landed cleanly over the exact setting | ✓ (+pivot) |
+| watch the `NormedField`-bridge diamond | **avoided** by pivoting to `integralClosure` — no D2 | ✓ (better) |
+
+## What was built (Step 2 self-audit)
+
+`Anabelian/ResidueReductionIntegral.lean`, standard axioms only (in-file `#print axioms`):
+- `galoisIntegers K` — the keystone's ring `B = 𝒪[K̄] = integralClosure 𝒪[K] K̄` (`Subring`).
+- `isIntegral_map_galois` — `σ ∈ Gal(K̄/K)` preserves integrality over `𝒪[K]`.
+- `galoisIntegers_isInvariant` — `IsInvariantSubring (Gal(K̄/K)) 𝒪[K̄]` ⟹ (via
+  `IsInvariantSubring.toMulSemiringAction`) the `MulSemiringAction G B` the keystone consumes
+  (**route step 1b, over the keystone's actual `B`, in the exact `IsNonarchimedeanLocalField` setting**).
+
+**Headline status: the axiom was NOT removed — `DEBT` remains the single open entry.** Strictly-lower,
+axiom-free, genuinely below the surjection (the action on `B`, not the lifting). **Nothing cardinal-sin
+posited** (the surjection is a present theorem to be *applied*, never stubbed; no new `DEBT`/`FOUNDATIONAL`).
+**Recovers nothing from an abstract group.** No new `structure`/`class` (no rule-2 obligation). **D1
+N/A** (local field); **D2 not incurred** (route avoids the `NormedField` bridge).
+
+## `DEBT` status and ledger delta
+
+- **`DEBT` OPEN. Route-steps remaining: [Step 2 `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` + discrete +
+  `ContinuousSMul` + `IsGalois K K̄` prerequisite; Step 3 residue `𝒪[K̄]/𝔪 ≅ AlgebraicClosure 𝓀[K]` +
+  `Aut` + `stabilizer = ⊤`; Step 4 apply keystone, delete axiom].** Steps 1, 1b done (Pass 13) over the
+  keystone's actual `B`.
+- **Ledger unchanged: `0 FOUNDATIONAL / 1 DEBT`.** No new axiom; no reclassification.
+
+## Scope: pointer to Pass 14
+
+Pass 14: **step 2** — establish `Algebra.IsInvariant 𝒪[K] (integralClosure 𝒪[K] K̄) (Gal(K̄/K))` (the
+fixed points `𝒪[K̄]^Gal = 𝒪[K]`), give `galoisIntegers K` the discrete topology with `ContinuousSMul`
+(open stabilizers of the Galois action), and address the `IsGalois K (AlgebraicClosure K)` profinite
+prerequisite (start with the perfect / char-0 local-field case where it holds). Then Pass 15: step 3
+(residue identification + `stabilizer = ⊤`), Pass 16: step 4 (apply the keystone, **delete the axiom** —
+net `DEBT` → 0). The discharge is a concrete, keystone-anchored, bounded sub-plan with one tracked
+prerequisite (perfectness); not a static boundary.
+
+---
+
+# Pass 14 — rung L1, route (a): fixed-ring `𝒪[K̄]^Gal = 𝒪[K]` + the generality decision (2026-05-30)
+
+## Job B — the generality decision (primary, not optional)
+
+Rung **L1**, **no reconstruction**. The keystone `stabilizerHom_surjective_of_profinite` needs
+`Gal(K̄/K)` **profinite** = `IsGalois K (AlgebraicClosure K)` ⟺ **`K` perfect** (`PerfectField K ⟹
+IsGalois K K̄`, confirmed). Mixed-char / char-0 local fields are perfect; imperfect equal-char (`𝔽_q((t))`)
+are not.
+
+**Investigation — is `residueReduction_surjective` true *as stated* for imperfect `K`? YES.**
+`Field.absoluteGaloisGroup K = Aut(K̄/K)`; for imperfect `K`, `K̄/K^sep` is purely inseparable, so each
+`K`-automorphism of `K̄` is determined by its rigid restriction to `K^sep`, giving `Aut(K̄/K) ≅
+Gal(K^sep/K)` (profinite). The residue field `𝓀[K]` is **finite, hence perfect**, so the residue
+reduction `Gal(K^sep/K) ↠ Gal(𝓀̄/𝓀)` holds by standard unramified theory. So the statement is true for
+all local fields — the obstruction is only that the keystone *as applied* needs `Gal(K̄/K)` *literally*
+profinite (`IsGalois K K̄`), which Mathlib gates on perfectness.
+
+**Decision: option (a) — narrow to the perfect case, track the imperfect case.** The discharging
+`theorem` (a later pass) will carry `[PerfectField K]`, the narrowing documented in its docstring +
+ledger, and the **imperfect equal-char case is a named tracked remainder** (`ROADMAP.md`), to be proven
+via the `Aut(K̄/K) ≅ Gal(K^sep/K)` framing — never silently dropped. Not enacted this pass (axiom not
+removed); decided + recorded.
+
+## Job A — the fixed-ring identification (step-2 core, perfect case)
+
+`Anabelian/ResidueReductionInvariant.lean`, standard axioms only (in-file `#print axioms`):
+- `galoisIntegers_algebraIsInvariant` — **`Algebra.IsInvariant 𝒪[K] (integralClosure 𝒪[K] K̄) Gal`**
+  (`𝒪[K̄]^Gal = 𝒪[K]`) for perfect `K`, one of the keystone's hypotheses. Proof: a `Gal`-fixed `b` has
+  `(b : K̄) ∈ fixedField ⊤ = (⊥ : IntermediateField K K̄) = K` (`InfiniteGalois.fixedField_fixingSubgroup`
+  + `fixingSubgroup_bot` + `mem_fixedField_iff`); `b` integral over `𝒪[K]`; integrality descends through
+  the injective `K → K̄` (`isIntegral_algebraMap_iff`); `𝒪[K]` integrally closed in `K = Frac 𝒪[K]`
+  (`IsIntegrallyClosed.isIntegral_iff`) ⟹ `b ∈ 𝒪[K]`.
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT (used):** `PerfectField K → IsGalois K (AlgebraicClosure K)`;
+  `InfiniteGalois.fixedField_fixingSubgroup` (the infinite Galois correspondence, `K̄^Gal = K`);
+  `IntermediateField.fixingSubgroup_bot`, `mem_fixedField_iff`, `IntermediateField.mem_bot`;
+  `isIntegral_algebraMap_iff` (integrality descent, injective algebraMap);
+  `IsIntegrallyClosed.isIntegral_iff` + `IsFractionRing ↥𝒪[K] K`; `FaithfulSMul.algebraMap_injective`.
+- **ABSENT (the confirmed discharge blocker, step 3):** `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]` — the
+  residue field of `K̄` is the algebraic closure of `𝓀` — no `ResidueField`-of-algebraic-closure API
+  (and no integral-closure-residue API). A substantial sub-construction (residue alg-closed + algebraic
+  over `𝓀` ⟹ `≅ AlgebraicClosure`).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| statement true for imperfect `K` | confirmed (`Aut(K̄/K) ≅ Gal(K^sep/K)`, residue finite/perfect) | ✓ |
+| fixed-ring `𝒪[K̄]^Gal = 𝒪[K]` reachable (moderate) | landed cleanly (the InfiniteGalois fixed-field + integrally-closed chain) | ✓ |
+| residue iso the hard blocker | confirmed ABSENT, substantial — the next obstacle | ✓ |
+| not reach axiom-removal this pass | confirmed (blocked on residue iso) | ✓ |
+
+## What was built (Step 2 self-audit) + HEADLINE status
+
+Built `galoisIntegers_algebraIsInvariant` (step-2 core, perfect case), axiom-free, strictly-lower.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+**Route-steps remaining: [Step 2b `DiscreteTopology` + `ContinuousSMul`; Step 3 residue iso (the ABSENT
+blocker) + `stabilizer = ⊤`; Step 4 apply keystone + delete axiom, perfect-case narrowing].** Steps 1,
+1b, 2a done. **Nothing cardinal-sin posited** (no sub-step stubbed with a new `DEBT`; the surjection is
+a present theorem to be applied). **Recovers nothing from an abstract group.** No new `structure`/`class`
+(no rule-2). **D1** N/A; **D2 not incurred** (integral-closure route, no `NormedField` bridge).
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`** (open).
+  The unit of progress this phase is strictly-lower axiom-free bricks toward the keystone application.
+
+## Scope: pointer to Pass 15
+
+Pass 15: **step 3 — the residue identification** `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]` (the ABSENT
+blocker: residue field of `K̄` is alg-closed + algebraic over `𝓀`), the `Aut = Gal(𝓀̄/𝓀)` identification,
+and `stabilizer 𝔪[K̄] = ⊤` (unique prime over `𝔪[K]`, Henselian). Plus step 2b (`DiscreteTopology` +
+`ContinuousSMul`). Then step 4: apply `stabilizerHom_surjective_of_profinite`, **delete the axiom**
+(perfect-case, documented narrowing), and track the imperfect case — net `DEBT` → 0 for the perfect
+case. The residue iso is the one remaining hard lemma; the rest of the route is assembled.
+
+---
+
+# Pass 15 — rung L1, route (a): Step 2b (`ContinuousSMul`) + the residue-iso verdict (2026-05-30)
+
+## Primary deliverable: the residue-identification tractability verdict
+
+Rung **L1**, **no reconstruction**. The discharge (perfect case) applies
+`stabilizerHom_surjective_of_profinite` to `B = 𝒪[K̄] = integralClosure 𝒪[K] K̄`; the one remaining hard
+step was the **residue iso** `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]` (Pass 14's pinpointed blocker).
+Front-loaded its tractability. **Verdict: a BOUNDED multi-pass sub-plan, not a wall.** Decomposition:
+- **3a. `𝒪[K̄]` local + `Q = 𝔪[K̄]`** — `𝒪[K̄]` is the valuation ring of the (unique, `𝒪[K]` complete)
+  extension to `K̄`. **ABSENT** as a direct lemma; reachable via the valuation-integral-closure API
+  (`RingTheory/Valuation/AlgebraInstances.lean`), **NOT** `spectralNorm` (that re-introduces the
+  `NormedField` bridge / **D2** — avoid). Substantial.
+- **3b. residue algebraic over `𝓀[K]`** — residue classes lift to integral (hence algebraic) elements.
+  Moderate.
+- **3c. residue `𝓀̄` algebraically closed** — **ABSENT** (no `IsAlgClosed`-of-residue API). From-scratch:
+  monic poly over `𝓀̄` lifts to monic over `𝒪[K̄] ⊆ K̄` (alg closed), root is integral ⟹ in `𝒪[K̄]` ⟹
+  reduces to a root in `𝓀̄`. Uses `K̄` alg-closed + integral-closure, **not** Hensel (`K̄` not complete ⟹
+  `𝒪[K̄]` not Henselian — the naive Hensel route fails). Substantial.
+- **3d. `𝓀̄ ≅ AlgebraicClosure 𝓀[K]`** — `isAlgClosure_iff` (`IsAlgClosed ∧ Algebra.IsAlgebraic ↔
+  IsAlgClosure`) + `IsAlgClosure.equiv`. **Supported.**
+- **3e. `Aut(𝓀̄/𝓀[K]) ≅ Field.absoluteGaloisGroup 𝓀[K]`** — transport along 3d. Supported.
+
+So the residue iso is reachable (~2–3 passes; 3a/3c the substantial from-scratch pieces, 3d/3e supported)
+— **not a wall**.
+
+## Built — Step 2b (`ContinuousSMul`, a keystone hypothesis)
+
+`Anabelian/ResidueReductionContinuity.lean`, standard axioms only (in-file `#print axioms`):
+- `galoisStabilizer_isOpen` — every stabilizer of the Galois action on `𝒪[K̄] = integralClosure 𝒪[K] K̄`
+  is **open** in `Gal(K̄/K)`: it equals the stabilizer of the underlying `(b : K̄)`, open by
+  `stabilizer_isOpen_of_isIntegral` (`K̄/K` integral; the coe-of-action bridge `↑(σ•b) = σ↑b` is `rfl`).
+- `continuousSMul_galoisIntegers` — hence with the **discrete** topology on `𝒪[K̄]` (the keystone's
+  choice), `ContinuousSMul Gal(K̄/K) 𝒪[K̄]` (`continuousSMul_iff_stabilizer_isOpen`). **Step 2b** —
+  `DiscreteTopology B` + `ContinuousSMul G B` — discharged, strictly-lower, axiom-free.
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT (used):** `stabilizer_isOpen_of_isIntegral` (`KrullTopology.lean`, integral ext ⟹ open
+  krull stabilizers); `continuousSMul_iff_stabilizer_isOpen` + `MulAction.stabilizer` API
+  (`Topology/Algebra/MulAction.lean`). For 3d/3e: `isAlgClosure_iff`, `IsAlgClosure.equiv`
+  (`FieldTheory/IsAlgClosed/Basic.lean`).
+- **ABSENT (the residue-iso remainder):** `IsLocalRing (integralClosure …)` / valuation-extension
+  uniqueness to `K̄` (3a); `IsAlgClosed`-of-residue-field (3c). Both from-scratch but bounded.
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| residue iso a bounded sub-plan, not a wall | confirmed — 3a/3c substantial, 3d/3e supported | ✓ |
+| Step 2b cheap and reachable | confirmed (`stabilizer_isOpen_of_isIntegral` + `continuousSMul_iff…`) | ✓ |
+| `spectralNorm` re-entry for 3a risks D2 | confirmed — flagged; use the `ValuativeRel` route instead | ✓ |
+| not reach axiom-removal this pass | confirmed (3a/3c remain) | ✓ |
+
+## What was built + HEADLINE status
+
+`galoisStabilizer_isOpen`, `continuousSMul_galoisIntegers` (Step 2b), axiom-free, strictly-lower.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+**Route-steps remaining: [Step 3a–3c (residue iso, the substantial remainder); 3d/3e (supported); Step
+4 apply keystone + delete axiom (perfect-case)].** Done: 1, 1b, 2a, 2b. **Nothing cardinal-sin posited**
+(no sub-step stubbed; residue iso to be built, surjection to be applied). **Recovers nothing from an
+abstract group.** No new `structure`/`class` (no rule-2). **D1** N/A; **D2 not incurred** (and the
+`spectralNorm` 3a-re-entry is flagged as a D2 risk to avoid).
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`** (open).
+
+## Scope: pointer to Pass 16
+
+Pass 16: **steps 3a + 3c** — the two substantial from-scratch lemmas: `𝒪[K̄] = integralClosure 𝒪[K] K̄`
+is **local** with maximal ideal `𝔪[K̄]` (the valuation ring of `K̄`, via the valuation-integral-closure
+API — avoiding the `spectralNorm`/D2 bridge), and its **residue field is algebraically closed** (the
+monic-lift argument; not Hensel). Then 3b (residue algebraic), 3d/3e (`IsAlgClosure` repackaging), and
+step 4 (apply `stabilizerHom_surjective_of_profinite`, **delete the axiom** — perfect-case, documented
+narrowing; the imperfect equal-char case stays tracked). Net `DEBT` → 0 for the perfect case is ~2–3
+passes out; the two named hard lemmas (3a, 3c) are the gate.
+
+---
+
+# Pass 16 — rung L1, route (a): brick 3c (residue field alg-closed) + the D2-fork decision (2026-05-30)
+
+## Restatement (i)–(iv), pre-search
+
+(i) **Target:** the two from-scratch residue-iso bricks — 3a (`𝒪[K̄] = integralClosure 𝒪[K] K̄` local,
+`𝔪[K̄]` its maximal ideal) and 3c (residue field algebraically closed). (ii) **3c depends on 3a** (the
+residue field is only a field once `𝒪[K̄]` is local). (iii) **PRIMARY DISCIPLINE:** route-first-step on
+3a — probe the valuation-extension-to-`K̄` / `IsLocalRing (integralClosure …)` API *before* building,
+and make the **D2 fork an explicit logged decision** (native `ValuativeRel` route = no D2 vs.
+`spectralNorm` route = tracked D2). 3c via the **monic-lift** argument, NOT Hensel. (iv) **Will not:**
+stub any residue-iso brick; claim discharge while the axiom exists; silently incur or route around D2;
+add a second sub-target.
+
+## 3a route-first-step probe — the finding (deepened beyond Pass 15)
+
+Probed `RingTheory/Valuation/AlgebraInstances.lean`, the `ValuativeRel`/`Valued` extension theory, and
+the `spectralNorm` route:
+
+- **`AlgebraInstances.lean`** has the integral-closure-of-valuationSubring algebra API
+  (`algebraMap_injective`, `isIntegral_of_mem_ringOfIntegers`, the `algebra`/`IsScalarTower` instances)
+  but **NOT** local-ness — no `IsLocalRing (integralClosure …)`, no valuation-extension-to-algebraic, no
+  Henselian-unique-extension. **ABSENT.**
+- **Key reduction found:** `ValuationRing.isLocalRing : IsLocalRing A` is a **free** (priority-100)
+  instance (`RingTheory/Valuation/ValuationRing.lean:266`). So 3a's local-ness **reduces to**
+  "`integralClosure 𝒪[K] K̄` is a `ValuationRing`" — and `IsLocalRing` then comes for free. But that
+  `ValuationRing` fact is the unique extension of a complete DVR's valuation to `K̄` (Serre II) —
+  **ABSENT** from Mathlib.
+- **`NormedField K` is NOT a global instance** for `IsNonarchimedeanLocalField K` (only a scoped
+  `Valued.toNormedField`, used locally in `LocalField/Basic.lean:163`). And the `spectralNorm` route's
+  bridge `spectralNorm x ≤ 1 ↔ IsIntegral 𝒪[K] x` is **ABSENT** (`Analysis/Normed/.../SpectralNorm.lean`
+  has no such lemma).
+
+## The D2 fork — DECIDED explicitly (the pass's primary discipline)
+
+**Decision: native `ValuativeRel` route; D2 NOT incurred.** Reasoning: both routes need substantial
+absent theory, but the `spectralNorm` route offers **no shortcut** for 3a — its `norm ≤ 1 ↔ integral`
+link is equally absent, so connecting `spectralIntegers` to `integralClosure` is itself a missing lemma,
+*and* it re-introduces the `NormedField`-on-`K` diamond. Taking on D2 would buy nothing. So the committed
+3a target is the native **"`integralClosure 𝒪[K] K̄` is a `ValuationRing`"** (⟹ `IsLocalRing` free). This
+deepens Pass 15's "3a substantial": 3a is a genuine from-scratch valuation-extension construction (the
+single substantial remaining gate), not avoidable via `spectralNorm`.
+
+## Built — brick 3c (route-independent, does NOT need 3a)
+
+The insight that let 3c land **this** pass despite its stated dependence on 3a: 3c's *substance* is a
+**general** fact, provable abstractly and applied to `𝒪[K̄]` with the maximal ideal left as a hypothesis
+(supplied later by 3a). `Anabelian/ResidueAlgClosed.lean`, standard axioms only (in-file `#print axioms`):
+
+- `residueField_isAlgClosed_of_integrallyClosed` — **the general 3c lemma.** `R` a subring of an
+  alg-closed field `L` (`algebraMap R L` injective), integrally closed in `L` ⟹ `R ⧸ m` alg-closed for
+  **any** maximal `m`. Proof chain: `p` monic over `R⧸m` → `lifts_and_natDegree_eq_and_monic` gives a
+  monic `P` over `R` of the same degree → `P.map (algebraMap R L)` monic, degree ≥ 1 (`Monic.natDegree_map`
+  + `Irreducible.natDegree_pos`) → `IsAlgClosed.exists_root` gives `r ∈ L` → `r` integral over `R` (root
+  of monic `P`) → `r ∈ R` (integral-closedness `hcl`) → `Ideal.Quotient.mk m r` (= via `s`, `algebraMap s
+  = r`) is a root of `p` (`eval_map` + `eval₂_at_apply`, injectivity to pull `eval s P = 0` from
+  `algebraMap (eval s P) = aeval r P = 0`). `IsAlgClosed.of_exists_root` closes it.
+- `galoisIntegers_integrallyClosed` — **`𝒪[K̄]` integrally closed in `K̄`** (the general lemma's `hcl`):
+  `x` integral over `integralClosure 𝒪[K] K̄` ⟹ integral over `𝒪[K]` (`isIntegral_trans`, using the
+  `integralClosure.AlgebraIsIntegral` instance) ⟹ in the integral closure (`IsIntegralClosure.isIntegral_iff`).
+- `galoisResidueField_isAlgClosed` — **brick 3c for `𝒪[K̄]`**: the general lemma applied to `R = 𝒪[K̄]`,
+  `L = K̄`, injectivity = `Subtype.coe_injective`. So for **any** maximal ideal `m` of `𝒪[K̄]`, the residue
+  field `𝒪[K̄] ⧸ m` is algebraically closed. **3c done modulo 3a** (3a supplies that `𝔪[K̄]` is maximal).
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT (used in 3c):** `IsAlgClosed.of_exists_root`, `IsAlgClosed.exists_root`
+  (`FieldTheory/IsAlgClosed/Basic.lean`); `lifts_and_natDegree_eq_and_monic`, `Polynomial.lifts_iff_coeff_lifts`
+  (`Algebra/Polynomial/Lifts.lean`); `Polynomial.Monic.natDegree_map`, `eval_map`, `eval₂_at_apply`,
+  `aeval_def`; `isIntegral_trans` + `integralClosure.AlgebraIsIntegral`, `IsIntegralClosure.isIntegral_iff`
+  (`RingTheory/IntegralClosure/IsIntegralClosure/Basic.lean`); `Ideal.Quotient.field`, `Ideal.Quotient.mk_surjective`.
+- **PRESENT (key 3a reduction):** `ValuationRing.isLocalRing` (free `IsLocalRing` from `ValuationRing`),
+  `ValuationSubring.isLocalRing` (`RingTheory/Valuation/`).
+- **ABSENT (the 3a gate):** "`integralClosure 𝒪[K] K̄` is a `ValuationRing`" / valuation-extension-to-`K̄`
+  / Henselian-unique-extension; `spectralNorm x ≤ 1 ↔ IsIntegral`; `NormedField K` as a global instance.
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| 3a `IsLocalRing (integralClosure …)` reachable via the valuation API | ABSENT; reduces to "is a `ValuationRing`", itself absent (unique-extension) | deepened — 3a more substantial than Pass 15 said |
+| `spectralNorm` route a viable D2-tradeoff for 3a | no shortcut — `norm ≤ 1 ↔ integral` also absent; D2 buys nothing | **decided: stay native, no D2** |
+| 3c depends on 3a (need 𝓀̄ a field) → can't land this pass | 3c's *substance* is a general lemma (m left as hypothesis) → **landed route-independently** | ✓ better than expected |
+| land 3a + 3c | landed **3c** (general + `𝒪[K̄]` discharges); 3a deepened to a verdict, not built | partial — 3c done, 3a is the gate |
+
+## What was built + HEADLINE status
+
+`residueField_isAlgClosed_of_integrallyClosed`, `galoisIntegers_integrallyClosed`,
+`galoisResidueField_isAlgClosed` (brick 3c), axiom-free, strictly-lower, **route-independent (no D2)**.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+**Route-steps remaining: [Step 3a `𝒪[K̄]` local = "`integralClosure` is a `ValuationRing`" (the one
+substantial gate, native route, no D2); 3b residue algebraic; 3d/3e (supported); Step 4 apply keystone +
+delete axiom (perfect-case)].** Done: 1, 1b, 2a, 2b (P13–15), **3c (P16)**. With 3c proved, the residue
+iso reduces to **3a + supported repackaging**. **Nothing cardinal-sin posited** (3c is *proved*, not
+stubbed; the surjection is to be *applied* from a present theorem). **Recovers nothing from an abstract
+group.** No new `structure`/`class` (no rule-2). **D1** N/A; **D2 NOT incurred** (fork decided — native
+route, `spectralNorm` rejected for offering no shortcut).
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`** (open).
+  Progress = a strictly-lower brick proved (3c) + the D2-fork resolved + 3a deepened to a precise target.
+
+## Scope: pointer to Pass 17
+
+Pass 17: **step 3a — the one substantial remaining gate.** Build "`integralClosure 𝒪[K] K̄` is a
+`ValuationRing`" (⟹ `IsLocalRing` for free via `ValuationRing.isLocalRing`, ⟹ `𝔪[K̄]` is *the* maximal
+ideal, ⟹ `galoisResidueField_isAlgClosed` applies to give `𝓀̄` alg-closed). This is the native
+`ValuativeRel` valuation-extension-to-`K̄` construction (complete-DVR valuation extends uniquely to the
+algebraic closure; the integral closure is its valuation ring) — ABSENT, from-scratch, possibly itself
+multi-pass. If it proves too large for one pass, decompose it honestly (e.g. uniqueness of the extension
+via Henselianness of `𝒪[K]`) and land the reachable sub-brick. With 3a done: 3b (residue algebraic),
+3d/3e (`IsAlgClosure` repackaging), then step 4 (apply `stabilizerHom_surjective_of_profinite`, **delete
+the axiom** — perfect case, documented narrowing; imperfect equal-char tracked). The metric is net `DEBT`
+reduction: 3c proved this pass, one named hard lemma (3a) plus supported repackaging stand between here
+and net `DEBT` → 0 for the perfect case.
+
+---
+
+# Pass 17 — rung L1, route (a): the 3a three-route comparison + the bridge's algebraic half (2026-05-30)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Pre-search pass-count guess: **(iii) Henselian-local-direct shortest** (if Mathlib has
+"integral-closure of a Henselian local ring is local"); **(ii) spectralNorm** next (~1–2 passes + D2);
+**(i) native ValuationRing** longest (~3). (ii) Probe: valuation-extension-to-`K̄` (route i);
+`spectralNorm ≤ 1 ↔ integral` + `Valued.integer` local (route ii); Henselian-local ⟹ integral-closure
+local + colimit (route iii). (iii) Bricks: land 3a if a route's key lemma is present, else strictly-lower
+bricks + the named sub-plan; assess whether 3a/discharge are ≤2 passes out. (iv) Decide by **magnitude +
+the D2 cost principle**, not reflex; never stub 3a/a residue-iso brick with a `DEBT`; claim discharge
+only at axiom-removal.
+
+## The three-route probe (real names) — reality vs. expectation
+
+- **(iii) Henselian-local-direct.** `HenselianLocalRing` exists (`Henselian.lean:108`), `Field.henselian`
+  + `IsAdicComplete.henselianRing` exist. But **`grep Henselian` hits only `Henselian.lean`** — its
+  `TFAE` (`:119`) is root-lifting only, **no** integral-closure-local clause; and `HenselianLocalRing
+  𝒪[K]` does **not** synthesize. So the key lemma is absent, must be built from TFAE, plus a colimit to
+  `K̄`. **~2–3 passes, no D2.** (My pre-search hope that Mathlib had it was wrong.)
+- **(i) native `ValuationRing`/`ValuativeRel`.** `ValuativeExtension` (`ValuativeRel/Basic.lean:1292`) is
+  **compatibility-only** (assumes `[ValuativeRel B]`, does not construct the `ValuativeRel` on `K̄`); no
+  canonical `ValuativeRel (AlgebraicClosure K)`. So local-ness via "`integralClosure` is a `ValuationRing`"
+  needs the full from-scratch unique-extension theory. **~3 passes, no D2.**
+- **(ii) `spectralNorm` (+ tracked D2).** Two decisive finds Pass 16 missed: (a) `Valued.integer K̄` is a
+  `ValuationRing` ⟹ `IsLocalRing` **for free** (`ValuationSubring`→`ValuationRing`→`IsLocalRing`;
+  `Padics/Complex.lean` is the exact template — `spectralNorm.normedField`, `NormedField.toValued`,
+  `Valued … ℝ≥0` on the *non-complete* `AlgebraicClosure`); (b) the bridge `spectralNorm x ≤ 1 ↔
+  IsIntegral 𝒪[K] x` is **reachable** — `spectralNorm = spectralValue ∘ minpoly` (`SpectralNorm.lean:379`)
+  + **`spectralValue_le_one_iff`** (`:202`, monic ⟹ `≤1 ↔ all coeffs norm ≤1`) + the algebraic half
+  (coeffs ∈ `𝒪[K]` ↔ integral). So only the bridge is real work; local-ness is free. **~2 passes + a
+  tracked D2.**
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| (iii) Henselian shortest (Mathlib has integral-closure-local) | absent (TFAE root-lifting only); + colimit absent | (iii) is ~2–3, not shortest |
+| (ii) bridge `spectralNorm ≤ 1 ↔ integral` maybe absent (P16) | **reachable** via `spectralValue_le_one_iff` (P16 missed it) | (ii) shrank to ~2 |
+| (ii) local-ness needs work | **free** — `Valued.integer` is a `ValuationRing` | (ii) shortest |
+| (i) native ~3 | confirmed (`ValuativeExtension` constructs nothing) | (i) longest |
+
+## The decision — route (ii), incur the tracked D2 (REVERSES Pass 16)
+
+**Route (ii) is materially shortest** (~2 passes vs ~3 / ~2–3): local-ness free + bridge reachable. By
+the **cost principle** — a tracked **D2** instance diamond is a *bounded, documented, fix-once* hygiene
+debt (logged like D1), **cheaper than 2–3 passes of from-scratch valuation/Henselian theory** — incurring
+D2 is the right trade. **This reverses Pass 16's "stay native, D2 not incurred"**, legitimately and on
+**new evidence**: Pass 16 grepped only `spectralNorm.*le_one` (missing `spectralValue_le_one_iff`) and
+had not found the free `Valued.integer` local-ness, so its magnitude estimate for (ii) was wrong. This is
+a **magnitude** decision, the opposite of a D2-reflex (it *chooses* D2 because (ii) is genuinely shorter).
+Note: local-ness genuinely cannot be finished without the spectral structure — an integral `x` is a unit
+iff `minpoly`'s constant coeff is a unit, but "non-units form an ideal" (additive closure) needs the
+multiplicative ultrametric `spectralNorm`; so the D2 is unavoidable, not gratuitous.
+
+## Built — the bridge's algebraic half (D2-free, strictly-lower)
+
+`Anabelian/GaloisIntegersLocal.lean`, standard axioms only (in-file `#print axioms`):
+- `isIntegral_iff_minpoly_coeff_mem` — `IsIntegral 𝒪[K] x ↔ ∀ i, (minpoly K x).coeff i ∈ 𝒪[K]`, for
+  `x : K̄`. Forward: `minpoly.isIntegrallyClosed_eq_field_fractions` (`𝒪[K]` integrally closed, `K = Frac
+  𝒪[K]`, so `minpoly K x = (minpoly 𝒪[K] x).map`). Reverse: lift `minpoly K x` to a monic poly over `𝒪[K]`
+  via `Polynomial.toSubring` (+ `monic_toSubring`, `aeval_map_algebraMap`, `map_toSubring`; the
+  `algebraMap ↥𝒪[K] K = subtype` step is `rfl`). The **algebraic core** of route (ii)'s bridge
+  `integralClosure 𝒪[K] K̄ = {x | spectralNorm x ≤ 1}`; the remaining (D2-incurring) half is `coeff ∈
+  𝒪[K] ↔ ‖coeff‖ ≤ 1` chained through `spectralValue_le_one_iff`. **Norm-free ⟹ D2-free** — D2 is deferred
+  to exactly the spectral step that needs the norm.
+
+Inventory correction needed: `IsIntegrallyClosed ↥𝒪[K]` is **not** transitively imported by
+`ResidueReductionIntegral` + minpoly/polynomial modules; it comes from
+`Mathlib.RingTheory.Valuation.LocalSubring` (the `ValuationSubring → IsIntegrallyClosed` instance), which
+this file imports. (Under `import Mathlib` the probe hid this.)
+
+## What was built + HEADLINE status
+
+`isIntegral_iff_minpoly_coeff_mem` (bridge algebraic half), axiom-free, strictly-lower, D2-free.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+**Route-steps remaining: [3a via route (ii): (a) D2 setup ⟹ `IsLocalRing (Valued.integer K̄)`; (b) the
+bridge `integralClosure = Valued.integer K̄` (algebraic half ✅ this pass); (c) transport ⟹ 3a; 3b residue
+algebraic; 3d/3e supported; Step 4 apply keystone + delete axiom (perfect-case)].** Done: 1, 1b, 2a, 2b,
+3c-modulo-3a, bridge algebraic half. **Nothing cardinal-sin posited** (3a being *built*; no `DEBT` posits
+`𝒪[K̄]` local / a `ValuationRing` / the residue iso). **Recovers nothing from an abstract group.** No new
+`structure`/`class` (no rule-2). **D1** N/A; **D2 decided to be incurred via route (ii)** (the reversal),
+not yet incurred in code, logged.
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`** (open).
+  Progress = the magnitude-based three-route decision (route ii, D2 to be incurred) + the bridge's
+  D2-free algebraic-half brick.
+
+## Scope: pointer to Pass 18
+
+Pass 18: **3a's spectral steps (a)/(b) — the D2 incurral.** (a) Set up `NormedField K`/`RankOne` on the
+local field (the `Padics/Complex` + `LocalField.Basic` `RankOne` pattern) ⟹ `spectralNorm.normedField K
+K̄` ⟹ `Valued K̄ ℝ≥0` ⟹ `IsLocalRing (Valued.integer K̄)` (free). Track the D2 diamond: prove the spectral
+`Valued`/`NormedField` on `K` agrees with the intrinsic `ValuativeRel` valuation (same valuation — the
+agreement lemma is the fix-once hygiene step). (b) The norm half of the bridge: `‖y‖ ≤ 1 ↔ y ∈ 𝒪[K]`
+(norm↔valuation) + `spectralValue_le_one_iff` chained to this pass's `isIntegral_iff_minpoly_coeff_mem`,
+giving `integralClosure 𝒪[K] K̄ = Valued.integer K̄`. (c) Transport ⟹ `IsLocalRing (integralClosure 𝒪[K]
+K̄)` = **3a**. With 3a: 3b (residue algebraic), 3d/3e (`IsAlgClosure` repackaging), then step 4 (apply
+`stabilizerHom_surjective_of_profinite`, **delete the axiom** — perfect case; imperfect equal-char
+tracked). Honest pointer: 3a is ~2 passes out (the D2 setup + bridge are the real work, both
+de-risked by the `Padics/Complex` template + the reachable `spectralValue_le_one_iff`), the discharge ~3.

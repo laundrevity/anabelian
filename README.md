@@ -20,11 +20,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 12)
+## Current state (Pass 17)
 
-Clean cached build on Mathlib `v4.30.0`. **Zero `FOUNDATIONAL`, one `DEBT`** (the residue surjection,
-reclassified from `FOUNDATIONAL` once its discharge began — Pass 11; still **open**), zero open owed
-witnesses, and no second boundary ever stacked.
+Clean cached build on Mathlib `v4.30.0` (3208 jobs). **Zero `FOUNDATIONAL`, one `DEBT`** (the residue
+surjection, reclassified from `FOUNDATIONAL` once its discharge began — Pass 11; still **open**), zero
+open owed witnesses, and no second boundary ever stacked.
 
 **Milestone (Pass 10): the first L1 *whole of depth* is closed.** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` — the absolute
 Galois group of a finite field is the profinite completion of `ℤ`, as a topological group — is proved
@@ -41,9 +41,51 @@ any ramification-filtration work.
 **Verdict (Pass 12): the hard step is not a wall.** Front-loading the discharge's hardest step (the
 *lifting*), Pass 12 found Mathlib already proves the residue-reduction surjectivity in the profinite
 setting — `Ideal.Quotient.stabilizerHom_surjective_of_profinite` — so **no maximal-unramified
-construction is needed**; the discharge is a bounded sub-plan with the keystone present (route steps
-1, 1b done — `𝒪[K̄]` + the Galois `MulSemiringAction`, `Anabelian.spectralIntegers_isInvariant`; steps
-2–4 remaining). The `DEBT` remains **open** (no new axiom).
+construction is needed**; the discharge is a bounded sub-plan with the keystone present. The `DEBT`
+remains **open** (no new axiom).
+
+**Fit + pivot (Pass 13): the keystone's exact hypotheses, verified.** Pass 13 checked the keystone fits
+`𝒪[K̄]`/`Gal(K̄/K)`: `B` must carry the **discrete** (Krull) topology, and `Gal(K̄/K)` is profinite only
+via `IsGalois K K̄` (a tracked prerequisite — holds for perfect/char-0 local fields, not imperfect
+equal-char). It pivoted the route to `B = integralClosure 𝒪[K] K̄` (native to `ValuativeRel`,
+**avoiding the `NormedField` bridge — no D2 diamond**) and built that ring + its Galois `MulSemiringAction`
+(`Anabelian.galoisIntegers`, `galoisIntegers_isInvariant`, route step 1b). Steps 2–4 remain; `DEBT` open.
+
+**Step 2 + generality (Pass 14).** Built the fixed-ring `𝒪[K̄]^Gal = 𝒪[K]`
+(`Anabelian.galoisIntegers_algebraIsInvariant`, the keystone's `Algebra.IsInvariant` hypothesis,
+perfect case, axiom-free). **Generality decision:** the discharge will be the **perfect case**
+(`[PerfectField K]` — char-0/mixed-char local fields); the statement is also true for imperfect
+equal-char `K` (`𝔽_q((t))`), tracked as a named remainder.
+
+**Step 2b + residue-iso verdict (Pass 15).** Built `Anabelian.continuousSMul_galoisIntegers` (the
+keystone's `DiscreteTopology` + `ContinuousSMul` hypotheses, via open Krull stabilizers, axiom-free).
+The remaining **blocker** — the residue iso `𝒪[K̄]/𝔪 ≅ AlgebraicClosure 𝓀[K]` — is now a verified
+**bounded multi-pass sub-plan** (its `𝒪[K̄]`-local and residue-algebraically-closed pieces are
+absent/substantial; the `≅ AlgebraicClosure` repackaging is `IsAlgClosure`-supported), **not a wall**.
+`DEBT` still **open**.
+
+**Brick 3c + the D2-fork decision (Pass 16).** Built `Anabelian.galoisResidueField_isAlgClosed` — the
+**residue field of `𝒪[K̄]` is algebraically closed** — axiom-free and *route-independent*, via a general
+lemma (`residueField_isAlgClosed_of_integrallyClosed`: the residue field of an integrally-closed subring
+of an algebraically closed field is algebraically closed, by a monic-lift argument, **not** Hensel) plus
+its two `𝒪[K̄]` hypotheses (injectivity; `𝒪[K̄]` integrally closed in `K̄`). This is the residue iso's
+brick **3c, done modulo 3a**. The pass also **decided the D2 fork explicitly**: 3a (`𝒪[K̄]` local)
+reduces to "`integralClosure 𝒪[K] K̄` is a `ValuationRing`" (then local for free) — absent, but the
+`spectralNorm` route gives **no shortcut** (its `norm ≤ 1 ↔ integral` link is equally absent), so the
+discharge **stays native and incurs no D2**. The residue iso now reduces to the single gate 3a; `DEBT`
+still **open**.
+
+**3a route comparison + bridge's algebraic half (Pass 17).** Re-opened the 3a route decision by
+**estimated pass-count across three routes** — (i) native `ValuationRing` (~3 passes; valuation-extension-
+to-`K̄` absent), (ii) `spectralNorm` (~2 passes **+ a tracked D2**; local-ness *free* via `Valued.integer`,
+bridge *reachable* via `spectralValue_le_one_iff`), (iii) Henselian-local-direct (~2–3 passes;
+integral-closure-local + colimit absent). **Chose route (ii) and to incur the tracked D2**, by the cost
+principle (a bounded fix-once D2 is cheaper than several passes of foundational theory) — **reversing
+Pass 16's "stay native"** on new evidence (Pass 16 had missed `spectralValue_le_one_iff` and the free
+`Valued.integer` local-ness). Built `Anabelian.isIntegral_iff_minpoly_coeff_mem` — `IsIntegral 𝒪[K] x ↔
+minpoly K x` has all coefficients in `𝒪[K]` — the bridge's **algebraic half**, axiom-free and **D2-free**
+(D2 deferred to the spectral steps). `DEBT` still **open**; 3a is ~2 passes out (D2 setup + bridge +
+transport), the discharge ~3.
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -88,6 +130,26 @@ construction is needed**; the discharge is a bounded sub-plan with the keystone 
 - `Anabelian/ResidueReductionRoute.lean` (L1) — Pass 12's lifting-tractability verdict (the hard step
   is **not** a wall; `stabilizerHom_surjective_of_profinite` supplies the surjectivity) + the
   Galois **`MulSemiringAction` on `𝒪[K̄]`** (`spectralIntegers_isInvariant`, route step 1b, axiom-free).
+- `Anabelian/ResidueReductionIntegral.lean` (L1) — Pass 13's keystone fit-verdict + route pivot to
+  `B = integralClosure 𝒪[K] K̄` (the keystone's actual ring, no `NormedField` bridge): `galoisIntegers`
+  + `galoisIntegers_isInvariant` (the Galois `MulSemiringAction` on `B`, axiom-free), over the exact
+  `IsNonarchimedeanLocalField` setting. Records the `IsGalois K K̄` profinite prerequisite.
+- `Anabelian/ResidueReductionInvariant.lean` (L1) — Pass 14's fixed-ring `𝒪[K̄]^Gal = 𝒪[K]`
+  (`galoisIntegers_algebraIsInvariant`, the keystone's `Algebra.IsInvariant` hypothesis, perfect case,
+  axiom-free) + the documented generality decision (perfect-case discharge; imperfect case tracked).
+- `Anabelian/ResidueReductionContinuity.lean` (L1) — Pass 15's Step 2b (`galoisStabilizer_isOpen` ⟹
+  `continuousSMul_galoisIntegers`, the keystone's `DiscreteTopology` + `ContinuousSMul` hypotheses,
+  axiom-free) + the residue-iso verdict (bounded multi-pass sub-plan, not a wall) in its docstring.
+- `Anabelian/ResidueAlgClosed.lean` (L1) — Pass 16's brick **3c**: the general
+  `residueField_isAlgClosed_of_integrallyClosed` (residue field of an integrally-closed subring of an
+  alg-closed field is alg-closed; monic-lift, not Hensel) + `galoisIntegers_integrallyClosed` (`𝒪[K̄]`
+  integrally closed in `K̄`) ⟹ `galoisResidueField_isAlgClosed` (residue field at any maximal ideal of
+  `𝒪[K̄]` is alg-closed — 3c done modulo 3a). Axiom-free, route-independent; the D2-fork decision (stay
+  native) is in its docstring.
+- `Anabelian/GaloisIntegersLocal.lean` (L1) — Pass 17's 3a work: the **three-route comparison** (native
+  `ValuationRing` ~3 / `spectralNorm` ~2 +D2 / Henselian-direct ~2–3, chosen route (ii), reversing
+  Pass 16) in its docstring, and the brick `isIntegral_iff_minpoly_coeff_mem` (`IsIntegral 𝒪[K] x ↔
+  minpoly K x` coeffs in `𝒪[K]`) — the **algebraic half** of route (ii)'s bridge, axiom-free, D2-free.
 
 Only `UnramifiedQuotient.lean` rests on the one `DEBT` entry (`residueReduction_surjective`, see
 `AXIOM_LEDGER.md` — `FOUNDATIONAL` Passes 5–10, reclassified `DEBT` Pass 11 with its discharge begun);
