@@ -1,0 +1,53 @@
+# CLAUDE.md — `anabelian`
+
+## What this repository is
+
+A long-horizon (multi-year) formalization effort in Lean 4 + Mathlib, aimed at **anabelian geometry** — ultimately at the **mono-anabelian reconstruction** of a field from Galois-theoretic and monoid-theoretic data, which is the forcing construction that the companion `iutt` project proved (by kernel-checked self-audit, twice) is the only thing that can convert IUT's "alien copies are non-identifiable" from a *stipulated* property into a *forced* one.
+
+This repository is **not** a continuation of `iutt`. Do not import it, do not reuse its skeleton or substrate. `iutt`'s job was to *locate* the reconstruction gap with precision; this repository's job is to *fill* it. Keeping them separate is deliberate: the framing here is "this work IS the hard theorem," not "substrate below a gap."
+
+## The honest scope, stated once so it governs everything
+
+The end target — recovering a field up to isomorphism from its absolute Galois group, algorithmically and functorially (mono-anabelian) — is **hard, partially unformalized frontier mathematics**. The classical predecessor (the **Neukirch–Uchida theorem**: a number field is determined up to isomorphism by its absolute Galois group, 1969/1977) is itself almost certainly **not** in Mathlib and may be a multi-year sub-target on its own. The mono-anabelian refinement Mochizuki needs sits *above* Neukirch–Uchida and is harder still.
+
+Therefore: **we do not start at the target.** We start at the bottom of a dependency ladder, prove genuinely-anabelian-flavored lemmas axiom-free, and climb. Years is not hyperbole and is not a problem — it is the honest timescale. No pass should imply the target is near.
+
+## The CENTRAL discipline: the axiom budget
+
+In the `iutt` project the dominant failure mode was *vacuous definitions dressed as content*, and the metric was rule-2 (constructible bad model). **Here the dominant failure mode is different and more dangerous: axiomatizing the hard theorem.** Because you will frequently be the first person to formalize a given result, the constant temptation will be to write `axiom neukirch_uchida : ...` (or any hard anabelian/Galois/ramification result) and build on it. That reproduces the exact Stage-1 IUT pathology — a clean `#print axioms` hiding the contested content in a posit — at a grander scale.
+
+The rules, non-negotiable:
+
+1. **Every `axiom` is a debt, logged in `AXIOM_LEDGER.md`** with: its statement, the precise mathematical result it encodes, a literature citation, and a one-line classification — `FOUNDATIONAL` (a result we are *deliberately* taking as a known input from outside the current sub-target, e.g. a deep theorem whose formalization is itself a separate multi-year effort) vs `DEBT` (a result we *intend to discharge* in this project and are temporarily stubbing). `DEBT` axioms are failures-in-progress; `FOUNDATIONAL` axioms are honest boundary markers. Never blur the two.
+2. **`#print axioms` on every headline result**, with the IUT-project convention: standard axioms (`propext`, `Classical.choice`, `Quot.sound`) are free; **every other axiom must appear in the ledger**, and the headline-result writeup must state which ledger entries it rests on and their classification.
+3. **The deliverable of a pass is never "it compiles."** It is: a real lemma proved with *fewer* `DEBT` axioms than a naive version would need, OR a `DEBT` axiom *discharged* into a theorem, OR an honest dependency map showing what stands between current Mathlib and the next real theorem. Progress = net reduction in `DEBT`, measured by the ledger — exactly the metric the IUT project converged on.
+4. **Do not `axiom` your way past a result that Mathlib already has.** Before stubbing anything, search Mathlib (`#check`, `exact?`, `apply?`, `loogle`-style name search, grep `.lake/packages/mathlib`) for the real name. Verify every Mathlib name before use; never guess.
+5. **A `DEBT` axiom that is itself the target, or trivially implies the target, is forbidden.** Stubbing `axiom field_recovered_from_galois_group` and deriving the conclusion is the cardinal sin — it asserts what the project exists to prove. `DEBT` stubs must be *strictly below* the current sub-target in the dependency order, and the writeup must say why.
+
+## Rule-2 still applies (carried from `iutt`)
+
+Every `structure`/`class` must satisfy: at least two genuinely different models that *come apart on what the structure is supposed to pin* (not one recipe at two inputs), and a hypothesis whose removal is a *proved* failure (a constructible bad model). The `iutt` history is the calibration: `FrobSplit`/`PrimeStrip` PASSED (sharpness, compatibility genuinely bite); `MulNotAdd` was flagged weak; `Gluing`/`Link` self-reported *stipulated* exclusions. Match the passing bar. If a structure merely re-encodes a Galois-theoretic definition with no constraint, flag it.
+
+**Rule-2 extends to theorems with a claimed load-bearing hypothesis (added Pass 2).** The "hypothesis whose removal is a *proved* failure" obligation is not confined to `structure`/`class` declarations — it binds any pass that *claims* a theorem's hypothesis is load-bearing. Whenever a pass makes such a claim, it must EITHER (i) prove the failure-when-dropped in that pass — a constructible/witnessed counterexample showing the conclusion fails without the hypothesis — OR (ii) register the missing counterexample as a named, tracked obligation in `AXIOM_LEDGER.md`'s "**Owed witnesses**" section (the lemma it supports, the witness needed, the discharge target). A prose-only "this hypothesis is essential" with no proof and no tracked obligation is **not permitted**, and "optional" is **not** a valid status for a load-bearing-hypothesis witness. This closes the exact erosion the `iutt` project warned of: the discipline enforcing the case it literally names (`structure`/`class`) while letting the analogous case (load-bearing theorem hypotheses) slip by on a technicality.
+
+## Mathlib reality (assume patchy, verify everything)
+
+Mathlib's relevant coverage is real but incomplete and changing. Profinite groups and the fundamental theorem of infinite Galois theory exist; local fields, ramification/higher ramification groups, the Galois cohomology and local class field theory needed downstream are partial-to-absent; the anabelian theorems themselves are absent. **Never assume a result is present or absent — check.** When a needed result is genuinely missing, that absence is itself a deliverable: log it as a `FOUNDATIONAL` boundary or a `DEBT` target with the dependency noted, rather than silently `axiom`-ing past it without classification.
+
+## Environment
+
+- Lean 4 + Lake + Mathlib, fresh project. `lake new anabelian math` (or pin a recent stable toolchain), then **`lake exe cache get`** immediately — never build Mathlib from source.
+- `lean-toolchain` matches the Mathlib commit Lake pins; do not hand-edit.
+- Prefer importing specific Mathlib modules over `import Mathlib`; fall back to `import Mathlib` only when a needed module path is uncertain, and note it.
+- Verify every build with `lake build`. A file that does not compile is not progress.
+
+## Repository conventions
+
+- `AXIOM_LEDGER.md` — the spine of the project. Every non-standard axiom, classified `FOUNDATIONAL`/`DEBT`, with statement, encoded result, citation, and (for `DEBT`) the intended discharge path. Updated every pass. This file, not `#print axioms` output alone, is the source of truth for what the project assumes.
+- `ROADMAP.md` — the dependency ladder from current Mathlib up to mono-anabelian reconstruction, honestly staged, with each rung marked NOT-STARTED / IN-PROGRESS / DONE and its `DEBT` cost. The bottom rungs are concrete (Mathlib inventory, a first axiom-free anabelian-flavored lemma); the top rungs (Neukirch–Uchida, then mono-anabelian recovery) are named as multi-year and explicitly far.
+- `NOTES.md` (or per-pass notes) — for each pass: what was proved, the ledger delta (DEBT added/discharged), which Mathlib API did the real work, rule-2 evidence for any new structure, and an honest scope paragraph.
+- No `sorry` in committed code. A `sorry` you would write becomes either a proved lemma or a *classified ledger axiom* — never a silent hole.
+
+## What success looks like, and what it does not
+
+Success is a slowly shrinking `DEBT` ledger and a climbing `ROADMAP`, each pass a real axiom-free lemma or a discharged debt. Success is **not** a clean `#print axioms` achieved by relabeling the hard theorem as `FOUNDATIONAL`, and it is **not** a tower of structures that compile but encode no constraint. The `iutt` project ended by proving — twice, with kernel-checked witnesses — that its gap was stipulated rather than forced; the entire purpose of this repository is to *earn*, lemma by lemma over years, the forcing that `iutt` could only stipulate. Honesty about the distance is the precondition for ever covering it.
