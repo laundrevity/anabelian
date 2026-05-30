@@ -335,3 +335,37 @@ logged in `ROADMAP.md`. Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueR
 unused here), **0 `DEBT`**. Reclassification log stays empty. D1 did **not** recur (finite fields).
 
 Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.
+
+### Pass 8 (2026-05-30) — rung L1: the `Ẑ`-side inverse-system presentation of `≅ Ẑ`
+
+Introduced **zero** axioms; **added no second `FOUNDATIONAL`**. The designated job was to **close**
+`Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (bijectivity of Pass 6's `zhatToGalois`). Inventory found closure **not reachable
+this pass** — and **corrected Pass 7's inventory**: the general "profinite = limit of finite
+quotients" machinery is in fact **PRESENT** (`ProfiniteGrp.Limits`: `toLimit`, `toLimit_injective`,
+`isoLimittoFiniteQuotientFunctor`, `proj`, `continuousMulEquivLimittoFiniteQuotientFunctor`), and
+`etaFn_injective_iff_residuallyFinite` is about the **unit** `η`, not `zhatToGalois`. The decisive
+blocker is the **Galois side**: no `𝔽_{q^n}` as a `FiniteGaloisIntermediateField` of
+`AlgebraicClosure K` (only standalone `GaloisField p n`), so the level projection
+`Gal(K̄/K) → Gal(𝔽_{q^n}/𝔽_q)` — needed on every injectivity route — is genuinely absent. Per the
+permitted not-closed outcome, made **real axiom-free progress on the actual injective-half machinery**
+(the `Ẑ`-side inverse-system presentation) and sharpened the remainder into a numbered sub-plan
+(`ROADMAP.md`); the iso was **NOT posited**.
+
+`Anabelian/ZHatProcyclic.lean` proves (standard axioms only — in-file `#print axioms`):
+
+```
+'Anabelian.zhat_topologicalClosure_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.zhat_quotient_isCyclic' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `zhat_topologicalClosure_eq_top` — **`Ẑ` is procyclic** (`zhatGen = η(ofAdd 1)` topologically
+  generates `Ẑ`): the `Ẑ`-side analogue of Pass 2's `frobenius_topologicalClosure_eq_top` for `Gal`.
+- `zhat_quotient_isCyclic` — **every finite quotient of `Ẑ` is cyclic**: with the point-separating
+  projections (`toLimit_injective`), this presents `Ẑ` as the inverse limit of finite **cyclic**
+  groups, matching `Gal`'s `ℤ/n` system (Pass 7) — the `Ẑ`-side of the injectivity square.
+
+Active axioms unchanged: **1 `FOUNDATIONAL`** (`residueReduction_surjective`, Pass 5, unused here),
+**0 `DEBT`**. Reclassification log stays empty. D1 (ℚ-diamond) did **not** recur (the work is over `Ẑ`
+and `Multiplicative ℤ`, no `Algebra ℚ (AlgebraicClosure ℚ)`).
+
+Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no new `FOUNDATIONAL`.

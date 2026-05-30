@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 7 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 8 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -37,7 +37,7 @@ This rung asserts nothing anabelian. It establishes that the *precondition* of r
 
 ## Foundational Mathlib gaps (L1–L4) — prerequisites, below the targets
 
-### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–7)   ·   DEBT 0, FOUNDATIONAL 1
+### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–8)   ·   DEBT 0, FOUNDATIONAL 1
 
 Mathlib **has** `IsNonarchimedeanLocalField` (definition, DVR, finite residue field, completeness),
 abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgroup`,
@@ -73,6 +73,12 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   finite-field extensions (i.e. `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`). A *complete* theorem (genuine but modest);
   closing the targeted whole `≅ Ẑ` was assessed not-axiom-free-this-pass, so this is the route-(i)
   fallback — **the iso was NOT posited**.
+- Pass 8 (`Anabelian/ZHatProcyclic.lean`): the **`Ẑ`-side inverse-system presentation** of `≅ Ẑ`,
+  axiom-free — `zhat_topologicalClosure_eq_top` (`Ẑ` is **procyclic**, the `Ẑ`-side analogue of Pass
+  2) and `zhat_quotient_isCyclic` (every finite quotient of `Ẑ` is **cyclic**). The designated job was
+  to *close* `≅ Ẑ`; inventory found closure blocked on the absent Galois-side level subfield `𝔽_{q^n}`
+  and the iso was **NOT posited** — instead, real on-path injective-half machinery + a numbered
+  Pass 9–11 sub-plan (below).
 
 **Sub-target IN-PROGRESS — the residue surjection (FOUNDATIONAL, Pass 5):**
 - The surjectivity half `Gal(K̄/K) ↠ Gal(𝔽_q̄/𝔽_q)` is imported as the classified `FOUNDATIONAL` axiom
@@ -84,30 +90,63 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   (i) build the maximal-unramified construction to discharge it (`FOUNDATIONAL → DEBT`, multi-pass);
   (ii) tie `N` to Pass 4's `inertiaSubgroup` (needs the valuation on `K̄`).
 
-**Sub-target IN-PROGRESS — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (Passes 6–7):**
-- **Surjective half DONE** (Pass 6, axiom-free): `zhatToGalois_surjective`.
-- **Injective half: per-level data DONE** (Pass 7, axiom-free): `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`
-  (`galoisFiniteField_mulEquivZMod`). **Remaining for the full iso**: `Ẑ`'s presentation as `lim ℤ/n`
-  (Mathlib's `Ẑ = completion (Multiplicative ℤ)` is indexed by `FiniteIndexNormalSubgroup`, not
-  `ℤ/n` — this presentation is **absent**) and the cofinal matching of that inverse system with
-  `Gal`'s `FiniteGaloisIntermediateField` system ⟹ `zhatToGalois` injective ⟹ the iso (via
-  `Continuous.homeoOfEquivCompactToT2` + `MulEquiv.ofBijective`). Genuinely multi-pass.
+**Sub-target IN-PROGRESS — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` (Passes 6–8):** the closest-to-closure L1 whole; still
+**open** (not closed, not posited). Pieces in hand, all axiom-free:
+- **Surjective half DONE** (Pass 6): `zhatToGalois_surjective`.
+- **Per-level data DONE** (Pass 7): `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n` (`galoisFiniteField_mulEquivZMod`).
+- **`Ẑ`-side inverse-system presentation DONE** (Pass 8, `Anabelian/ZHatProcyclic.lean`): `Ẑ` is
+  **procyclic** (`zhat_topologicalClosure_eq_top`) and its finite quotients are **cyclic**
+  (`zhat_quotient_isCyclic`); with `ProfiniteGrp.toLimit_injective` (point-separating projections),
+  `Ẑ` is the inverse limit of finite cyclic groups — the `Ẑ`-side of the injectivity square.
+
+**Inventory correction (Pass 8) to Pass 7's "absent" claim.** The general profinite-as-inverse-limit
+machinery is **PRESENT**, not absent: `Mathlib.Topology.Algebra.Category.ProfiniteGrp.Limits` has
+`toLimit`, `toLimit_injective` (separation via `exist_openNormalSubgroup_sub_open_nhds_of_one`),
+`proj`, `isLimitCone`, `isoLimittoFiniteQuotientFunctor`, `continuousMulEquivLimittoFiniteQuotientFunctor :`
+`P ≃ₜ* limit (diagram P)`. And `etaFn_injective_iff_residuallyFinite` concerns the **unit**
+`η : G → completion G`, **not** `zhatToGalois` — so it does not deliver `zhatToGalois`-injectivity.
+
+**The remaining obstruction, named precisely.** The full iso = injectivity of `zhatToGalois`, which
+needs the commuting square `Ẑ → ℤ/n ≅ Gal(𝔽_{q^n}/𝔽_q) ← Gal(K̄/K)` at every level. The blocker is the
+**Galois-side level projection** `Gal(K̄/K) → Gal(𝔽_{q^n}/𝔽_q)`: Mathlib has **no `𝔽_{q^n}` as a
+`FiniteGaloisIntermediateField` of `AlgebraicClosure K`** (only standalone `GaloisField p n`,
+`FieldTheory/Finite/GaloisField.lean`), so this restriction map is absent. Plus the *three* distinct
+index systems must be matched cofinally: `FiniteIndexNormalSubgroup (Multiplicative ℤ)` (for the
+`completion`-`Ẑ`), `OpenNormalSubgroup` (the generic `Limits` system), `(FiniteGaloisIntermediateField)ᵒᵖ`
+(for `Gal`, via `mulEquivToLimit` / `asProfiniteGaloisGroupFunctor`).
+
+**Numbered multi-pass sub-plan to close `≅ Ẑ` (axiom-free):**
+- **Pass 9 — the Galois-side level subfield.** Construct `𝔽_{q^n} ⊆ AlgebraicClosure K` as a
+  `FiniteGaloisIntermediateField K (AlgebraicClosure K)` (e.g. `IntermediateField.adjoin K` of the
+  roots of `X^(q^n) − X`, or `fixedField (Frob^n)`), prove it finite + Galois of degree `n`, and
+  identify `Gal(𝔽_{q^n}/K) ≅ ℤ/n` compatibly with Pass 7 (`galoisFiniteField_mulEquivZMod`). Build the
+  restriction `r_n : Gal(K̄/K) → Gal(𝔽_{q^n}/K)` (`AlgEquiv.restrictNormalHom`, `restrictNormalHom_surjective`).
+- **Pass 10 — the commuting square + injectivity.** Define the `Ẑ`-side level map `Ẑ → ℤ/n` (completion
+  universal property, or the `FiniteIndexNormalSubgroup nℤ` projection). Prove the square
+  `r_n ∘ zhatToGalois = (level iso) ∘ (Ẑ → ℤ/n)` on the dense `η(ℤ)` image (both sides continuous into
+  the discrete `ℤ/n`, so dense-agreement ⟹ equality — using Pass 8's procyclicity + Pass 6's
+  `zhatToGalois_etaFn`). Conclude `ker zhatToGalois = ⊥` via separation (`toLimit_injective`-style) +
+  the level isos.
+- **Pass 11 (or end of 10) — package the iso.** `zhatToGalois` bijective ⟹ `ContinuousMulEquiv` via
+  `Continuous.homeoOfEquivCompactToT2` + `MulEquiv.ofBijective` (both PRESENT). This **closes `≅ Ẑ`** —
+  the first L1 whole of depth. No `FOUNDATIONAL`, no `DEBT` at any step.
 
 **Sub-targets, NOT-STARTED:**
 - The unramified ⟶ tame ⟶ wild filtration of `Gal(K̄/K)` for local `K`.
 - ~~Discharge owed witness W1 (`Gal(ℚ̄/ℚ)` non-abelian)~~ — **DONE, Pass 3**.
 - Depends on: L0 + Mathlib's local-field/ramification/finite-field API.
 
-**Honest read on L1 completeness (updated Pass 7).** The easy/finite fruit is harvested (P1–4); Pass 5
-took the one honest `FOUNDATIONAL` boundary; Passes 6–7 made axiom-free progress on `≅ Ẑ` (surjective
-half + injective-half per-level data) **without** stacking boundaries. **Caveat the pass surfaced: no
-L1 *whole* of real depth has yet been closed** — `≅ Ẑ` is *closer* but still open (the `Ẑ = lim ℤ/n`
-presentation + cofinal matching are the genuine multi-pass remainder), and the residue-surjection
-discharge is blocked on the absent valuation-on-`K̄`. The honest next step is to **finish one whole**:
-Pass 8 should either (a) build `Ẑ = lim ℤ/n` + the cofinal matching to *close* `≅ Ẑ` (the satisfying
-whole), or (b) begin (A)'s valuation-on-`K̄` toward discharging `residueReduction_surjective`
-(`FOUNDATIONAL → DEBT`) — both multi-pass, neither a fresh boundary, and the aim is a closed whole,
-not another half.
+**Honest read on L1 completeness (updated Pass 8).** The easy/finite fruit is harvested (P1–4); Pass 5
+took the one honest `FOUNDATIONAL` boundary; Passes 6–8 made axiom-free progress on `≅ Ẑ` (surjective
+half + per-level data + the `Ẑ`-side inverse-system presentation) **without** stacking boundaries.
+**Caveat, still true after Pass 8: no L1 *whole* of real depth is closed yet** — `≅ Ẑ` now has all
+three of its component halves but the **iso itself remains open**, blocked precisely on the
+Galois-side level subfield `𝔽_{q^n} ⊆ K̄` (absent from Mathlib) and the cofinal matching of the three
+index systems. Pass 8 turned "genuinely multi-pass" from a hand-wave into the **named, numbered
+Pass 9–11 sub-plan** above; that is the disciplined way to finally *close* the whole rather than
+accumulate a fourth half. The residue-surjection discharge (route (A)) stays blocked on the absent
+valuation-on-`K̄`. Honest next step: **execute Pass 9** (the Galois-side level subfield) — the first
+rung of the sub-plan, axiom-free, no fresh boundary.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -119,7 +158,8 @@ we owe before sustained work in a sub-area):**
   agree definitionally, and provide a reusable lemma/instance — rather than dodging per-theorem.
   Trigger: the *second* recurrence of the diamond is when to attempt the structural fix instead of a
   second band-aid. Status: tracked, not yet triggered (Pass 3 = first appearance; Passes 4–5 did not
-  recur — Passes 4–7 worked over abstract/local/finite fields with no `Algebra ℚ (AlgebraicClosure ℚ)`).
+  recur — Passes 4–8 worked over abstract/local/finite fields (and `Ẑ`/`Multiplicative ℤ`) with no
+  `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 ### L2 — Higher ramification groups (lower & upper numbering)   ·   **NOT-STARTED**   ·   DEBT: medium-high
 

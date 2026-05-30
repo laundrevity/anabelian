@@ -19,11 +19,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 7)
+## Current state (Pass 8)
 
 Clean cached build on Mathlib `v4.30.0`. Zero `DEBT`, zero open owed witnesses, and exactly **one
 classified `FOUNDATIONAL` entry** (added Pass 5 — the honest sign the project reached its real work;
-Passes 6 and 7 each deliberately added **no** second boundary).
+Passes 6, 7 and 8 each deliberately added **no** second boundary).
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -45,6 +45,12 @@ Passes 6 and 7 each deliberately added **no** second boundary).
   `≅ Ẑ`'s injective half**: `Gal(L/K) ≃* Multiplicative (ZMod (finrank K L))` for finite `L/K` (the
   level `Gal(𝔽_{q^n}/𝔽_q) ≅ ℤ/n`). A *complete* theorem, not another half — but modest; the full `≅ Ẑ`
   remains open (needs `Ẑ = lim ℤ/n` + cofinal matching) and is **not** posited. No new boundary.
+- `Anabelian/ZHatProcyclic.lean` (L1) — Pass 8 proves, axiom-free, the **`Ẑ`-side inverse-system
+  presentation** of `≅ Ẑ`: `Ẑ` is **procyclic** (`zhat_topologicalClosure_eq_top`, the `Ẑ`-side
+  analogue of Pass 2) and its finite quotients are **cyclic** (`zhat_quotient_isCyclic`). The pass's
+  job was to *close* `≅ Ẑ`; closure is blocked on the absent Galois-side level subfield `𝔽_{q^n} ⊆ K̄`,
+  so the iso is **not** closed and **not** posited — instead a numbered Pass 9–11 sub-plan (in
+  `ROADMAP.md`) sharpens the remainder. No new boundary.
 
 Only `UnramifiedQuotient.lean` rests on the one `FOUNDATIONAL` entry (see `AXIOM_LEDGER.md`); every
 other file rests on standard axioms only. All touch the project's subject (absolute Galois
