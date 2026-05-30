@@ -1187,3 +1187,88 @@ Route (a) continues: **Pass 12** should advance the bridge `IsNonarchimedeanLoca
 unblocks L2 (ramification filtration) — so route (a) is the project's current spine. The one `DEBT` is
 now committed and under construction; driving it to a theorem (net `DEBT` → 0) is the standing
 objective, and it is no longer deferrable.
+
+---
+
+# Pass 12 — rung L1, route (a): the lifting is NOT a wall (keystone present) (2026-05-30)
+
+## The primary deliverable: the lifting-tractability verdict
+
+Rung **L1**, **no reconstruction (R1–R3)**. Pass 11 began route (a) and flagged the **lifting** — "every
+residue automorphism lifts to `Gal(K̄/K)`", the heart of `residueReduction_surjective`, which Pass 6
+called "irreducibly absent" — as the unverified hard step, with the failure mode being: build passes of
+bottom-up infrastructure and only then hit a wall. This pass **front-loaded that uncertainty**.
+
+**Verdict: the lifting is NOT a wall. The keystone is PRESENT.** Mathlib proves the residue-reduction
+surjectivity directly in the profinite setting:
+**`Ideal.Quotient.stabilizerHom_surjective_of_profinite`** (`RingTheory/Invariant/Profinite.lean`) —
+for a profinite group `G` acting continuously on a discrete commutative ring `B` over `A`, with
+`Algebra.IsInvariant A B G` and `Q` prime over `P`, the decomposition group `stabilizer G Q` **surjects
+onto** `Aut((B/Q)/(A/P))` (the residue-field automorphisms). It is assembled from the finite-level
+arithmetic Frobenius (`exists_of_isInvariant` / `stabilizerHom_surjective`,
+`RingTheory/Invariant/Basic.lean` + `Frobenius.lean`) via the **same profinite-limit machinery used to
+close `≅ Ẑ`** (`ProfiniteGrp.isoLimittoFiniteQuotientFunctor`,
+`exist_openNormalSubgroup_sub_open_nhds_of_one`, `nonempty_sections_of_finite_cofiltered_system`).
+
+Applied with `G = Gal(K̄/K)`, `B = 𝒪[K̄]`, `A = 𝒪[K]`, `Q = 𝔪[K̄]`, `P = 𝔪[K]` (where `stabilizer = ⊤`,
+the maximal ideal being the unique prime over `𝔪[K]`), this **is** the surjection `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`.
+So **no maximal-unramified / `K^ur` construction is needed** — correcting both Pass 6 and Pass 11.
+
+## Deepened inventory (real names; PRESENT/ABSENT)
+
+- **PRESENT — the keystone and its engine:** `Ideal.Quotient.stabilizerHom_surjective_of_profinite`
+  (profinite, the absolute surjectivity); `Ideal.Quotient.stabilizerHom_surjective` /
+  `IsFractionRing.stabilizerHom_surjective` (`RingTheory/Invariant/Basic.lean`, finite-level
+  decomposition→residue surjectivity); `AlgHom.IsArithFrobAt` + `exists_of_isInvariant`
+  (`RingTheory/Frobenius.lean`, the finite-level Frobenius lift); `Algebra.IsInvariant`,
+  `IsInvariantSubring` + `IsInvariantSubring.toMulSemiringAction` (`Algebra/Ring/Action/Invariant.lean`);
+  `MulSemiringAction (K̄ ≃ₐ[K] K̄) K̄`.
+- **ABSENT — and NOT needed (route-pruning finding):** `K^ur` / maximal-unramified extension / the
+  unramified Galois correspondence (zero hits — Pass 6's feared edifice). `IsKrasner`
+  (`Krasner.lean`) is **field-generation** (Krasner's lemma: close roots ⟹ subfield containment),
+  **not** Galois-automorphism lifting — so Pass 11's "IsKrasner supplies the lifting" was wrong; it is
+  irrelevant to the discharge. The keystone bypasses all of this.
+- **ABSENT — the remaining bounded setup (steps 2–3):** `𝒪[K̄]` as an `Algebra.IsInvariant 𝒪[K] · Gal`
+  discrete-continuous algebra (the keystone's hypotheses); `B/Q ≅ 𝓀̄` (residue of `K̄` = alg closure of
+  `𝓀[K]`); `stabilizer = ⊤`.
+
+### Pre-search expectation vs. reality
+
+| I expected (pre-search) | Reality | Verdict |
+|-------------------------|---------|---------|
+| lifting likely a wall / long maximal-unramified construction | **NOT a wall** — `stabilizerHom_surjective_of_profinite` supplies it directly | ✗→far better |
+| `IsKrasner` + Hensel supply the lifting | `IsKrasner` is field-generation, not lifting — irrelevant; the real engine is `RingTheory/Invariant` | ✗→corrected |
+| discharge = long bounded sub-plan | bounded sub-plan, but the **hardest step is PRESENT** (only setup remains) | ✓ (better) |
+| ledger stays `0 FOUNDATIONAL / 1 DEBT`, `DEBT` open | confirmed | ✓ |
+
+## What was built (Step 2 self-audit)
+
+`Anabelian/ResidueReductionRoute.lean`, standard axioms only (in-file `#print axioms`):
+- `spectralIntegers_isInvariant` — `IsInvariantSubring (Gal(K̄/K)) (spectralIntegers K)` (from Pass 11's
+  `spectralIntegers_mem_iff_galois`). Via `IsInvariantSubring.toMulSemiringAction` this yields the
+  `MulSemiringAction (Gal(K̄/K)) 𝒪[K̄]` the keystone consumes — **route step 1b**, strictly-lower,
+  axiom-free, genuinely on-route (not the lifting in disguise).
+
+**Nothing cardinal-sin posited:** the surjection is **not** stubbed — it is a present Mathlib theorem to
+be *applied* (step 4), never posited. No new axiom. **`DEBT` status: OPEN** (the
+`axiom residueReduction_surjective` is still present; discharge ⟺ its deletion). **Recovers nothing from
+an abstract group.** No new `structure`/`class` (no rule-2 obligation). **D1 did not recur** (abstract
+nonarch normed field).
+
+## `DEBT` status and ledger delta
+
+- **`DEBT` open. Single `DEBT` (`residueReduction_surjective`); no new axiom; no reclassification.**
+  Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`**. **Route-steps remaining: [Step 2
+  `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` framing (discrete + `ContinuousSMul`); Step 3 residue
+  identification `𝓀̄/𝓀` + `stabilizer = ⊤`; Step 4 apply `stabilizerHom_surjective_of_profinite`].**
+- Steps 1 (Pass 11) and 1b (Pass 12) done axiom-free. The unit of progress this phase is strictly-lower
+  bricks; the ledger sits at `0 FOUNDATIONAL / 1 DEBT` honestly while they accumulate toward the keystone.
+
+## Scope: pointer to Pass 13
+
+Pass 13: **step 2** — construct `B = integralClosure 𝒪[K] (AlgebraicClosure K)` (= `𝒪[K̄]`) as an
+`Algebra.IsInvariant 𝒪[K] B (Gal(K̄/K))` discrete-topology continuous-action algebra (the keystone's
+exact hypotheses), connecting `IsNonarchimedeanLocalField K`'s `𝒪[K]`/`ValuativeRel` to this framing.
+Then Pass 14: step 3 (residue identification + `stabilizer = ⊤`), Pass 15: step 4 (apply the keystone,
+**delete the axiom** — discharge). The discharge is now a concrete, bounded, keystone-anchored
+sub-plan; net `DEBT` → 0 is genuinely in sight, no longer a static boundary.

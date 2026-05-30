@@ -77,25 +77,35 @@ Reclassification log — on the strength of the begun discharge construction in
 - Was `FOUNDATIONAL` (Passes 5–10): taken as an external boundary because the maximal-unramified
   edifice that proves it was assessed absent. **Pass 11 corrected that assessment** and reclassified to
   `DEBT` (committing to discharge in-project) — see below and the Reclassification log.
-- **Discharge path (DEBT; multi-pass; route-first-step probe-verified Pass 11):**
-  1. **Valuation on `K̄`. ✅ begun Pass 11** (`Anabelian/SpectralValuation.lean`, axiom-free): the
-     spectral valuation ring `spectralIntegers K = 𝒪[K̄] = {x | spectralNorm K K̄ x ≤ 1}` (a `Subring`),
-     and `spectralIntegers_mem_iff_galois` (`Gal(K̄/K)` preserves `𝒪[K̄]`, the isometry property
-     `spectralNorm_eq_of_equiv`). Probe-verified the route's first concrete step
-     (`spectralNorm.normedField` typechecks on `AlgebraicClosure K` for a complete nonarch normed `K`).
-  2. **Bridge** `IsNonarchimedeanLocalField K` (`ValuativeRel`) → `NormedField K` via
-     `ValuativeRel → Valued → RankOne → Valued.toNormedField` (rank-one valued ⟹ normed; PRESENT,
-     `Topology/Algebra/Valued/NormedValued.lean`). Connects this construction to the exact statement.
-  3. **Residue field** `𝓀[K̄]` via `NormedField.toValued` (PRESENT; cf. `NumberTheory/Padics/Complex.lean`
-     for `ℂ_p`) and `IsLocalRing.ResidueField 𝒪[K̄]`; then the reduction map `Gal(K̄/K) → Aut 𝓀[K̄]`.
-  4. **Lifting / surjectivity** via `Krasner.lean`'s `IsKrasner` + the maximal-unramified construction.
-     This is the irreducible heart and the genuinely-multi-pass remainder. **NOT posited** (positing it
-     would be the cardinal sin — it *is* the surjection). Discharging it yields the theorem.
-- **Not the cardinal sin:** `residueReduction_surjective` is L1, strictly **below** R1/R2/R3 (a fact
-  about a given field's Galois group, not recovery from an abstract group). As a `DEBT` stub it is a
-  hole-we-intend-to-fill, and the strictly-lower infrastructure built Pass 11 (step 1) is genuinely
-  below it; step 4 (the lifting that *is* the surjection) is the target of the discharge, never stubbed.
-- Introduced: Pass 5 (`FOUNDATIONAL`).   Reclassified `→ DEBT`: Pass 11.   Discharged: — (in progress).
+- **Discharge path (DEBT; bounded sub-plan; keystone PRESENT — revised Pass 12).** The hard step —
+  the **lifting/surjectivity** — is **not** a wall and needs **no** maximal-unramified / `K^ur` /
+  `IsKrasner` construction (Pass 11's route assumed it; Pass 12 corrected this): Mathlib proves the
+  residue-reduction surjectivity directly in the profinite setting via
+  **`Ideal.Quotient.stabilizerHom_surjective_of_profinite`** (`RingTheory/Invariant/Profinite.lean`)
+  — for a profinite `G` acting continuously on a discrete `B/A` with `Algebra.IsInvariant A B G`,
+  `stabilizer G Q ↠ Aut((B/Q)/(A/P))`. Apply with `G = Gal(K̄/K)`, `B = 𝒪[K̄]`, `A = 𝒪[K]`,
+  `Q = 𝔪[K̄]`, `P = 𝔪[K]` (`stabilizer = ⊤`). Remaining strictly-lower steps:
+  1. **Valuation ring `𝒪[K̄]`. ✅ Pass 11** (`Anabelian/SpectralValuation.lean`): `spectralIntegers K`
+     (a `Subring`) + `spectralIntegers_mem_iff_galois` (`Gal(K̄/K)` preserves it).
+  1b. **Galois `MulSemiringAction` on `𝒪[K̄]`. ✅ Pass 12** (`Anabelian/ResidueReductionRoute.lean`):
+     `spectralIntegers_isInvariant` (`IsInvariantSubring`) ⟹ `IsInvariantSubring.toMulSemiringAction`,
+     the `MulSemiringAction G B` the keystone consumes.
+  2. **`IsInvariant` framing** `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` with discrete `B` + `ContinuousSMul`
+     (likely cleanest via `integralClosure 𝒪[K] (AlgebraicClosure K)`; bridge to `IsNonarchimedeanLocalField`'s
+     `𝒪[K]`/`ValuativeRel`). [remaining]
+  3. **Residue identification:** `Q = 𝔪[K̄]` over `P = 𝔪[K]`; `B/Q ≅ 𝓀̄`, `A/P = 𝓀[K]`,
+     `Aut((B/Q)/(A/P)) = Gal(𝓀̄/𝓀)`; `stabilizer G Q = ⊤`. [remaining]
+  4. **Apply the keystone** `stabilizerHom_surjective_of_profinite`; reinterpret as
+     `Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K]` surjective — **delete the `axiom`,
+     replace with a `theorem`** (only then is the `DEBT` discharged). **KEYSTONE PRESENT** — to be
+     *applied*, never posited.
+- **`DEBT` status: OPEN. Route-steps remaining: [Step 2 `IsInvariant` framing; Step 3 residue
+  identification + `stabilizer = ⊤`; Step 4 apply keystone].** Steps 1, 1b done (axiom-free).
+- **Not the cardinal sin:** L1, strictly **below** R1/R2/R3. The strictly-lower infrastructure (steps
+  1, 1b) is genuinely below the surjection; the surjection itself (step 4) is *supplied by a present
+  Mathlib theorem to be applied*, never stubbed.
+- Introduced: Pass 5 (`FOUNDATIONAL`).   Reclassified `→ DEBT`: Pass 11.   Discharged: — (open; steps
+  1, 1b done Passes 11–12; keystone present).
 
 ---
 
@@ -488,3 +498,37 @@ closure; no `Algebra ℚ (AlgebraicClosure ℚ)`). No new `structure`/`class` (n
 witness. Recovers nothing from an abstract group.
 
 Ledger delta: **`DEBT` +1 (via `FOUNDATIONAL → DEBT` reclassification), `FOUNDATIONAL` −1; no new axiom.**
+
+### Pass 12 (2026-05-30) — rung L1, route (a): the lifting is NOT a wall (keystone present)
+
+**Primary deliverable — the lifting-tractability verdict.** Pass 11 flagged the **lifting** (the heart
+of `residueReduction_surjective`, Pass-6-feared "irreducibly absent") as unverified. Front-loaded it:
+**verdict — NOT a wall.** Mathlib proves the residue-reduction surjectivity directly in the profinite
+setting via **`Ideal.Quotient.stabilizerHom_surjective_of_profinite`** (`RingTheory/Invariant/Profinite.lean`):
+for profinite `G` acting continuously on discrete `B/A` with `Algebra.IsInvariant A B G`,
+`stabilizer G Q ↠ Aut((B/Q)/(A/P))`. Assembled from the finite level (`exists_of_isInvariant` /
+`stabilizerHom_surjective`, the arithmetic Frobenius) via the same profinite-limit machinery that
+closed `≅ Ẑ`. **Corrects Pass 11's route:** the maximal-unramified / `K^ur` edifice is **not** needed,
+and `IsKrasner` is field-*generation* (not Galois-lifting). The discharge is a **bounded** sub-plan
+with the hardest step PRESENT.
+
+**Built (strictly-lower, axiom-free):** `Anabelian/ResidueReductionRoute.lean` —
+
+```
+'Anabelian.spectralIntegers_isInvariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+`spectralIntegers_isInvariant` (`IsInvariantSubring (Gal(K̄/K)) 𝒪[K̄]`, from Pass 11's invariance) ⟹
+the `MulSemiringAction (Gal(K̄/K)) 𝒪[K̄]` the keystone consumes (route step 1b).
+
+**`DEBT` status: OPEN — not discharged** (the `axiom residueReduction_surjective` is still present;
+discharge happens only when it is deleted and replaced by a `theorem`). **Route-steps remaining:
+[Step 2: `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` framing (discrete + continuous); Step 3: residue
+identification `𝓀̄/𝓀` + `stabilizer = ⊤`; Step 4: apply `stabilizerHom_surjective_of_profinite`].**
+
+**No new axiom; no reclassification; ledger unchanged at `0 FOUNDATIONAL / 1 DEBT`.** Nothing
+cardinal-sin posited — the surjection is supplied by a present theorem to be *applied*, never stubbed.
+D1 (ℚ-diamond) did **not** recur (abstract nonarch normed field + algebraic closure). No new
+`structure`/`class` (no rule-2 obligation). Recovers nothing from an abstract group.
+
+Ledger delta: **0 / 0** (no axiom change; a strictly-lower axiom-free brick + the route revision).

@@ -20,11 +20,11 @@ The discipline matters more than any single file. Read these in order:
   reconstruction. Bottom rungs concrete; top rungs explicitly multi-year and far.
 - **`NOTES.md`** — per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 
-## Current state (Pass 11)
+## Current state (Pass 12)
 
 Clean cached build on Mathlib `v4.30.0`. **Zero `FOUNDATIONAL`, one `DEBT`** (the residue surjection,
-reclassified from `FOUNDATIONAL` once its discharge began — Pass 11), zero open owed witnesses, and no
-second boundary ever stacked.
+reclassified from `FOUNDATIONAL` once its discharge began — Pass 11; still **open**), zero open owed
+witnesses, and no second boundary ever stacked.
 
 **Milestone (Pass 10): the first L1 *whole of depth* is closed.** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` — the absolute
 Galois group of a finite field is the profinite completion of `ℤ`, as a topological group — is proved
@@ -37,6 +37,13 @@ spectral valuation ring `𝒪[K̄]` + Galois-invariance, `Anabelian.spectralInte
 reclassified `residueReduction_surjective` `FOUNDATIONAL → DEBT` — a committed, under-construction debt,
 not a static posit. The valuation on `K̄` is the common prerequisite for both the residue discharge and
 any ramification-filtration work.
+
+**Verdict (Pass 12): the hard step is not a wall.** Front-loading the discharge's hardest step (the
+*lifting*), Pass 12 found Mathlib already proves the residue-reduction surjectivity in the profinite
+setting — `Ideal.Quotient.stabilizerHom_surjective_of_profinite` — so **no maximal-unramified
+construction is needed**; the discharge is a bounded sub-plan with the keystone present (route steps
+1, 1b done — `𝒪[K̄]` + the Galois `MulSemiringAction`, `Anabelian.spectralIntegers_isInvariant`; steps
+2–4 remaining). The `DEBT` remains **open** (no new axiom).
 
 - `Anabelian/Basic.lean` (L0) — faithfulness of the infinite Galois correspondence: the
   *precondition* of reconstruction, not reconstruction.
@@ -78,6 +85,9 @@ any ramification-filtration work.
   the **spectral valuation ring `𝒪[K̄]`** (`spectralIntegers`, the closed unit ball of `spectralNorm`,
   a `Subring`) and that **`Gal(K̄/K)` preserves it** (`spectralIntegers_mem_iff_galois`). The
   foundational brick of the residue-surjection discharge route; the lifting (its heart) is untouched.
+- `Anabelian/ResidueReductionRoute.lean` (L1) — Pass 12's lifting-tractability verdict (the hard step
+  is **not** a wall; `stabilizerHom_surjective_of_profinite` supplies the surjectivity) + the
+  Galois **`MulSemiringAction` on `𝒪[K̄]`** (`spectralIntegers_isInvariant`, route step 1b, axiom-free).
 
 Only `UnramifiedQuotient.lean` rests on the one `DEBT` entry (`residueReduction_surjective`, see
 `AXIOM_LEDGER.md` — `FOUNDATIONAL` Passes 5–10, reclassified `DEBT` Pass 11 with its discharge begun);

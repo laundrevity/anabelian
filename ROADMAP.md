@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 11 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 12 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -37,7 +37,7 @@ This rung asserts nothing anabelian. It establishes that the *precondition* of r
 
 ## Foundational Mathlib gaps (L1–L4) — prerequisites, below the targets
 
-### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–11)   ·   DEBT 1, FOUNDATIONAL 0
+### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–12)   ·   DEBT 1, FOUNDATIONAL 0
 
 Mathlib **has** `IsNonarchimedeanLocalField` (definition, DVR, finite residue field, completeness),
 abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgroup`,
@@ -95,6 +95,12 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   brick (route step 1) of the residue-surjection discharge; on its strength,
   `residueReduction_surjective` was **reclassified `FOUNDATIONAL → DEBT`** (now `0 FOUNDATIONAL / 1
   DEBT`). Nothing cardinal-sin posited (the lifting is untouched).
+- Pass 12 (`Anabelian/ResidueReductionRoute.lean`): route (a), the **lifting-tractability verdict** —
+  the surjection's hard step is **NOT a wall**: `Ideal.Quotient.stabilizerHom_surjective_of_profinite`
+  (Mathlib) supplies the profinite residue-reduction surjectivity directly (no maximal-unramified /
+  `K^ur` / `IsKrasner` needed — corrects Pass 6 & 11). Built the Galois `MulSemiringAction` on `𝒪[K̄]`
+  (`spectralIntegers_isInvariant`, axiom-free, route step 1b). `DEBT` stays **open** (no new axiom);
+  route now a bounded sub-plan with the keystone present.
 
 **Sub-target IN-PROGRESS — the residue surjection (now `DEBT`, discharge begun Pass 11):**
 - `Anabelian.residueReduction_surjective` (the surjectivity half `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`; Pass 4 proved
@@ -106,17 +112,26 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   reduction map) and (b) the ramification filtration (`G_i` are defined *via* the valuation, and the
   unramified/tame/wild picture sits *on* the residue reduction). So (b) is no independent escape from
   (a); (a) is the highest-leverage move. Chose (a).
-- **Tractability correction to Pass 6.** "Valuation on `K̄` irreducibly absent" was **wrong**:
-  `spectralNorm.normedField` + `NormedField.toValued` give `Valued K̄ ℝ≥0` (cf.
-  `NumberTheory/Padics/Complex.lean` for `ℂ_p`), whence `𝒪[K̄]`/`𝓀[K̄]`; `Krasner.lean`'s `IsKrasner` is
-  the lifting machinery. Only the final maximal-unramified lifting assembly is genuinely absent.
-- **Discharge route (multi-pass; step 1 done, first step probe-verified):** (1) **valuation on `K̄`** —
-  ✅ Pass 11 (`Anabelian/SpectralValuation.lean`): `spectralIntegers K = 𝒪[K̄]` (a `Subring`) +
-  `spectralIntegers_mem_iff_galois` (`Gal(K̄/K)` preserves it), axiom-free; (2) **bridge**
-  `IsNonarchimedeanLocalField K → NormedField K` (`ValuativeRel → Valued → RankOne → Valued.toNormedField`);
-  (3) **residue field** `𝓀[K̄]` (via `NormedField.toValued`) + the reduction map; (4) **lifting /
-  surjectivity** (`IsKrasner` + maximal-unramified) — the irreducible heart, **never posited** (that
-  would be the cardinal sin). Discharging step 4 turns the `DEBT` into a theorem.
+- **Pass-12 lifting verdict — the hard step is NOT a wall; the keystone is PRESENT.** Mathlib proves
+  the residue-reduction surjectivity directly in the profinite setting:
+  **`Ideal.Quotient.stabilizerHom_surjective_of_profinite`** (`RingTheory/Invariant/Profinite.lean`) —
+  for profinite `G` acting continuously on a discrete `B/A` with `Algebra.IsInvariant A B G`,
+  `stabilizer G Q ↠ Aut((B/Q)/(A/P))` — assembled from the finite-level arithmetic Frobenius
+  (`exists_of_isInvariant`) via the `≅ Ẑ` profinite-limit machinery. So **no maximal-unramified /
+  `K^ur` / `IsKrasner` construction is needed** (correcting Pass 6 *and* Pass 11; `IsKrasner` is
+  field-generation, not Galois-lifting). The discharge is a **bounded** sub-plan.
+- **Discharge route (revised Pass 12; keystone PRESENT; `DEBT` OPEN). Steps:** (1) ✅ Pass 11 — the
+  valuation ring `𝒪[K̄]` (`spectralIntegers`) + `Gal(K̄/K)` preserves it; (1b) ✅ Pass 12
+  (`Anabelian/ResidueReductionRoute.lean`) — the Galois `MulSemiringAction` on `𝒪[K̄]`
+  (`spectralIntegers_isInvariant` ⟹ `IsInvariantSubring.toMulSemiringAction`); (2) **[remaining]**
+  `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` framing (discrete `B` + `ContinuousSMul`; likely via
+  `integralClosure 𝒪[K] K̄`); (3) **[remaining]** residue identification `B/Q ≅ 𝓀̄`, `A/P = 𝓀[K]`,
+  `Aut = Gal(𝓀̄/𝓀)`, `stabilizer = ⊤`; (4) **[remaining — keystone PRESENT]** apply
+  `stabilizerHom_surjective_of_profinite`, reinterpret as `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`, **delete the
+  `axiom`** (only then discharged). The surjection is *applied from a present theorem*, **never posited**.
+- **`DEBT` status: OPEN. Route-steps remaining: [Step 2 framing; Step 3 residue + `stabilizer = ⊤`;
+  Step 4 apply keystone].** Pass-11 common-prerequisite finding still holds: this valuation/residue
+  infrastructure also gates L2 (ramification).
 
 **Sub-target ✅ DONE (Pass 10) — `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ`: the FIRST L1 WHOLE OF DEPTH, closed axiom-free.**
 `Anabelian/FiniteFieldZHatIso.lean`: `galoisContinuousMulEquivZHat : galoisProfinite K ≃ₜ* ZHat` (the
@@ -175,19 +190,20 @@ index systems must be matched cofinally: `FiniteIndexNormalSubgroup (Multiplicat
 - ~~Discharge owed witness W1 (`Gal(ℚ̄/ℚ)` non-abelian)~~ — **DONE, Pass 3**.
 - Depends on: L0 + Mathlib's local-field/ramification/finite-field API.
 
-**Honest read on L1 completeness (updated Pass 11).** The easy/finite fruit is harvested (P1–4);
+**Honest read on L1 completeness (updated Pass 12).** The easy/finite fruit is harvested (P1–4);
 Pass 5 took the one boundary; Passes 6–10 built and **closed** `≅ Ẑ` (the first L1 whole of depth,
-axiom-free); Pass 11 made the **inflection decision to confront the boundary** rather than drift into
-breadth. The project now holds **0 `FOUNDATIONAL`, 1 `DEBT`** — `residueReduction_surjective`,
-reclassified because route (a) (its discharge) is **begun**: Pass 11 built the valuation-on-`K̄`
-foundational brick (`spectralIntegers` = `𝒪[K̄]` + Galois-invariance) and **corrected** the Pass-6
-"valuation absent" assessment (`spectralNorm.normedField`/`NormedField.toValued`/`IsKrasner` are
-PRESENT). The valuation on `K̄` is the **common gate** for both the residue discharge and any
-ramification-filtration work, so (a) is the highest-leverage path and (b) is no independent escape.
-**Honest next step (Pass 12):** continue route (a) — the bridge `IsNonarchimedeanLocalField → NormedField`
-(step 2) and/or the residue field `𝓀[K̄]` + reduction map (step 3), toward the lifting (step 4, the
-`DEBT`'s heart). The metric is now net `DEBT` reduction: the one debt is committed and under
-construction, no longer a static boundary. No second boundary; nothing cardinal-sin posited.
+axiom-free); Pass 11 made the **inflection decision to confront the boundary** (reclassify
+`FOUNDATIONAL → DEBT`, begin route (a)); **Pass 12 front-loaded the hard step and the verdict is
+strong: the lifting is NOT a wall** — `Ideal.Quotient.stabilizerHom_surjective_of_profinite` supplies
+the profinite residue-reduction surjectivity directly, so the discharge is a **bounded** sub-plan with
+the keystone PRESENT (correcting Pass 6's "irreducibly absent" *and* Pass 11's maximal-unramified
+route). The project holds **0 `FOUNDATIONAL`, 1 `DEBT`** (`residueReduction_surjective`, **open**),
+with route steps 1, 1b done (`𝒪[K̄]` + the Galois action) and steps 2–4 remaining (the `IsInvariant`
+integral-closure framing, the residue identification, and *applying* the keystone). **Honest next step
+(Pass 13):** step 2 — set up `Algebra.IsInvariant 𝒪[K] 𝒪[K̄] Gal` (discrete `B` + `ContinuousSMul`,
+likely via `integralClosure 𝒪[K] K̄`). The metric is net `DEBT` reduction: the one debt is committed,
+under construction, and now assessed genuinely reachable — no longer a static boundary. No second
+boundary; nothing cardinal-sin posited.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -199,8 +215,8 @@ we owe before sustained work in a sub-area):**
   agree definitionally, and provide a reusable lemma/instance — rather than dodging per-theorem.
   Trigger: the *second* recurrence of the diamond is when to attempt the structural fix instead of a
   second band-aid. Status: tracked, not yet triggered (Pass 3 = first appearance; Passes 4–5 did not
-  recur — Passes 4–11 worked over abstract/local/finite fields, their algebraic closures, `Ẑ`/`Multiplicative ℤ`,
-  and (Pass 11) an abstract nonarchimedean normed field — no `Algebra ℚ (AlgebraicClosure ℚ)`).
+  recur — Passes 4–12 worked over abstract/local/finite fields, their algebraic closures, `Ẑ`/`Multiplicative ℤ`,
+  and (Passes 11–12) an abstract nonarchimedean normed field — no `Algebra ℚ (AlgebraicClosure ℚ)`).
 
 ### L2 — Higher ramification groups (lower & upper numbering)   ·   **NOT-STARTED**   ·   DEBT: medium-high
 
