@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Conor Mahany
 -/
 import Anabelian.ResidueReductionIntegral
-import Mathlib.FieldTheory.Minpoly.IsIntegrallyClosed
-import Mathlib.RingTheory.Polynomial.Basic
-import Mathlib.RingTheory.Valuation.LocalSubring
+import Mathlib
+-- `import Mathlib` (sanctioned fallback, CLAUDE.md): brick 3a's proof draws on the `spectralNorm`,
+-- `Valued`/`NormedValued`, `IsUltrametricDist`, and `Valued.integer`/`ValuationRing` APIs across
+-- many modules (several paths/transitive instances uncertain), so the broad import is honest here.
+-- The Pass-17 brick `isIntegral_iff_minpoly_coeff_mem` compiles unchanged under it.
 
 /-!
 # Rung L1, discharging the `DEBT`: brick 3a (`𝒪[K̄]` local), the route comparison (Pass 17)
@@ -126,7 +128,8 @@ open Polynomial
 
 namespace Anabelian
 
-open scoped ValuativeRel
+open scoped ValuativeRel NNReal
+open ValuativeRel
 
 variable (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
@@ -156,13 +159,69 @@ theorem isIntegral_iff_minpoly_coeff_mem (x : AlgebraicClosure K) :
       exact h i
     refine ⟨(minpoly K x).toSubring (𝒪[K] : Subring K) hsub,
       (Polynomial.monic_toSubring _ _ _).mpr (minpoly.monic halg), ?_⟩
-    show aeval x _ = 0
+    change aeval x _ = 0
     rw [← Polynomial.aeval_map_algebraMap K x,
         show algebraMap ↥𝒪[K] K = (𝒪[K] : Subring K).subtype from rfl,
         Polynomial.map_toSubring]
     exact minpoly.aeval K x
 
--- Reproducible axiom audit. Standard axioms only — strictly-lower, nothing posited.
+set_option synthInstance.maxHeartbeats 400000 in
+-- `synthInstance.maxHeartbeats` raised: the `IsLocalRing ↥(Valued.integer K̄)` instance search is
+-- expensive under `import Mathlib` + the imported Anabelian Galois-action instances — it resolves,
+-- just past the 20000 default. A search-cost matter, not logical (`#print axioms` is standard).
+/-- **Brick 3a (route (ii)): `𝒪[K̄] = integralClosure 𝒪[K] K̄` is local.** Proved via the spectral
+valuation, with the **D2 incursion localized entirely inside this proof** (the `letI` chain — a
+`RankOne` on `K`'s valuation, `Valued.toNontriviallyNormedField` for `NormedField K`,
+`spectralNorm.normedField K K̄` for `NormedField K̄`, `NormedField.toValued` for `Valued K̄ ℝ≥0`);
+none leaks to the statement, so prior bricks (2a/2b/3c) are untouched. Then `Valued.integer K̄` is
+a `ValuationRing` ⟹ `IsLocalRing` *for free*, and the **bridge** `integralClosure 𝒪[K] K̄ =
+Valued.integer K̄` (membership iff via `spectralValue_le_one_iff` + Pass-17's
+`isIntegral_iff_minpoly_coeff_mem` + the agreement `‖a‖ ≤ 1 ↔ a ∈ 𝒪[K]`, which is `Iff.rfl` since
+`Valued.v = ValuativeRel.valuation K` and `mem_integer_iff` is `rfl`) transports local-ness back
+along a `RingEquiv` (`RingEquiv.isLocalRing`). The bridge is over the **same `ValuativeRel` `𝒪[K]`**
+the prior bricks use. -/
+theorem isLocalRing_galoisIntegers :
+    IsLocalRing ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := by
+  letI := IsTopologicalAddGroup.rightUniformSpace K
+  haveI := isUniformAddGroup_of_addCommGroup (G := K)
+  letI rk : (Valued.v (R := K)).RankOne :=
+    { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
+      strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
+          MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
+  letI nnf : NontriviallyNormedField K := Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
+  letI nfL : NormedField (AlgebraicClosure K) := spectralNorm.normedField K (AlgebraicClosure K)
+  haveI ultL : IsUltrametricDist (AlgebraicClosure K) :=
+    IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
+      (isNonarchimedean_spectralNorm (K := K) (L := AlgebraicClosure K))
+  letI vL : Valued (AlgebraicClosure K) ℝ≥0 := NormedField.toValued
+  haveI hlr : IsLocalRing ↥(Valued.integer (AlgebraicClosure K)) := inferInstance
+  have hmem : ∀ x : AlgebraicClosure K,
+      x ∈ integralClosure ↥𝒪[K] (AlgebraicClosure K) ↔
+        x ∈ Valued.integer (AlgebraicClosure K) := by
+    intro x
+    have halg : IsIntegral K x := Algebra.IsIntegral.isIntegral x
+    rw [Valuation.mem_integer_iff]
+    change IsIntegral ↥𝒪[K] x ↔ _
+    rw [isIntegral_iff_minpoly_coeff_mem]
+    have hvx : (Valued.v x ≤ (1 : ℝ≥0)) ↔ spectralNorm K (AlgebraicClosure K) x ≤ 1 := by
+      rw [show Valued.v x = ‖x‖₊ from rfl,
+          show spectralNorm K (AlgebraicClosure K) x = ‖x‖ from rfl]
+      exact_mod_cast Iff.rfl
+    rw [hvx, show spectralNorm K (AlgebraicClosure K) x = spectralValue (minpoly K x) from rfl,
+        spectralValue_le_one_iff (minpoly.monic halg)]
+    refine forall_congr' (fun i => ?_)
+    rw [Valued.toNormedField.norm_le_one_iff]
+    exact Iff.rfl
+  let e : ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) ≃+*
+      ↥(Valued.integer (AlgebraicClosure K)) :=
+    { toFun := fun y => ⟨y.1, (hmem y.1).mp y.2⟩
+      invFun := fun y => ⟨y.1, (hmem y.1).mpr y.2⟩
+      left_inv := fun _ => rfl, right_inv := fun _ => rfl
+      map_mul' := fun _ _ => rfl, map_add' := fun _ _ => rfl }
+  exact e.symm.isLocalRing
+
+-- Reproducible axiom audit. Standard axioms only — strictly-lower, nothing posited (D2 localized).
 #print axioms isIntegral_iff_minpoly_coeff_mem
+#print axioms isLocalRing_galoisIntegers
 
 end Anabelian

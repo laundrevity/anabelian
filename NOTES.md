@@ -1744,3 +1744,276 @@ K̄)` = **3a**. With 3a: 3b (residue algebraic), 3d/3e (`IsAlgClosure` repackagi
 `stabilizerHom_surjective_of_profinite`, **delete the axiom** — perfect case; imperfect equal-char
 tracked). Honest pointer: 3a is ~2 passes out (the D2 setup + bridge are the real work, both
 de-risked by the `Padics/Complex` template + the reachable `spectralValue_le_one_iff`), the discharge ~3.
+
+---
+
+# Pass 18 — rung L1, route (a): brick 3a (`𝒪[K̄]` local) DONE + the D2 incursion (2026-05-30)
+
+## Restatement (i)–(iv), pre-search
+
+(i) D2 setup localized like D1: introduce `NormedField K`/`RankOne` via `letI` **inside the proof**, so
+`spectralNorm` is reachable but `𝒪[K]`/`integralClosure 𝒪[K] K̄` keep elaborating via `ValuativeRel`
+elsewhere (3a's statement is pure `ValuativeRel`, no leak). (ii) The bridge `spectralNorm x ≤ 1 ↔
+IsIntegral 𝒪[K] x` over the **same** `ValuativeRel` `𝒪[K]`, via `spectralValue_le_one_iff` + Pass-17's
+algebraic half + the norm↔valuation agreement. (iii) Expected 3a to land or be ≤2 passes out — it
+**landed**. (iv) D2 localized-and-logged, no stub, discharge only at axiom-removal, re-confirm 2a/2b/3c.
+
+## Route-first-step probes (real names) — the D2 setup
+
+- **`Valued K` needs `[UniformSpace K] [IsUniformAddGroup K]`** (`LocalField/Basic.lean:104`), absent in
+  my `[TopologicalSpace K]` context — but `Basic.lean:138-145` shows the localized fix: `letI :=
+  IsTopologicalAddGroup.rightUniformSpace K; haveI := isUniformAddGroup_of_addCommGroup; letI :
+  RankOne := {hom' := IsRankLeOne.nonempty.some.emb.comp …, strictMono' := …}`. Verified it elaborates.
+- **`NormedField K`** via `Valued.toNontriviallyNormedField K (ValueGroupWithZero K)` (NormedValued.lean);
+  `IsUltrametricDist K` then `inferInstance`. **`NormedField K̄`** via `spectralNorm.normedField K K̄`
+  (the `Padics/Complex.lean` template — `PadicAlgCl = AlgebraicClosure ℚ_[p]` mirrors our `K̄`);
+  `IsUltrametricDist K̄` via `IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
+  (isNonarchimedean_spectralNorm …)`; **`Valued K̄ ℝ≥0`** via `NormedField.toValued`. Then **`IsLocalRing
+  ↥(Valued.integer K̄)` is `inferInstance` — free** (`ValuationSubring → ValuationRing → IsLocalRing`).
+- **The agreement** `‖a‖ ≤ 1 ↔ a ∈ 𝒪[K]`: `Valued.toNormedField.norm_le_one_iff` (`‖x‖ ≤ 1 ↔ Valued.v x
+  ≤ 1`, NormedValued.lean:245) + `Valuation.mem_integer_iff` (`r ∈ v.integer ↔ v r ≤ 1`, `rfl`) + `Valued.v
+  = ValuativeRel.valuation K` (`rfl`, ValuativeRel.lean:66). So `coeff ∈ 𝒪[K] ↔ Valued.v coeff ≤ 1` is
+  **`Iff.rfl`** — the spectral norm's unit ball on `K` IS the `ValuativeRel` `𝒪[K]`, definitionally.
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| D2 setup via `Padics/Complex` template | works, but needs the `rightUniformSpace`+`RankOne` `letI` prefix (`[TopologicalSpace K]`, not `[UniformSpace K]`) | ✓ (localized as `letI`) |
+| agreement `‖a‖ ≤ 1 ↔ a ∈ 𝒪[K]` a real lemma | **`Iff.rfl`** (`Valued.v = valuation K` + `mem_integer_iff` both `rfl`) | better — diamond reconcilable |
+| `IsLocalRing (Valued.integer K̄)` free | free, but the instance search is **expensive** under `import Mathlib` + Anabelian instances (needs `maxHeartbeats` bump) | ✓ + a heartbeats note |
+| 3a lands this pass | **landed** (`isLocalRing_galoisIntegers`, standard-axioms-only) | ✓ |
+
+## Built — brick 3a (route (ii)), D2 localized
+
+`Anabelian/GaloisIntegersLocal.lean`, standard axioms only (in-file `#print axioms`):
+- `isLocalRing_galoisIntegers : IsLocalRing ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))`. Proof: the
+  `letI` chain (above) sets up `Valued K̄`; `Valued.integer K̄` local for free; the **bridge** `hmem : x ∈
+  integralClosure 𝒪[K] K̄ ↔ x ∈ Valued.integer K̄` (`change` to `IsIntegral`, then
+  `isIntegral_iff_minpoly_coeff_mem` ↔ `∀ i, coeff ∈ 𝒪[K]`; the RHS `x ∈ Valued.integer K̄ ↔ Valued.v x
+  ≤ 1 ↔ spectralNorm x ≤ 1 ↔ spectralValue (minpoly K x) ≤ 1 ↔ ∀ n, ‖coeff n‖ ≤ 1`, glued by the
+  `Iff.rfl` agreement per coeff); then a hand-built `RingEquiv` (identity on values, all axioms `rfl`)
+  and `RingEquiv.isLocalRing` transports local-ness back. With 3a, `𝔪[K̄]` is THE maximal ideal, so 3c
+  (`galoisResidueField_isAlgClosed`) gives `𝓀̄` algebraically closed.
+
+## D2 incursion — localized + logged (PRIMARY discipline)
+
+First incursion of D2 (watched P13–17). Contained like D1:
+- **Mechanism:** the spectral/normed/Valued setup is a `letI`/`haveI` chain **inside the proof**; the
+  statement is pure `ValuativeRel`. So nothing leaks to other declarations.
+- **Agreement band-aid:** `Iff.rfl` (no genuine clash — same valuation).
+- **No global instance; `synthInstance.maxHeartbeats 400000` (commented)** for the one expensive search.
+- **Re-typecheck confirmation (the discipline):** `lake build` clean (8493 jobs); 2a
+  `galoisIntegers_algebraIsInvariant`, 2b `continuousSMul_galoisIntegers`, 3c
+  `galoisResidueField_isAlgClosed` **all still `#print axioms` standard-only** — the D2 setup changed
+  nothing in them. 3a too is standard-only.
+- This file uses **`import Mathlib`** (sanctioned fallback, noted): 3a spans many spectral/valued/normed
+  modules with uncertain paths/transitive instances. (Pass-17's `isIntegral_iff_minpoly_coeff_mem`
+  compiles unchanged under it.)
+
+## What was built + HEADLINE status
+
+`isLocalRing_galoisIntegers` (brick 3a), axiom-free (standard only), D2 localized.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+**Route-steps remaining: [3b residue algebraic; 3d/3e `≅ AlgebraicClosure 𝓀[K]` + `Aut` (supported);
+Step 4 apply keystone + delete axiom (perfect-case)].** Done: 1, 1b, 2a, 2b, 3c, **3a (this pass)**.
+**Nothing cardinal-sin posited** (3a proved, not stubbed). **Recovers nothing from an abstract group.**
+No new `structure`/`class` (no rule-2). **D1** N/A; **D2 incurred, localized, logged** (hygiene, not a
+logical axiom). Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`**.
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Progress = brick 3a (the last substantial gate) proved
+  axiom-free + the D2 incursion contained.
+
+## Scope: pointer to Pass 19
+
+Pass 19: **steps 3b + 3d/3e (and possibly Step 4).** (3b) `𝓀̄ := 𝒪[K̄]/𝔪[K̄]` is algebraic over `𝓀[K]`
+— each residue class lifts to an element integral over `𝒪[K]`, hence algebraic (moderate). (3d) with 3c
+(`𝓀̄` alg-closed) + 3b (`𝓀̄/𝓀[K]` algebraic), `isAlgClosure_iff` gives `IsAlgClosure 𝓀[K] 𝓀̄`, and
+`IsAlgClosure.equiv` gives `𝓀̄ ≅ AlgebraicClosure 𝓀[K]` (supported). (3e) transport `Aut(𝓀̄/𝓀[K]) ≅
+Field.absoluteGaloisGroup 𝓀[K]`. Then **Step 4**: assemble the keystone hypotheses (all now in hand —
+`MulSemiringAction`, `Algebra.IsInvariant`, `DiscreteTopology`/`ContinuousSMul`, `Q = 𝔪[K̄]` prime over
+`𝔪[K]` with `stabilizer = ⊤` via local-ness, residue `B/Q ≅ 𝓀̄ ≅ AlgebraicClosure 𝓀[K]`), apply
+`stabilizerHom_surjective_of_profinite`, reinterpret as `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`, **delete the `axiom`**
+for a `[PerfectField K]` `theorem`, and propagate `[PerfectField K]` to the downstream
+`UnramifiedQuotient.lean` results (the narrowing) + record the imperfect equal-char remainder. 3a was the
+last substantial gate; the discharge is now ~1–2 passes out.
+
+---
+
+# Pass 19 — rung L1, route (a): the residue identification (3b/3c/3d/3e), clean partial (2026-05-30)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Bricks: 3b (`Algebra.IsAlgebraic 𝓀[K] 𝓀̄`), 3d (`𝓀̄ ≅ AlgebraicClosure 𝓀[K]`), 3e (`Aut ≅ Gal 𝓀[K]`),
+connective (Q prime/LiesOver, `stabilizer = ⊤`, `A/P ≅ 𝓀[K]`). (ii) Aim for Step 4 (discharge) but stop
+clean if it's too much. (iii) Discharge-moment checklist. (iv) Claim discharge only at axiom-removal.
+
+## Inventory (real names) — what made the bricks work
+
+- `𝓀[K] = IsLocalRing.ResidueField ↥𝒪[K]` (`Valued/ValuativeRel.lean:91`) = `𝒪[K] ⧸ 𝔪[K]` — matches the
+  keystone's `A/P` exactly.
+- **The connective keystone:** given `[IsLocalHom (algebraMap R S)]`, `ResidueField/Basic.lean:178-184`
+  gives `(maximalIdeal S).LiesOver (maximalIdeal R)` **and** `Algebra (ResidueField R) (ResidueField S)`
+  as **free instances**. So all connective tissue + the residue algebra reduce to proving `IsLocalHom
+  (algebraMap 𝒪[K] 𝒪[K̄])`.
+- `Ideal.isMaximal_comap_of_isIntegral_of_isMaximal` (`Ideal/GoingUp.lean:204`) + `eq_maximalIdeal`
+  (local) ⟹ `(𝔪[K̄]).comap = 𝔪[K]` = `local_hom_TFAE` clause 4 ⟹ clause 0 = `IsLocalHom`.
+- `IsAlgClosure.equiv` (`IsAlgClosed/Basic.lean:414`) needs `IsTorsionFree` (free over a field, but the
+  search is slow — bumped `synthInstance.maxHeartbeats`). `IsAlgClosure 𝓀[K] 𝓀̄ := ⟨h3c, h3b⟩` directly
+  (avoiding `isAlgClosure_iff`'s awkward arg binding).
+- **3b can NOT use `Algebra.IsAlgebraic.tower_top`** — that needs a *field* base, but `𝒪[K]` is a DVR. So
+  3b is element-wise: `mk b` with `b` integral (monic `q` over `𝒪[K]`); `q.map (algebraMap 𝒪[K] 𝓀[K])`
+  is monic (≠0) and kills `mk b` (`aeval_map_algebraMap 𝓀[K]` + `aeval_algHom_apply` + `aeval_def` +
+  the integrality witness).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| LiesOver/residue-algebra need separate work | **free** given `IsLocalHom` | ✓ (reduce to IsLocalHom) |
+| 3b via `tower_top` | `tower_top` needs field base; `𝒪[K]` is a DVR → element-wise | corrected, built directly |
+| Step 4 a big separate assembly | keystone **typechecks** on `G/B/A/P/Q`; only `ContinuousSMul` (Pass 2b) missing | discharge ~1 pass out |
+| might reach the discharge | residue iso done; Step 4 = keystone + `stabilizer=⊤` + reinterpret | clean partial, stop |
+
+## Built — the residue identification (`Anabelian/ResidueIso.lean`, standard axioms only)
+
+- `galoisIntegers_isLocalHom` (instance) — `IsLocalHom (algebraMap 𝒪[K] 𝒪[K̄])` (the comap-maximal +
+  TFAE chain). Unlocks `LiesOver` + `Algebra 𝓀[K] 𝓀̄`.
+- `galoisResidueEquiv` (3b + 3d) — `ResidueField 𝒪[K̄] ≃ₐ[𝓀[K]] AlgebraicClosure 𝓀[K]`.
+- `galoisResidueAut` (3e) — `Aut(𝓀̄/𝓀[K]) ≃* Field.absoluteGaloisGroup 𝓀[K]` (`AlgEquiv.autCongr`).
+All need **no `PerfectField`**; `isLocalRing_galoisIntegers` (3a) registered as `local instance` so the
+statements elaborate.
+
+## Step-4 distance (probed, for the honest pointer)
+
+`stabilizerHom_surjective_of_profinite (𝔪[K]) (𝔪[K̄])` **typechecks** applied to `G = Gal(K̄/K)`,
+`B = 𝒪[K̄]`, `A = 𝒪[K]` (with discrete `B`) — the *only* instance it can't auto-synth is `ContinuousSMul
+G 𝒪[K̄]`, which **is** Pass-2b's `continuousSMul_galoisIntegers` (supply via `haveI`). So Step 4 is:
+supply `ContinuousSMul` → keystone gives `stabilizer G 𝔪[K̄] ↠ (𝒪[K̄]/𝔪[K̄] ≃ₐ[𝒪[K]/𝔪[K]] 𝒪[K̄]/𝔪[K̄])`;
+prove `stabilizer G 𝔪[K̄] = ⊤` (pointwise-ideal-maximality + local uniqueness); reinterpret the codomain
+(`B/Q = 𝓀̄`, `A/P = 𝓀[K]`, defeq) via `galoisResidueAut` ⟹ `Gal K →* Gal 𝓀[K]` surjective; **delete the
+axiom**. ~1 pass.
+
+## What was built + HEADLINE status
+
+The residue identification (3b/3c/3d/3e) + connective `IsLocalHom`/`LiesOver`, all standard-axioms-only.
+**HEADLINE: the axiom was NOT removed — `residueReduction_surjective` remains the single open `DEBT`.**
+This is a **clean partial**: Step 4 (keystone application + `stabilizer = ⊤` + reinterpretation + axiom
+deletion) was **deliberately NOT half-assembled** — a half-built Step 4 is worse than a clean partial.
+**Nothing cardinal-sin posited** (all bricks proved; surjection to be applied from the present keystone).
+**Recovers nothing from an abstract group.** No new `structure`/`class` (no rule-2). **D1** N/A; **D2**
+unchanged (3a's localized incursion); no further D2 this pass.
+
+## Ledger delta
+
+- **0 / 0.** No new axiom; no reclassification. Ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`** (open,
+  now ~1 pass from discharge). Progress = the residue identification (the last substantial body of work).
+
+## Scope: pointer to Pass 20
+
+Pass 20: **the discharge.** Assemble Step 4 in `UnramifiedQuotient.lean` (or a new file feeding it):
+(1) `letI : TopologicalSpace 𝒪[K̄] := ⊥`, `haveI : DiscreteTopology`, `haveI := continuousSMul_galoisIntegers
+K`; (2) prove `MulAction.stabilizer (Gal K) 𝔪[K̄] = ⊤` (every `σ` maps the unique maximal ideal to a
+maximal ideal = itself — `Ideal.pointwise_smul` + maximality-under-equiv + `eq_maximalIdeal`); (3)
+`have := stabilizerHom_surjective_of_profinite 𝔪[K] 𝔪[K̄]` (typechecks); (4) compose `G ≃* ↥(stabilizer)`
+(`stabilizer = ⊤` ⟹ `Subgroup.topEquiv`), the surjective `stabilizerHom`, and `galoisResidueAut`
+(matching `B/Q = 𝓀̄`, `A/P = 𝓀[K]`) into `φ : Gal K →* Gal 𝓀[K]` surjective; (5) **delete `axiom
+residueReduction_surjective`, replace with the `[PerfectField K]` theorem of the SAME statement**;
+(6) **discharge-moment checklist**: `#print axioms` standard-only on the theorem AND
+`unramifiedQuotient_iso`/`_procyclic` (propagate `[PerfectField K]` to them + their docstrings),
+anti-circularity (keystone genuinely applied), ledger **1 DEBT → 0** with the tracked imperfect remainder.
+The residue identification is done; this is the keystone application + bookkeeping.
+
+---
+
+# Pass 20 — rung L1: THE DISCHARGE. `residueReduction_surjective`: `DEBT → theorem` (2026-05-30)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Step-4 pieces: `ContinuousSMul` plumbing (Pass 2b), `stabilizer = ⊤`, keystone application,
+codomain via `galoisResidueAut` (+ transport if not defeq), domain via `stabilizer = ⊤`. (ii) Aim to
+reach the deletion; stop clean if `stabilizer = ⊤` or the codomain transport balloons. (iii)
+Discharge-moment checklist. (iv) Claim discharge only at axiom-removal; re-audit downstream.
+
+## Route-first-step (keystone conclusion shape) + the identifications
+
+- `#check @Ideal.Quotient.stabilizerHom`: `... ↥(MulAction.stabilizer G P) →* (B ⧸ P) ≃ₐ[A ⧸ p] B ⧸ P`
+  (its `P` = our `Q = 𝔪[K̄]`, its `p` = our `P = 𝔪[K]`).
+- **Codomain identification is DEFEQ, no transport needed:** `B ⧸ 𝔪[K̄] = IsLocalRing.ResidueField 𝒪[K̄]
+  = 𝓀̄` and `A ⧸ 𝔪[K] = ResidueField 𝒪[K] = 𝓀[K]` (both `= R ⧸ maximalIdeal`, the `ResidueField` def);
+  and **both algebra instances are `Ideal.Quotient.algebraOfLiesOver`** (the keystone's from `LiesOver`,
+  `galoisResidueAut`'s from `IsLocalHom` ⟹ `LiesOver` ⟹ the `ResidueField.algebra` instance). So the
+  keystone's codomain *is* `galoisResidueAut`'s domain `𝓀̄ ≃ₐ[𝓀[K]] 𝓀̄` — `.comp` works directly.
+- `Subgroup.topEquiv : (⊤ : Subgroup G) ≃* G`; `Ideal.pointwise_smul_eq_comap : a • S = S.comap
+  (toRingAut _ _ a).symm`; **`comap_isMaximal_of_equiv` is an INSTANCE** (so `σ • 𝔪[K̄]` is maximal
+  automatically); `IsLocalRing.eq_maximalIdeal`.
+
+## The discharge assembly (`Anabelian/UnramifiedQuotient.lean`)
+
+- `stabilizer G 𝔪[K̄] = ⊤`: `Subgroup.eq_top_iff'`; `intro σ`; `MulAction.mem_stabilizer_iff,
+  Ideal.pointwise_smul_eq_comap`; `exact eq_maximalIdeal inferInstance` (the comap is maximal by the
+  instance; `= 𝔪[K̄]` by local uniqueness).
+- `hsurj := stabilizerHom_surjective_of_profinite (maximalIdeal 𝒪[K]) (maximalIdeal 𝒪[K̄])` — all
+  hypotheses synthesize (`MulSemiringAction`, `Algebra.IsInvariant`, `DiscreteTopology` via `⊥` +
+  `⟨rfl⟩`, `ContinuousSMul` via `continuousSMul_galoisIntegers K`, `G` profinite via `[PerfectField K]`,
+  `Q.IsPrime`/`Q.LiesOver P` via `IsLocalHom`).
+- `ι : Gal K →* ↥(stabilizer)`, `σ ↦ ⟨σ, by rw [hstab]; exact Subgroup.mem_top σ⟩`, surjective.
+- `φ = (galoisResidueAut K).toMonoidHom.comp (stabilizerHom.comp ι)`; surjective via
+  `(galoisResidueAut K).surjective.comp (hsurj.comp hι)` (after `simp only [MonoidHom.coe_comp,
+  MulEquiv.coe_toMonoidHom]`).
+- **`axiom` DELETED; `theorem residueReduction_surjective [PerfectField K] : <same statement> := by …`**.
+
+Verified standalone (`discharge_test` probe): `depends on axioms: [propext, Classical.choice,
+Quot.sound]` — no `residueReduction_surjective`, no `sorryAx`, no hidden axiom (anti-circularity).
+
+## Discharge-moment checklist (all five run)
+
+1. **Statement preserved:** `∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K],
+   Function.Surjective φ` + `[PerfectField K]` — identical existence claim.
+2. **`#print axioms` standard-only, theorem + downstream:** `residueReduction_surjective`,
+   `unramifiedQuotient_iso`, `residue_procyclic`, `unramifiedQuotient_procyclic` all `[propext,
+   Classical.choice, Quot.sound]`. `grep ^axiom` project-wide: **ZERO**. No new axiom replaced it.
+3. **Anti-circularity:** the proof *applies* the keystone to the axiom-free bricks (standalone audit
+   standard-only) — not a re-posit, not circular, no hidden `sorry`/axiom.
+4. **Narrowing propagation:** `[PerfectField K]` added to `unramifiedQuotient_iso`/`_procyclic`;
+   `residue_procyclic` left independent (not over-constrained); docstrings updated; imperfect case
+   tracked in `ROADMAP.md`.
+5. **Ledger `1 DEBT → 0`:** `0 FOUNDATIONAL / 0 DEBT`.
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| codomain `B/Q ≃ₐ[A/P]` may need an `AlgEquiv` transport to `𝓀̄ ≃ₐ[𝓀[K]] 𝓀̄` | **defeq** (`ResidueField` def + `algebraOfLiesOver` both ways) — `.comp` direct | ✓ no transport |
+| `stabilizer = ⊤` fiddly (pointwise-ideal maximality) | `comap_isMaximal_of_equiv` is an instance ⟹ 4-line proof | ✓ easy |
+| keystone instances need work | all synthesize once `ContinuousSMul` (2b) is supplied | ✓ |
+| might stop clean before Step 4 | **reached the deletion** — full discharge | ✓ DISCHARGED |
+
+## Build + headline
+
+`lake build`: **8494 jobs, clean** (no errors, no warnings, no `sorry`). **HEADLINE: the project's first
+`DEBT` is DISCHARGED into a proved `theorem`. Ledger `0 FOUNDATIONAL / 0 DEBT`; zero `axiom`
+declarations project-wide.** Imports: `UnramifiedQuotient` now imports the residue chain
+(`ResidueIso`/`ResidueReductionInvariant`/`ResidueReductionContinuity`); no cycle (none of those import
+`UnramifiedQuotient`). D1 N/A; **D2** unchanged (3a's localized incursion only; Step 4 adds none). No
+new `structure`/`class` (no rule-2). **Recovers nothing from an abstract group** — a map between the
+Galois groups of *given* fields `K`, `𝓀[K]`; R1–R3 untouched.
+
+## Ledger delta
+
+- **`DEBT` −1 (discharged into a theorem); `FOUNDATIONAL` 0.** `0 FOUNDATIONAL / 1 DEBT` →
+  **`0 FOUNDATIONAL / 0 DEBT`**.
+
+## Scope: pointer to Pass 21
+
+The residue surjection is discharged; L1's `DEBT` is gone. Pass 21 — the post-discharge L1 work, two
+natural options: (a) **tie `N` (the residue-reduction kernel) to Pass 4's `inertiaSubgroup`** — Pass 5
+logged this as blocked on the absent `K̄`-valuation, which is now in hand (`𝒪[K̄]` local, the spectral
+valuation), so the identification `N = inertiaSubgroup` is reachable; or (b) **open L2** — the
+unramified ⟶ tame ⟶ wild ramification filtration `G_i` of `Gal(K̄/K)`, defined via the now-available
+`K̄`-valuation (the Pass-11 common-prerequisite finding: the same `𝒪[K̄]`/valuation infrastructure
+gates L2). Also outstanding (not blocking): the **imperfect equal-char generality** of the residue
+surjection (the tracked remainder, via `Aut(K̄/K) ≅ Gal(K^sep/K)`). The honest frame stays: R1–R3
+remain distant; L1 is essentially complete (its one boundary earned, not posited).

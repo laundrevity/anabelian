@@ -56,13 +56,16 @@ Each entry uses this schema:
 
 | name | class | rung | introduced | status |
 |------|-------|------|-----------|--------|
-| `Anabelian.residueReduction_surjective` | `DEBT` | L1 (below R1) | Pass 5 | active (discharge begun Pass 11) |
+| *(none)* | — | — | — | — |
 
-**Count: 0 `FOUNDATIONAL`, 1 `DEBT`.** (Reclassified `FOUNDATIONAL → DEBT` in Pass 11 — see the
-Reclassification log — on the strength of the begun discharge construction in
-`Anabelian/SpectralValuation.lean` and a corrected tractability assessment.)
+**Count: 0 `FOUNDATIONAL`, 0 `DEBT`.** The project's sole non-standard axiom,
+`Anabelian.residueReduction_surjective`, was **DISCHARGED into a proved `theorem` in Pass 20** (perfect
+case; `#print axioms` standard-only on it and all downstream — `propext`/`Classical.choice`/`Quot.sound`).
+This is the project's **first `DEBT`-discharged-into-theorem** — genuine progress, not a relabel. The
+imperfect equal-characteristic case is a tracked remainder in `ROADMAP.md` (an *owed generality*, not an
+axiom — nothing is assumed in the kernel). See the (now historical) entry + the Pass-20 log below.
 
-### `Anabelian.residueReduction_surjective`   [DEBT]   *(was `FOUNDATIONAL`, Passes 5–10)*
+### `Anabelian.residueReduction_surjective`   [DISCHARGED Pass 20 → `theorem`]   *(`FOUNDATIONAL` Passes 5–10, `DEBT` Passes 11–19)*
 - Statement: `∀ (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K]`
   `[IsNonarchimedeanLocalField K], ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K],`
   `Function.Surjective φ`.
@@ -125,8 +128,16 @@ Reclassification log — on the strength of the begun discharge construction in
        cheaper than 2–3 passes of foundational theory), (ii) is materially shortest (local-ness free +
        bridge reachable). **This REVERSES Pass 16's "stay native"** on new evidence (Pass 16 missed
        `spectralValue_le_one_iff` and the free `Valued.integer` local-ness — its (ii) estimate was
-       wrong); a magnitude decision, not a D2-reflex. [3a in progress — algebraic half of the bridge
-       built this pass; D2 spectral steps next]
+       wrong); a magnitude decision, not a D2-reflex. **✅ Pass 18** (`Anabelian/GaloisIntegersLocal.lean`,
+       `isLocalRing_galoisIntegers`): brick 3a DONE via route (ii). The **D2 is incurred but localized
+       entirely inside the proof** (a `letI` chain — `IsTopologicalAddGroup.rightUniformSpace`,
+       `RankOne`, `Valued.toNontriviallyNormedField`, `spectralNorm.normedField K K̄`,
+       `NormedField.toValued`); none leaks to the statement, so 2a/2b/3c are untouched (re-verified
+       standard-axioms-only). `Valued.integer K̄` is local for free; the bridge `integralClosure 𝒪[K] K̄
+       = Valued.integer K̄` (`spectralValue_le_one_iff` + Pass-17 brick + the agreement `‖a‖ ≤ 1 ↔ a ∈
+       𝒪[K]`, which is `Iff.rfl` as `Valued.v = ValuativeRel.valuation K` and `mem_integer_iff` is `rfl`)
+       transports local-ness along a `RingEquiv`. Standard-axioms-only. **`𝔪[K̄]` is now THE maximal
+       ideal**, feeding 3c.
      - 3b. residue `𝓀̄` algebraic over `𝓀[K]` (residue classes lift to integral elements). [remaining]
      - 3c. `𝓀̄` algebraically closed. **✅ Pass 16** (`Anabelian/ResidueAlgClosed.lean`): the **general**
        fact `residueField_isAlgClosed_of_integrallyClosed` (residue field of an integrally-closed subring
@@ -149,20 +160,24 @@ Reclassification log — on the strength of the begun discharge construction in
   `[PerfectField K]` (a documented **narrowing**, not a silent discharge), and the **imperfect
   equal-characteristic case is a tracked remainder** (`ROADMAP.md`), never dropped. Not yet enacted (the
   axiom is not yet removed); decided + recorded this pass.
-- **`DEBT` status: OPEN. Route-steps remaining (updated Pass 17): [Step 3a via route (ii) `spectralNorm`
-  (+tracked D2): (a) D2 setup — `NormedField K`/`RankOne` ⟹ `spectralNorm.normedField K K̄` ⟹ `Valued K̄
-  ℝ≥0` ⟹ `IsLocalRing (Valued.integer K̄)` free; (b) the bridge `integralClosure 𝒪[K] K̄ = Valued.integer
-  K̄` via `spectralValue_le_one_iff` + the algebraic half (✅ this pass); (c) transport ⟹ `IsLocalRing
-  (integralClosure 𝒪[K] K̄)` = 3a; Step 3b residue algebraic; Step 3d/3e (supported); Step 4 apply
-  keystone + delete axiom (perfect-case narrowing)].** Steps 1, 1b, 2a, 2b done (Passes 13–15); **3c
-  done (Pass 16)**; **3a route chosen + bridge's algebraic half done (Pass 17)**. The residue iso reduces
-  to **3a (local-ness) via route (ii)** + the supported repackaging; 3a is ~2 passes out (D2 spectral
-  steps + transport), the discharge ~3.
-- **Not the cardinal sin:** L1, strictly **below** R1/R2/R3. The strictly-lower infrastructure (steps
-  1, 1b) is genuinely below the surjection; the surjection itself (step 4) is *supplied by a present
-  Mathlib theorem to be applied*, never stubbed.
-- Introduced: Pass 5 (`FOUNDATIONAL`).   Reclassified `→ DEBT`: Pass 11.   Discharged: — (open; steps
-  1, 1b done Passes 11–13; keystone present; route pivoted to `integralClosure` Pass 13).
+- **`DEBT` status: DISCHARGED (Pass 20).** The full route is built and assembled: steps 1, 1b
+  (`MulSemiringAction`), 2a (`Algebra.IsInvariant`), 2b (`DiscreteTopology`/`ContinuousSMul`), 3a
+  (`𝒪[K̄]` local), 3b/3c/3d/3e + `IsLocalHom`/`LiesOver` (the residue iso `𝓀̄ ≅ AlgebraicClosure 𝓀[K]`,
+  `galoisResidueAut`), then Step 4: `stabilizer G 𝔪[K̄] = ⊤` (the unique maximal ideal is Galois-stable,
+  via `Ideal.pointwise_smul_eq_comap` + `comap_isMaximal_of_equiv` + `eq_maximalIdeal`) ⟹ apply
+  `Ideal.Quotient.stabilizerHom_surjective_of_profinite` ⟹ reinterpret (`stabilizer = ⊤` for the domain,
+  `galoisResidueAut` for the codomain) ⟹ the surjection `Gal K →* Gal 𝓀[K]`. **The `axiom` was deleted
+  and replaced by a `theorem`** (carrying `[PerfectField K]`) of the same statement. `#print axioms`:
+  standard-only on the theorem and all downstream. **The surjection now *follows* — nothing posited.**
+- **Not the cardinal sin (confirmed at the finish line):** L1, strictly **below** R1/R2/R3. The proof
+  genuinely *applies* `stabilizerHom_surjective_of_profinite` to the assembled axiom-free bricks — it is
+  not a re-posit, not circular, no hidden `sorry`/axiom (verified by the standard-only `#print axioms`).
+- **Tracked remainder (owed generality, not an axiom):** the discharge carries `[PerfectField K]` (the
+  keystone needs `Gal(K̄/K)` profinite = `IsGalois K K̄` ⟺ `K` perfect). The statement is **true** for
+  imperfect equal-char `K` (`𝔽_q((t))`) too, via the separable-closure framing `Aut(K̄/K) ≅ Gal(K^sep/K)`
+  — tracked in `ROADMAP.md`, never dropped. Nothing is assumed in the kernel for it.
+- Introduced: Pass 5 (`FOUNDATIONAL`).   Reclassified `→ DEBT`: Pass 11.   **Discharged → `theorem`:
+  Pass 20** (perfect case; imperfect case a tracked owed generality).
 
 ---
 
@@ -795,3 +810,157 @@ abstract group.
 
 Ledger delta: **0 / 0** (the route comparison + D2 decision + the bridge's algebraic-half brick;
 axiom remains the single open `DEBT`).
+
+### Pass 18 (2026-05-30) — rung L1, route (a): brick 3a (`𝒪[K̄]` local) DONE + the D2 incursion
+
+**Brick 3a DONE.** `Anabelian.isLocalRing_galoisIntegers : IsLocalRing ↥(integralClosure ↥𝒪[K]
+(AlgebraicClosure K))` — the last substantial gate of the residue iso — proved via route (ii), the
+`spectralNorm` route chosen Pass 17. Standard-axioms-only (in-file `#print axioms`):
+
+```
+'Anabelian.isLocalRing_galoisIntegers' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Proof shape: (a) `Valued.integer K̄` for the spectral `Valued` on `K̄` is a `ValuationRing` ⟹
+`IsLocalRing` **for free**; (b) the **bridge** `integralClosure 𝒪[K] K̄ = Valued.integer K̄` via the
+membership iff `IsIntegral 𝒪[K] x ↔ x ∈ Valued.integer K̄` (`spectralValue_le_one_iff` +
+`spectralNorm = spectralValue ∘ minpoly` + Pass-17's `isIntegral_iff_minpoly_coeff_mem` + the
+agreement); (c) transport along a `RingEquiv` (`RingEquiv.isLocalRing`). With 3a, `𝔪[K̄]` is THE
+maximal ideal of `𝒪[K̄]`, so 3c (`galoisResidueField_isAlgClosed`) gives `𝓀̄` algebraically closed.
+
+**D2 — the `NormedField`-bridge diamond: INCURRED this pass, LOCALIZED + logged (parallel to D1).**
+This is the first incursion of D2 (watched Passes 13–17). It is contained exactly as D1 was (D1 used
+`attribute [-instance] DivisionRing.toRatAlgebra in <decl>`):
+- **Localization mechanism:** the entire spectral/normed setup is a `letI`/`haveI` chain **inside the
+  proof of `isLocalRing_galoisIntegers`** — `letI := IsTopologicalAddGroup.rightUniformSpace K`;
+  `haveI := isUniformAddGroup_of_addCommGroup`; `letI : (Valued.v (R := K)).RankOne := …`;
+  `letI : NontriviallyNormedField K := Valued.toNontriviallyNormedField K (ValueGroupWithZero K)`;
+  `letI : NormedField K̄ := spectralNorm.normedField K K̄`; `letI : Valued K̄ ℝ≥0 := NormedField.toValued`.
+  None appears in the **statement** (which is pure `ValuativeRel`: `IsLocalRing ↥(integralClosure
+  ↥𝒪[K] K̄)`), so none leaks to any other declaration.
+- **The agreement lemma (the fix-once band-aid):** `‖a‖ ≤ 1 ↔ a ∈ 𝒪[K]` reconciling the
+  `NormedField`-derived norm with the `ValuativeRel` valuation is **`Iff.rfl`** here, because
+  `Valued.v = ValuativeRel.valuation K` (`rfl`, `Topology/Algebra/Valued/ValuativeRel.lean`) and
+  `Valuation.mem_integer_iff` is `rfl`. So the diamond is *reconcilable, not a clash* — the spectral
+  norm's unit ball on `K` IS the `ValuativeRel` `𝒪[K]`, definitionally.
+- **No global instance; not silent:** no `NormedField K`/`Valued K̄` instance is registered globally;
+  the incursion is logged here and in `ROADMAP.md` (D2 section). `synthInstance.maxHeartbeats` is
+  raised (400000, commented) for the `IsLocalRing (Valued.integer K̄)` search, which is expensive
+  under `import Mathlib` + the Anabelian instances — a search-cost matter, not a logical axiom.
+- **Re-verification (the primary discipline):** `lake build` is clean (8493 jobs) and 2a
+  (`galoisIntegers_algebraIsInvariant`), 2b (`continuousSMul_galoisIntegers`), 3c
+  (`galoisResidueField_isAlgClosed`) **still typecheck against the same `𝒪[K]` and remain
+  standard-axioms-only** — confirmed by their `#print axioms`. The D2 setup changed nothing in them.
+
+This file uses **`import Mathlib`** (sanctioned fallback, noted): 3a's proof spans the `spectralNorm`,
+`Valued`/`NormedValued`, `IsUltrametricDist`, `Valued.integer`/`ValuationRing` APIs across many modules
+with uncertain paths/transitive instances.
+
+**`DEBT` status: OPEN — NOT discharged** (the `axiom residueReduction_surjective` is still present).
+**Route-steps remaining: [3b residue algebraic; 3d/3e `≅ AlgebraicClosure 𝓀[K]` + `Aut` (supported);
+Step 4 apply keystone + delete axiom (perfect-case)].** Done: 1, 1b, 2a, 2b, 3c, **3a (this pass)**.
+**Nothing cardinal-sin posited** — 3a is *proved*, not stubbed; no `DEBT` posits `𝒪[K̄]` local / the
+residue iso / the surjection. The discharge is ~2 passes out.
+
+No new axiom; no reclassification; ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`**. D1 N/A; **D2:
+incurred, localized, logged** (this pass; a hygiene debt, not a logical axiom — `#print axioms` stays
+standard-only). No new `structure`/`class` (no rule-2). Recovers nothing from an abstract group.
+
+Ledger delta: **0 / 0** (brick 3a axiom-free + the localized-D2 incursion; axiom remains the single
+open `DEBT`).
+
+### Pass 19 (2026-05-30) — rung L1, route (a): the residue identification (3b/3c/3d/3e) — clean partial
+
+**Built the residue identification + connective tissue** (`Anabelian/ResidueIso.lean`), standard-axioms-
+only (in-file `#print axioms`):
+
+```
+'Anabelian.galoisIntegers_isLocalHom' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisResidueEquiv'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisResidueAut'          depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `galoisIntegers_isLocalHom` (**connective tissue**) — `algebraMap 𝒪[K] 𝒪[K̄]` is a `IsLocalHom`:
+  `(𝔪[K̄]).comap` is maximal (`Ideal.isMaximal_comap_of_isIntegral_of_isMaximal`) hence `= 𝔪[K]`
+  (`eq_maximalIdeal`, local), = `local_hom_TFAE` clause 4 ⟹ clause 0. Unlocks `(𝔪[K̄]).LiesOver (𝔪[K])`
+  (the keystone's `Q.LiesOver P`) and `Algebra 𝓀[K] 𝓀̄` **for free**.
+- `galoisResidueEquiv` (**3b + 3d**) — `𝓀̄ := ResidueField 𝒪[K̄] ≃ₐ[𝓀[K]] AlgebraicClosure 𝓀[K]`. 3b
+  (`Algebra.IsAlgebraic 𝓀[K] 𝓀̄`) element-wise (reduce a lifted monic minpoly: `aeval_map_algebraMap` +
+  `aeval_algHom_apply`); with 3c (`IsAlgClosed 𝓀̄`), `IsAlgClosure 𝓀[K] 𝓀̄` ⟹ `IsAlgClosure.equiv`.
+- `galoisResidueAut` (**3e**) — `Aut(𝓀̄/𝓀[K]) ≃* Field.absoluteGaloisGroup 𝓀[K]` via `AlgEquiv.autCongr`.
+
+These need **no `PerfectField`** (only Step 4 does). `IsLocalRing 𝒪[K̄]` (3a) is registered as a
+`local instance` so the residue-field statements elaborate.
+
+**Step-4 distance (probed, for honesty).** `stabilizerHom_surjective_of_profinite (𝔪[K]) (𝔪[K̄])`
+**typechecks** applied to `G = Gal(K̄/K)`, `B = 𝒪[K̄]`, `A = 𝒪[K]` — the only instance it can't
+auto-synth is `ContinuousSMul G 𝒪[K̄]`, which is exactly Pass-2b's `continuousSMul_galoisIntegers`
+(supply it via `haveI`). So the discharge is **~1 pass out**: keystone application (typechecks) +
+`stabilizer G 𝔪[K̄] = ⊤` (pointwise-ideal-maximality + local uniqueness) + the reinterpretation
+(`G ≃* stabilizer` via `stabilizer = ⊤`; `B/Q = 𝓀̄`, `A/P = 𝓀[K]` defeq; `galoisResidueAut`) + deleting
+the axiom for a `[PerfectField K]` theorem.
+
+**`DEBT` status: OPEN — NOT discharged** (the `axiom residueReduction_surjective` is still present).
+This is a **clean partial**: the residue identification is complete; **Step 4 was deliberately NOT
+half-assembled** (a half-built Step 4 is worse than a clean partial). **Nothing cardinal-sin posited** —
+every brick is *proved*; the surjection is to be *applied* from the present keystone, never stubbed.
+
+No new axiom; no reclassification; ledger unchanged at **`0 FOUNDATIONAL / 1 DEBT`**. D1 N/A; **D2**:
+3a's localized incursion (in `GaloisIntegersLocal`) unchanged; this pass introduces **no further D2**
+(residue-field/`IsAlgClosure` API is quotient-/`ValuativeRel`-native). `synthInstance.maxHeartbeats`
+raised (commented) for one `IsAlgClosure.equiv` search — search-cost, not logical. No new
+`structure`/`class` (no rule-2). Recovers nothing from an abstract group. Uses `import Mathlib`
+(sanctioned fallback, noted).
+
+Ledger delta: **0 / 0** (the residue-identification bricks axiom-free; axiom remains the single open
+`DEBT`, now ~1 pass from discharge).
+
+### Pass 20 (2026-05-30) — rung L1: **THE DISCHARGE.** `residueReduction_surjective`: `DEBT → theorem`
+
+**The project's first (and only) `DEBT` discharged into a proved theorem.** `1 DEBT → 0`.
+
+**Step-4 assembly** (`Anabelian/UnramifiedQuotient.lean`, the `axiom` deleted, a `theorem` in its
+place):
+- **`ContinuousSMul` plumbing:** `letI : TopologicalSpace 𝒪[K̄] := ⊥`; `DiscreteTopology` (`⟨rfl⟩`);
+  `continuousSMul_galoisIntegers K` (Pass 2b); `galoisIntegers_algebraIsInvariant K` (Pass 2a).
+- **`stabilizer G 𝔪[K̄] = ⊤`:** `Subgroup.eq_top_iff'` + `MulAction.mem_stabilizer_iff`; then `σ • 𝔪[K̄]
+  = (𝔪[K̄]).comap (toRingAut σ).symm` (`Ideal.pointwise_smul_eq_comap`) is maximal
+  (`comap_isMaximal_of_equiv`, an instance) so `= 𝔪[K̄]` (`IsLocalRing.eq_maximalIdeal`) — `𝒪[K̄]` local
+  (3a) gives uniqueness.
+- **Keystone:** `Ideal.Quotient.stabilizerHom_surjective_of_profinite (𝔪[K]) (𝔪[K̄])` — all hypotheses
+  in hand; `Gal(K̄/K)` profinite via `[PerfectField K]` ⟹ `IsGalois K K̄`. Gives
+  `Surjective (stabilizerHom 𝔪[K̄] 𝔪[K] G : ↥(stabilizer) →* (𝒪[K̄]/𝔪[K̄]) ≃ₐ[𝒪[K]/𝔪[K]] (𝒪[K̄]/𝔪[K̄]))`.
+- **Codomain identification (defeq, no transport needed):** `𝒪[K̄]/𝔪[K̄] = ResidueField 𝒪[K̄] = 𝓀̄`,
+  `𝒪[K]/𝔪[K] = 𝓀[K]`, and both algebras are `Ideal.Quotient.algebraOfLiesOver` — so the keystone's
+  codomain *is* `galoisResidueAut`'s domain `𝓀̄ ≃ₐ[𝓀[K]] 𝓀̄`; `galoisResidueAut K` (3e) maps it to
+  `Field.absoluteGaloisGroup 𝓀[K]`.
+- **Domain identification:** `ι : Gal K →* ↥(stabilizer)`, `σ ↦ ⟨σ, by rw [hstab]; mem_top⟩`, surjective
+  (`fun τ => ⟨τ.1, Subtype.ext rfl⟩`).
+- **The surjection** `φ = (galoisResidueAut K).toMonoidHom ∘ stabilizerHom ∘ ι`; surjective as a
+  composition of two bijections (`galoisResidueAut`, `ι`) with the surjective keystone.
+
+**Discharge-moment checklist (all five run):**
+1. **Statement preserved:** the `theorem` states `∃ φ : Field.absoluteGaloisGroup K →*
+   Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ`, with `[PerfectField K]` added — identical
+   existence claim, not weakened/vacuous.
+2. **`#print axioms` standard-only, theorem AND downstream:** `residueReduction_surjective`,
+   `unramifiedQuotient_iso`, `residue_procyclic`, `unramifiedQuotient_procyclic` all
+   `[propext, Classical.choice, Quot.sound]`. `residueReduction_surjective` is **gone** from every audit
+   as an axiom; **no new axiom** replaced it. Project-wide: **zero `axiom` declarations**.
+3. **Anti-circularity:** the proof *applies* `stabilizerHom_surjective_of_profinite` to the assembled
+   axiom-free bricks — not a re-posit, not circular, no hidden `sorry`/axiom (confirmed standard-only).
+4. **Narrowing propagation:** `[PerfectField K]` added to `unramifiedQuotient_iso`/`_procyclic` (they
+   call the theorem); `residue_procyclic` left as-is (independent, no `PerfectField` needed — not
+   over-constrained). Docstrings updated. Imperfect case = tracked remainder in `ROADMAP.md`.
+5. **Ledger `1 DEBT → 0`:** recorded `0 FOUNDATIONAL / 0 DEBT`.
+
+D1 N/A. **D2** unchanged: 3a's localized incursion (in `GaloisIntegersLocal`) is the only D2; Step 4
+adds none (it works over the discrete topology + the existing instances). `synthInstance`/`maxHeartbeats`
+raised (commented) for the heavy keystone instance/elaboration searches — search-cost, not logical
+(`#print axioms` standard-only). No new `structure`/`class` (no rule-2). **Recovers nothing from an
+abstract group** — the surjection is a map between the Galois groups of *given* fields (`K`, `𝓀[K]`),
+not a reconstruction; R1–R3 remain distant and untouched.
+
+Ledger delta: **`DEBT` −1 (discharged into a theorem); `FOUNDATIONAL` 0.** Headline:
+**`0 FOUNDATIONAL / 1 DEBT` → `0 FOUNDATIONAL / 0 DEBT`.** The project's first `DEBT`-discharged-into-
+theorem — the genuine progress signal the discipline exists to produce.

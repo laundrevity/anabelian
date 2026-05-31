@@ -4,12 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Conor Mahany
 -/
 import Anabelian.FiniteField
+import Anabelian.ResidueIso
+import Anabelian.ResidueReductionInvariant
+import Anabelian.ResidueReductionContinuity
 import Mathlib.NumberTheory.LocalField.Basic
 import Mathlib.FieldTheory.AbsoluteGaloisGroup
 import Mathlib.GroupTheory.QuotientGroup.Basic
 
 /-!
 # Rung L1, the inflection point: the unramified quotient of a local field
+
+> **DISCHARGED (Pass 20).** `residueReduction_surjective` — the inflection-point boundary this file
+> introduced (Pass 5) — is now a **proved `theorem`** (perfect case), not an axiom. The narrative
+> below (option (B), the `FOUNDATIONAL` boundary, the `DEBT` reclassification) is the *history*.
+> See the theorem's own docstring for the discharge. Project ledger: `0 FOUNDATIONAL / 0 DEBT`.
 
 Passes 1–4 harvested the *easy/finite* L1 fruit. What remains in L1 — the **residue surjection**
 `Gal(K̄/K) ↠ Gal(𝔽_q̄/𝔽_q)` (equivalently `Gal(K^ur/K) ≅ Gal(𝔽_q̄/𝔽_q)`), the prototype of the
@@ -34,9 +42,9 @@ local field's Galois group. We import it as a classified **`FOUNDATIONAL`** axio
 (`residueReduction_surjective`, logged in `AXIOM_LEDGER.md`, permitted `FOUNDATIONAL` for R1 per the
 per-target list), and prove **real downstream structure** on it.
 
-## What is proved (on the `FOUNDATIONAL` boundary)
+## What is proved (Pass 5, now on the *proved* residue reduction)
 
-* `Anabelian.unramifiedQuotient_iso` — *unlocked by the boundary*: the absolute Galois group `G_K`
+* `Anabelian.unramifiedQuotient_iso` — *unlocked by the residue reduction*: `G_K`
   has a normal subgroup `N` (the kernel of the residue reduction; classically the inertia subgroup)
   with `G_K ⧸ N ≃* Field.absoluteGaloisGroup 𝓀[K]` (the residue Galois group), via the first
   isomorphism theorem. Rests on `residueReduction_surjective`.
@@ -58,43 +66,93 @@ on `K̄` (still absent) and is logged as remaining L1 work.
 (`K` and its residue field); nothing is recovered from an abstract topological group. No reach
 toward R1–R3.
 
-## Axiom status
+## Axiom status — DISCHARGED (Pass 20)
 
-`residue_procyclic` rests on standard axioms only. `unramifiedQuotient_iso` and
-`unramifiedQuotient_procyclic` rest on the standard axioms **plus the `FOUNDATIONAL` entry
-`Anabelian.residueReduction_surjective`** (see `AXIOM_LEDGER.md`). Pass-5 ledger delta:
-**`FOUNDATIONAL` +1, `DEBT` +0**. Verified by the in-file `#print axioms` below.
+The sections above narrate the *history* (Pass 5's `FOUNDATIONAL` boundary, Pass 11's `DEBT`
+reclassification). **As of Pass 20 that history is closed:** `residueReduction_surjective` is a
+**proved `theorem`** (carrying `[PerfectField K]`), not an axiom — see its own docstring for the
+proof and the perfect-case narrowing. **All four results below rest on standard axioms only**
+(`propext`/`Classical.choice`/`Quot.sound`); `residueReduction_surjective` appears in **no**
+audit as an axiom, and no new axiom replaced it. Project ledger: **`0 FOUNDATIONAL / 0 DEBT`**.
+Verified by the in-file `#print axioms` below. The imperfect equal-characteristic case is the
+tracked remainder in `ROADMAP.md`.
 -/
 
-open scoped ValuativeRel
+open scoped ValuativeRel Pointwise
 
 namespace Anabelian
 
+open ValuativeRel IsLocalRing
+
 variable (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
-/-- **`FOUNDATIONAL` (classical; Serre, *Local Fields* I–II / Neukirch II).** The residue reduction
-`Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)` of a nonarchimedean local field is surjective: there is a surjective group
+attribute [local instance] isLocalRing_galoisIntegers
+
+set_option maxHeartbeats 1000000 in
+-- elaboration heartbeats raised for the heavy keystone assembly (see the instance note below).
+set_option synthInstance.maxHeartbeats 1000000 in
+-- heartbeats raised: the keystone's `MulAction (Gal K) (Ideal 𝒪[K̄])` + profinite instance searches
+-- are expensive under `import Mathlib` + the imported Anabelian instances; they resolve, just past
+-- the defaults. A search-cost matter, not logical (`#print axioms` below is standard-only).
+/-- **DISCHARGED (Pass 20): a proved `theorem`, no longer an axiom.** The residue reduction
+`Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)` of a nonarchimedean local field is surjective — for a **perfect** base field
+`K` (the `[PerfectField K]` hypothesis; see the narrowing note below). There is a surjective group
 homomorphism from the absolute Galois group of `K` onto that of its residue field `𝓀[K]`.
 
-Classified **`FOUNDATIONAL`** in `AXIOM_LEDGER.md`: it sits *strictly below* the R-targets (it is a
-structural fact about a *given* local field's Galois group, not a reconstruction), and is permitted
-as a `FOUNDATIONAL` input for R1 per the per-target list. This posits the *existence* of a
-surjection — weaker than, and implied by, the full classical statement (specific continuous map,
-kernel = inertia). The maximal-unramified construction that would *prove* it is absent from
-Mathlib.
+**History.** Posited `FOUNDATIONAL` (Passes 5–10), reclassified `DEBT` (Pass 11), then *built*
+across Passes 11–20: the valuation ring `𝒪[K̄] = integralClosure 𝒪[K] K̄` and its Galois
+`MulSemiringAction`, the fixed ring `𝒪[K̄]^Gal = 𝒪[K]`, the discrete/continuous-action data, `𝒪[K̄]`
+local (route (ii), via `spectralNorm`), the residue field algebraically closed, and the residue
+identification `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]`. **Proof (the discharge):** with `𝔪[K̄]` the
+unique maximal ideal of the local `𝒪[K̄]`, every `σ ∈ Gal(K̄/K)` stabilizes it (it permutes
+maximal ideals, of which there is one), so `stabilizer = ⊤`;
+`Ideal.Quotient.stabilizerHom_surjective_of_profinite` (`Gal(K̄/K)` profinite via `[PerfectField K]`
+⟹ `IsGalois K K̄`) gives `stabilizer ↠ Aut(𝓀̄/𝓀[K])`; `galoisResidueAut` identifies the codomain
+with `Field.absoluteGaloisGroup 𝓀[K]`, and `stabilizer = ⊤` the domain with `Gal(K̄/K)`.
+**The surjection now *follows* — nothing posited.**
 
-**Update (Pass 11): reclassified `FOUNDATIONAL → DEBT`.** The "construction absent" assessment was
-corrected (`spectralNorm`-valuation on `K̄` and `IsKrasner` lifting are present), and the discharge
-is now begun in `Anabelian/SpectralValuation.lean` (the spectral valuation ring `𝒪[K̄]` +
-Galois-invariance, route step 1). This is now a `DEBT` we intend to discharge in-project, not an
-external boundary; see `AXIOM_LEDGER.md` (Reclassification log + full route). -/
-axiom residueReduction_surjective :
-    ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ
+**Narrowing (Pass 14/20).** This carries `[PerfectField K]` (holds for char-0 / mixed-char local
+fields). The statement is **true** for imperfect equal-characteristic `K` (`𝔽_q((t))`) too, but the
+keystone delivers only the perfect case (it needs `Gal(K̄/K)` literally profinite =
+`IsGalois K K̄` ⟺ `K` perfect); the imperfect case (via `Aut(K̄/K) ≅ Gal(K^sep/K)`) is a tracked
+remainder in `ROADMAP.md`, never dropped. -/
+theorem residueReduction_surjective [PerfectField K] :
+    ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ := by
+  letI : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
+  haveI : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
+  haveI := continuousSMul_galoisIntegers K
+  haveI := galoisIntegers_algebraIsInvariant K
+  -- `𝔪[K̄]` is the unique maximal ideal of the local `𝒪[K̄]`, and `σ • 𝔪[K̄]` is again maximal
+  -- (`comap` under the ring automorphism `σ`), so by uniqueness `σ` fixes it: `stabilizer = ⊤`.
+  have hstab : MulAction.stabilizer (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+      (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))) = ⊤ := by
+    rw [Subgroup.eq_top_iff']
+    intro σ
+    rw [MulAction.mem_stabilizer_iff, Ideal.pointwise_smul_eq_comap]
+    exact eq_maximalIdeal inferInstance
+  -- the keystone: `stabilizer ↠ Aut((B/Q)/(A/P))` (all hypotheses now in hand)
+  have hsurj := Ideal.Quotient.stabilizerHom_surjective_of_profinite
+    (G := AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+    (maximalIdeal ↥𝒪[K]) (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))
+  -- `stabilizer = ⊤` identifies the domain with `Gal(K̄/K)`
+  let ι : (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) →*
+      ↥(MulAction.stabilizer (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
+        (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))) :=
+    { toFun := fun σ => ⟨σ, by rw [hstab]; exact Subgroup.mem_top σ⟩
+      map_one' := rfl, map_mul' := fun _ _ => rfl }
+  have hι : Function.Surjective ι := fun τ => ⟨τ.1, Subtype.ext rfl⟩
+  -- `galoisResidueAut` identifies the codomain with `Field.absoluteGaloisGroup 𝓀[K]`
+  refine ⟨(galoisResidueAut K).toMonoidHom.comp
+    ((Ideal.Quotient.stabilizerHom (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))
+      (maximalIdeal ↥𝒪[K]) (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)).comp ι), ?_⟩
+  simp only [MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
+  exact (galoisResidueAut K).surjective.comp (hsurj.comp hι)
 
-/-- **Unlocked by the boundary.** The absolute Galois group of a local field `K` has a normal
-subgroup `N` (the kernel of the residue reduction — classically the inertia subgroup) whose quotient
-is isomorphic to the residue Galois group `Gal(𝓀̄/𝓀)`. Rests on `residueReduction_surjective`. -/
-theorem unramifiedQuotient_iso :
+/-- **Unlocked by the (now proved) residue reduction.** The absolute Galois group of a local field
+`K` has a normal subgroup `N` (the kernel of the residue reduction — classically the inertia
+subgroup) whose quotient is isomorphic to the residue Galois group `Gal(𝓀̄/𝓀)`. Rests on
+`residueReduction_surjective`, hence carries its `[PerfectField K]` narrowing. -/
+theorem unramifiedQuotient_iso [PerfectField K] :
     ∃ (N : Subgroup (Field.absoluteGaloisGroup K)) (_ : N.Normal),
       Nonempty ((Field.absoluteGaloisGroup K ⧸ N) ≃* Field.absoluteGaloisGroup 𝓀[K]) := by
   obtain ⟨φ, hφ⟩ := residueReduction_surjective K
@@ -110,8 +168,9 @@ theorem residue_procyclic :
 /-- **The payoff.** The unramified quotient of a local field's absolute Galois group is procyclic:
 `G_K` has a normal subgroup `N` with `G_K ⧸ N ≃* Gal(𝓀̄/𝓀)`, and that residue Galois group is
 topologically generated by a single (Frobenius) element. Combines `residueReduction_surjective`
-(`FOUNDATIONAL`) with Pass 2's procyclicity of finite-field absolute Galois groups. -/
-theorem unramifiedQuotient_procyclic :
+(now a proved theorem, carrying `[PerfectField K]`) with Pass 2's procyclicity of finite-field
+absolute Galois groups. -/
+theorem unramifiedQuotient_procyclic [PerfectField K] :
     ∃ (N : Subgroup (Field.absoluteGaloisGroup K)) (_ : N.Normal)
       (_ : (Field.absoluteGaloisGroup K ⧸ N) ≃* Field.absoluteGaloisGroup 𝓀[K]),
       ∃ g : Field.absoluteGaloisGroup 𝓀[K], (Subgroup.zpowers g).topologicalClosure = ⊤ := by
@@ -120,8 +179,10 @@ theorem unramifiedQuotient_procyclic :
   exact ⟨φ.ker, inferInstance, QuotientGroup.quotientKerEquivOfSurjective φ hφ,
     _, Anabelian.frobenius_topologicalClosure_eq_top 𝓀[K]⟩
 
--- Reproducible axiom audit. `residue_procyclic`: standard only. The other two: standard +
--- the `FOUNDATIONAL` entry `Anabelian.residueReduction_surjective` (logged in `AXIOM_LEDGER.md`).
+-- Reproducible axiom audit. **All four standard-axioms-only** — `residueReduction_surjective` is
+-- now a proved `theorem` (Pass-20 discharge), NOT an axiom; it appears in no audit, and no new
+-- axiom replaced it. Ledger: `0 FOUNDATIONAL / 0 DEBT`.
+#print axioms residueReduction_surjective
 #print axioms unramifiedQuotient_iso
 #print axioms residue_procyclic
 #print axioms unramifiedQuotient_procyclic
