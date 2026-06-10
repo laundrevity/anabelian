@@ -28,3 +28,5 @@ import Anabelian.ExtensionIntegers
 import Anabelian.ExtensionUniformizer
 import Anabelian.ExtensionResidue
 import Anabelian.ExtensionResidueFinite
+import Anabelian.ExtensionMonogenic
+import Anabelian.ExtensionMonogenicTop

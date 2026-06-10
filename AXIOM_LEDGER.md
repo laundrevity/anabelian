@@ -1494,3 +1494,38 @@ D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **At `𝒪_L`, the Pass-28 wild/tame dichotomy now has every
 hypothesis concrete except monogenicity: finite decomposition group ✓, separation ✓, uniformizer
 ✓, `CharP 𝓀_L p` ✓.**
+
+### Pass 32 (2026-06-10) — the descent, rung 4: the MONOGENICITY ENGINE (totally-ramified case)
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. The deepest rung of the
+block: the **monogenicity package of Passes 25/27/28, discharged for totally-ramified data**.
+Two files (`Anabelian/ExtensionMonogenic.lean` — structures + the free half;
+`Anabelian/ExtensionMonogenicTop.lean` — the engine). In-file `#print axioms`, standard-only:
+
+```
+'Anabelian.smul_extensionAlgebraMap_range_eq'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.closure_range_union_uniformizer_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- Global `Algebra 𝒪[K] 𝒪_L` and `Module.Finite 𝒪[K] 𝒪_L` instances (promoting Pass 31's
+  proof-local structures; canonical, no competing instances).
+- **`smul_extensionAlgebraMap_range_eq`** — the **`hfix` half is free** for
+  `A₀ = range(𝒪[K] → 𝒪_L)`: decomposition elements are `K`-algebra equivalences
+  (`AlgEquiv.commutes`).
+- **`closure_range_union_uniformizer_eq_top`** — the **`hgen` half** (Serre I §6 Prop. 18's
+  skeleton, Nakayama-finished): given `hres` (residues covered by the base — trivial residue
+  extension) and `he` (`𝔪_L^e ≤ (ι 𝔪[K])·𝒪_L`) — together, "totally ramified" — the finite
+  π-adic digit expansion runs to depth `e`, the error lands in `𝔪[K]·𝒪_L`, and **Nakayama**
+  (module-finiteness over the local `𝒪[K]` — *no completeness needed*) closes
+  `Subring.closure (A₀ ∪ {π}) = ⊤`.
+
+**Honesty.** `hres`/`he` are honest named data (= totally ramified), to be supplied by the
+`e·f = n` bookkeeping (next rung) or by hand in concrete cases; no irremovability claimed (used
+constructively — no rule-2 obligation). The general case (`A₀ = 𝒪_{L₀}`, maximal unramified
+subextension) is named future work; the classical reduction runs through exactly this engine
+over `L₀`. No new `structure`/`class` beyond the two canonical instances; no owed witness;
+D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **For totally-ramified data, the monogenicity hypothesis
+of the abstract L2 theory is DISCHARGED — the full tame/wild quotient structure (P24–P28)
+instantiates on totally-ramified finite separable extensions of local fields, end to end.**

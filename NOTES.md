@@ -2886,3 +2886,63 @@ needs the unramified subextension or a direct primitive-element argument at the 
 (b) The `IsNonarchimedeanLocalField L` assembly (completeness via `FiniteDimensional.complete`;
 mostly bookkeeping given rungs 1–3). (c) `e·f = n`. Honest frame: R1–R3 distant; one hypothesis
 stands between the abstract L2 theory and its full instantiation on local fields.
+
+---
+
+# Pass 32 — the descent, rung 4: the monogenicity engine, totally-ramified case (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved: the monogenicity discharge itself. (ii) Honest scope decision UP FRONT: the
+FULL discharge needs the maximal-unramified-subextension tower (its own multi-pass story); what
+one pass can deliver is the **totally-ramified engine** — `A₀ = range(𝒪[K])`, where `hfix` is
+free and `hgen` is Serre I §6 Prop. 18's digit expansion. (iii) The totally-ramified DATA
+(`hres`: residues covered; `he`: `𝔪_L^e ≤ (ι 𝔪[K])·𝒪_L`) enter as named hypotheses, to be
+supplied by `e·f = n` bookkeeping later. (iv) Key design insight: **Nakayama replaces
+completeness** — the classical successive-approximation argument needs completeness for infinite
+expansions, but module-finiteness (Pass 29) + a depth-`e` expansion + Nakayama over the local
+`𝒪[K]` gives `S = ⊤` with no topology at all.
+
+## Probes
+
+`Submodule.le_of_le_smul_of_le_jacobson_bot` (Nakayama, exactly the `N' := ⊤` shape);
+`IsLocalRing.maximalIdeal_le_jacobson`; `Module.finite_def`; `Submodule.smul_induction_on`;
+`mul_smul_comm`; the dependent-motive `Submodule.span_induction`.
+
+## What was built
+
+Per the ledger: the two global instances (Algebra + Module.Finite, promoted from P31), the free
+`hfix` (`AlgEquiv.commutes`), and the engine (digit expansion by induction on depth via `hres` +
+`hspan`; bridge `Ideal.map ι 𝔪[K] ⊆ 𝔪[K] • ⊤` by span- and smul-induction; Nakayama closes).
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the engine to be the hardest descent proof yet | ONE real iteration: the span-induction motive captured a duplicate hypothesis (fixed by `clear hz` — the dependent motive generalizes the element, dragging stale hypotheses into the IHs) | the P27 lesson (read the definition, match the proof to it) keeps paying |
+| completeness to be needed somewhere | Nakayama + module-finiteness made the argument purely algebraic | the design insight of the pass |
+| both files to fight the I/O wall | 31 s and 36 s — both fit | ≤2-declaration discipline works |
+
+## Build + headline
+
+Full build clean at warning level; both audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: for totally-ramified data, the monogenicity hypothesis — the LAST
+open hypothesis of the abstract L2 theory — is DISCHARGED: `hfix` free
+(`smul_extensionAlgebraMap_range_eq`), `hgen` proved (`closure_range_union_uniformizer_eq_top`).
+The full tame/wild quotient structure of Passes 24–28 now instantiates end-to-end on
+totally-ramified finite separable extensions of local fields.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 33
+
+(a) **`e·f = n` bookkeeping** — defines `e` and `f` for `L/K` and proves the totally-ramified
+characterizations that DISCHARGE `hres`/`he` (`f = 1 ⟹ hres`; `v_L(ϖ_K) = e ⟹ he`), turning
+the engine's hypotheses into honest theorems; with it, an assembled showcase ("for totally
+ramified `L/K`: `ker θ₀ = G₁`, `G₁` is the Sylow `p`-subgroup, ...") becomes one-line. (b) The
+`IsNonarchimedeanLocalField L` assembly. (c) The maximal unramified subextension `L₀` (the
+general-case reduction; the deepest remaining piece of the block). Honest frame: R1–R3 distant;
+the descent has its engine — what remains is bookkeeping below it and the unramified tower
+above it.

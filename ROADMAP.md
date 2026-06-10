@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 31 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 32 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -334,11 +334,14 @@ finiteness/eventual-triviality hypotheses are now **theorems at `𝒪_L`**. **Pa
 a DVR and discharged the uniformizer package** — the tame character of `L/K` exists
 (`extensionTameCharacter`); only monogenicity remains open. **Pass 31 made the
 residue field finite** (`Finite 𝓀_L` + `CharP` transfer — the Pass-28 dichotomy concrete at
-`𝒪_L` except monogenicity). **Honest next step (Pass 32):** the **monogenicity discharge** (the
-last open hypothesis; inventory Mathlib's unramified/étale machinery vs the classical Serre IV
-§1 Prop. 5 route first); the `IsNonarchimedeanLocalField L` assembly; `e·f = n`. No second
-boundary was ever stacked; nothing cardinal-sin posited; the surjection *follows* from the
-keystone applied to axiom-free bricks.
+`𝒪_L` except monogenicity). **Pass 32 built the
+monogenicity engine** — for totally-ramified data, the last open hypothesis is discharged; the
+full P24–P28 quotient structure instantiates on totally-ramified extensions. **Honest next step
+(Pass 33):** `e·f = n` bookkeeping (discharges the engine's `hres`/`he` from honest
+ramification-index data, enabling the assembled showcase); the `IsNonarchimedeanLocalField L`
+assembly; the maximal unramified subextension `L₀` (the general-case reduction — the block's
+deepest remaining piece). No second boundary was ever stacked; nothing cardinal-sin posited;
+the surjection *follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -474,6 +477,15 @@ groups in lower numbering`).
   **`Finite 𝓀_L`** (separable; module-finiteness pushed to residues, `letI`-local structures);
   **`CharP 𝓀_L p`** transfers. At `𝒪_L`, the Pass-28 dichotomy has every hypothesis concrete
   except monogenicity.
+- **Pass 32 (`Anabelian/ExtensionMonogenic.lean` + `ExtensionMonogenicTop.lean`) — the
+  MONOGENICITY ENGINE (totally-ramified case), axiom-free.** For `A₀ = range(𝒪[K] → 𝒪_L)`:
+  **`hfix` is free** (`AlgEquiv.commutes`) and **`hgen` is proved** — Serre I §6 Prop. 18's
+  digit expansion run to depth `e`, **Nakayama-finished** (module-finiteness over the local
+  `𝒪[K]` replaces completeness): given `hres` (residues covered = trivial residue extension)
+  and `he` (`𝔪_L^e ≤ (ι 𝔪[K])·𝒪_L`) — together "totally ramified" —
+  `Subring.closure (A₀ ∪ {π}) = ⊤`. **The last open hypothesis of the abstract L2 theory is
+  discharged for totally-ramified data**; `hres`/`he` await the `e·f = n` bookkeeping, and the
+  general case (`A₀ = 𝒪_{L₀}`) is named future work through this same engine over `L₀`.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
