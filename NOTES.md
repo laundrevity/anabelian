@@ -2774,3 +2774,58 @@ fully concrete); (c) the `IsNonarchimedeanLocalField L` instance assembly (compl
 §1 Prop. 5's own proof; needs (a)+(b) and the unramified-subextension story). Honest frame:
 R1–R3 distant; the descent's first rung is laid and the abstract/concrete gap is closing
 hypothesis by hypothesis.
+
+---
+
+# Pass 30 — the descent, rung 2: `𝒪_L` is a DVR; uniformizer package discharged (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Continue the block per the Pass-29 pointer, candidate (a). (ii) Scope: the intersection
+`𝒪_L ∩ K = 𝒪[K]`; `𝔪_L ≠ ⊥`; `IsDiscreteValuationRing 𝒪_L` (separable); the uniformizer
+package `∃ π, 𝔪_L = (π) ∧ π ≠ 0`; showcase: the tame character of `L/K` exists. (iii) NOT in
+scope: finite residue field, full instance assembly, monogenicity. (iv) Route: Noetherian +
+Bezout ⟹ PID via `IsBezout.TFAE`; not-a-field via the base uniformizer through the
+intersection lemma.
+
+## Probes
+
+`IsBezout.TFAE` (Noetherian ↔ PIR for Bezout domains, `.out 0 1`);
+`IsDiscreteValuationRing extends IsPrincipalIdealRing, IsLocalRing` + `not_a_field'`;
+`IsIntegrallyClosed.isIntegral_iff`; `isIntegral_algebraMap_iff`;
+`IsDiscreteValuationRing.exists_irreducible` + `irreducible_iff_uniformizer` (P24's device).
+
+## What was built (`Anabelian/ExtensionUniformizer.lean`, all standard-axioms-only)
+
+The five declarations as scoped (ledger).
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| another first-try build | three iterations: an illegal `omit` (the lemma references `extensionIntegers`, which carries the full local-field stack — can't omit), a `field_simp` replaced by `inv_eq_of_mul_eq_one_right` (cheaper and correct-direction), and `Irreducible.not_unit → not_isUnit` (pin rename) | back to normal friction; the rename catalog grows |
+| the per-call wall to be a non-issue | **new environment fact**: with the `import Mathlib` closure, ~30 s of every call is *olean-loading I/O* (sys-time-dominated; the 5.7 GB olean set exceeds the VM's 3 GB RAM, so the page cache can never hold it) — leaving ~10 s of elaboration budget per call. Descent files must stay individually light; `--log-level=warning` is now standard for build calls (replay printing was eating seconds) | logged for the recipe; future descent passes should keep declarations few and cheap per file |
+
+## Build + headline
+
+Full build clean at warning level; all five audits standard-only; zero `axiom` declarations
+project-wide; sync-back update-only. **HEADLINE: `𝒪_L` is a discrete valuation ring for every
+finite separable extension of nonarchimedean local fields, and the uniformizer package
+`(π, 𝔪 = (π), π ≠ 0)` — the hypothesis triple of every character theorem since Pass 24 — is now
+a THEOREM at `𝒪_L`; the tame character of `L/K` exists (`extensionTameCharacter`). Of the
+abstract theory's hypothesis stack, only monogenicity remains open.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 31
+
+(a) **Finite residue field `𝓀_L`** — module-finiteness of `𝒪_L` over `𝒪[K]`
+(`IsIntegralClosure.finite`) pushed to the residue level (needs the `IsLocalHom` brick, the
+P19 pattern at finite level); then `CharP 𝓀_L p` and Pass 28's wild/tame dichotomy is fully
+concrete at `𝒪_L` except monogenicity. (b) The `IsNonarchimedeanLocalField L` assembly
+(completeness via `FiniteDimensional.complete` + the pieces). (c) **Monogenicity** (deepest;
+needs (a) + the unramified subextension story — possibly via Mathlib's
+`IsLocalRing.IsUnramified`/Etale machinery, to be inventoried). Honest frame: R1–R3 distant;
+the descent is two rungs down, one hypothesis from closing the loop on the abstract theory.

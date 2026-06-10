@@ -25,3 +25,4 @@ import Anabelian.RamificationExhibit
 import Anabelian.AdditiveCharacter
 import Anabelian.WildInertia
 import Anabelian.ExtensionIntegers
+import Anabelian.ExtensionUniformizer

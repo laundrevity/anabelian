@@ -1425,3 +1425,39 @@ reused, contained**. Recovers nothing from an abstract group; R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **The descent has its foundation: the L2 filtration now
 lives on actual finite extensions of local fields, with separation and eventual triviality
 proved rather than hypothesized.**
+
+### Pass 30 (2026-06-10) — the descent, rung 2: `𝒪_L` is a DVR; the uniformizer package DISCHARGED
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**.
+`Anabelian/ExtensionUniformizer.lean` (in-file `#print axioms`, all standard-only):
+
+```
+'Anabelian.algebraMap_mem_extensionIntegers_iff'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalIdeal_extensionIntegers_ne_bot'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isDiscreteValuationRing_extensionIntegers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_uniformizer_extensionIntegers'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionTameCharacter'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`algebraMap_mem_extensionIntegers_iff`** — the integrally-closed intersection
+  `𝒪_L ∩ K = 𝒪[K]` (via `isIntegral_algebraMap_iff` + `IsIntegrallyClosed.isIntegral_iff`).
+- **`maximalIdeal_extensionIntegers_ne_bot`** — `𝒪_L` is not a field: the base uniformizer
+  `ϖ_K` stays a nonzero non-unit (a unit-inverse would land in `𝒪_L ∩ K = 𝒪[K]`).
+- **`isDiscreteValuationRing_extensionIntegers`** (`[Algebra.IsSeparable K L]`) — Noetherian
+  (Pass 29) + Bezout (valuation ring) ⟹ PID (`IsBezout.TFAE`), local, `𝔪 ≠ ⊥`: **`𝒪_L` is a
+  DVR.**
+- **`exists_uniformizer_extensionIntegers`** — `∃ π, 𝔪_L = (π) ∧ π ≠ 0`: the `(π, hspan, hπ0)`
+  hypothesis triple of every character theorem since Pass 24, now a **theorem** at `𝒪_L`.
+- **`extensionTameCharacter`** — the showcase: the tame character
+  `θ₀ : G₀(L/K) →* 𝓀_Lˣ` of a finite separable extension of local fields exists (Pass 24's
+  `tameCharacterOfIrreducible` instantiated; canonical by `tameCharacter_eq_of_span_eq`).
+
+**Honesty.** `[Algebra.IsSeparable K L]` exactly where Pass-29 Noetherian-ness is consumed.
+Remaining rungs: finite residue field (`CharP 𝓀_L p` concrete), `IsNonarchimedeanLocalField L`
+assembly, the monogenicity discharge, `e·f = n`. No new `structure`/`class`; no owed witness;
+D1 N/A; D2 N/A (`integralClosure`-native; the spectral structure stays sealed in Pass 29).
+Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **Of the abstract L2 theory's hypothesis stack —
+separation, finiteness, eventual triviality, uniformizer package, monogenicity — only
+monogenicity now remains open at `𝒪_L`.**
