@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 33 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 34 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -339,11 +339,14 @@ monogenicity engine** — for totally-ramified data, the last open hypothesis is
 full P24–P28 quotient structure instantiates on totally-ramified extensions. **Pass 33 delivered
 the block's promise**: the engine's data discharged (`he` unconditional; `hres` = residue
 surjectivity) and the showcase assembled — `ker θ₀ = G₁` on totally ramified extensions of
-actual local fields. **Honest next step (Pass 34):** the maximal unramified subextension `L₀`
-(the general-case reduction); P27/P28 instantiations at `𝒪_L` (consolidation); the
-`IsNonarchimedeanLocalField L` assembly; or the ascent (Herbrand/upper numbering) now that the
-finite-level floor is concrete. No second boundary was ever stacked; nothing cardinal-sin
-posited; the surjection *follows* from the keystone applied to axiom-free bricks.
+actual local fields. **Pass 34 put the
+general-case reduction in place**: `ker θ₀ = G₁` for arbitrary finite separable `L/K` hangs on
+exactly one named lemma (`hresid`). **Honest next step (Pass 35):** prove `hresid` (the
+finite-level keystone `Ideal.Quotient.stabilizerHom_surjective` + finite Galois descent of
+residues — inventory the Invariant/Basic.lean statement shapes first); then P27/P28
+instantiations, the `IsNonarchimedeanLocalField L` assembly, or the ascent. No second boundary
+was ever stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone
+applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -498,6 +501,14 @@ groups in lower numbering`).
   now a theorem in this setting.** Remaining in the block: the maximal unramified subextension
   `L₀` (general case); the `IsNonarchimedeanLocalField L` assembly; P27/P28 instantiations
   (near-one-liners).
+- **Pass 34 (`Anabelian/InertiaFixedIntegers.lean` + `ExtensionMonogenicGeneral.lean`) — the
+  general-case reduction, axiom-free.** `inertiaFixedIntegers` (the ring-incarnation of
+  `𝒪_{L₀}`; **`hfix` free by definition**); the **engine generalized** to any base subring
+  containing `range(𝒪[K])` (the Nakayama spine never used more); and
+  **`ker_tameCharacter_of_inertiaFixed_cover`** — for ANY finite separable `L/K`, any
+  uniformizer: **`ker θ₀ = G₁` modulo ONE named lemma** (`hresid`: inertia-fixed integers cover
+  `𝓀_L` = "`L/L₀` totally ramified"), whose proof path (finite-level keystone surjectivity +
+  finite Galois descent) is the block's next rung. Both files first-try clean builds.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:

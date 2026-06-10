@@ -1564,3 +1564,40 @@ R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **The descent block's promise is delivered: every
 hypothesis the abstract L2 theory accumulated (Passes 23–28) is now PROVED for totally ramified
 finite separable extensions of nonarchimedean local fields — five rungs, zero axioms.**
+
+### Pass 34 (2026-06-10) — the descent, rung 6: the inertia-fixed integers; the engine generalized; the GENERAL kernel theorem
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Two files
+(`Anabelian/InertiaFixedIntegers.lean`, `Anabelian/ExtensionMonogenicGeneral.lean`). In-file
+`#print axioms`, all standard-only (both files first-try clean builds):
+
+```
+'Anabelian.inertiaFixedIntegers'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smul_inertiaFixedIntegers_eq'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionAlgebraMap_mem_inertiaFixedIntegers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.closure_subring_union_uniformizer_eq_top'   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_tameCharacter_of_inertiaFixed_cover'    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`inertiaFixedIntegers K L : Subring 𝒪_L`** — the working incarnation of `𝒪_{L₀}`: elements
+  fixed by every inertia element. **`hfix` is free by definition**; the base image embeds
+  (Pass 32's `AlgEquiv.commutes` lemma).
+- **`closure_subring_union_uniformizer_eq_top`** — the Pass-32 engine **generalized to any base
+  subring containing the image of `𝒪[K]`**: the Nakayama spine never used the specific base —
+  only `S ⊇ range ι` (for the `𝒪[K]`-module structure) and residues-from-`A₀`. Same proof,
+  abstracted binder.
+- **`ker_tameCharacter_of_inertiaFixed_cover`** — **the general kernel theorem**: for ANY finite
+  separable `L/K` and any uniformizer, if the inertia-fixed integers cover the residue field
+  (`hresid`), then `ker θ₀ = G₁`. With Pass 33's unconditional `he`, **the general case of
+  Serre IV §2 Prop. 7 (level 0) on actual local fields now hangs on exactly one named classical
+  lemma** — `hresid` ("`L/L₀` is totally ramified", always true), whose proof path is the
+  finite-level keystone surjectivity `G/G₀ ↠ Gal(𝓀_L/𝓀[K])` + finite Galois descent of
+  residues: the block's next rung.
+
+**Honesty.** `hresid` named, constructive, not claimed irremovable; the field `L₀` itself and
+`inertiaFixedIntegers = 𝒪_{L₀}` are not needed and not built. Rule-2 note for the new
+`Subring`-valued def: pinned by genuinely different models (totally ramified: as small as the
+base closure; unramified: all of `𝒪_L`). No owed witness; D1 N/A; D2 N/A. Recovers nothing from
+an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **General-case tame injectivity is one lemma away.**

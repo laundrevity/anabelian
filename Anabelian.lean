@@ -32,3 +32,5 @@ import Anabelian.ExtensionMonogenic
 import Anabelian.ExtensionMonogenicTop
 import Anabelian.ExtensionRamificationData
 import Anabelian.ExtensionTotallyRamified
+import Anabelian.InertiaFixedIntegers
+import Anabelian.ExtensionMonogenicGeneral

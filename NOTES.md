@@ -3003,3 +3003,57 @@ back up the ladder: Herbrand/upper numbering (the ascent), now with a concrete f
 floor under it. Honest frame: R1–R3 distant; L2's lower-numbering chapter — abstract theory,
 witnesses, characters, dichotomy, and concrete instantiation — is essentially a closed book for
 the totally ramified case.
+
+---
+
+# Pass 34 — the descent, rung 6: inertia-fixed integers; engine generalized; general kernel theorem (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved: the maximal unramified subextension. (ii) Honest scope: the FULL `L₀` story
+is two passes; this pass delivers the decisive reduction — define the **inertia-fixed
+integers** (the ring-incarnation of `𝒪_{L₀}`; `hfix` free BY DEFINITION), generalize the
+Pass-32 engine to arbitrary base subrings ⊇ `range ι`, and state the **general** kernel theorem.
+(iii) Key structural observation driving the design: the engine's Nakayama spine never used
+`A₀ = range ι` — only `S ⊇ range ι` (for the `𝒪[K]`-module structure on the generated subring)
+and digit-residues-from-`A₀`. The Nakayama base stays `𝒪[K]` even for larger `A₀`. (iv) After
+this pass the general case hangs on ONE lemma (`hresid`): inertia-fixed integers cover `𝓀_L`
+(= "`L/L₀` totally ramified") — proof path: Mathlib's finite-level keystone
+(`Ideal.Quotient.stabilizerHom_surjective`) + finite-field Galois descent; next rung.
+
+## What was built
+
+Per the ledger: the `inertiaFixedIntegers` subring (fixedness lemmas free), the generalized
+engine (Pass-32 proof with abstracted base binder — verbatim adaptation), and
+`ker_tameCharacter_of_inertiaFixed_cover`.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the generalization to need new module plumbing | verbatim Pass-32 proof with two-line changes (the base binder + `hA₀S`) | recognizing what a proof DOESN'T use is as valuable as the proof |
+| friction somewhere | **both files first-try clean** (third and fourth first-try builds of the block) | the descent idiom is fully stabilized |
+
+## Build + headline
+
+Full build clean at warning level; all five audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: the general kernel theorem — for ANY finite separable extension of
+nonarchimedean local fields, `ker θ₀ = G₁` holds modulo exactly one named classical lemma
+(`hresid`: inertia-fixed integers cover the residue field). The maximal-unramified-subextension
+reduction is in place; what remains of it is one lemma with a known proof path.** R1–R3
+untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 35
+
+(a) **Prove `hresid`** — the block's keystone finale: Mathlib's finite-level
+`Ideal.Quotient.stabilizerHom_surjective` (the non-profinite sibling of the Pass-20 keystone)
+gives `G ↠ Gal(𝓀_L/𝓀[K])` with kernel-side inertia; then for `x̄ ∈ 𝓀_L`, descend a
+representative to the inertia-fixed subring (finite-field Galois theory + an averaging or
+Hensel-free lifting argument — inventory first: the exact statement shape in
+`RingTheory/Invariant/Basic.lean`). With it, `ker θ₀ = G₁` holds unconditionally on local
+fields. (b) The P27/P28 instantiations (consolidation). (c) `IsNonarchimedeanLocalField L`
+assembly. Honest frame: R1–R3 distant; the descent is one lemma from complete.
