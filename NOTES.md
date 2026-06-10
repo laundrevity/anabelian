@@ -2385,3 +2385,94 @@ covering this territory starts from Serre and the committed Pass-23/24 files.
 status` clean-tree check at every session start; uncommitted work does not exist as far as the
 governance files are concerned. Root cause was 13 passes run without a single commit, then a
 cross-machine divergence the spine files could not see.
+
+---
+
+# Pass 25 — rung L2: tame injectivity `G₀/G₁ ↪ 𝓀ˣ` under explicit monogenicity (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-24 pointer, candidate (b), user-approved: injectivity of the tame map, stated
+WITH a monogenicity hypothesis at the abstract `ValuationSubring` level (the honest,
+hypothesis-parametrized shape — Pass 23's Krull precedent) and discharged later at the
+local-field level. (ii) Scope up front: detection lemma (Serre IV §1 Prop. 5) + `ker θ₀ = G₁` +
+injectivity of Pass 24's `tameQuotientHom`; stretch: `G₀/G₁` abelian / cyclic-when-finite.
+(iii) NOT in scope: discharging monogenicity (needs the finite-extension local-field instances);
+the `i ≥ 1` additive injections. (iv) Hypothesis form: instance-free — `A₀ : Subring ↥A`
+inertia-fixed, `Subring.closure (↑A₀ ∪ {π}) = ⊤`.
+
+## Environment note (in-sandbox builds restored — read before any future Cowork pass)
+
+This pass ran in the Cowork sandbox, which cannot reach Lean's release servers (egress
+allowlist; the "package managers" tier the user enabled applies only to freshly booted
+sessions). Resolved WITHOUT a session restart: the user dropped `lean-4.30.0-linux_aarch64.tar.zst`
+into the repo folder (now gitignored — keep it there; it makes every future session
+network-independent), extracted to session-local disk. Two environment facts that will recur:
+
+1. **The FUSE mount caps simultaneously-open files at ~1019** (measured; the daemon's limit, not
+   `ulimit` — shell soft/hard were already 524288). Lean holds ~2000 oleans open, so `lake build`
+   **cannot run against the mounted repo**. Fix: a **hybrid local workspace** under the session
+   tmp dir — olean/build trees of all packages rsynced to local disk (~6.2 GB; trim the
+   toolchain's `*.a` + LLVM `.so`s to fit), *sources symlinked to the mount*, artifacts rsynced
+   back to the mount after green. Mount-side `lake build --no-build` then re-verifies acceptance.
+2. **Each bash call is a bwrap sandbox with `--die-with-parent` + 45 s cap** — no background
+   builds survive a call. Builds fit anyway: with oleans local and the page cache warm,
+   the new file elaborated in ~2 s; the full-project build (8,499 jobs, mostly replays) in ~30 s.
+
+## Route-first-step probes (against the pinned Mathlib source, before writing)
+
+All names verified by grep in `.lake/packages/mathlib` (the FUSE mount serves greps fine):
+`Subring.closure_induction` (dependent motive, `Algebra/Ring/Subring/Basic.lean:507`; cases
+`mem/zero/one/add/neg/mul`); `Ideal.mul_mem_right`; `QuotientGroup.ker_lift` +
+`QuotientGroup.map_mk'_self` + `MonoidHom.ker_eq_bot_iff`; `isCyclic_of_injective_ringHom`
+(**naming drift caught by probe**: `subgroup_units_cyclic` deprecated 2026-03-03,
+`isCyclic_of_subgroup_isDomain` deprecated 2026-03-04 — the pin is newer than priors);
+monogenicity **ABSENT** as a general lemma (only `PowerBasis.adjoin_gen_eq_top`-adjacent
+machinery) — re-verified independently, not cited from the discarded orphans.
+
+## What was built (`Anabelian/TameInjectivity.lean`, all standard-axioms-only)
+
+- `smul_sub_dvd_of_mem_closure` — `(σπ − π) ∣ (σx − x)` on `closure (A₀ ∪ {π})`
+  (`Subring.closure_induction`; `mul`: `σ(xy) − xy = σx·(σy − y) + (σx − x)·y`).
+- **`mem_ramificationGroup_of_smul_uniformizer_sub_mem`** — detection on `π`, all `i`
+  (Serre IV §1 Prop. 5 monogenic form): divide, `Ideal.mul_mem_right`.
+- **`ker_tameCharacter`** — `ker θ₀ = (G₁).subgroupOf G₀`: `⊇` Pass 24; `⊆`: `u_σ ≡ 1 mod 𝔪` ⟹
+  `σπ − π = π(u_σ − 1) ∈ 𝔪²` ⟹ detection at `i = 1`.
+- **`tameQuotientHom_injective`** — `G₀/G₁ ↪ 𝓀ˣ` (`ker_lift` + kernel identification +
+  `map_mk'_self`).
+- `tameQuotient_mul_comm`; `tameQuotient_isCyclic` (`isCyclic_of_injective_ringHom` composed
+  with `Units.coeHom`) — both stretch goals landed.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| `Units.map`-defeq friction unpacking `θ₀σ = 1` (P23/24's residue-vs-`mk` déjà vu) | did NOT bite: `have h1 : Units.map … = 1 := hσ` accepted by defeq; `simpa` finished | clean |
+| `closure_induction` case/binder friction (recently refactored API) | none — probe-matched signature elaborated first try | probe paid off |
+| `Finite (G₀ ⧸ N)` instance might need manual `Quotient.finite` | synthesized automatically | clean |
+| writing Lean without a compiler is risky | the ONLY failures: four missing branch-closers (`exact dvd_zero _`/`dvd_rfl`) in the induction — caught on first in-sandbox elaboration, fixed in one edit | the in-sandbox loop matters |
+
+## Build + headline
+
+`lake build`: **8,499 jobs, clean** (in-sandbox; mount-side `--no-build` re-verified); all six
+audits standard-only; zero `axiom` declarations project-wide. **HEADLINE: `ker θ₀ = G₁` and
+`G₀/G₁ ↪ 𝓀ˣ` — the tame quotient is a proved embedding, abelian, cyclic when `G₀` is finite —
+conditional on the explicit, named monogenicity hypothesis (Serre IV §2 Prop. 7 at level 0,
+monogenicity-conditional).** No new `structure`/`class`; no owed witness incurred (hypothesis
+not claimed irremovable — Pass-23 precedent); D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. L2's level-0 quotient structure closed modulo one named hypothesis.
+
+## Scope: pointer to Pass 26
+
+Candidates, leverage order: (a) **the concrete properly-decreasing chain** — `G₀ ≠ G₁` for an
+explicitly tamely-ramified extension (the come-apart exhibit; worth more now that the tame
+structure is closed: it would witness `θ₀ ≠ 1` somewhere — `𝔽_p((s))/𝔽_p((s²))`-style toy or
+`Zsqrtd`-adjacent); (b) **the `i ≥ 1` additive injections** `G_i/G_{i+1} ↪ 𝓀⁺` — the detection
+engine is already proved for all `i`, only the additive cocycle layer is new; (c) **the
+finite-extension local-field instances** (~3-pass infra; ALSO the gate to discharging this
+pass's monogenicity hypothesis and Pass 23's instantiation gap); (d) L1 polish (continuity of
+`residueReductionHom`; the imperfect-case generality). Honest frame: R1–R3 distant; L2
+finite-level structure closing rung by rung, one named hypothesis outstanding.

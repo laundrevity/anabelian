@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 24 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 25 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -319,12 +319,15 @@ quantitative payoff** `Gal(K̄/K) ⧸ I ≃* Ẑ` (`unramifiedQuotientZHat`, ass
 surjectivity results carry `[PerfectField K]`; the imperfect equal-char case is the tracked remainder
 above. **Pass 23 opened L2 proper** (the lower-numbering filtration + basic theory); **Pass 24 added
 the tame character** `θ₀ : G_0 →* 𝓀ˣ` (canonical; `G_1 ≤ ker`; induced `G_0/G_1 →* 𝓀ˣ`) **and
-eventual triviality** for finite decomposition groups. **Honest next step (Pass 25):** the L2
-continuation — the concrete properly-decreasing chain (`G_0 ≠ G_1` for an explicitly ramified
-extension), or injectivity of the tame map (needs the monogenicity input), or the finite-extension
-local-field instances; or the smaller L1 refinements (continuity of the reduction; the imperfect-case
-generality). No second boundary was ever stacked; nothing cardinal-sin posited; the surjection
-*follows* from the keystone applied to axiom-free bricks.
+eventual triviality** for finite decomposition groups; **Pass 25 proved tame injectivity**
+(`ker θ₀ = G_1`, `G_0/G_1 ↪ 𝓀ˣ`, abelian, cyclic-when-finite) under the explicit monogenicity
+hypothesis. **Honest next step (Pass 26):** the L2 continuation — the concrete
+properly-decreasing chain (`G_0 ≠ G_1` for an explicitly tamely-ramified extension), the `i ≥ 1`
+additive injections (detection engine in hand), or the finite-extension local-field instances
+(which also gate the monogenicity-hypothesis discharge); or the smaller L1 refinements
+(continuity of the reduction; the imperfect-case generality). No second boundary was ever
+stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied to
+axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -363,7 +366,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
 ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
@@ -394,6 +397,17 @@ groups in lower numbering`).
   abelian/cyclic) — it needs `σ ∈ G_i` to be detectable on `π` alone, i.e. monogenicity of the
   totally-ramified subextension (Serre IV §1 Prop. 5, from completeness/Eisenstein), absent at this
   abstraction level. That is the **next L2 rung**, with wild `G_1` pro-`p` behind it.
+- **Pass 25 (`Anabelian/TameInjectivity.lean`) — tame injectivity `G₀/G₁ ↪ 𝓀ˣ` under explicit
+  monogenicity, axiom-free.** The Pass-24 deferral, taken: monogenicity enters as a *named
+  hypothesis* (inertia-fixed `A₀ : Subring ↥A`, `Subring.closure (↑A₀ ∪ {π}) = ⊤` — the Pass-23
+  Krull pattern; the general lemma is re-verified ABSENT from Mathlib), and from it: the
+  divisibility engine (`Subring.closure_induction`), **detection on `π`** for all `i` (Serre IV
+  §1 Prop. 5: `σπ − π ∈ 𝔪^(i+1) ⟹ σ ∈ G_i`), **`ker θ₀ = G₁`**, **`tameQuotientHom`
+  injective**, and the corollaries `G₀/G₁` **abelian** and (finite `G₀`) **cyclic**. Serre IV §2
+  Prop. 7 at level 0, monogenicity-conditional. The hypothesis is not claimed irremovable (no
+  witness incurred); **discharging it** for `A = 𝒪_L` is named follow-on work, gated on the
+  finite-extension instances below. Pre-pass: the 2026-05-31 orphan incident resolved
+  (discard, user decision) — NOTES.md.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
@@ -410,8 +424,10 @@ groups in lower numbering`).
   `∃ i, G_i = ⊥` for finite decomposition groups~~ **✅ Pass 24**; the tame quotient hom
   `G_0/G_1 →* 𝓀_L^×` with `θ₀` canonical **✅ Pass 24 (hom + kernel half)**; **remaining in (1):**
   a **concrete properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the
-  come-apart exhibit the definition deserves); **injectivity** of `G_0/G_1 →* 𝓀^×` (needs the
-  monogenicity input — Serre IV §1 Prop. 5); wild `G_1` pro-`p`;
+  come-apart exhibit the definition deserves); ~~**injectivity** of `G_0/G_1 →* 𝓀^×`~~ **✅ Pass 25**
+  (monogenicity-conditional; the **hypothesis discharge** for `A = 𝒪_L` remains, gated on the
+  finite-extension instances); the `i ≥ 1` additive injections `G_i/G_{i+1} ↪ 𝓀⁺` (the detection
+  engine is in hand, Pass 25); wild `G_1` pro-`p`;
   (2) the **Herbrand function** `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible;
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.

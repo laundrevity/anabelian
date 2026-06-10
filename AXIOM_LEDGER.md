@@ -1173,3 +1173,57 @@ rule-2 obligation incurred. No new `structure`/`class`; no new owed witness; D1 
 
 Ledger delta: **0 / 0** — axiom-free. **L2: the tame character exists, is canonical, and kills
 `G_1`** — the first map out of the filtration.
+
+### Pass 25 (2026-06-10) — rung L2: tame injectivity `G₀/G₁ ↪ 𝓀ˣ` under explicit monogenicity
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Completes the level-0
+quotient structure (Serre IV §2 Prop. 7 at `i = 0`) **conditionally on an explicit monogenicity
+hypothesis** — the Pass-23 Krull pattern: the input Mathlib cannot yet discharge is named in the
+binders, never assumed silently. Pre-pass housekeeping: the 2026-05-31 orphaned-session incident
+was resolved (12 uncommitted files discarded, user decision — see the NOTES.md incident entry) and
+the commit-per-pass convention added to `CLAUDE.md`. `Anabelian/TameInjectivity.lean` (in-file
+`#print axioms`, all standard-only):
+
+```
+'Anabelian.smul_sub_dvd_of_mem_closure'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_ramificationGroup_of_smul_uniformizer_sub_mem'
+                                                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_tameCharacter'                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameQuotientHom_injective'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameQuotient_mul_comm'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameQuotient_isCyclic'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Setting:** Pass 24's (`𝔪_A = (π)`, `π ≠ 0`) plus the **monogenicity hypothesis**: an
+  inertia-fixed `A₀ : Subring ↥A` with `Subring.closure (↑A₀ ∪ {π}) = ⊤` (i.e. `A = A₀[π]`).
+  Monogenicity is a true theorem for `A = 𝒪_L` (complete DVR, separable residue extension — Serre
+  IV §1 Prop. 5's own proof) and **absent from Mathlib as a general lemma** (re-verified this
+  pass: only `PowerBasis.adjoin_gen_eq_top`-adjacent machinery) — so it enters as a *named
+  hypothesis*, not an axiom.
+- `smul_sub_dvd_of_mem_closure` — the engine: `(σπ − π) ∣ (σx − x)` for every
+  `x ∈ closure (A₀ ∪ {π})`, by `Subring.closure_induction` (the induction *is* Serre's
+  telescoping; the `mul` case is `σ(xy) − xy = σx·(σy − y) + (σx − x)·y`).
+- **`mem_ramificationGroup_of_smul_uniformizer_sub_mem`** — **detection on `π`** (Serre IV §1
+  Prop. 5, monogenic form): `σπ − π ∈ 𝔪^(i+1) ⟹ σ ∈ G_i` (divide, land via
+  `Ideal.mul_mem_right`). Stated for all `i` — also the engine for the future `i ≥ 1` additive
+  story.
+- **`ker_tameCharacter` — `ker θ₀ = G₁`** (as `(G₁).subgroupOf G₀`): `⊇` is Pass 24's
+  `tameCharacter_eq_one`; `⊆` reads `θ₀(σ) = 1` as `u_σ ≡ 1 mod 𝔪`, whence
+  `σπ − π = π(u_σ − 1) ∈ 𝔪²`, and detection at `i = 1` finishes.
+- **`tameQuotientHom_injective` — `G₀/G₁ ↪ 𝓀ˣ`** (`QuotientGroup.ker_lift` + the kernel
+  identification + `QuotientGroup.map_mk'_self`).
+- Corollaries: **`tameQuotient_mul_comm`** (`G₀/G₁` abelian — injects into `𝓀ˣ`) and
+  **`tameQuotient_isCyclic`** (finite `G₀` ⟹ `G₀/G₁` cyclic, via
+  `isCyclic_of_injective_ringHom` into the residue field).
+
+**Honesty.** The monogenicity hypothesis is **not claimed irremovable** from any conclusion — no
+constructed non-monogenic counterexample is attempted, so per the extended rule-2 no
+load-bearing claim is made and no owed witness is incurred (none dodged; the hypothesis is used
+constructively — the Pass-23 Krull precedent). **Discharging the hypothesis** for `A = 𝒪_L`
+(`L/K` finite) is the named follow-on, blocked on the (verified absent) finite-extension
+`IsNonarchimedeanLocalField` instances. The `i ≥ 1` additive analogues (`G_i/G_{i+1} ↪ 𝓀⁺`) are
+named, not attempted. No new `structure`/`class`; no new owed witness; D1 N/A; **D2 N/A**
+(`ValuationSubring`-native). Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2: the tame quotient `G₀/G₁ ↪ 𝓀ˣ` is a proved embedding
+(monogenicity-conditional), abelian, and cyclic when `G₀` is finite.**

@@ -20,3 +20,4 @@ import Anabelian.GaloisInertia
 import Anabelian.RamificationDegeneracy
 import Anabelian.RamificationFiltration
 import Anabelian.TameCharacter
+import Anabelian.TameInjectivity
