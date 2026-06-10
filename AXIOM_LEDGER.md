@@ -1227,3 +1227,55 @@ named, not attempted. No new `structure`/`class`; no new owed witness; D1 N/A; *
 
 Ledger delta: **0 / 0** — axiom-free. **L2: the tame quotient `G₀/G₁ ↪ 𝓀ˣ` is a proved embedding
 (monogenicity-conditional), abelian, and cyclic when `G₀` is finite.**
+
+### Pass 26 (2026-06-10) — rung L2: the come-apart exhibit — `G₀ ≠ G₁`, constructed (obligation discharged)
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Discharges the obligation
+logged since Pass 23 ("the come-apart exhibit the definition deserves"): a fully concrete
+`(K, L, A)` where the ramification filtration **provably decreases at the first step** — the
+rule-2 currency (a constructed witness, not prose) applied to the L2 definition itself, the
+separating counterpart of Pass 22's proved collapse. `Anabelian/RamificationExhibit.lean`
+(in-file `#print axioms`, all standard-only):
+
+```
+'Anabelian.laurentNegXAlgEquiv'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalIdeal_laurentIntegers_eq_span'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.laurentNegX_mem_decompositionSubgroup'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.laurentNegXDecomp_mem_ramificationGroup_zero'
+                                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.laurentNegXDecomp_notMem_ramificationGroup_one'
+                                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.laurentRamificationGroup_zero_ne_one'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_zero_ne_one_rat'         depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The exhibit:** `L = k⸨X⸩` (Mathlib's `X`-adic `Valued` instance), `A = {v ≤ 1} ≅ k⟦X⟧`
+  (`laurentIntegers`, membership = "is a power series" via `val_le_one_iff_eq_coe`), `K = k`
+  the constants, and `σ : f(X) ↦ f(−X)` — `PowerSeries.evalNegHom` lifted along the localization
+  `k⸨X⸩ = k⟦X⟧[X⁻¹]` (`IsLocalization.lift`; an involution, hence a `k`-algebra equivalence).
+  The classical tame quadratic picture (`k⸨X⸩/k⸨X²⸩`, `e = 2`) with the base enlarged to the
+  constants — which only enlarges `L ≃ₐ[K] L`; the membership facts are identical.
+- `maximalIdeal_laurentIntegers_eq_span` — **`𝔪_A = (π)`, `π = X`** (constant-coefficient
+  unit-detection both ways), `π ≠ 0`: the uniformizer package of Passes 24–25, instantiated
+  concretely for the first time.
+- **`σ ∈ G₀`** — `σ` moves every integer by a constant-term-zero series, i.e. by an element of
+  `(π)`.
+- **`σ ∉ G₁`** (`(2 : k) ≠ 0`) — **detected by Pass 24's tame character**: `σπ = π·(−1)` gives
+  `tameUnit σ = −1` (`tameUnit_unique`), so `θ₀(σ) = −1`; `G₁`-membership would force
+  `θ₀(σ) = 1` (`tameCharacter_eq_one`), and `−1 = 1` in `𝓀` pushes down (via
+  `ofPowerSeries_injective` at the constant coefficient) to `2 = 0` in `k`. The exhibit
+  *exercises* the Pass-24/25 tame structure: `θ₀` is exactly the invariant that sees the jump.
+- **`laurentRamificationGroup_zero_ne_one`** — `G₀ ≠ G₁` for `(k, k⸨X⸩, A)`, `(2 : k) ≠ 0`; and
+  **`ramificationGroup_zero_ne_one_rat`** — the **fully closed witness** at `k = ℚ`: no
+  hypotheses, no variables.
+
+**Honesty.** This pass discharges an obligation rather than incurring one. NOT claimed: anything
+about the rest of the ambient filtration (`G₁ ≠ ⊥` here — wild automorphisms live in the large
+decomposition group; the classical `G₀ ⊃ G₁ = ⊥` chain for the quadratic subextension needs the
+subfield `k⸨X²⸩` and is named, not attempted). No new `structure`/`class`; no new owed witness;
+D1 N/A; **D2 N/A** (the `Valued` structure on `k⸨X⸩` is Mathlib's own canonical instance on a
+concrete type — nothing imposed, nothing leaking into the abstract files). Recovers nothing from
+an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2: the filtration provably comes apart — `G₀ ≠ G₁`,
+witnessed over `ℚ⸨X⸩` with every hypothesis closed.**

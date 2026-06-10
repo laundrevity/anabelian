@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 25 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 26 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -321,13 +321,15 @@ above. **Pass 23 opened L2 proper** (the lower-numbering filtration + basic theo
 the tame character** `θ₀ : G_0 →* 𝓀ˣ` (canonical; `G_1 ≤ ker`; induced `G_0/G_1 →* 𝓀ˣ`) **and
 eventual triviality** for finite decomposition groups; **Pass 25 proved tame injectivity**
 (`ker θ₀ = G_1`, `G_0/G_1 ↪ 𝓀ˣ`, abelian, cyclic-when-finite) under the explicit monogenicity
-hypothesis. **Honest next step (Pass 26):** the L2 continuation — the concrete
-properly-decreasing chain (`G_0 ≠ G_1` for an explicitly tamely-ramified extension), the `i ≥ 1`
-additive injections (detection engine in hand), or the finite-extension local-field instances
-(which also gate the monogenicity-hypothesis discharge); or the smaller L1 refinements
-(continuity of the reduction; the imperfect-case generality). No second boundary was ever
-stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied to
-axiom-free bricks.
+hypothesis. **Pass 26 constructed the come-apart exhibit** (`G₀ ≠ G₁` over `k⸨X⸩`, fully closed
+at `k = ℚ`, the jump detected by the tame character) — with Pass 22's collapse, both regimes of
+the L2 architecture are witnessed. **Honest next step (Pass 27):** the `i ≥ 1` additive
+injections `G_i/G_{i+1} ↪ 𝓀⁺` (the Pass-25 detection engine covers all `i`); the
+finite-extension local-field instances (which gate the monogenicity-hypothesis discharge and the
+`A = 𝒪_L` instantiation); wild `G₁` pro-`p` (behind the additive injections); or the smaller L1
+refinements (continuity of the reduction; the imperfect-case generality). No second boundary was
+ever stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied
+to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -366,7 +368,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
 ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
@@ -408,6 +410,16 @@ groups in lower numbering`).
   witness incurred); **discharging it** for `A = 𝒪_L` is named follow-on work, gated on the
   finite-extension instances below. Pre-pass: the 2026-05-31 orphan incident resolved
   (discard, user decision) — NOTES.md.
+- **Pass 26 (`Anabelian/RamificationExhibit.lean`) — the come-apart exhibit, DISCHARGED,
+  axiom-free.** The obligation logged since Pass 23: in `L = k⸨X⸩` (Mathlib's `X`-adic `Valued`),
+  `A = {v ≤ 1} ≅ k⟦X⟧`, `K = k`, with `σ : f(X) ↦ f(−X)` (`evalNegHom` lifted along the
+  localization), **`σ ∈ G₀ \ G₁`** for `(2 : k) ≠ 0` — hence
+  **`ramificationGroup k A 0 ≠ ramificationGroup k A 1`**, with a **fully closed witness at
+  `k = ℚ`** (`ramificationGroup_zero_ne_one_rat`, no hypotheses, no variables). The jump is
+  detected by Pass 24's tame character (`θ₀(σ) = −1 ≠ 1` vs `tameCharacter_eq_one`); the
+  uniformizer package `𝔪_A = (X)` is the Passes-24/25 hypothesis instantiated concretely for the
+  first time. With Pass 22's proved collapse, *both* regimes of the hypothesis-parametrized L2
+  architecture are now constructed.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
@@ -423,8 +435,9 @@ groups in lower numbering`).
   inertia, antitone, normal, separation under Krull, Noetherian discharge); ~~eventual triviality
   `∃ i, G_i = ⊥` for finite decomposition groups~~ **✅ Pass 24**; the tame quotient hom
   `G_0/G_1 →* 𝓀_L^×` with `θ₀` canonical **✅ Pass 24 (hom + kernel half)**; **remaining in (1):**
-  a **concrete properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the
-  come-apart exhibit the definition deserves); ~~**injectivity** of `G_0/G_1 →* 𝓀^×`~~ **✅ Pass 25**
+  ~~a **concrete properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the
+  come-apart exhibit the definition deserves)~~ **✅ Pass 26** (`k⸨X⸩`, `σ : X ↦ −X`; fully closed
+  at `k = ℚ`); ~~**injectivity** of `G_0/G_1 →* 𝓀^×`~~ **✅ Pass 25**
   (monogenicity-conditional; the **hypothesis discharge** for `A = 𝒪_L` remains, gated on the
   finite-extension instances); the `i ≥ 1` additive injections `G_i/G_{i+1} ↪ 𝓀⁺` (the detection
   engine is in hand, Pass 25); wild `G_1` pro-`p`;

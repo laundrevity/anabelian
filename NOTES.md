@@ -2476,3 +2476,94 @@ finite-extension local-field instances** (~3-pass infra; ALSO the gate to discha
 pass's monogenicity hypothesis and Pass 23's instantiation gap); (d) L1 polish (continuity of
 `residueReductionHom`; the imperfect-case generality). Honest frame: R1–R3 distant; L2
 finite-level structure closing rung by rung, one named hypothesis outstanding.
+
+---
+
+# Pass 26 — rung L2: the come-apart exhibit — `G₀ ≠ G₁` constructed (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-25 pointer, candidate (a), user-selected: the concrete properly-decreasing
+chain — an explicit `(K, L, A)` with `ramificationGroup K A 0 ≠ ramificationGroup K A 1`,
+discharging the obligation logged since Pass 23. (ii) Scope: ONE proper decrease, fully
+witnessed; a hypothesis-free closed instance as the capstone. (iii) NOT in scope: the full chain
+structure of the ambient group (`G₁ = ⊥` is false for the big decomposition group and the
+quadratic-subextension statement needs `k⸨X²⸩`). (iv) Route decision deferred to inventory:
+Laurent series `k⸨X⸩` (tame quadratic flavor, `G₀ ≠ G₁`) vs `ℤ[i]` at `(1+i)` (wild, jump at
+`G₁ ≠ G₂`).
+
+## Route decision (probe-driven)
+
+**Laurent series won decisively.** Inventory finds (all pinned-Mathlib, grep-verified):
+`LaurentSeries.valued : Valued k⸨X⸩ ℤᵐ⁰` + `val_le_one_iff_eq_coe` (membership in the unit ball
+⟺ power series — the entire `A ≅ k⟦X⟧` bridge, free); `PowerSeries.evalNegHom` (`f(X) ↦ f(−X)`
+pre-packaged, with `rescale_rescale`/`rescale_one` for the involution and `evalNegHom_X`);
+`of_powerSeries_localization : IsLocalization (powers X) k⸨X⸩` (the lift device for `σ`);
+`ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem` (decomposition membership);
+`HahnSeries.ofPowerSeries_injective` (the push-down). The Gaussian-integer route would have
+needed `HeightOneSpectrum` valuation API plus `WithZero ℤₘ₀` exponent bookkeeping on localized
+fractions — strictly more friction for a *weaker-flavored* (wild) exhibit.
+
+**The `σ ∉ G₁` design choice:** rather than `𝔪²`-valuation arithmetic, use **Pass 24's tame
+character as the detector** — `σπ = π·(−1)` ⟹ `tameUnit σ = −1` (`tameUnit_unique`) ⟹
+`θ₀(σ) = −1 ≠ 1`, while `tameCharacter_eq_one` makes `G₁`-membership force `θ₀(σ) = 1`. The
+`−1 ≠ 1` step pushes down to `(2 : k) ≠ 0` through `ofPowerSeries_injective` at the constant
+coefficient — no value-group arithmetic anywhere in the file.
+
+## What was built (`Anabelian/RamificationExhibit.lean`, all standard-axioms-only)
+
+- `laurentNegXAlgEquiv` — `σ` as a `k`-algebra involution of `k⸨X⸩`: `evalNegHom` through
+  `IsLocalization.lift` (units of `(−X)^n` from `single_ne_zero`), involution via
+  `IsLocalization.ringHom_ext`, `k`-linearity via `HahnSeries.algebraMap_apply'` (see below).
+- `laurentIntegers` / `mem_laurentIntegers_iff` — `A` and its power-series membership.
+- `laurentUniformizer` + **`maximalIdeal_laurentIntegers_eq_span`** — `𝔪_A = (X)`, `X ≠ 0`:
+  nonunits ⟺ zero constant coefficient (`isUnit_iff_constantCoeff`, `X_dvd_iff`), the
+  Pass-24/25 uniformizer package instantiated concretely for the first time.
+- `laurentNegX_mem_decompositionSubgroup` — `σ • A = A` via `σ⁻¹ = σ`
+  (`inv_eq_of_mul_eq_one_right`) + stability of the power-series subring.
+- **`laurentNegXDecomp_mem_ramificationGroup_zero`** — `σ ∈ G₀` (constant terms cancel).
+- **`laurentNegXDecomp_notMem_ramificationGroup_one`** — `σ ∉ G₁` (`(2:k) ≠ 0`), the
+  tame-character detection above.
+- **`laurentRamificationGroup_zero_ne_one`** and **`ramificationGroup_zero_ne_one_rat`** — the
+  exhibit, and its fully closed `k = ℚ` instance (no hypotheses, no variables).
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the `↥A`-smul coe bridge to need a manual lemma | `rfl` — `coe_laurentNegXDecomp_smul` proved by `rfl` first try | the RamificationGroup `SubMulAction` is defeq-transparent |
+| `σ ∈ G₀` to be the fiddly half | compiled on the **first** elaboration attempt | the `mem_span` helper carried it |
+| `Algebra k k⸨X⸩` to be the HahnSeries base instance | it is `HahnSeries.powerSeriesAlgebra` (routes through `k⟦X⟧`; `IsScalarTower k k⟦X⟧ k⸨X⸩` does NOT exist) — diagnosed via `#synth` probe; `HahnSeries.algebraMap_apply'` is the right lemma | the one genuine surprise; two failed guesses before probing the instance directly |
+| coercion bookkeeping (`↑(π*c)` vs `↑π*↑c`, `↑0`, units-val) to bite | it bit exactly as in P23–25 (`push_cast`, explicit `coe_*` rewrites, the P25 defeq-`have` for `Units.map`) | known friction, known fixes |
+| `isUnit_of_mul_eq_one` available | unknown identifier at this pin | replaced by `isUnit_iff_exists.mpr` |
+
+## Build + headline
+
+`lake build`: **8,500 jobs, clean** (in-sandbox; mount-side `lake -R build --no-build`
+re-verified all targets up-to-date); all seven audits standard-only; zero `axiom` declarations
+project-wide. Environment refinement for the recipe: exclude lake's compiled config from the
+artifact rsync-back (`.lake/config` is machine-pathed — it was cleared so each machine
+reconfigures fresh). **HEADLINE: the ramification filtration provably comes apart —
+`ramificationGroup ℚ (laurentIntegers ℚ) 0 ≠ ramificationGroup ℚ (laurentIntegers ℚ) 1`, a
+fully closed witness, with the jump detected by the Pass-24 tame character.** The Pass-22
+collapse and this pass's separation are now *both* constructed: the two regimes the
+hypothesis-parametrized L2 architecture was built for. No new `structure`/`class`; no owed
+witness (an obligation discharged, none incurred); D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. The Pass-23 logged obligation (come-apart exhibit) is DISCHARGED.
+
+## Scope: pointer to Pass 27
+
+Candidates, leverage order: (a) **the `i ≥ 1` additive injections** `G_i/G_{i+1} ↪ 𝓀⁺` — the
+Pass-25 detection engine covers all `i`; only the additive cocycle layer is new; with it the
+finite-level quotient structure is complete across all levels; (b) **the finite-extension
+local-field instances** (~3-pass infra; gates the monogenicity-hypothesis discharge AND the
+`A = 𝒪_L` instantiation of everything in L2); (c) **wild `G₁` pro-`p`** (needs (a) as input:
+`G_i/G_{i+1}` embeds in `𝓀⁺`, an elementary abelian `p`-group at finite level); (d) L1 polish
+(continuity of `residueReductionHom`; imperfect-case generality). The exhibit also suggests a
+cheap stretch for whichever pass goes next: `θ₀(σ) = −1` computes the tame character's *value*
+on a concrete element — the first numerical datum out of the L2 structure. Honest frame: R1–R3
+distant; L2's level-0 theory is now complete (definition, basics, tame character, injectivity
+modulo monogenicity, and both regimes witnessed).
