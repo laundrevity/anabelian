@@ -2567,3 +2567,72 @@ cheap stretch for whichever pass goes next: `θ₀(σ) = −1` computes the tame
 on a concrete element — the first numerical datum out of the L2 structure. Honest frame: R1–R3
 distant; L2's level-0 theory is now complete (definition, basics, tame character, injectivity
 modulo monogenicity, and both regimes witnessed).
+
+---
+
+# Pass 27 — rung L2: additive characters `θ_i : G_i →* 𝓀⁺` (`i ≥ 1`) + the `i = 0` witness (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-26 pointer, candidate (a), user-selected: the `i ≥ 1` additive injections.
+(ii) Scope: `additiveCoeff` + the hom `θ_i` (`i ≥ 1`) + `G_{i+1} ≤ ker` + quotient hom + (under
+Pass-25 monogenicity) `ker = G_{i+1}`, injectivity, commutativity. (iii) The `1 ≤ i` hypothesis
+will be CLAIMED load-bearing ⟹ extended rule-2 obliges a witness: plan to discharge IN-PASS via
+the Pass-26 exhibit (`σ² = 1` vs `res a_σ = −2`). (iv) Stretch: the uniformizer-twist law
+`res(w)^i·res(a') = res(a)` (all `i`; recovers P24's independence at `i = 0`).
+
+## What was built (`Anabelian/AdditiveCharacter.lean`, all standard-axioms-only)
+
+- `additiveCoeff` (every level) + `_spec`/`_unique`/`_one`; `smul_uniformizer_eq_mul`
+  (`linear_combination` from the spec — clean).
+- **`additiveCharacter (hi : 1 ≤ i) : G_i →* Multiplicative 𝓀`**: cocycle
+  `a_{στ} = a_σ + (1 + π^i a_σ)^(i+1)·σ(a_τ)` (proved by `smul_mul'`/`smul_pow'` + `ring`),
+  straightened by `residue_one_add_pow_mul` (needs `i ≥ 1`) + P24's
+  `residue_smul_eq_of_mem_ramificationGroup_zero` (via antitonicity).
+- `additiveCharacter_eq_one`; `additiveQuotientHom`; under monogenicity:
+  **`ker_additiveCharacter`** (P25 detection at `i+1` — the engine covered all `i` as designed),
+  **`additiveQuotientHom_injective`**, **`additiveQuotient_mul_comm`**.
+- **`additiveCoeff_residue_not_additive_at_zero`** — the rule-2 witness, discharged in-pass: on
+  the P26 exhibit, `a_{σ·σ} = a_1 = 0` (`σ` is an involution) while `res a_σ + res a_σ = −4`,
+  and `−4 ∉ 𝔪` because `4` is a unit of `A` (P26's `isUnit_of_constantCoeff_ne_zero` +
+  `map_ofNat`/`norm_cast` for the numeral coercions). So additivity at `i = 0` is **refuted**,
+  not just unproved — the `1 ≤ i` gate is witnessed.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the cocycle computation to be the hard part | landed first-try modulo an argument-order trap (`eq_add_of_sub_eq` adds on the wrong side — replaced by `linear_combination`) | the P24-style scaffolding (spec/unique) carries it |
+| `K` as a section variable to stay out of K-free lemmas | it did (`residue_one_add_pow_mul` takes no `K`) — but my call sites passed `K` anyway | one-character fixes |
+| the P24 `whnf`-timeout trap to reappear at the quotient corollary | it appeared — at the **twist** theorem, misattributed twice to neighbors (end-position error reporting) | see below |
+| the twist (stretch) to be routine | its *statement* hits a reproducible `whnf` divergence elaborating `additiveCoeff` at the composite uniformizer `π * ↑w`: not cured by `maxHeartbeats 800000`, coercion ascription `(w : ↥A)`, `subst`-elimination of `π'`, or replacing `linear_combination` with explicit `calc`/`ring`. Root cause unisolated (suspect: unification unfolding `Exists.choose` through the composite-argument spec during statement elaboration) | **CUT from scope mid-pass** (the P22/P24 under-promise discipline applied to ourselves); the better target is the twist-free canonical `𝔪^i/𝔪^(i+1)`-valued map — named future work. A failed stretch goal, honestly reported; the core pass is unaffected |
+| numeral coercion friction in the witness (`(4 : ↥A)` vs `(4 : k⟦X⟧)`) | bit as expected; `norm_cast` + `map_ofNat` resolved | known friction class |
+
+## Build + headline
+
+`lake build`: **8,501 jobs, clean** (in-sandbox; mount-side `lake -R build --no-build`
+re-verified; lake's machine-pathed config cleared after sync — the rsync-back must exclude
+`.lake/config`, now part of the recipe); all eight audits standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: every finite-level quotient of the ramification
+filtration now carries its classical character — `G₀/G₁ ↪ 𝓀ˣ` (P24/25) and `G_i/G_{i+1} ↪ 𝓀⁺`
+(`i ≥ 1`, this pass, monogenicity-conditional) — and the multiplicative/additive dichotomy at
+`i = 0` is constructively witnessed, not asserted.** No new `structure`/`class`; one would-be
+owed witness DISCHARGED in-pass; D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. Extended-rule-2 obligation for the `1 ≤ i` gate discharged in-pass.
+
+## Scope: pointer to Pass 28
+
+Candidates, leverage order: (a) **the finite-extension local-field instances** (the known
+~3-pass infra subproject; now gates THREE things: the monogenicity-hypothesis discharge for
+P25/P27, the `A = 𝒪_L` instantiation of all of L2, and eventual Herbrand work at honest
+generality); (b) **wild `G₁` pro-`p`** — with the additive embeddings in hand, `G_i/G_{i+1}`
+embeds in `𝓀⁺`; for finite residue characteristic `p` this is an elementary abelian `p`-group,
+giving `G₁` pro-`p` at finite level (needs `CharP 𝓀 p` plumbing); (c) **the canonical
+`𝔪^i/𝔪^(i+1)`-valued form** of the additive character (also resolves the twist question that
+defeated this pass's stretch goal); (d) L1 polish (continuity of `residueReductionHom`;
+imperfect-case generality). Honest frame: R1–R3 distant; the finite-level L2 quotient theory is
+now COMPLETE modulo the named monogenicity hypothesis — the architecture's next genuinely new
+content is either downward (concrete instances) or upward (Herbrand/upper numbering).

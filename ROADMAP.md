@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 26 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 27 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -323,13 +323,15 @@ eventual triviality** for finite decomposition groups; **Pass 25 proved tame inj
 (`ker θ₀ = G_1`, `G_0/G_1 ↪ 𝓀ˣ`, abelian, cyclic-when-finite) under the explicit monogenicity
 hypothesis. **Pass 26 constructed the come-apart exhibit** (`G₀ ≠ G₁` over `k⸨X⸩`, fully closed
 at `k = ℚ`, the jump detected by the tame character) — with Pass 22's collapse, both regimes of
-the L2 architecture are witnessed. **Honest next step (Pass 27):** the `i ≥ 1` additive
-injections `G_i/G_{i+1} ↪ 𝓀⁺` (the Pass-25 detection engine covers all `i`); the
-finite-extension local-field instances (which gate the monogenicity-hypothesis discharge and the
-`A = 𝒪_L` instantiation); wild `G₁` pro-`p` (behind the additive injections); or the smaller L1
-refinements (continuity of the reduction; the imperfect-case generality). No second boundary was
-ever stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied
-to axiom-free bricks.
+the L2 architecture are witnessed. **Pass 27 completed the finite-level quotient theory**: the
+additive characters `θ_i : G_i/G_{i+1} ↪ 𝓀⁺` (`i ≥ 1`, monogenicity-conditional) alongside
+Pass 24/25's multiplicative `θ₀`, with the level-0 dichotomy *witnessed* on the Pass-26 exhibit.
+**Honest next step (Pass 28):** the finite-extension local-field instances (now gating the
+monogenicity discharge, the `A = 𝒪_L` instantiation, AND honest-generality Herbrand work); wild
+`G₁` pro-`p` (`CharP 𝓀 p` plumbing on the Pass-27 embeddings); the canonical
+`𝔪^i/𝔪^(i+1)`-valued characters; or the smaller L1 refinements (continuity of the reduction;
+the imperfect-case generality). No second boundary was ever stacked; nothing cardinal-sin
+posited; the surjection *follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -368,7 +370,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26; additive characters `i ≥ 1` + level-0 dichotomy witness Pass 27 — **finite-level quotient theory COMPLETE modulo monogenicity**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
 ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
@@ -420,6 +422,18 @@ groups in lower numbering`).
   uniformizer package `𝔪_A = (X)` is the Passes-24/25 hypothesis instantiated concretely for the
   first time. With Pass 22's proved collapse, *both* regimes of the hypothesis-parametrized L2
   architecture are now constructed.
+- **Pass 27 (`Anabelian/AdditiveCharacter.lean`) — the additive characters
+  `θ_i : G_i →* 𝓀⁺` for `i ≥ 1`, axiom-free.** `additiveCoeff` (`σπ − π = π^(i+1)·a_σ`, every
+  level); the hom (cocycle `a_{στ} = a_σ + (1+π^i a_σ)^(i+1)·σ(a_τ)`, straightened by
+  inertia-fixes-residues + `1 + π^i a_σ ≡ 1`, the latter **needing `i ≥ 1`**);
+  `G_{i+1} ≤ ker θ_i`; and under the Pass-25 monogenicity hypothesis: **`ker θ_i = G_{i+1}`**,
+  the **embedding `G_i/G_{i+1} ↪ 𝓀⁺`**, abelian-ness. The `1 ≤ i` gate is claimed load-bearing
+  and **witnessed in-pass** on the Pass-26 exhibit (`σ² = 1` forces `a_{σσ} = 0` while
+  `res a_σ + res a_σ = −4 ≠ 0` — additivity at level 0 *refuted*; level 0 is multiplicative,
+  Pass 24). Cut from scope (honest, logged): the uniformizer-twist law — its statement hits an
+  unisolated `whnf` elaboration divergence; the better target is the canonical
+  `𝔪^i/𝔪^(i+1)`-valued form. **The finite-level quotient theory of the filtration is now
+  complete modulo the named monogenicity hypothesis.**
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
@@ -439,8 +453,10 @@ groups in lower numbering`).
   come-apart exhibit the definition deserves)~~ **✅ Pass 26** (`k⸨X⸩`, `σ : X ↦ −X`; fully closed
   at `k = ℚ`); ~~**injectivity** of `G_0/G_1 →* 𝓀^×`~~ **✅ Pass 25**
   (monogenicity-conditional; the **hypothesis discharge** for `A = 𝒪_L` remains, gated on the
-  finite-extension instances); the `i ≥ 1` additive injections `G_i/G_{i+1} ↪ 𝓀⁺` (the detection
-  engine is in hand, Pass 25); wild `G_1` pro-`p`;
+  finite-extension instances); ~~the `i ≥ 1` additive injections `G_i/G_{i+1} ↪ 𝓀⁺`~~ **✅ Pass
+  27** (monogenicity-conditional; the `1 ≤ i` dichotomy witnessed); wild `G_1` pro-`p` (the
+  embeddings are in hand — needs `CharP 𝓀 p` plumbing); the canonical `𝔪^i/𝔪^(i+1)`-valued
+  characters (also the right home for the uniformizer-twist question, Pass 27);
   (2) the **Herbrand function** `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible;
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.

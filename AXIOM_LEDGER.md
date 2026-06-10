@@ -1279,3 +1279,58 @@ an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **L2: the filtration provably comes apart — `G₀ ≠ G₁`,
 witnessed over `ℚ⸨X⸩` with every hypothesis closed.**
+
+### Pass 27 (2026-06-10) — rung L2: the additive characters `θ_i : G_i →* 𝓀⁺` (`i ≥ 1`) + the `i = 0` failure witness
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Completes the
+finite-level quotient structure across **all** levels (Serre IV §2 Prop. 7): with Pass 24's
+multiplicative `θ₀` at level 0, every quotient `G_i/G_{i+1}` now carries its classical character
+— additive for `i ≥ 1` — an **embedding** under the Pass-25 monogenicity hypothesis (whose
+detection engine covered all `i`, as designed). The `1 ≤ i` gate is **claimed load-bearing and
+the claim is discharged in-pass** by a constructed counterexample on the Pass-26 exhibit (the
+extended-rule-2 obligation that would otherwise be owed — no witness left open).
+`Anabelian/AdditiveCharacter.lean` (in-file `#print axioms`, all standard-only):
+
+```
+'Anabelian.additiveCoeff'                              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveCharacter'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveCharacter_eq_one'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveQuotientHom'                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_additiveCharacter'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveQuotientHom_injective'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveQuotient_mul_comm'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.additiveCoeff_residue_not_additive_at_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `additiveCoeff` (defined for **every** level): the unique `a_σ` with `σπ − π = π^(i+1)·a_σ`
+  (cancellation in the domain `↥A`), with `_spec`/`_unique`/`_one` and
+  `smul_uniformizer_eq_mul` (`σπ = π(1 + π^i a_σ)`).
+- **`additiveCharacter (hi : 1 ≤ i) : G_i →* Multiplicative 𝓀`** — the pass's heart: the
+  cocycle `a_{στ} = a_σ + (1 + π^i a_σ)^(i+1)·σ(a_τ)` straightens to additivity by exactly two
+  inputs: inertia fixes residues (Pass 24's lemma, via antitonicity `G_i ≤ G₀`), and
+  `1 + π^i a_σ ≡ 1 mod 𝔪` — **which uses `i ≥ 1`**.
+- **`additiveCharacter_eq_one`** — `G_{i+1} ≤ ker θ_i`; **`additiveQuotientHom`** —
+  `G_i/G_{i+1} →* 𝓀⁺` (`QuotientGroup.lift`).
+- Under monogenicity (Pass-25 binders, unchanged): **`ker_additiveCharacter`** —
+  `ker θ_i = G_{i+1}` (detection at `i+1`); **`additiveQuotientHom_injective`** — the embedding
+  `G_i/G_{i+1} ↪ 𝓀⁺`; **`additiveQuotient_mul_comm`** — the higher quotients are abelian.
+- **`additiveCoeff_residue_not_additive_at_zero`** — **the `i = 0` failure witness**: on the
+  Pass-26 exhibit (`ℚ⸨X⸩`, `σ : X ↦ −X`), `σ² = 1` gives `a_{σσ} = 0` while
+  `res(a_σ) + res(a_σ) = −4 ≠ 0` (since `4` is a unit of `ℚ⟦X⟧`) — so the additive recipe is
+  provably **not** a homomorphism at level 0, where the multiplicative `θ₀` (Pass 24) is the
+  correct structure. The `1 ≤ i` hypothesis is load-bearing, *witnessed*, not asserted.
+
+**Honesty.** Monogenicity exactly as in Pass 25 (named, not claimed irremovable — no new
+obligation). **Cut from scope mid-pass** (the Pass-22/24 under-promise discipline applied to
+ourselves): the uniformizer-twist law `res(w)^i·res(a'_σ) = res(a_σ)` — mathematically routine,
+but its *statement* hits a reproducible `whnf` divergence elaborating `additiveCoeff` at the
+composite uniformizer `π * ↑w` (not cured by 800k heartbeats, coercion ascriptions, or
+`subst`-elimination; root cause unisolated — logged in NOTES as a known elaboration pathology).
+Its better formulation is the twist-free canonical map into `𝔪^i/𝔪^(i+1)` — named future work.
+Also not attempted: wild `G₁` pro-`p` (needs `char 𝓀 = p`); the local-field instantiation. No
+new `structure`/`class`; no owed witness (one *discharged*); D1 N/A; D2 N/A. Recovers nothing
+from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2: the full ladder of quotient characters exists —
+`θ₀ : G₀/G₁ ↪ 𝓀ˣ` and `θ_i : G_i/G_{i+1} ↪ 𝓀⁺` (`i ≥ 1`, monogenicity-conditional) — with the
+level-0/level-positive dichotomy constructively witnessed.**
