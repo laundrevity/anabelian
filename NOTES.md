@@ -2946,3 +2946,60 @@ ramified `L/K`: `ker θ₀ = G₁`, `G₁` is the Sylow `p`-subgroup, ...") beco
 general-case reduction; the deepest remaining piece of the block). Honest frame: R1–R3 distant;
 the descent has its engine — what remains is bookkeeping below it and the unramified tower
 above it.
+
+---
+
+# Pass 33 — the descent, rung 5: data discharged, showcase assembled (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved: the `e·f = n` bookkeeping. (ii) Mid-planning REALIZATION that reshaped the
+pass: the engine's `he` input is dischargeable **unconditionally** — in the DVR `𝒪_L`,
+`span {ι ϖ_K}` is a power of `𝔪_L` by the ideal classification; no totally-ramified assumption,
+no numerical `e` needed. Only `hres` is genuinely the totally-ramified datum, and its honest
+form is surjectivity of the residue extension. (iii) So scope: discharge `he` outright; reduce
+`hres` to `hsurj`; assemble the `hgen` package; instantiate the Pass-25 showcase. (iv) Full
+numerical `e·f = n` bookkeeping deferred — not needed for the discharge.
+
+## Probes
+
+`IsDiscreteValuationRing.eq_unit_mul_pow_irreducible`; `Ideal.mem_map_of_mem`;
+`Ideal.span_singleton_le_iff_mem`; (`ResidueField.map_residue` from P31, rfl).
+
+## What was built
+
+Per the ledger: the two data-discharge lemmas, the assembled `hgen` package, and
+**`ker_tameCharacter_extensionIntegers`** — `ker θ₀ = G₁` for totally ramified finite separable
+`L/K`, any uniformizer: the abstract Pass-25 theorem with all binders filled by Pass-29–33
+theorems.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| to need numerical `e`/`f` definitions | the DVR ideal classification gives `he` with a bare `∃ e` — no arithmetic | the bookkeeping pass mostly dissolved its own bookkeeping |
+| the showcase assembly to surface instance friction | the chain typechecked as written (one fix: an `Associated` witness needed `u⁻¹`, not `u`) | the hypothesis-parametrized architecture (P23–28) composes exactly as designed |
+
+## Build + headline
+
+Full build clean at warning level; all four audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: the descent block delivers — `ker θ₀ = G₁` and `G₀/G₁ ↪ 𝓀_Lˣ` hold
+for totally ramified finite separable extensions of nonarchimedean local fields, with every
+hypothesis of the Passes-23–28 abstract theory now a theorem. Serre IV §§1–2 at level 0, on
+actual local fields, five descent rungs, zero axioms.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 34
+
+(a) **The maximal unramified subextension `L₀`** — the general-case reduction (the block's
+remaining depth: build `L₀` as the fixed field of inertia or via residue-theoretic lifting; the
+engine then runs over `L₀` verbatim); (b) the analogous instantiations of the Pass-27/28
+theorems (additive characters' kernels, the wild Sylow statement) at `𝒪_L` — near-one-liners on
+the Pass-33 pattern, good consolidation; (c) the `IsNonarchimedeanLocalField L` assembly; (d)
+back up the ladder: Herbrand/upper numbering (the ascent), now with a concrete finite-level
+floor under it. Honest frame: R1–R3 distant; L2's lower-numbering chapter — abstract theory,
+witnesses, characters, dichotomy, and concrete instantiation — is essentially a closed book for
+the totally ramified case.

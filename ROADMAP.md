@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 32 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 33 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -336,12 +336,14 @@ a DVR and discharged the uniformizer package** — the tame character of `L/K` e
 residue field finite** (`Finite 𝓀_L` + `CharP` transfer — the Pass-28 dichotomy concrete at
 `𝒪_L` except monogenicity). **Pass 32 built the
 monogenicity engine** — for totally-ramified data, the last open hypothesis is discharged; the
-full P24–P28 quotient structure instantiates on totally-ramified extensions. **Honest next step
-(Pass 33):** `e·f = n` bookkeeping (discharges the engine's `hres`/`he` from honest
-ramification-index data, enabling the assembled showcase); the `IsNonarchimedeanLocalField L`
-assembly; the maximal unramified subextension `L₀` (the general-case reduction — the block's
-deepest remaining piece). No second boundary was ever stacked; nothing cardinal-sin posited;
-the surjection *follows* from the keystone applied to axiom-free bricks.
+full P24–P28 quotient structure instantiates on totally-ramified extensions. **Pass 33 delivered
+the block's promise**: the engine's data discharged (`he` unconditional; `hres` = residue
+surjectivity) and the showcase assembled — `ker θ₀ = G₁` on totally ramified extensions of
+actual local fields. **Honest next step (Pass 34):** the maximal unramified subextension `L₀`
+(the general-case reduction); P27/P28 instantiations at `𝒪_L` (consolidation); the
+`IsNonarchimedeanLocalField L` assembly; or the ascent (Herbrand/upper numbering) now that the
+finite-level floor is concrete. No second boundary was ever stacked; nothing cardinal-sin
+posited; the surjection *follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -486,6 +488,16 @@ groups in lower numbering`).
   `Subring.closure (A₀ ∪ {π}) = ⊤`. **The last open hypothesis of the abstract L2 theory is
   discharged for totally-ramified data**; `hres`/`he` await the `e·f = n` bookkeeping, and the
   general case (`A₀ = 𝒪_{L₀}`) is named future work through this same engine over `L₀`.
+- **Pass 33 (`Anabelian/ExtensionRamificationData.lean` + `ExtensionTotallyRamified.lean`) —
+  the engine's data discharged; the SHOWCASE, axiom-free.** `he` holds **unconditionally**
+  (DVR ideal classification — one of the two "totally-ramified" inputs was never a hypothesis);
+  `hres` reduces to **residue surjectivity** (`f = 1`, the honest datum); the `hgen` package
+  assembles; and **`ker_tameCharacter_extensionIntegers`**: for totally ramified finite
+  separable `L/K`, any uniformizer — **`ker θ₀ = G₁`**, hence `G₀/G₁ ↪ 𝓀_Lˣ`. **Serre IV §§1–2
+  at level 0 on actual local fields: every hypothesis of the Passes-23–28 abstract theory is
+  now a theorem in this setting.** Remaining in the block: the maximal unramified subextension
+  `L₀` (general case); the `IsNonarchimedeanLocalField L` assembly; P27/P28 instantiations
+  (near-one-liners).
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:

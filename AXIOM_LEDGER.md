@@ -1529,3 +1529,38 @@ D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **For totally-ramified data, the monogenicity hypothesis
 of the abstract L2 theory is DISCHARGED — the full tame/wild quotient structure (P24–P28)
 instantiates on totally-ramified finite separable extensions of local fields, end to end.**
+
+### Pass 33 (2026-06-10) — the descent, rung 5: the engine's data discharged; the SHOWCASE assembled
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Two files
+(`Anabelian/ExtensionRamificationData.lean`, `Anabelian/ExtensionTotallyRamified.lean`).
+In-file `#print axioms`, all standard-only:
+
+```
+'Anabelian.exists_pow_maximalIdeal_le_map'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.residue_sub_mem_of_surjective'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.closure_eq_top_of_residue_surjective'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_tameCharacter_extensionIntegers'   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`exists_pow_maximalIdeal_le_map`** — the engine's `he` input holds **unconditionally** for
+  every finite separable `L/K`: in the DVR `𝒪_L`, `(ι ϖ_K)` is automatically a power of `𝔪_L`
+  (ideal classification; the exponent is the ramification index, no numerical bookkeeping
+  needed). *One of the engine's two "totally-ramified" hypotheses was never a hypothesis.*
+- **`residue_sub_mem_of_surjective`** — the `hres` input reduces to surjectivity of the residue
+  extension `𝓀[K] → 𝓀_L` (`f = 1`: the honest totally-ramified datum).
+- **`closure_eq_top_of_residue_surjective`** — the complete `hgen` package (engine + both data).
+- **`ker_tameCharacter_extensionIntegers`** — **the showcase**: for totally ramified finite
+  separable `L/K` and ANY uniformizer of `𝒪_L`, **`ker θ₀ = G₁`** — Pass 25's kernel
+  identification with every hypothesis a theorem; with Pass 24's `tameQuotientHom`,
+  `G₀/G₁ ↪ 𝓀_Lˣ` — **Serre IV §2 Prop. 7 at level 0, as a statement about actual local
+  fields**.
+
+**Honesty.** `hsurj` is the totally-ramified datum in its honest form; the general case routes
+through the maximal unramified subextension `L₀` (named, the block's remaining depth). No new
+`structure`/`class`; no owed witness; D1 N/A; D2 N/A. Recovers nothing from an abstract group;
+R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **The descent block's promise is delivered: every
+hypothesis the abstract L2 theory accumulated (Passes 23–28) is now PROVED for totally ramified
+finite separable extensions of nonarchimedean local fields — five rungs, zero axioms.**

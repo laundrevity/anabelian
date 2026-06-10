@@ -30,3 +30,5 @@ import Anabelian.ExtensionResidue
 import Anabelian.ExtensionResidueFinite
 import Anabelian.ExtensionMonogenic
 import Anabelian.ExtensionMonogenicTop
+import Anabelian.ExtensionRamificationData
+import Anabelian.ExtensionTotallyRamified
