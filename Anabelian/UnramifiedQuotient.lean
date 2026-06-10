@@ -5,6 +5,7 @@ Authors: Conor Mahany
 -/
 import Anabelian.FiniteField
 import Anabelian.GaloisInertia
+import Anabelian.FiniteFieldZHatIso
 import Mathlib.NumberTheory.LocalField.Basic
 import Mathlib.FieldTheory.AbsoluteGaloisGroup
 import Mathlib.GroupTheory.QuotientGroup.Basic
@@ -147,12 +148,35 @@ theorem unramifiedQuotient_procyclic [PerfectField K] :
   exact ⟨φ.ker, inferInstance, QuotientGroup.quotientKerEquivOfSurjective φ hφ,
     _, Anabelian.frobenius_topologicalClosure_eq_top 𝓀[K]⟩
 
--- Reproducible axiom audit. **All four standard-axioms-only** — `residueReduction_surjective` is
+section UniverseZero
+
+variable (K₀ : Type) [Field K₀] [ValuativeRel K₀] [TopologicalSpace K₀]
+  [IsNonarchimedeanLocalField K₀]
+
+/-- **The unramified quotient of a local field's absolute Galois group is `Ẑ`** (Pass 22) —
+the quantitative upgrade of `unramifiedQuotient_procyclic`: `Gal(K̄/K) ⧸ I ≃* Ẑ`, assembling two
+project wholes — Pass 21's `unramifiedQuotientEquiv` (`Gal(K̄/K) ⧸ galoisInertia K ≅ Gal(𝓀̄/𝓀)`)
+and Pass 10's `galoisContinuousMulEquivZHat` (`Gal(𝔽_q̄/𝔽_q) ≃ₜ* Ẑ`, applied to the finite residue
+field `𝓀[K]`). Carries `[PerfectField K₀]` from the surjectivity (the tracked narrowing).
+
+Universe note: stated for `K₀ : Type` (universe 0) because the Pass 6–10 `Ẑ` development is
+packaged through `ProfiniteGrp` at a fixed universe — a packaging artifact, not mathematics
+(`ℚ_p` and every concrete local field live in `Type`). The group-only (not yet topological) form
+reflects that continuity of the residue reduction is still the logged refinement. -/
+noncomputable def unramifiedQuotientZHat [PerfectField K₀] :
+    (Field.absoluteGaloisGroup K₀ ⧸ galoisInertia K₀) ≃* ZHat :=
+  letI : Fintype 𝓀[K₀] := Fintype.ofFinite _
+  (unramifiedQuotientEquiv K₀).trans (galoisContinuousMulEquivZHat 𝓀[K₀]).toMulEquiv
+
+end UniverseZero
+
+-- Reproducible axiom audit. **All standard-axioms-only** — `residueReduction_surjective` is
 -- now a proved `theorem` (Pass-20 discharge), NOT an axiom; it appears in no audit, and no new
 -- axiom replaced it. Ledger: `0 FOUNDATIONAL / 0 DEBT`.
 #print axioms residueReduction_surjective
 #print axioms unramifiedQuotient_iso
 #print axioms residue_procyclic
 #print axioms unramifiedQuotient_procyclic
+#print axioms unramifiedQuotientZHat
 
 end Anabelian

@@ -1028,3 +1028,45 @@ untouched.
 
 Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no `FOUNDATIONAL`; the Pass-5 sub-target
 "tie `N` to the inertia subgroup" is **closed**.
+
+### Pass 22 (2026-06-10) — L2 opening verdict: naive lower numbering DEGENERATE (proved) + the `Ẑ` payoff
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. The planned L2 opening —
+define `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` on the absolute group and prove antitone/normal —
+was **refuted in-pass before being committed**, and the refutation is the deliverable
+(`Anabelian/RamificationDegeneracy.lean`, in-file `#print axioms` all standard-only):
+
+```
+'Anabelian.maximalIdeal_galoisIntegers_sq'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalIdeal_galoisIntegers_pow_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.inertia_maximalIdeal_pow_collapse'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unramifiedQuotientZHat'             depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`maximalIdeal_galoisIntegers_sq` — `𝔪[K̄]² = 𝔪[K̄]`** (idempotent): every `x ∈ 𝔪[K̄]` has a
+  square root in the algebraically closed `K̄`, integral (monic `T² − x` + transitivity), a non-unit,
+  hence in `𝔪[K̄]`; so `x ∈ 𝔪²`. (Divisible value group ⟹ no minimal positive valuation.)
+- `maximalIdeal_galoisIntegers_pow_eq` — `𝔪[K̄]^n = 𝔪[K̄]` (`n ≠ 0`).
+- **`inertia_maximalIdeal_pow_collapse` — the would-be `G_i` all equal `G_0 = galoisInertia K`.**
+  The naive definition would compile and its "theorems" (antitone, normal) would hold **vacuously**
+  — the groups never come apart for distinct `i`. This is the rule-2 discipline applied *preemptively*:
+  the come-apart failure is **proved** (a constructible witness, the project's currency), not asserted,
+  and the vacuous `structure`-free definition was never committed.
+- **Corrected L2 architecture recorded in `ROADMAP.md`** (Serre, *Local Fields*, ch. IV): lower
+  numbering lives at **finite levels** `L/K` (DVR `𝒪_L` — `Ideal.inertia` on `𝔪_L^(i+1)` is still the
+  right device, at the right level); the absolute-group filtration is **upper numbering** via Herbrand
+  `φ`/`ψ` (which is exactly what survives the limit — the degeneracy is the lower numbering's failure
+  to, seen at the limit). Mathlib gaps re-verified (Pass 22): `RamificationGroup.lean` still the entire
+  ramification API (definition-only); no Herbrand; no finite-extension-of-local-field instances.
+- **The `Ẑ` payoff** (`UnramifiedQuotient.lean`): `unramifiedQuotientZHat [PerfectField K] :
+  Gal(K̄/K) ⧸ galoisInertia K ≃* Ẑ` — the quantitative unramified-quotient theorem, a two-line
+  assembly of Pass 21's `unramifiedQuotientEquiv` and Pass 10's `galoisContinuousMulEquivZHat` at the
+  (finite) residue field. Group form only (the topological form awaits the logged continuity
+  refinement); stated for `K : Type` — a universe artifact of the Pass 6–10 `ProfiniteGrp` packaging,
+  documented in the docstring, not mathematics.
+
+No new `structure`/`class`; no new owed witness; D1 N/A; **D2 unchanged** (no valuation on `K̄` in any
+statement). Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. L2 status: **architecture fixed (degenerate route closed,
+proved); finite-level content NOT-STARTED.**

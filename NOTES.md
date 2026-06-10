@@ -2110,3 +2110,87 @@ numbering — are the real L2 body). Alternatives: the imperfect equal-char gene
 remainder, via `Aut(K̄/K) ≅ Gal(K^sep/K)`), or continuity of `residueReductionHom`. Honest frame
 unchanged: R1–R3 distant; L1 essentially complete with its boundary earned, its map named, and its
 kernel identified.
+
+---
+
+# Pass 22 — L2 opening verdict: naive lower numbering is DEGENERATE (proved) + the `Ẑ` payoff (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) The approved plan: open L2 by defining `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` and proving
+`G_0 = galoisInertia`, antitonicity, normality. (ii) Red flag raised before writing a line: `K̄` is
+algebraically closed, so its value group is divisible — `𝔪[K̄]` should be **idempotent**, making the
+filtration collapse. Verify FIRST; if confirmed, the refutation IS the pass (a vacuous definition
+whose "theorems" all hold trivially is the exact iutt failure mode, and rule-2's come-apart test
+would fail for every pair `i ≠ j`). (iii) If degenerate: prove it axiom-free, record the corrected
+architecture, and bank the available real payoff (`≃ Ẑ`). (iv) Do NOT define the degenerate `G_i`.
+
+## The verdict (confirmed): the planned opening was mathematically vacuous
+
+`𝔪[K̄]² = 𝔪[K̄]`: for `x ∈ 𝔪[K̄]`, `K̄` gives `y` with `y² = x` (`IsAlgClosed.exists_pow_nat_eq`);
+`y` is integral over `𝒪[K̄]` (monic `T² − x`, `Polynomial.monic_X_pow_sub_C`) hence over `𝒪[K]`
+(`isIntegral_trans` + `integralClosure.AlgebraIsIntegral`) hence in `𝒪[K̄]`; `y` is a non-unit
+(else `x = y²` is a unit, contra `x ∈ 𝔪` = nonunits, local), so `y ∈ 𝔪[K̄]` and `x = y·y ∈ 𝔪²`.
+Then `𝔪^n = 𝔪` (`n ≠ 0`, induction) and `(𝔪^(i+1)).inertia G = galoisInertia K` for EVERY `i`
+(`inertia_maximalIdeal_pow_collapse`) — the would-be `G_i` never come apart.
+
+**This corrects the Pass-21 scope-pointer (and the pre-pass plan presented to the user), which had
+recommended exactly this definition.** The discipline's value is that the refutation was *proved
+before the definition was committed* — preemptive rule-2, a constructed failure as deliverable, in
+the tradition of the Pass-13 fit-verdict and Pass-16/17 route reversals.
+
+## What was built (all standard-axioms-only)
+
+- `Anabelian/RamificationDegeneracy.lean`: `maximalIdeal_galoisIntegers_sq` (`𝔪[K̄]² = 𝔪[K̄]`),
+  `maximalIdeal_galoisIntegers_pow_eq` (`𝔪^n = 𝔪`, `n ≠ 0`),
+  `inertia_maximalIdeal_pow_collapse` (the collapse `G_i = G_0` ∀ `i`). Side consequences noted:
+  `𝒪[K̄]` non-Noetherian, no uniformizer — DVR-style arguments must stay at finite level.
+- `Anabelian/UnramifiedQuotient.lean` (+import `FiniteFieldZHatIso`): **`unramifiedQuotientZHat
+  [PerfectField K] : Gal(K̄/K) ⧸ galoisInertia K ≃* Ẑ`** — the quantitative unramified-quotient
+  theorem, assembling Pass 21's `unramifiedQuotientEquiv` with Pass 10's
+  `galoisContinuousMulEquivZHat` at the finite residue field `𝓀[K]` (`Fintype` via
+  `Fintype.ofFinite`). Two project wholes, one theorem. Universe note: `K : Type` (the Pass 6–10
+  `Ẑ` development is `ProfiniteGrp`-packaged at universe 0 — an artifact, documented); group form
+  only (topological form awaits the continuity refinement).
+- **Corrected L2 architecture** (`ROADMAP.md`, L2 now IN-PROGRESS/architecture-fixed): (1)
+  finite-level `G_i(L/K)` over a DVR + basic theory (tame `G_0/G_1 ↪ 𝓀_L^×`, wild `G_1` pro-`p`);
+  (2) Herbrand `φ`/`ψ` + upper numbering; (3) the limit `G^v ≤ Gal(K̄/K)` (upper numbering is what
+  survives limits — the degeneracy is lower numbering's failure to); (4) Hasse–Arf. Gaps re-verified:
+  `RamificationGroup.lean` still definition-only; Herbrand ABSENT; finite-extension
+  `IsNonarchimedeanLocalField` instances ABSENT (`NumberTheory/LocalField/Basic.lean` is the only
+  file there).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| define `G_i` on `Gal(K̄/K)`, prove antitone/normal | **degenerate** — `𝔪[K̄]` idempotent, all `G_i = G_0`; proved, not asserted | ✗ plan refuted — refutation banked instead |
+| degeneracy proof might need value-group machinery | pure ring theory: square roots + integrality + locality (~25 lines) | ✓ cheaper |
+| `≃ Ẑ` payoff a one-liner | needed `Fintype 𝓀[K]` (`ofFinite`) + a universe restriction to `Type` (`ProfiniteGrp` packaging) | ✓ minor friction |
+
+## Build + headline
+
+`lake build`: **8496 jobs, clean**; all audits standard-only; zero `axiom` declarations project-wide.
+**HEADLINE: the naive absolute-group lower-numbering filtration is PROVED degenerate (the L2
+architecture is now fixed on the classical finite-level/upper-numbering ladder), and the unramified
+quotient is now quantitatively `Ẑ`** (`Gal(K̄/K) ⧸ I ≃* Ẑ`, Passes 10+21 assembled). D1 N/A; **D2
+unchanged**. No new `structure`/`class`; no new owed witness. Recovers nothing from an abstract
+group; R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. Progress = a proved refutation that re-routed L2 before any vacuous
+  definition landed, + one real assembled theorem (`≃ Ẑ`).
+
+## Scope: pointer to Pass 23
+
+**Open L2 at the finite level.** First job is the prerequisite inventory + bricks: (a) does Mathlib
+make a finite extension `L/K` of a nonarch local field a nonarch local field (instances ABSENT in
+`LocalField/Basic.lean` — check wider: `Valued`/`DiscreteValuationRing` routes)? (b) the
+`Gal(L/K)`-action bricks on `𝒪_L = integralClosure 𝒪[K] L` (finite-level analogues of P11–14:
+invariance, fixed ring, local-ness — much should specialize from the existing machinery); (c) then
+`G_i(L/K) := (𝔪_L^(i+1)).inertia Gal(L/K)` with the REAL (non-vacuous, DVR) basic theory: `G_0` =
+inertia, strictly-eventually-trivial (`G_i = 1` for `i` large — the DVR separation that `K̄` lacks),
+antitone, normal in the decomposition group. Alternates: continuity of `residueReductionHom`
+(upgrades `unramifiedQuotientZHat` to `≃ₜ*`), or the imperfect equal-char generality. Honest frame:
+R1–R3 distant; L1 done in substance; L2 now starts on a sound foundation.
