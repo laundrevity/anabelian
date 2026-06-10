@@ -8,7 +8,7 @@ import Anabelian.ResidueReductionInvariant
 import Anabelian.ResidueReductionContinuity
 
 /-!
-# Rung L1, post-discharge: the named residue reduction and its kernel — the inertia subgroup (Pass 21)
+# Rung L1, post-discharge: the named residue reduction and its kernel (Pass 21)
 
 Pass 20 discharged `residueReduction_surjective` as an *existential* (`∃ φ, Surjective φ`): the
 concrete map was buried inside the proof. This pass **names** it and identifies its kernel — the
@@ -96,11 +96,9 @@ variable (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchi
 
 attribute [local instance] isLocalRing_galoisIntegers
 
-set_option synthInstance.maxHeartbeats 1000000
--- file-wide: as in Pass 20, the `MulAction (Gal(K̄/K)) (Ideal 𝒪[K̄])` / stabilizer instance
--- searches are expensive under `import Mathlib` + the Anabelian instances; they resolve, just past
--- the default. A search-cost matter, not logical (`#print axioms` below is standard-only).
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **The decomposition group is everything.** `Gal(K̄/K)` stabilizes `𝔪[K̄]`: each `σ` permutes
 the maximal ideals of `𝒪[K̄]` (`σ • 𝔪[K̄] = (𝔪[K̄]).comap σ⁻¹` is maximal), and the local `𝒪[K̄]`
 (Pass 18) has only one. Classically: a local field has a unique prime, so the decomposition group
@@ -114,6 +112,8 @@ theorem galoisIntegers_stabilizer_eq_top :
   rw [MulAction.mem_stabilizer_iff, Ideal.pointwise_smul_eq_comap]
   exact eq_maximalIdeal inferInstance
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- The (iso)morphism `Gal(K̄/K) →* stabilizer 𝔪[K̄]` packaging `galoisIntegers_stabilizer_eq_top`:
 every Galois element, bundled with the proof that it stabilizes `𝔪[K̄]`. Surjective
 (`galoisToStabilizer_surjective`), so `stabilizerHom`'s domain restriction is no restriction. -/
@@ -125,11 +125,15 @@ def galoisToStabilizer :
   map_one' := rfl
   map_mul' _ _ := rfl
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- `galoisToStabilizer` is surjective (immediate from `stabilizer = ⊤`). -/
 theorem galoisToStabilizer_surjective :
     Function.Surjective (galoisToStabilizer K) :=
   fun τ => ⟨τ.1, Subtype.ext rfl⟩
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **THE residue reduction, as a named map** (Pass 21; previously existential inside the Pass-20
 discharge): `Gal(K̄/K) →* Gal(𝓀̄/𝓀)`, the composite of `galoisToStabilizer` (decomposition = ⊤),
 Mathlib's `Ideal.Quotient.stabilizerHom` (act on `𝒪[K̄]/𝔪[K̄]`), and `galoisResidueAut` (Pass 19's
@@ -145,6 +149,8 @@ noncomputable def residueReductionHom :
         (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)).comp
       (galoisToStabilizer K))
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 set_option maxHeartbeats 1000000 in
 -- elaboration heartbeats raised for the keystone application, exactly as in the Pass-20 discharge.
 /-- **The residue reduction is surjective** — the Pass-20 discharge, restated for the *named* map
@@ -164,6 +170,8 @@ theorem residueReductionHom_surjective [PerfectField K] :
   simp only [MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
   exact (galoisResidueAut K).surjective.comp (hsurj.comp (galoisToStabilizer_surjective K))
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **The inertia subgroup of `Gal(K̄/K)`, named.** `Ideal.inertia` of `𝔪[K̄]`:
 `{σ | ∀ b ∈ 𝒪[K̄], σ b − b ∈ 𝔪[K̄]}` — the classical pointwise condition (`v(σx − x) > 0`;
 Serre, *Local Fields*, ch. IV §1), i.e. "acts trivially on the residue field". Typed as a
@@ -175,6 +183,8 @@ noncomputable def galoisInertia : Subgroup (Field.absoluteGaloisGroup K) :=
   (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))).inertia
     (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- Membership in the inertia subgroup, unfolded: `σ ∈ I ↔ ∀ b ∈ 𝒪[K̄], σ b − b ∈ 𝔪[K̄]` — the
 concrete realization of Pass 4's abstract `mem_inertiaSubgroup_iff` ("acts trivially on the
 residue field") for `𝒪[K̄]/𝒪[K]`. (Stated for `σ` in the `AlgEquiv` form of the Galois group,
@@ -185,6 +195,8 @@ theorem mem_galoisInertia_iff (σ : AlgebraicClosure K ≃ₐ[K] AlgebraicClosur
         σ • b - b ∈ maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) :=
   AddSubgroup.mem_inertia
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **The identification `N = inertia`** — the sub-target logged at Pass 5 ("tie `N` to the
 inertia subgroup"), closed: the kernel of the residue reduction is exactly the inertia subgroup.
 Proof: `galoisResidueAut` is injective, so `ker(residueReductionHom) = ker(stabilizerHom ∘
@@ -204,6 +216,8 @@ theorem ker_residueReductionHom :
     EmbeddingLike.map_eq_one_iff]
   exact h.trans Subgroup.mem_subgroupOf
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **Inertia is normal in the full absolute Galois group** — because it is a kernel
 (`ker_residueReductionHom`); classically, because the decomposition group is everything
 (`galoisIntegers_stabilizer_eq_top`). Unconditional (no `PerfectField`). -/
@@ -211,6 +225,8 @@ instance galoisInertia_normal : (galoisInertia K).Normal := by
   rw [← ker_residueReductionHom]
   exact MonoidHom.normal_ker (residueReductionHom K)
 
+set_option synthInstance.maxHeartbeats 1000000 in
+-- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.
 /-- **The unramified quotient theorem, classical form** (upgrading Pass 5/20's existential
 `unramifiedQuotient_iso`): `Gal(K̄/K) ⧸ I ≃* Gal(𝓀̄/𝓀)` with `I = galoisInertia K` the *named*
 inertia subgroup — decomposition mod inertia is the residue Galois group, and here decomposition

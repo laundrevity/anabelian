@@ -2418,6 +2418,10 @@ network-independent), extracted to session-local disk. Two environment facts tha
 2. **Each bash call is a bwrap sandbox with `--die-with-parent` + 45 s cap** — no background
    builds survive a call. Builds fit anyway: with oleans local and the page cache warm,
    the new file elaborated in ~2 s; the full-project build (8,499 jobs, mostly replays) in ~30 s.
+   **Known exception (post-Pass-27 style cleanup): `GaloisInertia.lean` elaborates LONGER than
+   one 45 s call** (ten declarations with 1M-heartbeat instance searches; no intra-file
+   checkpointing) — edits to that file cannot be compile-verified in-sandbox and must be
+   verified by a host-side `lake build` before committing.
 
 ## Route-first-step probes (against the pinned Mathlib source, before writing)
 

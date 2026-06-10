@@ -150,7 +150,7 @@ noncomputable def tameCharacter (π : ↥A) (hspan : maximalIdeal ↥A = Ideal.s
     rw [map_mul]
     congr 1
     apply Units.ext
-    show residue ↥A ↑(smulUnit K σ.1 (tameUnit K π hspan τ.1))
+    change residue ↥A ↑(smulUnit K σ.1 (tameUnit K π hspan τ.1))
         = residue ↥A ↑(tameUnit K π hspan τ.1)
     rw [smulUnit_val]
     exact residue_smul_eq_of_mem_ramificationGroup_zero K σ.2 _
@@ -171,7 +171,7 @@ theorem tameCharacter_eq_one (π : ↥A) (hspan : maximalIdeal ↥A = Ideal.span
       ring
     exact mul_left_cancel₀ hπ0 h2
   apply Units.ext
-  show residue ↥A ↑(tameUnit K π hspan σ.1) = 1
+  change residue ↥A ↑(tameUnit K π hspan σ.1) = 1
   have hsub : residue ↥A ↑(tameUnit K π hspan σ.1) = residue ↥A 1 :=
     (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mpr
       (by rw [hu1, hspan]; exact Ideal.mem_span_singleton.mpr ⟨r, rfl⟩)
@@ -205,7 +205,7 @@ theorem tameCharacter_eq_of_span_eq (π : ↥A) (hspan : maximalIdeal ↥A = Ide
     calc π * ↑(tameUnit K π hspan σ.1) * (σ.1 • ↑w)
         = π * (↑w * ↑w⁻¹) * ↑(tameUnit K π hspan σ.1) * (σ.1 • ↑w) := by rw [hwinv]; ring
       _ = π * ↑w * (↑w⁻¹ * ↑(tameUnit K π hspan σ.1) * (σ.1 • ↑w)) := by ring
-  show residue ↥A ↑(tameUnit K π hspan σ.1) = residue ↥A ↑(tameUnit K π' hspan' σ.1)
+  change residue ↥A ↑(tameUnit K π hspan σ.1) = residue ↥A ↑(tameUnit K π' hspan' σ.1)
   rw [tameUnit_unique K π' hspan' hπ0' hu', Units.val_mul, Units.val_mul, smulUnit_val,
     map_mul, map_mul, residue_smul_eq_of_mem_ramificationGroup_zero K σ.2 (w : ↥A)]
   have hwres : residue ↥A ↑w⁻¹ * residue ↥A ↑w = 1 := by

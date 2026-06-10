@@ -159,7 +159,7 @@ noncomputable def additiveCharacter (π : ↥A) (hspan : maximalIdeal ↥A = Ide
         = residue ↥A (additiveCoeff K π hspan τ) :=
       residue_smul_eq_of_mem_ramificationGroup_zero K
         (ramificationGroup_antitone K A (Nat.zero_le i) σ.2) _
-    show Multiplicative.ofAdd (residue ↥A (additiveCoeff K π hspan (σ * τ))) = _
+    change Multiplicative.ofAdd (residue ↥A (additiveCoeff K π hspan (σ * τ))) = _
     rw [hco, map_add, map_mul, hres1, hres2, one_mul, ofAdd_add]
 
 /-- **`G_{i+1}` lies in the kernel of `θ_i`**. -/
@@ -172,7 +172,7 @@ theorem additiveCharacter_eq_one (π : ↥A) (hspan : maximalIdeal ↥A = Ideal.
   obtain ⟨c, hc⟩ := h
   have hcoeff : additiveCoeff K π hspan σ = π * c :=
     additiveCoeff_unique K π hspan hπ0 (by rw [hc]; ring)
-  show Multiplicative.ofAdd (residue ↥A (additiveCoeff K π hspan σ)) = 1
+  change Multiplicative.ofAdd (residue ↥A (additiveCoeff K π hspan σ)) = 1
   rw [hcoeff]
   exact ofAdd_eq_one.mpr (Ideal.Quotient.eq_zero_iff_mem.mpr (by
     rw [hspan]
@@ -259,7 +259,7 @@ theorem additiveCoeff_residue_not_additive_at_zero :
   have hinvol : σ0 * σ0 = 1 := by
     apply Subtype.ext
     apply Subtype.ext
-    show laurentNegXAlgEquiv ℚ * laurentNegXAlgEquiv ℚ = 1
+    change laurentNegXAlgEquiv ℚ * laurentNegXAlgEquiv ℚ = 1
     nth_rewrite 2 [← inv_laurentNegXAlgEquiv ℚ]
     exact mul_inv_cancel _
   -- a_{σ₀} = −2
@@ -293,7 +293,8 @@ theorem additiveCoeff_residue_not_additive_at_zero :
     exact h5
   have hunit : IsUnit (4 : ↥(laurentIntegers ℚ)) := by
     refine isUnit_of_constantCoeff_ne_zero ℚ (g := (4 : PowerSeries ℚ)) ?_ ?_
-    · show ((4 : ↥(laurentIntegers ℚ)) : LaurentSeries ℚ) = ((4 : PowerSeries ℚ) : LaurentSeries ℚ)
+    · change ((4 : ↥(laurentIntegers ℚ)) : LaurentSeries ℚ)
+        = ((4 : PowerSeries ℚ) : LaurentSeries ℚ)
       have hl : ((4 : ↥(laurentIntegers ℚ)) : LaurentSeries ℚ) = (4 : LaurentSeries ℚ) := by
         norm_cast
       have hr : ((4 : PowerSeries ℚ) : LaurentSeries ℚ) = (4 : LaurentSeries ℚ) :=

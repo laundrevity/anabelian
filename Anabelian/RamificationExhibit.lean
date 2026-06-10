@@ -80,21 +80,21 @@ variable (k : Type*) [Field k]
 /-- `evalNegHom` is an involution of `k⟦X⟧`. -/
 theorem evalNegHom_evalNegHom (f : PowerSeries k) :
     PowerSeries.evalNegHom (PowerSeries.evalNegHom f) = f := by
-  show PowerSeries.rescale (-1 : k) (PowerSeries.rescale (-1 : k) f) = f
+  change PowerSeries.rescale (-1 : k) (PowerSeries.rescale (-1 : k) f) = f
   rw [PowerSeries.rescale_rescale, neg_one_mul, neg_neg, PowerSeries.rescale_one,
     RingHom.id_apply]
 
 /-- `evalNegHom` fixes constant coefficients. -/
 theorem constantCoeff_evalNegHom (f : PowerSeries k) :
     PowerSeries.constantCoeff (PowerSeries.evalNegHom f) = PowerSeries.constantCoeff f := by
-  show PowerSeries.constantCoeff (PowerSeries.rescale (-1 : k) f) = _
+  change PowerSeries.constantCoeff (PowerSeries.rescale (-1 : k) f) = _
   rw [← PowerSeries.coeff_zero_eq_constantCoeff, PowerSeries.coeff_rescale]
   simp
 
 /-- `evalNegHom` fixes constants. -/
 theorem evalNegHom_C (c : k) :
     PowerSeries.evalNegHom (PowerSeries.C c) = PowerSeries.C c := by
-  show PowerSeries.rescale (-1 : k) (PowerSeries.C c) = _
+  change PowerSeries.rescale (-1 : k) (PowerSeries.C c) = _
   ext n
   rw [PowerSeries.coeff_rescale, PowerSeries.coeff_C]
   split_ifs with h
@@ -110,7 +110,7 @@ theorem laurentNegXAux_isUnit (y : Submonoid.powers (PowerSeries.X : PowerSeries
   obtain ⟨n, hn⟩ := y.2
   have h1 : laurentNegXAux k y =
       (algebraMap (PowerSeries k) (LaurentSeries k) (-PowerSeries.X)) ^ n := by
-    show (algebraMap (PowerSeries k) (LaurentSeries k)) (PowerSeries.evalNegHom y.1) = _
+    change (algebraMap (PowerSeries k) (LaurentSeries k)) (PowerSeries.evalNegHom y.1) = _
     rw [← hn, map_pow, PowerSeries.evalNegHom_X, map_pow]
   rw [h1]
   refine IsUnit.pow n (isUnit_iff_ne_zero.mpr ?_)
@@ -151,7 +151,7 @@ noncomputable def laurentNegXAlgEquiv : LaurentSeries k ≃ₐ[k] LaurentSeries 
         rw [HahnSeries.algebraMap_apply', LaurentSeries.coe_algebraMap,
           PowerSeries.algebraMap_apply]
         simp
-      show laurentNegXHom k (algebraMap k (LaurentSeries k) c) = algebraMap k (LaurentSeries k) c
+      change laurentNegXHom k (algebraMap k (LaurentSeries k) c) = algebraMap k (LaurentSeries k) c
       rw [hC, laurentNegXHom_algebraMap, evalNegHom_C])
 
 @[simp] theorem laurentNegXAlgEquiv_apply (f : LaurentSeries k) :
@@ -217,7 +217,7 @@ theorem mem_span_laurentUniformizer {x : ↥(laurentIntegers k)} {g : PowerSerie
   rw [Ideal.mem_span_singleton]
   refine ⟨⟨(h : LaurentSeries k), coe_mem_laurentIntegers k h⟩, ?_⟩
   apply Subtype.ext
-  show (x : LaurentSeries k) =
+  change (x : LaurentSeries k) =
     ((PowerSeries.X : PowerSeries k) : LaurentSeries k) * ((h : PowerSeries k) : LaurentSeries k)
   rw [hx, hh, map_mul]
 
@@ -230,11 +230,11 @@ theorem isUnit_of_constantCoeff_ne_zero {x : ↥(laurentIntegers k)} {g : PowerS
   refine isUnit_iff_exists.mpr
     ⟨⟨((u⁻¹ : (PowerSeries k)ˣ) : PowerSeries k), coe_mem_laurentIntegers k _⟩, ?_, ?_⟩
   · apply Subtype.ext
-    show (x : LaurentSeries k) * (((u⁻¹ : (PowerSeries k)ˣ) : PowerSeries k) : LaurentSeries k)
+    change (x : LaurentSeries k) * (((u⁻¹ : (PowerSeries k)ˣ) : PowerSeries k) : LaurentSeries k)
       = 1
     rw [hx, ← map_mul, ← hu, Units.mul_inv, map_one]
   · apply Subtype.ext
-    show (((u⁻¹ : (PowerSeries k)ˣ) : PowerSeries k) : LaurentSeries k) * (x : LaurentSeries k)
+    change (((u⁻¹ : (PowerSeries k)ˣ) : PowerSeries k) : LaurentSeries k) * (x : LaurentSeries k)
       = 1
     rw [hx, ← map_mul, ← hu, Units.inv_mul, map_one]
 
@@ -294,7 +294,7 @@ theorem laurentNegX_mem_decompositionSubgroup :
   rw [MulAction.mem_stabilizer_iff]
   ext f
   rw [ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem, inv_laurentNegXAlgEquiv]
-  show laurentNegXAlgEquiv k f ∈ laurentIntegers k ↔ f ∈ laurentIntegers k
+  change laurentNegXAlgEquiv k f ∈ laurentIntegers k ↔ f ∈ laurentIntegers k
   constructor
   · intro hf
     have h1 := laurentNegXAlgEquiv_mem k _ hf
@@ -321,7 +321,7 @@ theorem laurentNegXDecomp_mem_ramificationGroup_zero :
   obtain ⟨g, hg⟩ := (mem_laurentIntegers_iff k (a : LaurentSeries k)).mp a.2
   refine mem_span_laurentUniformizer k
     (g := PowerSeries.evalNegHom g - g) ?_ ?_
-  · show ((laurentNegXDecomp k • a : ↥(laurentIntegers k)) : LaurentSeries k)
+  · change ((laurentNegXDecomp k • a : ↥(laurentIntegers k)) : LaurentSeries k)
         - (a : LaurentSeries k) = _
     rw [coe_laurentNegXDecomp_smul, ← hg, laurentNegXAlgEquiv_coe, map_sub]
   · rw [map_sub, constantCoeff_evalNegHom, sub_self]
@@ -337,7 +337,7 @@ theorem laurentNegXDecomp_smul_uniformizer :
       = -1 := by
     rw [Units.val_neg, Units.val_one]
     rfl
-  show _ = ((laurentUniformizer k : ↥(laurentIntegers k)) : LaurentSeries k) *
+  change _ = ((laurentUniformizer k : ↥(laurentIntegers k)) : LaurentSeries k) *
     ((↑(-1 : (↥(laurentIntegers k))ˣ) : ↥(laurentIntegers k)) : LaurentSeries k)
   rw [h1, coe_laurentUniformizer, mul_neg_one]
 
@@ -371,7 +371,7 @@ theorem laurentNegXDecomp_notMem_ramificationGroup_one (h2 : (2 : k) ≠ 0) :
   -- −1 = 1 in 𝓀 means −1 − 1 = −2 ∈ 𝔪 = (π)
   have h5 : ((-1 : ↥(laurentIntegers k)) - 1) ∈ maximalIdeal ↥(laurentIntegers k) := by
     refine (Ideal.Quotient.mk_eq_mk_iff_sub_mem _ _).mp ?_
-    show residue ↥(laurentIntegers k) (-1) = residue ↥(laurentIntegers k) 1
+    change residue ↥(laurentIntegers k) (-1) = residue ↥(laurentIntegers k) 1
     rw [map_one, h3']
   rw [maximalIdeal_laurentIntegers_eq_span] at h5
   obtain ⟨c, hc⟩ := Ideal.mem_span_singleton.mp h5
