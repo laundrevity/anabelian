@@ -2194,3 +2194,82 @@ inertia, strictly-eventually-trivial (`G_i = 1` for `i` large — the DVR separa
 antitone, normal in the decomposition group. Alternates: continuity of `residueReductionHom`
 (upgrades `unramifiedQuotientZHat` to `≃ₜ*`), or the imperfect equal-char generality. Honest frame:
 R1–R3 distant; L1 done in substance; L2 now starts on a sound foundation.
+
+---
+
+# Pass 23 — rung L2 OPENED: lower-numbering ramification filtration + basic theory (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Open L2 per the corrected architecture: the filtration where `𝔪`-powers separate. (ii) Choice of
+setting: Mathlib's own `ValuationSubring` ramification setting (Pass 4's) — it has the
+decomposition-group `MulSemiringAction` on `A` ready-made, and its file carries the literal
+`TODO: Define higher ramification groups in lower numbering`; the abstract form subsumes the
+finite-level `𝒪_L` case (Noetherian ⟹ Krull) without waiting on the absent finite-extension
+local-field instances. (iii) Deliverables: `G_i` + mem-iff + antitone + `G_0 = inertiaSubgroup` +
+normality + separation (hypothesis-explicit) + Noetherian discharge; cut eventual-triviality-for-
+finite if fiddly. (iv) State the Krull hypothesis explicitly (Pass-22 lesson); make no
+irremovability claim (no rule-2 obligation incurred).
+
+## Inventory finds (route-first-step probe)
+
+- `RamificationGroup.lean` (54 lines): `decompositionSubgroup` = stabilizer of `A` in `L ≃ₐ[K] L`;
+  **`decompositionSubgroupMulSemiringAction : MulSemiringAction (decompositionSubgroup K A) A`**
+  (instance, ready-made); `inertiaSubgroup` = ker of the residue action. The TODO is verbatim.
+- `IsLocalRing.ResidueField.residue_smul : residue R (g • r) = g • residue R r` — `@[simp]`, `rfl`;
+  the bridge lemma for `G_0 = inertiaSubgroup`.
+- **`Ideal.iInf_pow_eq_bot_of_isLocalRing`** (`RingTheory/Filtration.lean`) — Krull intersection for
+  Noetherian local rings: discharges the separation hypothesis in the Noetherian case.
+- `Ideal.map_isMaximal_of_equiv` (instance) + `IsLocalRing.eq_maximalIdeal` + `Ideal.map_pow` — the
+  crux `smul_mem_maximalIdeal_pow` assembles from these.
+- `IsNonarchimedeanLocalField`: still exactly one Mathlib file, no finite-extension instances
+  (re-verified) — the local-field instantiation `A = 𝒪_L` stays blocked, logged.
+
+## What was built (`Anabelian/RamificationFiltration.lean`, all standard-axioms-only)
+
+`ramificationGroup K A i := (𝔪_A^(i+1)).inertia (decompositionSubgroup K A)` (ℕ-indexed, `G_0` =
+inertia, Serre's `G_{−1}` = ambient decomposition group), with: `mem_ramificationGroup_iff`;
+`smul_mem_maximalIdeal_pow` (crux: the action preserves `𝔪_A^n`); `ramificationGroup_antitone`;
+**`ramificationGroup_zero : G_0 = A.inertiaSubgroup K`** (ties to Pass 4's `mem_inertiaSubgroup_iff`
+via `residue_smul`; the residue/`Quotient.mk` defeq handled by a term-mode bridge `hres`, since `rw`
+needs syntactic match); **`ramificationGroup_normal`** (Serre IV §1 Prop. 1 — conjugation transports
+the inertia condition along the crux); **`iInf_ramificationGroup_eq_bot`** (separation under explicit
+`⨅ 𝔪_A^n = ⊥`; fixing `A` pointwise ⟹ fixing `L` via `mem_or_inv_mem` + `map_inv₀`);
+`iInf_ramificationGroup_eq_bot_of_isNoetherianRing` (Krull discharge — field-or-DVR = the finite
+level); `exists_notMem_ramificationGroup` (per-element escape).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| need to build the decomposition action on `A` | Mathlib instance `decompositionSubgroupMulSemiringAction` ready-made | ✓ free |
+| `G_0 = inertiaSubgroup` may need a new residue-action apply lemma | `residue_smul` present, `@[simp]`/`rfl`; only friction was `residue` vs `Quotient.mk` syntactic mismatch (term-mode bridge) | ✓ |
+| Krull intersection might be absent for valuation rings | `Ideal.iInf_pow_eq_bot_of_isLocalRing` present (Noetherian local) — exactly the needed discharge | ✓ |
+| eventual triviality `∃ i, G_i = ⊥` for finite groups this pass | cut (antitone-chain-in-finite-group epsilon); per-element escape proved instead; logged | – honest cut |
+
+## Build + headline
+
+`lake build`: **8497 jobs, clean**; all audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: L2 is OPEN — the lower-numbering ramification filtration is defined (the
+Mathlib-TODO object) with its basic theory proved: `G_0` = inertia, antitone, normal in the
+decomposition group, and separating exactly where it should (Krull/DVR regime), in proved contrast
+to the Pass-22 collapse.** No claim of hypothesis-irremovability (none needed; none dodged). D1 N/A;
+**D2 N/A** (`ValuationSubring`-native). No new `structure`/`class`; no new owed witness. Recovers
+nothing from an abstract group; R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. L2's first real content: the filtration + five basic theorems.
+
+## Scope: pointer to Pass 24
+
+L2 continuation, three candidate jobs in rough leverage order: (a) **the tame-quotient embedding**
+`G_0/G_1 ↪ 𝓀^×` (`σ ↦ σ(π)/π mod 𝔪` for a uniformizer `π` — needs the DVR uniformizer API, present
+in Mathlib for DVRs; the first structurally-rich L2 theorem, gateway to `G_0/G_1` cyclic + wild
+`G_1` pro-`p`); (b) **the concrete properly-decreasing chain** — `G_0 ≠ G_1` for an explicitly
+ramified extension (the come-apart exhibit; needs a concrete `ValuationSubring` with computable
+Galois action — possibly `ℤ_p[√p]`-style or a Laurent-series toy); (c) **eventual triviality** for
+finite decomposition groups (antitone chain in a finite group stabilizes at `⨅ = ⊥`). The
+local-field instantiation (`A = 𝒪_L`, finite `L/K`) stays blocked on the absent
+`IsNonarchimedeanLocalField`-finite-extension instances (gap logged; building them is itself a
+candidate pass). Honest frame: R1–R3 distant; L1 done in substance; L2 now has its first rung built.

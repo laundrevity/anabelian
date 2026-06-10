@@ -1070,3 +1070,58 @@ statement). Recovers nothing from an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. L2 status: **architecture fixed (degenerate route closed,
 proved); finite-level content NOT-STARTED.**
+
+### Pass 23 (2026-06-10) — rung L2 OPENED: lower-numbering ramification filtration + basic theory
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Fills (at project level) the
+literal Mathlib TODO in `RingTheory/Valuation/RamificationGroup.lean` — *"Define higher ramification
+groups in lower numbering"* — in that file's own `ValuationSubring` setting (Pass 4's setting), on the
+Pass-22-corrected architecture: the filtration is developed **with the separation hypothesis
+explicit**, because both regimes are now proved (Pass 22: collapse at idempotent `𝔪[K̄]`; this pass:
+separation under Krull). `Anabelian/RamificationFiltration.lean` (in-file `#print axioms`, all
+standard-only):
+
+```
+'Anabelian.ramificationGroup'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_ramificationGroup_iff'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smul_mem_maximalIdeal_pow'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_antitone'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_zero'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_normal'       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.iInf_ramificationGroup_eq_bot'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.iInf_ramificationGroup_eq_bot_of_isNoetherianRing'
+                                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_notMem_ramificationGroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `ramificationGroup K A i` — **`G_i` in lower numbering** (Serre IV §1): `Ideal.inertia` of
+  `𝔪_A^(i+1)` under the decomposition-group action (the Pass-21 device, at the non-degenerate level).
+  ℕ-indexed, `G_0` = inertia; Serre's `G_{−1}` = the ambient decomposition group.
+- `smul_mem_maximalIdeal_pow` — the crux: the action preserves `𝔪_A^n` (ring automorphisms of a local
+  ring fix `𝔪` setwise — `map_isMaximal_of_equiv` + `eq_maximalIdeal` + `Ideal.map_pow`).
+- `ramificationGroup_antitone`; **`ramificationGroup_zero : G_0 = inertiaSubgroup`** (ties the
+  filtration base to Mathlib's/Pass-4's inertia via `residue_smul` + `mem_inertiaSubgroup_iff`);
+  **`ramificationGroup_normal`** (normal in the decomposition group, Serre IV §1 Prop. 1).
+- **`iInf_ramificationGroup_eq_bot`** — separation under the explicit Krull hypothesis
+  `⨅ 𝔪_A^n = ⊥`: a `σ` in every `G_i` fixes `A` pointwise hence all of `L` (valuation-subring
+  dichotomy `mem_or_inv_mem`) hence `= 1`. **Discharged in the Noetherian case**
+  (`iInf_ramificationGroup_eq_bot_of_isNoetherianRing`, via Mathlib's Krull intersection
+  `Ideal.iInf_pow_eq_bot_of_isLocalRing`) — Noetherian valuation ring = field-or-DVR, exactly the
+  finite-level regime. Plus the per-element escape (`exists_notMem_ramificationGroup`).
+
+**Honesty.** The hypothesis-parametrized shape is *forced* by Pass 22, and **no claim is made that the
+Krull hypothesis is irremovable from the separation conclusion** (that would need a constructed `A`
+with non-separating powers *and* a nontrivial inertia element — not attempted; no rule-2 obligation
+incurred, none dodged: `ramificationGroup` is a `Subgroup`-valued `def`, not a `structure`/`class`).
+The named remaining L2 work (in `ROADMAP.md`): a **concrete properly-decreasing chain** (`G_0 ≠ G_1`
+for an explicitly ramified extension — the come-apart exhibit the definition eventually deserves),
+eventual triviality for finite decomposition groups, the tame/wild structure, Herbrand/upper
+numbering, and the local-field instantiation `A = 𝒪_L` (blocked on the re-verified-absent
+finite-extension `IsNonarchimedeanLocalField` instances).
+
+No new `structure`/`class`; no new owed witness; D1 N/A; **D2 N/A** (the file is
+`ValuationSubring`-native — no spectral structure anywhere). Recovers nothing from an abstract group;
+R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2: lower numbering defined + basic theory proved** (the
+rung's first real content).

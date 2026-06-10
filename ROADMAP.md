@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 22 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 23 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -317,9 +317,10 @@ quantitative payoff** `Gal(K̄/K) ⧸ I ≃* Ẑ` (`unramifiedQuotientZHat`, ass
 **refuted the naive L2 opening** (the degeneracy `𝔪[K̄]² = 𝔪[K̄]`; see L2). The project holds
 **`0 FOUNDATIONAL / 0 DEBT`** (**zero `axiom` declarations** project-wide). **Generality (Job B):** the
 surjectivity results carry `[PerfectField K]`; the imperfect equal-char case is the tracked remainder
-above. **Honest next step (Pass 23):** open **L2 at the finite level** — `G_i(L/K)` for finite Galois
-`L/K` over a DVR, per the corrected architecture (L2 below); its prerequisite inventory
-(finite-extension local-field instances, `Gal(L/K)`-action on `𝒪_L`) is the first job. Or the smaller
+above. **Pass 23 opened L2 proper**: the lower-numbering filtration + basic theory, abstract
+`ValuationSubring` form (see L2 below). **Honest next step (Pass 24):** L2 continuation — the concrete
+properly-decreasing chain (`G_0 ≠ G_1` for an explicitly ramified extension), eventual triviality for
+finite decomposition groups, or the tame-quotient embedding `G_0/G_1 ↪ 𝓀^×`; or the smaller L1
 refinements (continuity of the reduction; the imperfect-case generality). No second boundary was ever
 stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied to axiom-free
 bricks.
@@ -361,11 +362,24 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; no filtration content yet)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
 ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
-Herbrand function, no upper numbering).
+Herbrand function, no upper numbering; the file carries a literal `TODO: Define higher ramification
+groups in lower numbering`).
+
+- **Pass 23 (`Anabelian/RamificationFiltration.lean`) — lower numbering DEFINED + basic theory,
+  axiom-free, on the corrected architecture.** In Mathlib's own `ValuationSubring` setting (the
+  Pass-4 file's setting, filling its TODO at project level): `ramificationGroup K A i` =
+  `G_i = (𝔪_A^(i+1)).inertia (decompositionSubgroup K A)` with: `mem_ramificationGroup_iff`;
+  `smul_mem_maximalIdeal_pow` (the action preserves `𝔪_A^n` — the crux); **antitone**;
+  **`G_0 = inertiaSubgroup`** (`ramificationGroup_zero` — ties to Mathlib's/Pass 4's inertia via
+  `residue_smul`); **normal in the decomposition group** (Serre IV §1 Prop. 1); **separation**
+  `⨅ G_i = ⊥` under the explicit Krull hypothesis `⨅ 𝔪_A^n = ⊥`, **discharged in the Noetherian
+  (= field-or-DVR, i.e. finite-level) case** via `Ideal.iInf_pow_eq_bot_of_isLocalRing`; per-element
+  escape (`exists_notMem_ramificationGroup`). The hypothesis-parametrized shape is *forced* by
+  Pass 22: both regimes are now proved (collapse at idempotent `𝔪[K̄]`; separation under Krull).
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
@@ -375,15 +389,19 @@ Herbrand function, no upper numbering).
   axiom-free — a rule-2-style *constructed failure* caught **before** the vacuous definition was
   committed, not after. Side fact: `𝒪[K̄]` is non-Noetherian with no uniformizer — DVR-style
   arguments must stay at finite level.
-- **The corrected L2 ladder (Serre, *Local Fields*, ch. IV):** (1) the **finite-level** filtration
-  `G_i(L/K)` for finite Galois `L/K` with `𝒪_L` a DVR (`Ideal.inertia` on `𝔪_L^(i+1)` — the right
-  device, at the right level), with the basic theory (`G_0` = inertia, antitone, normal, `G_i = 1`
-  for large `i`, tame quotient `G_0/G_1 ↪ 𝓀_L^×`, wild `G_1` pro-`p`); (2) the **Herbrand function**
-  `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible; (3) the **limit** `G^v ≤ Gal(K̄/K)`
-  (upper numbering is what passes to the inverse limit — the degeneracy above is the lower
-  numbering's failure to do so, seen at the limit); (4) Hasse–Arf. Prerequisite gaps to inventory
-  when (1) starts: finite-extension-of-local-field instances (`IsNonarchimedeanLocalField L` for
-  `L/K` finite — ABSENT from `NumberTheory/LocalField/Basic.lean`, the only file there), the
+- **The corrected L2 ladder (Serre, *Local Fields*, ch. IV):** (1) the filtration `G_i` over a
+  valuation subring with separating `𝔪`-powers (the DVR/finite-level regime) with its basic
+  theory — **✅ defined + basics DONE, Pass 23** (abstract `ValuationSubring` form: `G_0` =
+  inertia, antitone, normal, separation under Krull, Noetherian discharge); **remaining in (1):**
+  eventual triviality `∃ i, G_i = ⊥` for finite decomposition groups; a **concrete
+  properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the come-apart
+  exhibit the definition deserves); the tame quotient `G_0/G_1 ↪ 𝓀_L^×` and wild `G_1` pro-`p`;
+  (2) the **Herbrand function** `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible;
+  (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
+  degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.
+  Prerequisite gaps for the local-field instantiation `A = 𝒪_L`: finite-extension-of-local-field
+  instances (`IsNonarchimedeanLocalField L` for `L/K` finite — ABSENT from
+  `NumberTheory/LocalField/Basic.lean`, the only file there; re-verified Pass 23), the
   `Gal(L/K)`-action bricks on `𝒪_L` (finite-level analogues of the P11–14 `galoisIntegers`
   machinery).
 - Depends on: L1 (DONE for what (1) needs: the residue reduction, inertia, `𝒪[K̄]` infrastructure).
