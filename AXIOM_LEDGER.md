@@ -1376,3 +1376,52 @@ no new owed witness; D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1
 Ledger delta: **0 / 0** — axiom-free. **L2 finite-level arc COMPLETE (modulo the named
 monogenicity hypothesis): filtration, both regime witnesses, all quotient characters, and the
 wild/tame dichotomy — `G₁` pro-`p` at finite level, `G₀/G₁` tame of order prime to `p`.**
+
+### Pass 29 (2026-06-10) — the descent, rung 1: `𝒪_L` as a valuation subring; separation + eventual triviality DISCHARGED at `𝒪_L`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Opens the
+finite-extension local-field block (user-approved direction): for `K` nonarchimedean local and
+`L/K` **finite**, `Anabelian/ExtensionIntegers.lean` builds the object all of L2 was
+parametrized by — and discharges, at `A = 𝒪_L`, two of the abstract theory's standing
+hypotheses. (In-file `#print axioms`, all standard-only; **first-try clean build**, the second
+in a row.)
+
+```
+'Anabelian.isIntegral_iff_minpoly_coeff_mem_findim'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionIntegers'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_extensionIntegers_iff'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isNoetherianRing_extensionIntegers'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.iInf_ramificationGroup_extensionIntegers'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_ramificationGroup_extensionIntegers_eq_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`extensionIntegers K L : ValuationSubring L`** — `𝒪_L = integralClosure 𝒪[K] L`, a genuine
+  valuation subring: `mem_or_inv_mem` **is** the unique-extension-of-valuations theorem for the
+  complete `K`, proved via the spectral norm with the **entire normed structure localized inside
+  the proof field** (the Pass-18 `letI` discipline; the statement is `integralClosure`-pure —
+  the D2 containment pattern reused, nothing new to watch). `IsLocalRing 𝒪_L` is then **free**
+  (`ValuationSubring → ValuationRing → IsLocalRing`).
+- `isIntegral_iff_minpoly_coeff_mem_findim` — the Pass-17 algebraic bridge, `L`-version
+  (norm-free).
+- `isNoetherianRing_extensionIntegers` (`[Algebra.IsSeparable K L]`) — Mathlib's
+  `IsIntegralClosure.isNoetherianRing` over the DVR `𝒪[K]`, transported along the carrier
+  identity.
+- **`iInf_ramificationGroup_extensionIntegers`** — Pass 23's Krull separation hypothesis,
+  **discharged**: `⨅ i, G_i(L/K) = ⊥` for finite separable `L/K`, a theorem.
+- `Finite (decompositionSubgroup)` instance (`AlgEquiv.fintype`) and
+  **`exists_ramificationGroup_extensionIntegers_eq_bot`** — Pass 24's finiteness + eventual
+  triviality, **discharged**.
+
+**Honesty.** The `[Algebra.IsSeparable K L]` hypothesis on the Noetherian-side results is what
+Mathlib's integral-closure finiteness consumes (char 0: automatic; equal char: a real, named
+restriction — same boundary family as the Pass-14 perfect-case narrowing). Remaining rungs of
+the block, named: `IsDiscreteValuationRing 𝒪_L`; finite residue field; the
+`IsNonarchimedeanLocalField L` assembly; the **monogenicity discharge** (the Passes-25/27/28
+hypothesis becomes a theorem here, eventually); `e·f = n` bookkeeping. No new
+`structure`/`class` (a witness for Mathlib's `ValuationSubring`, already rule-2-calibrated by
+the Pass-22/26 collapse-vs-separation pair); no owed witness; D1 N/A; **D2: Pass-18 pattern
+reused, contained**. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **The descent has its foundation: the L2 filtration now
+lives on actual finite extensions of local fields, with separation and eventual triviality
+proved rather than hypothesized.**

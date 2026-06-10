@@ -24,3 +24,4 @@ import Anabelian.TameInjectivity
 import Anabelian.RamificationExhibit
 import Anabelian.AdditiveCharacter
 import Anabelian.WildInertia
+import Anabelian.ExtensionIntegers

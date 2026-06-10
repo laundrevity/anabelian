@@ -2704,3 +2704,73 @@ pro-`p` statement and, much later, `G^v`-compatibility); (c) the canonical `𝔪
 characters + `Sylow` packaging (polish tier); (d) L1 polish (continuity; imperfect case).
 Honest frame: R1–R3 distant; L2's finite-level chapter reads, end to end, like the textbook —
 which was the point of the rung.
+
+---
+
+# Pass 29 — the descent, rung 1: `𝒪_L : ValuationSubring L` + hypotheses discharged (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved direction: descend (the finite-extension block). (ii) Rung-1 scope:
+`extensionIntegers K L : ValuationSubring L` (= `integralClosure 𝒪[K] L`, mem_or_inv_mem via
+spectral, Pass-18-localized); Noetherian-ness (separable); discharge of Pass 23's separation +
+Pass 24's finiteness/eventual-triviality at `𝒪_L`. (iii) NOT in scope (later rungs, named): DVR,
+finite residue, `IsNonarchimedeanLocalField L` assembly, monogenicity discharge, `e·f = n`.
+(iv) Design: reuse the Pass-17/18 template verbatim with `L` for `K̄` — the spectral bridge
+works for any algebraic extension; finiteness replaces algebraic closure.
+
+## Route-first-step probes
+
+`spectralNorm.normedField` (sig re-read: `NontriviallyNormedField K` + algebraic `L` — the
+Pass-18 `letI` chain supplies everything; finite ⟹ `Algebra.IsIntegral`/`IsAlgebraic`
+instances); `Mathlib/NumberTheory/LocalField/Basic.lean` re-inventoried — **richer than the
+Pass-13-era notes**: it now has `IsDiscreteValuationRing 𝒪[K]`, `Finite 𝓀[K]`,
+`CompleteSpace K`, `valueGroupWithZeroIsoInt : ValueGroupWithZero K ≃*o ℤᵐ⁰`, `IsAdicComplete`
+(the K-side is fully equipped; finite-extension instances still absent ✓);
+`IsIntegralClosure.isNoetherianRing` (+ `.finite`, `.isNoetherian`) in
+`DedekindDomain/IntegralClosure.lean` with exactly the `𝒪[K]`-available instance stack;
+`isNoetherianRing_of_surjective` for the carrier transport; `AlgEquiv.fintype`.
+
+## What was built (`Anabelian/ExtensionIntegers.lean`, all standard-axioms-only)
+
+The six declarations as scoped (ledger). Notes: `mem_or_inv_mem` reduces to
+`(Valued.v).valuationSubring.mem_or_inv_mem` after the membership bridge — i.e. the
+ValuationSubring property is *inherited from the spectral valuation* through the
+`integralClosure = Valued.integer` identification; `IsLocalRing` then comes free from Mathlib's
+`ValuationSubring` instances (the finite-level analogue of Pass 18's transport, at zero cost).
+The carrier-identity `RingEquiv` (Subalgebra-subtype ≃ ValuationSubring-subtype, all fields
+`rfl`) transports Noetherian-ness.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the P17/18 template to adapt with light friction | **first-try clean build** (second consecutive) | template + probe discipline fully compounding |
+| `LocalField/Basic.lean` to be as sparse as the P13 notes said | substantially richer now (DVR, finite residue, ℤᵐ⁰ value group, completeness all present for `K`) | re-inventory standing assumptions each block — the pin moves |
+
+## Build + headline
+
+`lake build`: full project clean (8,477-job closure for the new file; root clean at warning
+level); all six audits standard-only; zero `axiom` declarations project-wide; artifact sync-back
+now `rsync -au` (update-only — the Pass-28 clobber cannot recur). **HEADLINE: `𝒪_L` exists as a
+`ValuationSubring` of any finite extension of a nonarchimedean local field — `mem_or_inv_mem`
+proved via the spectral norm (the unique-extension theorem), Pass-18-contained — and the
+abstract L2 theory's separation and eventual-triviality hypotheses are now THEOREMS at `𝒪_L`
+(finite separable case).** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. Two standing hypotheses of the abstract theory discharged at `𝒪_L`.
+
+## Scope: pointer to Pass 30
+
+The block continues, leverage order: (a) **`IsDiscreteValuationRing 𝒪_L`** (Noetherian ✓ + local
+✓ + valuation ring ✓ + not-a-field — the last needs the valuation on `L` nontrivial, i.e. `K`'s
+uniformizer is a non-unit in `𝒪_L`; with DVR comes the uniformizer package `𝔪_L = (π_L)` —
+Passes 24–28's hypothesis discharged at `𝒪_L`); (b) **finite residue field `𝓀_L`** (residue ext
+finite over `𝓀[K]` via module-finiteness; then `CharP 𝓀_L p` automatic — Pass 28's hypotheses
+fully concrete); (c) the `IsNonarchimedeanLocalField L` instance assembly (completeness via
+`FiniteDimensional.complete`); (d) the **monogenicity discharge** (the deepest rung — Serre IV
+§1 Prop. 5's own proof; needs (a)+(b) and the unramified-subextension story). Honest frame:
+R1–R3 distant; the descent's first rung is laid and the abstract/concrete gap is closing
+hypothesis by hypothesis.
