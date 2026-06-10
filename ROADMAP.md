@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 27 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 28 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -326,12 +326,14 @@ at `k = ℚ`, the jump detected by the tame character) — with Pass 22's collap
 the L2 architecture are witnessed. **Pass 27 completed the finite-level quotient theory**: the
 additive characters `θ_i : G_i/G_{i+1} ↪ 𝓀⁺` (`i ≥ 1`, monogenicity-conditional) alongside
 Pass 24/25's multiplicative `θ₀`, with the level-0 dichotomy *witnessed* on the Pass-26 exhibit.
-**Honest next step (Pass 28):** the finite-extension local-field instances (now gating the
-monogenicity discharge, the `A = 𝒪_L` instantiation, AND honest-generality Herbrand work); wild
-`G₁` pro-`p` (`CharP 𝓀 p` plumbing on the Pass-27 embeddings); the canonical
-`𝔪^i/𝔪^(i+1)`-valued characters; or the smaller L1 refinements (continuity of the reduction;
-the imperfect-case generality). No second boundary was ever stacked; nothing cardinal-sin
-posited; the surjection *follows* from the keystone applied to axiom-free bricks.
+**Pass 28 closed the finite-level arc**: `G₁` is a `p`-group and `p ∤ |G₀/G₁|` — the wild/tame
+dichotomy (Serre IV §2 complete at finite level, monogenicity-conditional). **Honest next step
+(Pass 29):** the finite-extension local-field instances (the ~3-pass infra block — discharges
+monogenicity, instantiates all of L2 at `A = 𝒪_L`, `char 𝓀 = p` automatic); or the ascent
+(Herbrand `φ`/`ψ`, upper numbering — Serre IV §3, the path to the absolute pro-`p` statement);
+or polish (canonical `𝔪^i/𝔪^(i+1)` characters, `Sylow` packaging, L1 continuity/imperfect
+case). No second boundary was ever stacked; nothing cardinal-sin posited; the surjection
+*follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -370,7 +372,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26; additive characters `i ≥ 1` + level-0 dichotomy witness Pass 27 — **finite-level quotient theory COMPLETE modulo monogenicity**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26; additive characters `i ≥ 1` + level-0 dichotomy witness Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — **finite-level arc COMPLETE modulo monogenicity**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
 ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
@@ -434,6 +436,15 @@ groups in lower numbering`).
   unisolated `whnf` elaboration divergence; the better target is the canonical
   `𝔪^i/𝔪^(i+1)`-valued form. **The finite-level quotient theory of the filtration is now
   complete modulo the named monogenicity hypothesis.**
+- **Pass 28 (`Anabelian/WildInertia.lean`) — wild inertia: `G₁` is a `p`-group, `p ∤ |G₀/G₁|`,
+  axiom-free.** Residue characteristic `p`: the higher quotients have **exponent `p`** (additive
+  embeddings + `p • c = 0`), so `σ ∈ G₁ ⟹ σ^(p^k) ∈ G_{1+k}`, and the eventually-trivial
+  filtration (Pass 24) gives **`IsPGroup p G₁`** (finite level; `p` not assumed prime); the tame
+  quotient has **no `p`-torsion** (Frobenius injectivity through `G₀/G₁ ↪ 𝓀ˣ`), hence
+  **`p ∤ |G₀/G₁|`** (Cauchy). `G₁` = the normal Sylow `p`-subgroup of inertia — the wild/tame
+  dichotomy, Serre IV §2 complete at finite level (monogenicity-conditional). `Sylow` packaging
+  and the pro-`p` limit form (upper numbering) named, not attempted. First pass to compile clean
+  on its first build.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:

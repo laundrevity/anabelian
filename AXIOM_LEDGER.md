@@ -1334,3 +1334,45 @@ from an abstract group; R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **L2: the full ladder of quotient characters exists —
 `θ₀ : G₀/G₁ ↪ 𝓀ˣ` and `θ_i : G_i/G_{i+1} ↪ 𝓀⁺` (`i ≥ 1`, monogenicity-conditional) — with the
 level-0/level-positive dichotomy constructively witnessed.**
+
+### Pass 28 (2026-06-10) — rung L2: wild inertia — `G₁` is a `p`-group, `p ∤ |G₀/G₁|`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. The capstone of the
+finite-level arc (Serre IV §2, corollaries): in residue characteristic `p`, the two character
+embeddings have opposite torsion, and chaining the additive one through the eventually-trivial
+filtration makes `G₁` the **normal Sylow `p`-subgroup of the inertia group** — the wild inertia.
+`Anabelian/WildInertia.lean` (in-file `#print axioms`, all standard-only; **compiled clean on the
+first build** — the probe-first discipline's first zero-iteration pass):
+
+```
+'Anabelian.additiveQuotient_pow_eq_one'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.pow_mem_ramificationGroup_succ'   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.pow_pow_mem_ramificationGroup'    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isPGroup_ramificationGroup_one'   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameQuotient_pow_prime_eq_one_imp' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.not_dvd_natCard_tameQuotient'     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `additiveQuotient_pow_eq_one` — **exponent `p`** on `G_i/G_{i+1}` (`i ≥ 1`, `[CharP 𝓀 p]`,
+  monogenicity): the Pass-27 embedding + `p • c = 0` in `𝓀` (via `toAdd`/`CharP.cast_eq_zero`).
+- `pow_mem_ramificationGroup_succ` / `pow_pow_mem_ramificationGroup` — `σ ∈ G_i ⟹ σ^p ∈
+  G_{i+1}`, iterated to `σ ∈ G₁ ⟹ σ^(p^k) ∈ G_{1+k}` (the fixed-ring hypothesis taken once over
+  `G₀`, restricted by antitonicity).
+- **`isPGroup_ramificationGroup_one`** — `IsPGroup p G₁` for finite decomposition groups under
+  separation + monogenicity: the chain above meets Pass 24's `exists_ramificationGroup_eq_bot`.
+  Notably `p` need not be assumed prime.
+- `tameQuotient_pow_prime_eq_one_imp` — **no `p`-torsion in `G₀/G₁`** (`p` prime): the tame
+  embedding lands in `𝓀ˣ` where **Frobenius injectivity** (`frobenius_inj`) kills `p`-torsion.
+- **`not_dvd_natCard_tameQuotient`** — `p ∤ |G₀/G₁|` by Cauchy's theorem
+  (`exists_prime_orderOf_dvd_card`), contrapositive.
+
+**Honesty.** Hypotheses are exactly the Pass-25/27 stack plus `[CharP (ResidueField ↥A) p]` and
+(only where needed: the tame side, Cauchy) `[Fact p.Prime]`; finiteness + separation only where
+consumed. NOT attempted: Mathlib `Sylow p` packaging (routine atop these two results — named);
+the **pro-`p` limit statement** for the absolute group (upper-numbering territory); the
+local-field instantiation (where `char 𝓀 = p` holds automatically). No new `structure`/`class`;
+no new owed witness; D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2 finite-level arc COMPLETE (modulo the named
+monogenicity hypothesis): filtration, both regime witnesses, all quotient characters, and the
+wild/tame dichotomy — `G₁` pro-`p` at finite level, `G₀/G₁` tame of order prime to `p`.**

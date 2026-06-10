@@ -2640,3 +2640,67 @@ defeated this pass's stretch goal); (d) L1 polish (continuity of `residueReducti
 imperfect-case generality). Honest frame: R1–R3 distant; the finite-level L2 quotient theory is
 now COMPLETE modulo the named monogenicity hypothesis — the architecture's next genuinely new
 content is either downward (concrete instances) or upward (Herbrand/upper numbering).
+
+---
+
+# Pass 28 — rung L2: wild inertia — `G₁` is a `p`-group, `p ∤ |G₀/G₁|` (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-27 pointer, candidate (b), user-approved: wild `G₁` pro-`p` at finite level.
+(ii) Scope: exponent-`p` higher quotients (`CharP 𝓀 p`); `σ^(p^k)`-climbing; `IsPGroup p G₁`
+(finite + separation + monogenicity); tame quotient `p`-torsion-free (`p` prime); `p ∤ |G₀/G₁|`
+(Cauchy). (iii) NOT in scope: `Sylow` packaging (named); the pro-`p` limit form (upper
+numbering); local-field instantiation. (iv) Design: `IsPGroup`'s definition is literally
+`∀ g, ∃ k, g^(p^k) = 1` — match the proof to it (no extension-closure API needed).
+
+## Route-first-step probes
+
+`IsPGroup` (def shape confirmed), `ofAdd_nsmul`/`toAdd_pow`, `frobenius_inj`
+(`Algebra/CharP/Reduced.lean` — fields qualify), Cauchy = `exists_prime_orderOf_dvd_card`
+(`Fintype`-based; bridged via `nonempty_fintype` + `Nat.card_eq_fintype_card`),
+`QuotientGroup.eq_one_iff`. All grep-verified pre-write.
+
+## What was built (`Anabelian/WildInertia.lean`, all standard-axioms-only)
+
+The six declarations as scoped (see ledger). Design notes: the fixed-ring hypothesis is taken
+ONCE over `G₀` and restricted per level via `ramificationGroup_antitone` (cleaner than per-level
+binders when quantifying over all `i`); `isPGroup_ramificationGroup_one` needs no primality of
+`p`; the tame side kills `p`-torsion via `frobenius_inj` rather than binomial expansions.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| 2–4 build iterations (the P25–27 norm) | **compiled clean on the FIRST build** — zero errors, zero warnings | the probe-first + battle-tested-idiom stack has matured; every lemma name and every coercion pattern came from verified precedent |
+| the `IsPGroup` chain to need extension-closure API | unnecessary — the definition is elementwise and matched the `σ^(p^k) ∈ G_{1+k}` climb exactly | reading the definition first beats assuming the textbook route |
+
+## Build + headline
+
+`lake build`: full project clean (in-sandbox; `--log-level=warning` now used for full-project
+verification — replaying 8,500 cached info-lines through the pipe was itself eating the 45 s
+call window); all six audits standard-only; zero `axiom` declarations project-wide.
+**Environment incident, logged for the recipe: the ws→mount artifact rsync CLOBBERED the
+host-built `GaloisInertia`/`UnramifiedQuotient`/`RamificationDegeneracy` artifacts with stale
+ws copies** (the ws never successfully elaborated GaloisInertia — the 45 s wall; plain `rsync -a`
+overwrote newer host artifacts with older ws ones). Benign — sources unchanged, the host build
+self-heals by re-elaborating the trio once — but the recipe is now: **sync back only the targets
+the sandbox actually built, or use `rsync -au`** (update-only). **HEADLINE: in residue
+characteristic `p`, `G₁` is a `p`-group (`IsPGroup p G₁`, finite level, monogenicity-conditional,
+`p` not even assumed prime) and `p ∤ |G₀/G₁|` — `G₁` is the normal Sylow `p`-subgroup of inertia:
+the wild/tame dichotomy, completing Serre IV §2 at finite level.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 29
+
+The finite-level L2 arc is closed. Candidates, leverage order: (a) **the finite-extension
+local-field instances** (the ~3-pass infra block; discharges monogenicity, instantiates ALL of
+L2 at `A = 𝒪_L` with `char 𝓀 = p` automatic, and opens honest-generality Herbrand); (b) **the
+ascent: Herbrand `φ`/`ψ` + upper numbering** (Serre IV §3 — the path to the absolute-group
+pro-`p` statement and, much later, `G^v`-compatibility); (c) the canonical `𝔪^i/𝔪^(i+1)`
+characters + `Sylow` packaging (polish tier); (d) L1 polish (continuity; imperfect case).
+Honest frame: R1–R3 distant; L2's finite-level chapter reads, end to end, like the textbook —
+which was the point of the rung.
