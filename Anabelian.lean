@@ -26,3 +26,5 @@ import Anabelian.AdditiveCharacter
 import Anabelian.WildInertia
 import Anabelian.ExtensionIntegers
 import Anabelian.ExtensionUniformizer
+import Anabelian.ExtensionResidue
+import Anabelian.ExtensionResidueFinite

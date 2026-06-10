@@ -2829,3 +2829,60 @@ concrete at `𝒪_L` except monogenicity. (b) The `IsNonarchimedeanLocalField L`
 needs (a) + the unramified subextension story — possibly via Mathlib's
 `IsLocalRing.IsUnramified`/Etale machinery, to be inventoried). Honest frame: R1–R3 distant;
 the descent is two rungs down, one hypothesis from closing the loop on the abstract theory.
+
+---
+
+# Pass 31 — the descent, rung 3: `𝓀_L` is finite; `CharP` concrete (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-30 pointer, candidate (a), user-approved: the finite residue field. (ii) Scope:
+`extensionAlgebraMap` + unit transfer + `IsLocalHom` (the P19 brick at finite level);
+`Finite 𝓀_L` (separable); `CharP` transfer. (iii) NOT in scope: instance assembly,
+monogenicity. (iv) Design: the finiteness chain `Module.Finite 𝒪[K] 𝒪_L → (residue surjection)
+→ Module.Finite 𝒪[K] 𝓀_L → (restrict scalars through the local hom) → Module.Finite 𝓀[K] 𝓀_L →
+Finite`, with ALL module/algebra structures `letI`-local to the proof.
+
+## Probes
+
+`ResidueField.map` + `map_residue` (**rfl** — which makes the `IsScalarTower` step
+`of_algebraMap_eq (fun _ => rfl)`); `Module.Finite.of_restrictScalars_finite`;
+`Module.finite_of_finite`; `charP_of_injective_ringHom`; `Finite 𝓀[K]` (LocalField.Basic).
+
+## What was built
+
+The four declarations as scoped (ledger), in two files — **the build-granularity lesson
+applied**: the single-file version did not fit the ~40 s per-call window (the `import Mathlib`
+closure costs ~30 s of olean-loading I/O per call, leaving ~10 s of elaboration), so the
+local-hom half and the finiteness half are separate modules. This is now the standing pattern
+for descent files.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the letI tower to be the friction point | one defeq failure only: `Algebra.smul_def` is a theorem, not `rfl`, on the subalgebra side — `show` → explicit `SetLike.val_smul`/`smul_def` rewrite | known pattern |
+| `map_residue` to need bridging | it is `rfl`, so the scalar tower came free | probe paid off |
+| one file to suffice | split required (window variance: the same file built at 31–34 s or not at all) | the I/O wall is the binding constraint on descent passes; plan files at ≤ 2 substantial declarations |
+
+## Build + headline
+
+Full build clean at warning level; all four audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: the residue field of `𝒪_L` is FINITE for finite separable `L/K`, and
+the residue characteristic transfers — at `𝒪_L`, the Pass-28 wild/tame dichotomy now has every
+hypothesis concrete except monogenicity** (finite decomposition ✓ separation ✓ uniformizer ✓
+`CharP 𝓀_L p` ✓). R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 32
+
+(a) **The monogenicity discharge** — the last open hypothesis; inventory first: Mathlib's
+unramified/étale machinery (`Algebra.IsUnramified`, `IsLocalRing` Etale files) and the classical
+route (Serre IV §1 Prop. 5: complete DVR + finite separable residue ext ⟹ `𝒪_L = 𝒪_{L₀}[π]`;
+needs the unramified subextension or a direct primitive-element argument at the residue level).
+(b) The `IsNonarchimedeanLocalField L` assembly (completeness via `FiniteDimensional.complete`;
+mostly bookkeeping given rungs 1–3). (c) `e·f = n`. Honest frame: R1–R3 distant; one hypothesis
+stands between the abstract L2 theory and its full instantiation on local fields.

@@ -1461,3 +1461,36 @@ Recovers nothing from an abstract group; R1–R3 untouched.
 Ledger delta: **0 / 0** — axiom-free. **Of the abstract L2 theory's hypothesis stack —
 separation, finiteness, eventual triviality, uniformizer package, monogenicity — only
 monogenicity now remains open at `𝒪_L`.**
+
+### Pass 31 (2026-06-10) — the descent, rung 3: the residue field `𝓀_L` is FINITE; `CharP` concrete
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Two files
+(`Anabelian/ExtensionResidue.lean` — the local-hom half, unconditional;
+`Anabelian/ExtensionResidueFinite.lean` — the finiteness half; split for build-granularity per
+the NOTES environment log). In-file `#print axioms`, all standard-only:
+
+```
+'Anabelian.extensionAlgebraMap'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isUnit_extensionAlgebraMap_iff'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_residueField_extensionIntegers'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.charP_residueField_extensionIntegers'   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `extensionAlgebraMap : 𝒪[K] →+* 𝒪_L`; **`isUnit_extensionAlgebraMap_iff`** (unit transfer —
+  Pass 30's argument abstracted to every element); **`IsLocalHom` instance** (the finite-level
+  Pass-19 brick) ⟹ the residue extension `𝓀[K] →+* 𝓀_L` exists (`ResidueField.map`).
+- **`finite_residueField_extensionIntegers`** (`[Algebra.IsSeparable K L]`) — `𝓀_L` is finite:
+  module-finiteness of `𝒪_L` over `𝒪[K]` (Pass 29) pushed to the residue level through the
+  local hom (all module/algebra structures `letI`-local), then finite-dimensional over the
+  finite `𝓀[K]`.
+- **`charP_residueField_extensionIntegers`** — the residue characteristic transfers along the
+  injective residue extension: **Pass 28's `CharP 𝓀 p` hypothesis is concrete at `𝒪_L`.**
+
+**Honesty.** Separability exactly where module-finiteness is consumed. Remaining rungs: the
+`IsNonarchimedeanLocalField L` assembly; the **monogenicity discharge** (the last open
+hypothesis of the abstract theory); `e·f = n`. No new `structure`/`class`; no owed witness;
+D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **At `𝒪_L`, the Pass-28 wild/tame dichotomy now has every
+hypothesis concrete except monogenicity: finite decomposition group ✓, separation ✓, uniformizer
+✓, `CharP 𝓀_L p` ✓.**

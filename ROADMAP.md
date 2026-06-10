@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 30 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 31 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -332,12 +332,13 @@ descent**: `𝒪_L : ValuationSubring L` exists for finite `L/K` (spectral `mem_
 Pass-18-contained), Noetherian for separable `L/K` — and the abstract theory's separation +
 finiteness/eventual-triviality hypotheses are now **theorems at `𝒪_L`**. **Pass 30 made `𝒪_L`
 a DVR and discharged the uniformizer package** — the tame character of `L/K` exists
-(`extensionTameCharacter`); only monogenicity remains open. **Honest next step (Pass 31):**
-finite residue field `𝓀_L` (module-finiteness to the residue level via the P19 `IsLocalHom`
-pattern; makes `CharP 𝓀_L p` and the Pass-28 dichotomy concrete); the
-`IsNonarchimedeanLocalField L` assembly; deepest, the monogenicity discharge (inventory
-Mathlib's unramified/Etale machinery first). No second boundary was ever stacked; nothing
-cardinal-sin posited; the surjection *follows* from the keystone applied to axiom-free bricks.
+(`extensionTameCharacter`); only monogenicity remains open. **Pass 31 made the
+residue field finite** (`Finite 𝓀_L` + `CharP` transfer — the Pass-28 dichotomy concrete at
+`𝒪_L` except monogenicity). **Honest next step (Pass 32):** the **monogenicity discharge** (the
+last open hypothesis; inventory Mathlib's unramified/étale machinery vs the classical Serre IV
+§1 Prop. 5 route first); the `IsNonarchimedeanLocalField L` assembly; `e·f = n`. No second
+boundary was ever stacked; nothing cardinal-sin posited; the surjection *follows* from the
+keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -467,6 +468,12 @@ groups in lower numbering`).
   character theorem since Pass 24, now a theorem; showcase `extensionTameCharacter` — **the tame
   character of a finite separable extension of local fields exists.** Of the abstract L2
   hypothesis stack, **only monogenicity remains open at `𝒪_L`**.
+- **Pass 31 (`Anabelian/ExtensionResidue.lean` + `ExtensionResidueFinite.lean`) — `𝓀_L` is
+  FINITE; `CharP` concrete, axiom-free.** `extensionAlgebraMap` with **unit transfer** and
+  **`IsLocalHom`** (the P19 brick at finite level) ⟹ the residue extension `𝓀[K] →+* 𝓀_L`;
+  **`Finite 𝓀_L`** (separable; module-finiteness pushed to residues, `letI`-local structures);
+  **`CharP 𝓀_L p`** transfers. At `𝒪_L`, the Pass-28 dichotomy has every hypothesis concrete
+  except monogenicity.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
