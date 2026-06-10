@@ -34,3 +34,4 @@ import Anabelian.ExtensionRamificationData
 import Anabelian.ExtensionTotallyRamified
 import Anabelian.InertiaFixedIntegers
 import Anabelian.ExtensionMonogenicGeneral
+import Anabelian.InertiaCharpoly

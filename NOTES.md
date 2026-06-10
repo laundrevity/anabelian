@@ -3057,3 +3057,49 @@ Hensel-free lifting argument — inventory first: the exact statement shape in
 `RingTheory/Invariant/Basic.lean`). With it, `ker θ₀ = G₁` holds unconditionally on local
 fields. (b) The P27/P28 instantiations (consolidation). (c) `IsNonarchimedeanLocalField L`
 assembly. Honest frame: R1–R3 distant; the descent is one lemma from complete.
+
+---
+
+# Pass 35 — the descent, rung 7 (first half): the inertia orbit polynomial (2026-06-10)
+
+## Restatement + the design discovery
+
+(i) User-approved: prove `hresid`. (ii) The inventory of `RingTheory/Invariant/Basic.lean`
+found `MulSemiringAction.charpoly` (the orbit polynomial) with `smul_coeff_charpoly` —
+symmetric-function invariance FREE — and `Subgroup.mulSemiringAction` makes it apply over `G₀`
+directly. (iii) The full proof design (elementary — **no Hensel, no Lucas, no completeness**):
+coefficients of `∏_{σ∈G₀}(X − σ•b)` are inertia-fixed; mod `𝔪` the polynomial is
+`(X − b̄)^{p^a·m}` (Pass 24's residue-fixing); freshman's dream
+(`(X − b̄)^{p^a·m} = (X^{p^a} − b̄^{p^a})^m`) puts `±m·b̄^{p^a}` at the `X^{p^a(m−1)}`
+coefficient; `p ∤ m` makes `m` invertible in the residue image (a finite subfield); take `b̄` a
+generator of the cyclic `𝓀_Lˣ` — then `b̄^{p^a}` is also a generator (Frobenius is an
+automorphism), so the image is all of `𝓀_L`. (iv) Two passes: bricks now, extraction+assembly
+next.
+
+## What was built
+
+`coeff_inertiaCharpoly_mem` + `map_residue_inertiaCharpoly` (see ledger). Both essentially
+one-liners over Mathlib's machinery once the right objects are named — the pass's substance was
+the DESIGN (finding charpoly + the Lucas-free coefficient route).
+
+## Build + headline
+
+Clean (one window-variance retry); both audits standard-only. **HEADLINE: every coefficient of
+`(X − b̄)^{|G₀|}` is the residue of an inertia-fixed integer — the raw material for `hresid` is
+in place, with an elementary assembly plan.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 36
+
+The finale: (1) coefficient extraction — in `𝓀_L[X]`: `(X − b̄)^{p^a m} = (X^{p^a} − b̄^{p^a})^m`
+(`sub_pow_char_pow`), and the `X^{p^a(m−1)}`-coefficient of the right side is
+`−m·b̄^{p^a}` (binomial expansion, single surviving term); (2) the residue image
+`F := (inertiaFixedIntegers).map residue` is a finite subfield containing `m·b̄^{p^a}` and `m⁻¹`
+⟹ `b̄^{p^a} ∈ F`; (3) choose `b` with `b̄` a generator of `𝓀_Lˣ` (cyclic ✓, lift via
+`Ideal.Quotient.mk_surjective`); `b̄^{p^a}` is a generator (`p ∤ |𝓀_Lˣ|`) ⟹ `F = 𝓀_L` ⟹
+**`hresid`**; (4) the unconditional kernel theorem
+`ker_tameCharacter_extensionIntegers_general` := Pass 34's theorem + `hresid` — **the descent
+closes**. Then: P27/P28 instantiations; `IsNonarchimedeanLocalField L`; or the ascent.

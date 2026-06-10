@@ -1601,3 +1601,32 @@ base closure; unramified: all of `𝒪_L`). No owed witness; D1 N/A; D2 N/A. Rec
 an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **General-case tame injectivity is one lemma away.**
+
+### Pass 35 (2026-06-10) — the descent, rung 7 (first half): the inertia orbit polynomial
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**.
+`Anabelian/InertiaCharpoly.lean` — the two bricks of the `hresid` proof (in-file
+`#print axioms`, standard-only):
+
+```
+'Anabelian.coeff_inertiaCharpoly_mem'    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_residue_inertiaCharpoly'  depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`coeff_inertiaCharpoly_mem`** — the coefficients of the inertia orbit polynomial
+  `∏_{σ∈G₀}(X − σ•b)` (Mathlib's `MulSemiringAction.charpoly` over the subgroup, whose
+  `Subgroup.mulSemiringAction` instance exists) are **inertia-fixed**
+  (`smul_coeff_charpoly` — the symmetric-function invariance, free from Mathlib).
+- **`map_residue_inertiaCharpoly`** — its residue is **`(X − b̄)^{|G₀|}`** (Pass 24's
+  residue-fixing collapses every factor).
+
+Hence: every coefficient of `(X − b̄)^{|G₀|}` is the residue of an inertia-fixed integer — the
+raw material for `hresid`. The second half (Pass 36): write `|G₀| = p^a·m` (`p ∤ m`), extract
+the `X^{p^a(m−1)}`-coefficient `±m·b̄^{p^a}` via freshman's dream, invert `m`, and run the
+cyclic-generator argument (`b̄` a generator of `𝓀_Lˣ` ⟹ `b̄^{p^a}` a generator ⟹ the residue
+image of the inertia-fixed integers is all of `𝓀_L`) — no Hensel, no Lucas, no completeness.
+
+**Honesty.** Bricks only; `hresid` not claimed. No new `structure`/`class`; no owed witness;
+D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free.
