@@ -2349,3 +2349,39 @@ the local-field level; (c) **the finite-extension local-field instances** (the k
 infrastructure subproject; unlocks genuine `𝒪_L` instantiation of everything above). Also still
 open: continuity of `residueReductionHom` (L1 polish); the imperfect-case generality. Honest
 frame: R1–R3 distant; L2 advancing rung by rung on sound foundations.
+
+---
+
+# Incident note (2026-06-10, pre-Pass 25) — orphaned uncommitted session discovered and discarded
+
+A pre-Pass-25 repo review found **12 untracked Lean files (~1,710 lines), mtimes 2026-05-31
+13:02–18:44**, from a session that was never committed and never entered the governance files:
+`RamificationInjection/Monogenic/Tame`, `HerbrandFunction/Monotone/Inverse/Averaging/Kernel`,
+`UpperNumbering`, `RamificationTower/Function/Index`. Internally they numbered themselves "passes
+24–35" and covered: the additive injection `G_i/G_{i+1} ↪ 𝓀⁺` (`i ≥ 1`), the monogenicity
+reduction (Serre IV §1 Prop 5, hypothesis-parametrized), the tame injection `G_0/G_1 ↪ 𝓀ˣ`
+(including the injectivity the committed Pass 24 deliberately deferred), Herbrand `φ`/`ψ` as an
+`OrderIso` on `[0,∞)`, upper numbering with `G^{φ(u)} = G_u`, the tower/restriction maps, the
+ramification function `i_G`, and a from-scratch relative ramification index.
+
+**Why they were unusable as-is:** all 12 were written against a lost 2026-05-31 version of
+`RamificationFiltration.lean` whose API (`lowerRamificationGroup`, `_iff`, `_antitone`, `_normal`)
+exists nowhere in the surviving tree — the reflog shows this machine sat at `pass 20`, then a
+`reset --hard` + fast-forward `pull` to `pass 24` (2026-06-10) destroyed the May-31 session's
+tracked-file changes (its filtration file and its NOTES/ledger updates), leaving only the 12
+non-colliding orphans. They do not elaborate against HEAD; their in-file "standard axioms only"
+audit blocks are therefore unverifiable claims, not evidence. They also reference an owed witness
+"W2" that the committed ledger has never contained, and the committed Passes 23–24 (run on a fresh
+machine, unaware of them) re-derived part of the same territory under different names with
+narrower, honestly-scoped claims.
+
+**Decision (user, 2026-06-10): discard, proceed clean.** The 12 files were deleted (they exist in
+no commit; genuinely gone). Cost accepted: the tame-injectivity route and the Herbrand `OrderIso`
+bookkeeping are feasibility-proven but must be re-derived against the committed
+`ramificationGroup` API. Nothing from the orphans is cited as evidence anywhere; any future pass
+covering this territory starts from Serre and the committed Pass-23/24 files.
+
+**Process fix (added to `CLAUDE.md`, Repository conventions):** commit + push every pass; `git
+status` clean-tree check at every session start; uncommitted work does not exist as far as the
+governance files are concerned. Root cause was 13 passes run without a single commit, then a
+cross-machine divergence the spine files could not see.
