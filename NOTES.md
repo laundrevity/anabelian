@@ -2273,3 +2273,79 @@ finite decomposition groups (antitone chain in a finite group stabilizes at `⨅
 local-field instantiation (`A = 𝒪_L`, finite `L/K`) stays blocked on the absent
 `IsNonarchimedeanLocalField`-finite-extension instances (gap logged; building them is itself a
 candidate pass). Honest frame: R1–R3 distant; L1 done in substance; L2 now has its first rung built.
+
+---
+
+# Pass 24 — rung L2: the tame character `θ₀ : G₀ →* 𝓀ˣ` (hom + kernel half) + eventual triviality (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) Per the Pass-23 pointer and the user-approved plan: the tame character, scoped UP FRONT to the
+homomorphism + kernel half (`θ₀ : G_0 →* 𝓀ˣ`, `G_1 ≤ ker`, induced `G_0/G_1 →* 𝓀ˣ`), with the
+eventual-triviality warm-up bundled. (ii) Injectivity (the full Serre IV §2 Prop. 7 embedding) is
+declared OUT of scope before starting: it needs `σ ∈ G_i` detectable on `π` alone, i.e. the
+monogenicity of the totally-ramified subextension (Serre IV §1 Prop. 5, from
+completeness/Eisenstein) — absent at the bare-`ValuationSubring` level. The Pass-22 lesson applied
+prospectively: under-promise. (iii) Setting: a uniformizer hypothesis `𝔪_A = (π)`, `π ≠ 0`
+(weaker than DVR; DVR is the entry point). (iv) Stretch: uniformizer-independence (θ canonical).
+
+## What was built (all standard-axioms-only)
+
+`Anabelian/TameCharacter.lean`:
+- `smulUnit` — decomposition elements act on units (the generic `MulDistribMulAction` units
+  instance does NOT synthesize for this action — constructed directly, 4 lines).
+- `exists_smul_uniformizer_eq`/`tameUnit`/`_spec`/`_unique` — `σπ = π·u_σ`, `u_σ` a unique unit:
+  `σ` preserves `(π)` both ways (Pass-23's `smul_mem_maximalIdeal_pow`) ⟹ `π ∣ σπ ∣ π` ⟹
+  `associated_of_dvd_dvd`; uniqueness by `mul_left_cancel₀`.
+- `residue_smul_eq_of_mem_ramificationGroup_zero` — inertia fixes residues (the `G_0` condition
+  mod `𝔪`).
+- **`tameCharacter : ↥(G_0) →* (ResidueField ↥A)ˣ`** — multiplicativity is the pass's heart: the
+  cocycle `(στ)π = π·u_σ·σ(u_τ)` is only a crossed homomorphism in general and straightens
+  BECAUSE `σ ∈ G_0` fixes residues. (This is the mathematical content of "θ₀ lives on inertia".)
+- **`tameCharacter_eq_one`** — `G_1 ≤ ker`: `σπ − π = π(u_σ − 1) ∈ (π²)`, cancel `π`,
+  `u_σ ≡ 1 mod 𝔪`.
+- **`tameQuotientHom : G_0 ⧸ (G_1.subgroupOf G_0) →* 𝓀ˣ`** — `QuotientGroup.lift` (normality:
+  Pass 23's instance + `Subgroup.normal_subgroupOf`).
+- **`tameCharacter_eq_of_span_eq`** — uniformizer-independence: `π' = πw` ⟹ `u'_σ =
+  w⁻¹·u_σ·σ(w)`, and inertia fixes `res w` ⟹ same character. **θ₀ is canonical.**
+- `tameCharacterOfIrreducible` — the DVR entry point (`irreducible_iff_uniformizer`).
+
+`RamificationFiltration.lean` (appended): **`exists_ramificationGroup_eq_bot`** — finite
+decomposition group + separation ⟹ `∃ i, G_i = ⊥` (closes the Pass-23 epsilon).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| units-action instance available for `σ • u` | `MulDistribMulAction (decomposition) (↥A)ˣ` does NOT synthesize | constructed `smulUnit` by hand (4 lines) |
+| eventual triviality a 15-line `Finset.sup` argument | `Fintype`/`Finset.univ.sup` route hit a `whnf` TIMEOUT (800k heartbeats); root cause isolated by bisection: an un-annotated anonymous constructor in a one-liner `exact` | restructured via `Set.finite_range.bddAbove` + type-annotated constructor — compiles at default heartbeats |
+| independence a stretch goal, might drop | went through (the same inertia-fixes-residues lemma does the work) | ✓ included — θ₀ canonical |
+| `residue` vs `Quotient.mk` syntactic friction (Pass-23 déjà vu) | hit again in two proofs | same term-mode-bridge fix |
+
+## Build + headline
+
+`lake build`: **8498 jobs, clean**; all audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: the tame character exists as an honest, canonical homomorphism
+`θ₀ : G_0 →* 𝓀ˣ` killing `G_1` — the first map OUT of the ramification filtration — and finite
+decomposition groups have eventually-trivial filtration.** Injectivity (⟹ `G_0/G_1`
+abelian/cyclic) deliberately not claimed: it is the named next rung, needing the monogenicity
+input. No new `structure`/`class`; no new owed witness; D1 N/A; **D2 N/A**. Recovers nothing from
+an abstract group; R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. L2 gains its first quotient-structure map + the eventual-triviality
+  closure.
+
+## Scope: pointer to Pass 25
+
+Three L2 candidates, leverage order: (a) **the concrete properly-decreasing chain** — `G_0 ≠ G_1`
+for an explicitly ramified extension (the come-apart exhibit; spelunking-heavy: needs an explicit
+`ValuationSubring` of a quadratic extension with computable action — `Zsqrtd`/`GaussianInt`
+adjacent); (b) **injectivity of the tame map** — needs the monogenicity bridge (`v(σπ − π) ≥ i+1
+⟹ σ ∈ G_i` when `𝒪_L = 𝒪_{L_0}[π]`) — could be stated WITH a monogenicity hypothesis at the
+abstract level (honest, hypothesis-parametrized, like Pass 23's Krull) and discharged later at
+the local-field level; (c) **the finite-extension local-field instances** (the known ~3-pass
+infrastructure subproject; unlocks genuine `𝒪_L` instantiation of everything above). Also still
+open: continuity of `residueReductionHom` (L1 polish); the imperfect-case generality. Honest
+frame: R1–R3 distant; L2 advancing rung by rung on sound foundations.

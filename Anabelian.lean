@@ -19,3 +19,4 @@ import Anabelian.ResidueIso
 import Anabelian.GaloisInertia
 import Anabelian.RamificationDegeneracy
 import Anabelian.RamificationFiltration
+import Anabelian.TameCharacter

@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 23 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 24 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -317,13 +317,14 @@ quantitative payoff** `Gal(K̄/K) ⧸ I ≃* Ẑ` (`unramifiedQuotientZHat`, ass
 **refuted the naive L2 opening** (the degeneracy `𝔪[K̄]² = 𝔪[K̄]`; see L2). The project holds
 **`0 FOUNDATIONAL / 0 DEBT`** (**zero `axiom` declarations** project-wide). **Generality (Job B):** the
 surjectivity results carry `[PerfectField K]`; the imperfect equal-char case is the tracked remainder
-above. **Pass 23 opened L2 proper**: the lower-numbering filtration + basic theory, abstract
-`ValuationSubring` form (see L2 below). **Honest next step (Pass 24):** L2 continuation — the concrete
-properly-decreasing chain (`G_0 ≠ G_1` for an explicitly ramified extension), eventual triviality for
-finite decomposition groups, or the tame-quotient embedding `G_0/G_1 ↪ 𝓀^×`; or the smaller L1
-refinements (continuity of the reduction; the imperfect-case generality). No second boundary was ever
-stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied to axiom-free
-bricks.
+above. **Pass 23 opened L2 proper** (the lower-numbering filtration + basic theory); **Pass 24 added
+the tame character** `θ₀ : G_0 →* 𝓀ˣ` (canonical; `G_1 ≤ ker`; induced `G_0/G_1 →* 𝓀ˣ`) **and
+eventual triviality** for finite decomposition groups. **Honest next step (Pass 25):** the L2
+continuation — the concrete properly-decreasing chain (`G_0 ≠ G_1` for an explicitly ramified
+extension), or injectivity of the tame map (needs the monogenicity input), or the finite-extension
+local-field instances; or the smaller L1 refinements (continuity of the reduction; the imperfect-case
+generality). No second boundary was ever stacked; nothing cardinal-sin posited; the surjection
+*follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
@@ -380,6 +381,19 @@ groups in lower numbering`).
   (= field-or-DVR, i.e. finite-level) case** via `Ideal.iInf_pow_eq_bot_of_isLocalRing`; per-element
   escape (`exists_notMem_ramificationGroup`). The hypothesis-parametrized shape is *forced* by
   Pass 22: both regimes are now proved (collapse at idempotent `𝔪[K̄]`; separation under Krull).
+- **Pass 24 (`Anabelian/TameCharacter.lean` + `RamificationFiltration.lean`) — the tame character
+  `θ₀ : G₀ →* 𝓀ˣ` (hom + kernel half) + eventual triviality, axiom-free.** Given a uniformizer
+  (`𝔪_A = (π)`, `π ≠ 0` — any DVR supplies one, `tameCharacterOfIrreducible`): every `σ` moves `π`
+  by a unique unit (`tameUnit`); **`tameCharacter`** is a homomorphism on `G_0` (the cocycle
+  `(στ)π = π·u_σ·σ(u_τ)` straightens *because* inertia fixes residues — this is why `θ₀` lives on
+  `G_0`); **`G_1 ≤ ker θ₀`** (`tameCharacter_eq_one`), giving **`tameQuotientHom : G_0/G_1 →* 𝓀ˣ`**;
+  and `θ₀` is **uniformizer-independent** (`tameCharacter_eq_of_span_eq`) — canonical. Also
+  **eventual triviality** (`exists_ramificationGroup_eq_bot`): finite decomposition group +
+  separation ⟹ some `G_i = ⊥` (closes the Pass-23 epsilon). **Deliberately NOT claimed:
+  injectivity** of `G_0/G_1 →* 𝓀ˣ` (the full Serre IV §2 Prop. 7 embedding, ⟹ `G_0/G_1`
+  abelian/cyclic) — it needs `σ ∈ G_i` to be detectable on `π` alone, i.e. monogenicity of the
+  totally-ramified subextension (Serre IV §1 Prop. 5, from completeness/Eisenstein), absent at this
+  abstraction level. That is the **next L2 rung**, with wild `G_1` pro-`p` behind it.
 - **Architecture verdict (Pass 22, `Anabelian/RamificationDegeneracy.lean`) — the naive opening move
   is DEGENERATE, proved.** Defining lower numbering directly on the absolute group as
   `G_i := (𝔪[K̄]^(i+1)).inertia Gal(K̄/K)` (the Pass-21 device on powers) collapses:
@@ -392,10 +406,12 @@ groups in lower numbering`).
 - **The corrected L2 ladder (Serre, *Local Fields*, ch. IV):** (1) the filtration `G_i` over a
   valuation subring with separating `𝔪`-powers (the DVR/finite-level regime) with its basic
   theory — **✅ defined + basics DONE, Pass 23** (abstract `ValuationSubring` form: `G_0` =
-  inertia, antitone, normal, separation under Krull, Noetherian discharge); **remaining in (1):**
-  eventual triviality `∃ i, G_i = ⊥` for finite decomposition groups; a **concrete
-  properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the come-apart
-  exhibit the definition deserves); the tame quotient `G_0/G_1 ↪ 𝓀_L^×` and wild `G_1` pro-`p`;
+  inertia, antitone, normal, separation under Krull, Noetherian discharge); ~~eventual triviality
+  `∃ i, G_i = ⊥` for finite decomposition groups~~ **✅ Pass 24**; the tame quotient hom
+  `G_0/G_1 →* 𝓀_L^×` with `θ₀` canonical **✅ Pass 24 (hom + kernel half)**; **remaining in (1):**
+  a **concrete properly-decreasing chain** (`G_0 ≠ G_1` for an explicitly ramified extension — the
+  come-apart exhibit the definition deserves); **injectivity** of `G_0/G_1 →* 𝓀^×` (needs the
+  monogenicity input — Serre IV §1 Prop. 5); wild `G_1` pro-`p`;
   (2) the **Herbrand function** `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible;
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.

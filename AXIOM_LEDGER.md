@@ -1125,3 +1125,51 @@ R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **L2: lower numbering defined + basic theory proved** (the
 rung's first real content).
+
+### Pass 24 (2026-06-10) — rung L2: the tame character `θ₀ : G₀ →* 𝓀ˣ` (hom + kernel) + eventual triviality
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. The first structurally rich
+L2 theorem (Serre IV §2, the level-0 map), scoped *up front* to the hom + kernel half — injectivity
+deliberately not claimed (see Honesty). `Anabelian/TameCharacter.lean` + the warm-up appended to
+`RamificationFiltration.lean` (in-file `#print axioms`, all standard-only):
+
+```
+'Anabelian.exists_ramificationGroup_eq_bot'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smulUnit'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_smul_uniformizer_eq'       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameUnit_spec' / '_unique'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.residue_smul_eq_of_mem_ramificationGroup_zero'    — standard-only
+'Anabelian.tameCharacter'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameCharacter_eq_one'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameQuotientHom'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameCharacter_eq_of_span_eq'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.tameCharacterOfIrreducible'       depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Setting:** a uniformizer `π` (`𝔪_A = (π)`, `π ≠ 0`) — exactly what a DVR supplies
+  (`tameCharacterOfIrreducible` is the DVR entry point via `irreducible_iff_uniformizer`).
+- `tameUnit` — `σπ = π·u_σ` with `u_σ` a *unique* unit (`σ` preserves `(π)` both ways ⟹
+  `π ∣ σπ ∣ π` ⟹ `associated_of_dvd_dvd`).
+- **`tameCharacter : G_0 →* 𝓀ˣ`** — the cocycle `(στ)π = π·u_σ·σ(u_τ)` is a *crossed* homomorphism
+  in general; it straightens to an honest one **because inertia fixes residues** (`σ(u_τ) ≡ u_τ`)
+  — the mathematical reason `θ₀` is defined on `G_0`, not the decomposition group.
+- **`tameCharacter_eq_one` — `G_1 ≤ ker θ₀`** (`σπ − π = π(u_σ−1) ∈ (π²)`, cancel `π`), giving
+  **`tameQuotientHom : G_0/G_1 →* 𝓀ˣ`** (`QuotientGroup.lift`; normality from Pass 23).
+- **`tameCharacter_eq_of_span_eq`** — uniformizer-independence (`u'_σ = w⁻¹·u_σ·σ(w)`, inertia
+  fixes `w`'s residue): `θ₀` is **canonical**.
+- **`exists_ramificationGroup_eq_bot`** — eventual triviality for finite decomposition groups under
+  separation (closes the Pass-23 logged epsilon): per-element escape indices are finitely many,
+  bound them, antitone finishes. (Lean note: the `whnf`-timeout trap here was an un-annotated
+  anonymous constructor inside a one-liner `exact`; restructured with `Set.finite_range.bddAbove`.)
+
+**Honesty.** **Injectivity of `G_0/G_1 →* 𝓀ˣ` is NOT claimed or attempted** — classically it needs
+`σ ∈ G_i` to be detectable on `π` alone (`v(σπ−π) ≥ i+1 ⟹ σ ∈ G_i`), which requires the
+totally-ramified subextension to be monogenic (Serre IV §1 Prop. 5; from completeness/Eisenstein) —
+genuinely absent at the bare-`ValuationSubring` abstraction level. That, with its corollaries
+(`G_0/G_1` abelian/cyclic) and wild `G_1` pro-`p`, is the named next L2 rung. The `𝔪 = (π)`/`π ≠ 0`
+hypotheses are used *constructively* to build the map (not claimed-essential-for-a-theorem) — no
+rule-2 obligation incurred. No new `structure`/`class`; no new owed witness; D1 N/A; **D2 N/A**
+(`ValuationSubring`-native). Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **L2: the tame character exists, is canonical, and kills
+`G_1`** — the first map out of the filtration.

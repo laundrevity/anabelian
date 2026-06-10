@@ -63,9 +63,11 @@ hypothesis is irremovable from the *conclusion* `⨅ G_i = ⊥` — that would r
 What this pass does **not** yet provide, logged in `ROADMAP.md` (L2):
 * a concrete properly-decreasing chain (`G_0 ≠ G_1` for an explicitly ramified extension) — the
   come-apart exhibit that the definition eventually deserves;
-* eventual triviality `∃ i, G_i = ⊥` for finite decomposition groups (the `⨅ = ⊥` +
-  antitone-in-a-finite-group epsilon);
-* the tame quotient `G_0/G_1 ↪ 𝓀^×`, wild `G_1` pro-`p`, Herbrand `φ`/`ψ`, upper numbering;
+* ~~eventual triviality `∃ i, G_i = ⊥` for finite decomposition groups~~ — **DONE, Pass 24**
+  (`exists_ramificationGroup_eq_bot` below);
+* the tame quotient `G_0/G_1 ↪ 𝓀^×` (the hom + kernel half is **Pass 24**,
+  `Anabelian/TameCharacter.lean`; injectivity remains), wild `G_1` pro-`p`, Herbrand `φ`/`ψ`,
+  upper numbering;
 * the local-field instantiation `A = 𝒪_L`, `L/K` finite — blocked on the (verified absent)
   finite-extension `IsNonarchimedeanLocalField` instances.
 
@@ -197,8 +199,7 @@ theorem iInf_ramificationGroup_eq_bot_of_isNoetherianRing [IsNoetherianRing ↥A
     (Ideal.iInf_pow_eq_bot_of_isLocalRing _ Ideal.IsPrime.ne_top')
 
 /-- Per-element escape: under separation, every `σ ≠ 1` in the decomposition group leaves some
-ramification group. (The eventual triviality `∃ i, G_i = ⊥` for *finite* decomposition groups is
-the next epsilon — `ROADMAP.md`.) -/
+ramification group. -/
 theorem exists_notMem_ramificationGroup (h : (⨅ n : ℕ, maximalIdeal ↥A ^ n) = ⊥)
     {σ : A.decompositionSubgroup K} (hσ : σ ≠ 1) :
     ∃ i, σ ∉ ramificationGroup K A i := by
@@ -207,6 +208,25 @@ theorem exists_notMem_ramificationGroup (h : (⨅ n : ℕ, maximalIdeal ↥A ^ n
     not_not.mp fun hni => hc ⟨i, hni⟩
   exact hσ ((Subgroup.eq_bot_iff_forall _).mp (iInf_ramificationGroup_eq_bot K A h) σ
     (Subgroup.mem_iInf.mpr hall))
+
+/-- **Eventual triviality** (Pass 24, closing the Pass-23 logged epsilon): for a *finite*
+decomposition group, under separation the filtration is eventually trivial — some `G_i = ⊥`
+(Serre IV §1: `G_i = 1` for `i` large). Each `σ ≠ 1` escapes at some finite index
+(`exists_notMem_ramificationGroup`); finitely many escape indices are bounded, and antitonicity
+finishes. -/
+theorem exists_ramificationGroup_eq_bot [Finite (A.decompositionSubgroup K)]
+    (h : (⨅ n : ℕ, maximalIdeal ↥A ^ n) = ⊥) :
+    ∃ i, ramificationGroup K A i = ⊥ := by
+  choose f hf using fun σ : {σ : A.decompositionSubgroup K // σ ≠ 1} =>
+    exists_notMem_ramificationGroup K A h σ.2
+  obtain ⟨i₀, hi₀⟩ := (Set.finite_range f).bddAbove
+  refine ⟨i₀, ?_⟩
+  rw [Subgroup.eq_bot_iff_forall]
+  intro σ hσ
+  by_contra hne
+  have h1 : f ⟨σ, hne⟩ ≤ i₀ :=
+    hi₀ (Set.mem_range_self (⟨σ, hne⟩ : {σ : A.decompositionSubgroup K // σ ≠ 1}))
+  exact hf ⟨σ, hne⟩ (ramificationGroup_antitone K A h1 hσ)
 
 -- Reproducible axiom audit (re-runs on every `lake build`). All standard-axioms-only.
 #print axioms ramificationGroup
@@ -218,5 +238,6 @@ theorem exists_notMem_ramificationGroup (h : (⨅ n : ℕ, maximalIdeal ↥A ^ n
 #print axioms iInf_ramificationGroup_eq_bot
 #print axioms iInf_ramificationGroup_eq_bot_of_isNoetherianRing
 #print axioms exists_notMem_ramificationGroup
+#print axioms exists_ramificationGroup_eq_bot
 
 end Anabelian
