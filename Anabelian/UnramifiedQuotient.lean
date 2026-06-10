@@ -4,9 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Conor Mahany
 -/
 import Anabelian.FiniteField
-import Anabelian.ResidueIso
-import Anabelian.ResidueReductionInvariant
-import Anabelian.ResidueReductionContinuity
+import Anabelian.GaloisInertia
 import Mathlib.NumberTheory.LocalField.Basic
 import Mathlib.FieldTheory.AbsoluteGaloisGroup
 import Mathlib.GroupTheory.QuotientGroup.Basic
@@ -57,10 +55,12 @@ per-target list), and prove **real downstream structure** on it.
 ## Honesty: what this is and is NOT
 
 This is the honest sign the project reached its real work: the ledger is no longer empty. The
-`FOUNDATIONAL` axiom posits the *existence* of a surjection `G_K ↠ G_{𝓀[K]}` — weaker than (and
+`FOUNDATIONAL` axiom posited the *existence* of a surjection `G_K ↠ G_{𝓀[K]}` — weaker than (and
 implied by) the full classical theorem (which gives the *specific* continuous residue reduction with
-kernel exactly the inertia subgroup). Tying `N` to Pass 4's `inertiaSubgroup` requires the valuation
-on `K̄` (still absent) and is logged as remaining L1 work.
+kernel exactly the inertia subgroup). ~~Tying `N` to the inertia subgroup requires the valuation
+on `K̄` (still absent) and is logged as remaining L1 work~~ — **DONE (Pass 21)**: the map is now
+the named `residueReductionHom` and `ker_residueReductionHom` identifies `N = galoisInertia K`
+(`Anabelian/GaloisInertia.lean`); only *continuity* of the reduction remains a logged refinement.
 
 **Not reconstruction.** The residue surjection is a map between the Galois groups of *given* fields
 (`K` and its residue field); nothing is recovered from an abstract topological group. No reach
@@ -88,12 +88,6 @@ variable (K : Type*) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchi
 
 attribute [local instance] isLocalRing_galoisIntegers
 
-set_option maxHeartbeats 1000000 in
--- elaboration heartbeats raised for the heavy keystone assembly (see the instance note below).
-set_option synthInstance.maxHeartbeats 1000000 in
--- heartbeats raised: the keystone's `MulAction (Gal K) (Ideal 𝒪[K̄])` + profinite instance searches
--- are expensive under `import Mathlib` + the imported Anabelian instances; they resolve, just past
--- the defaults. A search-cost matter, not logical (`#print axioms` below is standard-only).
 /-- **DISCHARGED (Pass 20): a proved `theorem`, no longer an axiom.** The residue reduction
 `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)` of a nonarchimedean local field is surjective — for a **perfect** base field
 `K` (the `[PerfectField K]` hypothesis; see the narrowing note below). There is a surjective group
@@ -103,13 +97,15 @@ homomorphism from the absolute Galois group of `K` onto that of its residue fiel
 across Passes 11–20: the valuation ring `𝒪[K̄] = integralClosure 𝒪[K] K̄` and its Galois
 `MulSemiringAction`, the fixed ring `𝒪[K̄]^Gal = 𝒪[K]`, the discrete/continuous-action data, `𝒪[K̄]`
 local (route (ii), via `spectralNorm`), the residue field algebraically closed, and the residue
-identification `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]`. **Proof (the discharge):** with `𝔪[K̄]` the
-unique maximal ideal of the local `𝒪[K̄]`, every `σ ∈ Gal(K̄/K)` stabilizes it (it permutes
-maximal ideals, of which there is one), so `stabilizer = ⊤`;
-`Ideal.Quotient.stabilizerHom_surjective_of_profinite` (`Gal(K̄/K)` profinite via `[PerfectField K]`
-⟹ `IsGalois K K̄`) gives `stabilizer ↠ Aut(𝓀̄/𝓀[K])`; `galoisResidueAut` identifies the codomain
-with `Field.absoluteGaloisGroup 𝓀[K]`, and `stabilizer = ⊤` the domain with `Gal(K̄/K)`.
-**The surjection now *follows* — nothing posited.**
+identification `𝒪[K̄]/𝔪[K̄] ≅ AlgebraicClosure 𝓀[K]`. The Pass-20 keystone assembly
+(`stabilizer = ⊤` + `Ideal.Quotient.stabilizerHom_surjective_of_profinite` + `galoisResidueAut`)
+now lives in `Anabelian/GaloisInertia.lean` as the **named map** `residueReductionHom` (Pass 21);
+this theorem is its existential corollary. **The surjection *follows* — nothing posited.**
+
+**Pass 21 upgrade.** The witness `φ` is now the named `residueReductionHom K`, whose kernel is
+the named inertia subgroup (`ker_residueReductionHom : ker = galoisInertia K`) — so the `N` in
+`unramifiedQuotient_iso` below is no longer anonymous; see `unramifiedQuotientEquiv` for the
+concrete form `Gal(K̄/K) ⧸ galoisInertia K ≃* Gal(𝓀̄/𝓀)`.
 
 **Narrowing (Pass 14/20).** This carries `[PerfectField K]` (holds for char-0 / mixed-char local
 fields). The statement is **true** for imperfect equal-characteristic `K` (`𝔽_q((t))`) too, but the
@@ -117,36 +113,8 @@ keystone delivers only the perfect case (it needs `Gal(K̄/K)` literally profini
 `IsGalois K K̄` ⟺ `K` perfect); the imperfect case (via `Aut(K̄/K) ≅ Gal(K^sep/K)`) is a tracked
 remainder in `ROADMAP.md`, never dropped. -/
 theorem residueReduction_surjective [PerfectField K] :
-    ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ := by
-  letI : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
-  haveI : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
-  haveI := continuousSMul_galoisIntegers K
-  haveI := galoisIntegers_algebraIsInvariant K
-  -- `𝔪[K̄]` is the unique maximal ideal of the local `𝒪[K̄]`, and `σ • 𝔪[K̄]` is again maximal
-  -- (`comap` under the ring automorphism `σ`), so by uniqueness `σ` fixes it: `stabilizer = ⊤`.
-  have hstab : MulAction.stabilizer (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
-      (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))) = ⊤ := by
-    rw [Subgroup.eq_top_iff']
-    intro σ
-    rw [MulAction.mem_stabilizer_iff, Ideal.pointwise_smul_eq_comap]
-    exact eq_maximalIdeal inferInstance
-  -- the keystone: `stabilizer ↠ Aut((B/Q)/(A/P))` (all hypotheses now in hand)
-  have hsurj := Ideal.Quotient.stabilizerHom_surjective_of_profinite
-    (G := AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
-    (maximalIdeal ↥𝒪[K]) (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))
-  -- `stabilizer = ⊤` identifies the domain with `Gal(K̄/K)`
-  let ι : (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K) →*
-      ↥(MulAction.stabilizer (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
-        (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))) :=
-    { toFun := fun σ => ⟨σ, by rw [hstab]; exact Subgroup.mem_top σ⟩
-      map_one' := rfl, map_mul' := fun _ _ => rfl }
-  have hι : Function.Surjective ι := fun τ => ⟨τ.1, Subtype.ext rfl⟩
-  -- `galoisResidueAut` identifies the codomain with `Field.absoluteGaloisGroup 𝓀[K]`
-  refine ⟨(galoisResidueAut K).toMonoidHom.comp
-    ((Ideal.Quotient.stabilizerHom (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))
-      (maximalIdeal ↥𝒪[K]) (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)).comp ι), ?_⟩
-  simp only [MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
-  exact (galoisResidueAut K).surjective.comp (hsurj.comp hι)
+    ∃ φ : Field.absoluteGaloisGroup K →* Field.absoluteGaloisGroup 𝓀[K], Function.Surjective φ :=
+  ⟨residueReductionHom K, residueReductionHom_surjective K⟩
 
 /-- **Unlocked by the (now proved) residue reduction.** The absolute Galois group of a local field
 `K` has a normal subgroup `N` (the kernel of the residue reduction — classically the inertia

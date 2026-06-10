@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 20 (2026-05-30)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 21 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -37,7 +37,7 @@ This rung asserts nothing anabelian. It establishes that the *precondition* of r
 
 ## Foundational Mathlib gaps (L1–L4) — prerequisites, below the targets
 
-### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–20)   ·   **DEBT 0, FOUNDATIONAL 0** (the L1 `DEBT` discharged Pass 20)
+### L1 — Galois theory of local/finite fields   ·   **IN-PROGRESS** (Passes 1–21)   ·   **DEBT 0, FOUNDATIONAL 0** (the L1 `DEBT` discharged Pass 20)
 
 Mathlib **has** `IsNonarchimedeanLocalField` (definition, DVR, finite residue field, completeness),
 abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgroup`,
@@ -174,6 +174,17 @@ abstract decomposition/inertia *subgroups* (`ValuationSubring.decompositionSubgr
   downstream (`unramifiedQuotient_iso`/`_procyclic` carry `[PerfectField K]`, `residue_procyclic`
   unchanged). **Ledger `1 DEBT → 0`.** The project's first `DEBT`-discharged-into-theorem; nothing
   posited (the surjection *follows* from the keystone applied to axiom-free bricks).
+- Pass 21 (`Anabelian/GaloisInertia.lean`): **the named residue reduction + `ker = inertia`**,
+  axiom-free — the post-discharge packaging that closes the Pass-5 "tie `N` to the inertia subgroup"
+  sub-target. `residueReductionHom : Gal(K̄/K) →* Gal(𝓀̄/𝓀)` (the Pass-20 existential's witness,
+  **named**; no `PerfectField` for the map itself), `galoisInertia : Subgroup (Gal(K̄/K))` (Mathlib's
+  `Ideal.inertia` of `𝔪[K̄]` — `{σ | ∀ b ∈ 𝒪[K̄], σ b − b ∈ 𝔪[K̄]}`, the classical pointwise
+  condition `v(σx − x) > 0`), **`ker_residueReductionHom : ker = galoisInertia`** (unconditional —
+  via Mathlib's `Ideal.Quotient.ker_stabilizerHom`, found by inventory, + `stabilizer = ⊤`),
+  `galoisInertia_normal` (unconditional), and `unramifiedQuotientEquiv [PerfectField K] :
+  Gal(K̄/K) ⧸ galoisInertia K ≃* Gal(𝓀̄/𝓀)` — the classical unramified-quotient theorem in standard
+  form, upgrading the existential `unramifiedQuotient_iso`. `residueReduction_surjective` is now a
+  one-line corollary of the named map.
 
 **Sub-target ✅ DONE (Pass 20) — the residue surjection (discharged into a `theorem`):**
 - `Anabelian.residueReduction_surjective` (the surjectivity half `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`; Pass 4 proved
@@ -268,29 +279,38 @@ index systems must be matched cofinally: `FiniteIndexNormalSubgroup (Multiplicat
   feared "procyclic ⟹ unique index-`n` subgroup" lemma was **not** needed — `ker χ_m = closure⟨zhatGen^m⟩`
   did the job directly. No `FOUNDATIONAL`, no `DEBT`; standard axioms only.
 
-**Sub-targets, NOT-STARTED (the next L1 objectives, post-discharge):**
-- **Tie `N` (the residue-reduction kernel) to Pass 4's `inertiaSubgroup`** — now reachable, since the
-  valuation on `K̄` / `𝒪[K̄]` is in hand (Pass 5 logged this as blocked on the absent `K̄`-valuation).
+**Sub-targets (the next L1 objectives, post-discharge):**
+- ~~**Tie `N` (the residue-reduction kernel) to the inertia subgroup**~~ — **DONE, Pass 21**
+  (`ker_residueReductionHom : (residueReductionHom K).ker = galoisInertia K`, unconditional, via
+  Mathlib's `Ideal.inertia`/`Ideal.Quotient.ker_stabilizerHom`). Note the *form*: the tie is to
+  `Ideal.inertia` (the pointwise condition, the same content Pass 4's `mem_inertiaSubgroup_iff`
+  isolates), **not** to the literal `ValuationSubring.inertiaSubgroup` — that translation would put
+  the spectral `Valued`/`ValuationSubring` structure on `K̄` into *statements* (statement-level D2)
+  and is deliberately not pursued; the `Ideal.inertia` form is canonical for the project.
+- **Continuity of `residueReductionHom`** (it is a map of profinite groups; Mathlib's `stabilizerHom`
+  has no continuity API) — a true, unproved refinement; needed eventually for the topological form
+  of the unramified quotient. NOT-STARTED.
 - The unramified ⟶ tame ⟶ wild **ramification filtration** of `Gal(K̄/K)` for local `K` (rung L2),
-  defined *via* the now-available valuation on `K̄`.
+  now concretely anchorable: `G_0 = galoisInertia K`, `G_i = {σ | ∀ b, σ b − b ∈ 𝔪[K̄]^(i+1)}`
+  (Pass 21 unblocked the anchor). NOT-STARTED.
 - ~~Discharge owed witness W1 (`Gal(ℚ̄/ℚ)` non-abelian)~~ — **DONE, Pass 3**.
 - ~~The residue surjection~~ — **DONE (DISCHARGED Pass 20)**.
 
-**Honest read on L1 completeness (updated Pass 20).** Easy/finite fruit harvested (P1–4); Pass 5 took
+**Honest read on L1 completeness (updated Pass 21).** Easy/finite fruit harvested (P1–4); Pass 5 took
 the one boundary; Passes 6–10 closed `≅ Ẑ`; Pass 11 made the inflection decision (`FOUNDATIONAL → DEBT`);
 Pass 12 found the lifting is **not a wall** (keystone `stabilizerHom_surjective_of_profinite` present);
 Passes 13–18 built the keystone's inputs (`B = integralClosure 𝒪[K] K̄`, the fixed ring, the
 discrete/continuous action, `𝒪[K̄]` local); Pass 19 the residue identification (`𝓀̄ ≅ AlgebraicClosure
 𝓀[K]`, `galoisResidueAut`); **Pass 20 ran Step 4 and DISCHARGED — `stabilizer = ⊤`, the keystone
-applied, the `axiom` deleted for a proved `[PerfectField K]` `theorem`.** The project now holds
-**`0 FOUNDATIONAL / 0 DEBT`** (`#print axioms` standard-only on `residueReduction_surjective` and all
-downstream; **zero `axiom` declarations** project-wide) — the **first `DEBT`-discharged-into-theorem**,
-the genuine progress signal the discipline exists to produce. **Generality (Job B):** the discharge is
-the **perfect case** (`[PerfectField K]`); the imperfect equal-char case is the tracked remainder above.
-**Honest next step (Pass 21):** the post-discharge L1 work — tie `N` to `inertiaSubgroup` (now that the
-`K̄`-valuation is in hand), or open L2 (the ramification filtration). No second boundary was ever
-stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone applied to axiom-free
-bricks.
+applied, the `axiom` deleted for a proved `[PerfectField K]` `theorem`.** **Pass 21 named the map and
+its kernel** — `residueReductionHom`, `galoisInertia`, `ker = inertia` (unconditional), and the
+classical-form `unramifiedQuotientEquiv : Gal(K̄/K) ⧸ I ≃* Gal(𝓀̄/𝓀)`. The project holds
+**`0 FOUNDATIONAL / 0 DEBT`** (**zero `axiom` declarations** project-wide). **Generality (Job B):** the
+surjectivity results carry `[PerfectField K]`; the imperfect equal-char case is the tracked remainder
+above. **Honest next step (Pass 22):** open **L2** — the ramification filtration, whose anchor
+`G_0 = galoisInertia K` Pass 21 supplied (`G_i` via `𝔪[K̄]^(i+1)`); or the smaller refinements
+(continuity of the reduction; the imperfect-case generality). No second boundary was ever stacked;
+nothing cardinal-sin posited; the surjection *follows* from the keystone applied to axiom-free bricks.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

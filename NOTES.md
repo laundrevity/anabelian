@@ -2017,3 +2017,96 @@ unramified ⟶ tame ⟶ wild ramification filtration `G_i` of `Gal(K̄/K)`, defi
 gates L2). Also outstanding (not blocking): the **imperfect equal-char generality** of the residue
 surjection (the tracked remainder, via `Aut(K̄/K) ≅ Gal(K^sep/K)`). The honest frame stays: R1–R3
 remain distant; L1 is essentially complete (its one boundary earned, not posited).
+
+---
+
+# Pass 21 — rung L1, post-discharge: the named residue reduction + `ker = inertia` (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) The Pass-20 pointer's two options: (a) tie `N` to the inertia subgroup; (b) open L2. (ii) Choose
+(a): the Pass-20 discharge is an *existential* (`∃ φ, Surjective φ`) with the concrete map buried in
+the proof — until it is a named `def` with an identified kernel, L2's filtration has no anchor
+(`G_0` *is* inertia), so (a) gates (b). (iii) Deliverables: the named map, its surjectivity, the
+kernel characterization as the pointwise residue stabilizer; stop clean if the kernel identification
+balloons. (iv) Claim only what is proved; `[PerfectField K]` only where surjectivity is consumed.
+
+## Environment note (this pass ran on a fresh machine)
+
+No Lean toolchain was present: installed `elan` (4.2.3), toolchain `v4.30.0` auto-pinned from
+`lean-toolchain`, `lake exe cache get` (8459 files), baseline `lake build` clean (8494 jobs,
+all Pass-20 audits standard-only) before any work.
+
+## Route-first-step (probe) + the inventory find of the pass
+
+- **`Ideal.inertia` is PRESENT** (`Mathlib/RingTheory/Ideal/Defs.lean`):
+  `Ideal.inertia G I : Subgroup G = {σ | ∀ x, σ • x - x ∈ I}` (via `AddSubgroup.inertia`, with
+  `AddSubgroup.mem_inertia : … ↔ ∀ x, σ • x - x ∈ I` a simp `.rfl`) — Mathlib's general inertia
+  subgroup for a group acting on a ring, exactly the classical pointwise condition.
+- **`Ideal.Quotient.ker_stabilizerHom` is PRESENT** (`Mathlib/RingTheory/Ideal/Over.lean`):
+  `(stabilizerHom P p G).ker = (P.inertia G).subgroupOf (stabilizer G P)` — the kernel lemma we
+  would otherwise have proved by hand. (Also `map_ker_stabilizer_subtype`, `inertia_le_stabilizer`,
+  `stabilizerHom_apply` simp.) So the pass *applies* Mathlib's kernel identification; nothing reproved.
+- Full draft probed via `lake env lean` (throwaway): all declarations compiled standard-axioms-only
+  after three fixes (below).
+
+## What was built (`Anabelian/GaloisInertia.lean`, all standard-axioms-only)
+
+- `galoisIntegers_stabilizer_eq_top` — decomposition = ⊤ (extracted from the Pass-20 proof as a
+  named lemma; no `PerfectField`).
+- `galoisToStabilizer` (+ `_surjective`) — `Gal K →* ↥(stabilizer 𝔪[K̄])`, the bundled inclusion.
+- `residueReductionHom : Gal K →* Gal 𝓀[K]` — **THE residue reduction, named** =
+  `galoisResidueAut ∘ stabilizerHom ∘ galoisToStabilizer`. **No `PerfectField`** (the map exists
+  unconditionally; only surjectivity needs profiniteness).
+- `residueReductionHom_surjective [PerfectField K]` — the Pass-20 keystone assembly, restated for
+  the named map. `residueReduction_surjective` (`UnramifiedQuotient.lean`) refactored to the
+  one-line corollary `⟨residueReductionHom K, residueReductionHom_surjective K⟩` (statement
+  verbatim; heavy proof + its heartbeat options removed from that file).
+- `galoisInertia : Subgroup (Field.absoluteGaloisGroup K)` — the inertia subgroup, named:
+  `(𝔪[K̄]).inertia Gal(K̄/K)` (+ `mem_galoisInertia_iff`, the unfolded pointwise form — the concrete
+  realization of Pass 4's abstract `mem_inertiaSubgroup_iff`).
+- **`ker_residueReductionHom : (residueReductionHom K).ker = galoisInertia K`** — the headline.
+  `galoisResidueAut` injective + `ker_stabilizerHom` + `stabilizer = ⊤` collapsing `subgroupOf`.
+  **Unconditional.**
+- `galoisInertia_normal` — inertia normal in the full group (it is a kernel). Unconditional.
+- `unramifiedQuotientEquiv [PerfectField K] : Gal K ⧸ galoisInertia K ≃* Gal 𝓀[K]` — the classical
+  unramified-quotient theorem in standard form (upgrades the existential `unramifiedQuotient_iso`).
+
+### Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| kernel characterization proved by hand (mk-surjectivity + quotient eq) | **`Ideal.Quotient.ker_stabilizerHom` is in Mathlib** — applied, not reproved | ✓ cheaper |
+| inertia stated ad-hoc as a set-with-condition | **`Ideal.inertia` is in Mathlib** — the canonical form | ✓ better |
+| the equiv `G⧸I ≃* Gal 𝓀` routine | **instance-path trap**: `AlgEquiv.aut` vs the `deriving Group` instance on `absoluteGaloisGroup` are defeq but not syntactically equal — `Subgroup.Normal` synthesis fails across the mismatch (motive-not-type-correct under `rw`) | fixed by **typing `galoisInertia` as `Subgroup (Field.absoluteGaloisGroup K)`** so every statement lives over one instance path |
+| `mem`-lemma for `σ : absoluteGaloisGroup K` | `HSMul` synthesis won't unfold the `absoluteGaloisGroup` def (instances are reducible-only) | stated for `σ` in the `AlgEquiv` form (defeq) |
+
+## Build + headline
+
+`lake build`: **8495 jobs, clean** (no errors, warnings, or `sorry`); all 14 rebuilt-file audits
+standard-only; project-wide `axiom`-declaration grep: **zero**. **HEADLINE: the Pass-5 sub-target
+"tie `N` to the inertia subgroup" is CLOSED — `ker(residueReductionHom) = galoisInertia`,
+unconditionally, and the unramified quotient now reads `Gal(K̄/K) ⧸ I ≃* Gal(𝓀̄/𝓀)` with `I` the
+named inertia subgroup.** Honesty: connective packaging of Passes 11–20's hard content + Mathlib's
+kernel lemma — not a new hard theorem; its value is that downstream work can now *refer* to the
+reduction and to inertia. The literal `ValuationSubring.inertiaSubgroup` translation deliberately
+not pursued (statement-level D2); continuity of the reduction logged as remaining refinement.
+D1 N/A; **D2 unchanged** (no valuation on `K̄` in any statement). No new `structure`/`class`
+(no rule-2); no new owed witness (`[PerfectField K]` = the tracked owed generality, not a
+load-bearing claim). Recovers nothing from an abstract group; R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** No axiom touched; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Progress = the named
+  map + the unconditional kernel identification (the Pass-5 remaining-work item, closed).
+
+## Scope: pointer to Pass 22
+
+With `galoisInertia` named, **L2 is unblocked at its anchor**: the ramification filtration in lower
+numbering — `G_0 = galoisInertia K`, `G_i = {σ | ∀ b ∈ 𝒪[K̄], σ b − b ∈ 𝔪[K̄]^(i+1)}` (i.e.
+`Ideal.inertia` applied to `𝔪[K̄]^(i+1)` — the SAME Mathlib device, so the definition costs little;
+the *theorems* — `G_i` normal in `G_0`, the quotients' structure, eventually Herbrand/upper
+numbering — are the real L2 body). Alternatives: the imperfect equal-char generality (the tracked
+remainder, via `Aut(K̄/K) ≅ Gal(K^sep/K)`), or continuity of `residueReductionHom`. Honest frame
+unchanged: R1–R3 distant; L1 essentially complete with its boundary earned, its map named, and its
+kernel identified.

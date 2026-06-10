@@ -16,3 +16,4 @@ import Anabelian.ResidueReductionContinuity
 import Anabelian.ResidueAlgClosed
 import Anabelian.GaloisIntegersLocal
 import Anabelian.ResidueIso
+import Anabelian.GaloisInertia

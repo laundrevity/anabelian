@@ -964,3 +964,67 @@ not a reconstruction; R1–R3 remain distant and untouched.
 Ledger delta: **`DEBT` −1 (discharged into a theorem); `FOUNDATIONAL` 0.** Headline:
 **`0 FOUNDATIONAL / 1 DEBT` → `0 FOUNDATIONAL / 0 DEBT`.** The project's first `DEBT`-discharged-into-
 theorem — the genuine progress signal the discipline exists to produce.
+
+### Pass 21 (2026-06-10) — rung L1, post-discharge: the named residue reduction + `ker = inertia`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Executed the first of the two
+Pass-20-pointer options: **(a) tie `N` (the residue-reduction kernel) to the inertia subgroup** —
+chosen over (b) opening L2 because L2's filtration *sits on* this identification (`G_0` *is* the
+inertia subgroup; an anonymous existential kernel cannot anchor a filtration), so (a) gates (b).
+
+**The Pass-20 discharge was an existential** (`∃ φ, Surjective φ`) — the concrete map was buried in
+the proof. `Anabelian/GaloisInertia.lean` names it and identifies its kernel (in-file `#print axioms`,
+all standard-only):
+
+```
+'Anabelian.galoisIntegers_stabilizer_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisToStabilizer'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisToStabilizer_surjective'   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.residueReductionHom'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.residueReductionHom_surjective'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisInertia'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_galoisInertia_iff'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_residueReductionHom'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.galoisInertia_normal'            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unramifiedQuotientEquiv'         depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `galoisIntegers_stabilizer_eq_top` — **decomposition = ⊤** (extracted from the Pass-20 proof as a
+  named lemma; no `PerfectField`).
+- `residueReductionHom : Gal(K̄/K) →* Gal(𝓀̄/𝓀)` — **THE residue reduction, named** (`galoisResidueAut
+  ∘ stabilizerHom ∘ galoisToStabilizer`); the *map* needs **no `PerfectField`** — only surjectivity
+  does (`residueReductionHom_surjective`, the Pass-20 keystone assembly restated for the named map;
+  `residueReduction_surjective` in `UnramifiedQuotient.lean` is now its one-line existential corollary).
+- `galoisInertia : Subgroup (Field.absoluteGaloisGroup K)` — **the inertia subgroup, named**:
+  Mathlib's `Ideal.inertia` of `𝔪[K̄]` = `{σ | ∀ b ∈ 𝒪[K̄], σ b − b ∈ 𝔪[K̄]}` (the classical
+  `v(σx − x) > 0`; Serre, *Local Fields*, ch. IV §1).
+- **`ker_residueReductionHom` — the identification `ker = galoisInertia`, the headline.** Rests on
+  Mathlib's `Ideal.Quotient.ker_stabilizerHom` (**found by inventory, not reproved** — the Pass-21
+  probe discovered `Ideal.inertia` + `ker_stabilizerHom` + `map_ker_stabilizer_subtype` are PRESENT
+  in `RingTheory/Ideal/Over.lean`) + `stabilizer = ⊤` + injectivity of `galoisResidueAut`.
+  **Unconditional — no `PerfectField`** (the identification holds for the map, surjective or not).
+- `galoisInertia_normal` — inertia is normal in the full `Gal(K̄/K)` (it is a kernel). Unconditional.
+- `unramifiedQuotientEquiv [PerfectField K]` — **the classical unramified-quotient theorem in its
+  standard form**: `Gal(K̄/K) ⧸ galoisInertia K ≃* Gal(𝓀̄/𝓀)` — upgrading Pass 5/20's `∃ N, …`
+  (`unramifiedQuotient_iso`) to the concrete named statement.
+
+**Honesty.** Connective, not a new hard theorem: the surjectivity was earned in Passes 11–20 and the
+kernel lemma is Mathlib's; the pass's content is the *correct packaging* (named map, named kernel,
+single group-instance path — a real Lean-architecture constraint: the `AlgEquiv.aut` vs derived-`Group`
+instance mismatch forced `galoisInertia` to be typed over `Field.absoluteGaloisGroup K`) plus the
+honest closing of the Pass-5 "tie `N` to inertia" sub-target. The *literal*
+`ValuationSubring.inertiaSubgroup`-form translation is **deliberately not pursued** (it would put the
+spectral `Valued` structure on `K̄` into *statements* — a statement-level D2 incursion); the
+`Ideal.inertia` form is canonical for the project. **Continuity** of `residueReductionHom` (it is a
+map of profinite groups) is true but not proved — logged as remaining L1 refinement in `ROADMAP.md`.
+
+No new `structure`/`class` (no rule-2 model obligation). No new owed witness (`[PerfectField K]` on
+the two surjectivity-dependent results is the *tracked owed generality* — we claim the statement is
+true *without* it — not a load-bearing-hypothesis claim). D1 N/A (no `Algebra ℚ (AlgebraicClosure ℚ)`).
+**D2 unchanged** (3a's localized incursion only; `Ideal.inertia` is valuation-free). File-wide
+`synthInstance.maxHeartbeats` raise (commented) — the same stabilizer/`MulAction (Gal K) (Ideal 𝒪[K̄])`
+search cost as Pass 20; search-cost, not logical. Recovers nothing from an abstract group; R1–R3
+untouched.
+
+Ledger delta: **0 / 0** — axiom-free; no `DEBT`, no `FOUNDATIONAL`; the Pass-5 sub-target
+"tie `N` to the inertia subgroup" is **closed**.
