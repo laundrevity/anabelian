@@ -35,3 +35,4 @@ import Anabelian.ExtensionTotallyRamified
 import Anabelian.InertiaFixedIntegers
 import Anabelian.ExtensionMonogenicGeneral
 import Anabelian.InertiaCharpoly
+import Anabelian.InertiaResidueCover

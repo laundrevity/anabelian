@@ -1630,3 +1630,48 @@ image of the inertia-fixed integers is all of `𝓀_L`) — no Hensel, no Lucas,
 D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free.
+
+### Pass 36 (2026-06-10) — the descent finale: `hresid` proved; the unconditional kernel theorem
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**.
+`Anabelian/InertiaResidueCover.lean` — `hresid` and the finale (in-file `#print axioms`,
+standard-only; build host-verified, warning-clean):
+
+```
+'Anabelian.map_residue_inertiaFixedIntegers_eq_top'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.inertiaFixedIntegers_residue_cover'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_tameCharacter_extensionIntegers_general' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`map_residue_inertiaFixedIntegers_eq_top`** — the residue image `F` of the inertia-fixed
+  integers is **all of `𝓀_L`**. For any `b̄`: every coefficient of `(X − b̄)^{|G₀|}` lies in `F`
+  (the Pass-35 bricks); `|G₀| = p^e·m`, `p ∤ m` (`Nat.exists_eq_pow_mul_and_not_dvd`); the
+  freshman's dream (`sub_pow_expChar_pow_of_commute` — the ExpChar-era name) plus
+  `Polynomial.expand`/`coeff_expand`/`coeff_X_add_C_pow` identify the
+  `X^{p^e(m−1)}`-coefficient as `−(b̄^{p^e})·m`; `p ∤ m` makes `m ≠ 0` in `𝓀_L`
+  (`CharP.cast_eq_zero_iff`) and `m` inverts by `m^{q−2}` (`pow_card_sub_one_eq_one`), so
+  `b̄^{p^e} ∈ F`; the `p^e`-power map is the **iterated Frobenius** — a ring hom out of a
+  field, injective, hence surjective on the finite `𝓀_L` — so `F = 𝓀_L`.
+- **`inertiaFixedIntegers_residue_cover`** — **`hresid` verbatim**: every `x ∈ 𝒪_L` is
+  congruent mod `𝔪_L` to an inertia-fixed integer.
+- **`ker_tameCharacter_extensionIntegers_general`** — **the finale**: Pass 34's reduction +
+  `hresid` ⟹ `ker θ₀ = G₁` for ANY finite separable extension of nonarchimedean local
+  fields, **unconditionally**. Serre IV §2 Prop. 7 (level 0), general case, on actual local
+  fields.
+
+Two deviations from the Pass-35 sketch, both simplifications: **no cyclic generator** of
+`𝓀_Lˣ` (iterated-Frobenius surjectivity replaces the generator transport — the sketch's own
+"or argue via the Frobenius automorphism" parenthetical was the better route), and **no
+subfield structure** on `F` (`m⁻¹ = m^{q−2}` keeps the argument in subring-membership
+arithmetic). `p := ringChar 𝓀_L` is derived internally (finite field ⟹ prime char), so the
+Pass-31 `CharP`-transfer lemma is not consumed.
+
+**Honesty.** `[Finite G₀]` (the proposition, per the `unusedFintypeInType` linter — `Fintype`
+only proof-locally via `Fintype.ofFinite`) and `[Algebra.IsSeparable K L]` exactly where
+consumed. Classically the content is "`L/L₀` is totally ramified" (Serre I §7), proved here
+directly, without constructing `L₀`. No new `structure`/`class`; no owed witness; D1 N/A;
+D2 N/A. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **The descent block (Passes 29–36) is closed: every
+hypothesis of the abstract L2 lower-numbering theory is a theorem on actual local fields, in
+the general case — not just the totally ramified one.**

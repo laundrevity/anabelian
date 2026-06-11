@@ -3103,3 +3103,99 @@ The finale: (1) coefficient extraction — in `𝓀_L[X]`: `(X − b̄)^{p^a m} 
 **`hresid`**; (4) the unconditional kernel theorem
 `ker_tameCharacter_extensionIntegers_general` := Pass 34's theorem + `hresid` — **the descent
 closes**. Then: P27/P28 instantiations; `IsNonarchimedeanLocalField L`; or the ascent.
+
+---
+
+# Pass 36 — the descent finale: `hresid` proved; the unconditional kernel theorem (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved: the handoff's Pass-36 plan — prove `hresid`, then the unconditional kernel
+theorem. (ii) Honest scope: one file (`Anabelian/InertiaResidueCover.lean`), two substantial
+declarations + a one-liner finale (the finale adds no imports, so no second file). (iii) The
+proof as designed during probing simplified the Pass-35 sketch twice: the cyclic-generator
+transport is unnecessary (every `b̄` satisfies `b̄^{p^e} ∈ F`, and `x ↦ x^{p^e}` = iterated
+Frobenius is *surjective* on the finite `𝓀_L` — injective ring hom out of a field + finite),
+and no subfield structure on `F` is needed (`m⁻¹ = m^{q−2}` by `pow_card_sub_one_eq_one` keeps
+everything in subring-membership arithmetic). `p := ringChar 𝓀_L` internally — the Pass-31
+`CharP`-transfer is not even consumed. (iv) Coefficient extraction redesigned around
+`Polynomial.expand`: `(X − b̄)^{p^e·m} = expand (p^e) ((X − C b̄^{p^e})^m)` (freshman's dream +
+`expand` ring-hom-ness), so `coeff_expand` + `coeff_X_add_C_pow` read off the
+`X^{p^e(m−1)}`-coefficient as `−(b̄^{p^e})·m` — no binomial sums, no `Finset.sum_eq_single`.
+
+## Environment incident (governs future sessions) + the module-probe recipe
+
+The handoff's verified hybrid-workspace recipe was **infeasible this session**: the `/sessions`
+volume (9.8 G) was 99 % full with the *same-day* dead workspaces of the P25–35 sessions
+(unreclaimable from inside the VM — owned by `nobody`), the root volume had 2.3 G free, no
+root/sudo. Worse, the full library closure is irreducible: the project's union import closure
+is the whole of Mathlib (8392 modules, 5.31 G of artifacts) regardless of import-narrowing —
+three early files bare-`import Mathlib`, and even without them the union closure is full.
+**Future sessions: check `df` on `/sessions` at start; dead session dirs from the same day eat
+the volume; ~7 G free is the bar for the full recipe.**
+
+What replaced it — a **module-probe environment** (new, verified, ~2.5 G total, sub-second
+iterations; worth reusing even when disk is plentiful):
+
+- Toolchain: extract via `zstd -dc <tarball> | tar -x` with `--exclude='*.a'`
+  `--exclude='*libLLVM*'` etc.; delete `src/`, all bins except `bin/lean`, all `*.ilean` /
+  `*.olean.server` — and **all toolchain `*.olean.private`** (1.2 G!) — but **keep/restore
+  `*.ir`** (the interpreter IR: `module`-style imports demand it; "missing data file" errors
+  name the module whose `.ir` is absent).
+- Packages: copy **only `.olean` (publics) + `.ir`** of the needed Mathlib import closure
+  (computed by a BFS over sources whose regex must handle `public import`, `meta import`,
+  `import all`), plus `.olean.private` + `.ir` of the small dep packages
+  (batteries/aesop/Qq/…, 179 MB). Mathlib privates (proof bodies) are NOT needed.
+- Probe files start with the `module` keyword (loads public interfaces only — this is what
+  makes the privates unnecessary), invoked as plain `lean` with a hand-set `LEAN_PATH` — no
+  `lake`, hence no traces, no FUSE fd-cap exposure, no 30 s olean tax: **probe runs were
+  0.4–1.0 s.**
+
+In this environment the pass's mathematics was **kernel-verified in-sandbox before the file
+ever met the project context**: `probe_engine` = the ENTIRE main proof with the Pass-35 bricks
+abstracted as hypotheses (`P : 𝒪 → 𝒪[X]`, `hP1`/`hP2` with the bricks' exact statement shapes),
+plus the lemma-B skeleton (`probe_cover`), the `key` rewrite chain, the `m^{q−2}` division, the
+Frobenius surjectivity, and every individual Mathlib step — all standard-axioms-only. The
+committed file then differed from kernel-checked code only by substituting the concrete project
+names. The full `lake build` (which the sandbox cannot hold) ran on the host: **green on the
+first try** — the abstract-probe methodology works. Two warning-clean follow-ups (below), both
+host-rebuilt.
+
+## What was built
+
+Per the ledger: `map_residue_inertiaFixedIntegers_eq_top` (`F = 𝓀_L`),
+`inertiaFixedIntegers_residue_cover` (`hresid` verbatim), and
+`ker_tameCharacter_extensionIntegers_general` (the finale, a term-mode one-liner: Pass 34 +
+`hresid`). Root import added.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the Pass-35 sketch's cyclic-generator argument | unnecessary — iterated-Frobenius surjectivity closes `F = 𝓀_L` directly (the sketch's own "or argue via the Frobenius automorphism" was the better route) | probe before committing to a plan's combinatorics |
+| `sub_pow_char_pow`, `Nat.ord_proj`/`ord_compl` | renamed/superseded: `sub_pow_expChar_pow_of_commute` (ExpChar drift), `Nat.exists_eq_pow_mul_and_not_dvd` (the exact decomposition, one `obtain`) | the pin is newer than priors — grep everything |
+| binomial-sum coefficient extraction | `Polynomial.expand` + `coeff_expand` + `coeff_X_add_C_pow` — three rewrites, no sums | Mathlib's `expand` API is precisely the freshman's-dream bookkeeping |
+| in-sandbox build per the handoff recipe | volume dead (same-day sessions' corpses); invented the module-probe env; host ran the real build, green first try | kernel-verify the mathematics abstractly when the project context won't fit |
+| `[Fintype G₀]` hypothesis style (P33–35 precedent) | `unusedFintypeInType` linter: the types never mention cardinality — `[Finite G₀]` + proof-local `Fintype.ofFinite` is correct; P35's bricks keep `Fintype` legitimately (their *types* mention `charpoly`/`card`) | the linter caught a real style debt the precedent files masked |
+
+## Build + headline
+
+Host `lake build` green (8514 jobs), warning-clean after two follow-ups (the `Finite`/`Fintype`
+refinement; one long docstring line); all three audits standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: `hresid` is a theorem and the descent closes — `ker θ₀ = G₁`
+unconditionally, for every finite separable extension of nonarchimedean local fields. Serre IV
+§2 Prop. 7 (level 0), general case, on actual local fields, axiom-free. The descent block
+(Passes 29–36): eight rungs, zero axioms.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 37
+
+(a) The Pass-27/28 instantiations at `𝒪_L` (additive-character kernels, the wild Sylow
+statement — near-one-liners on the Pass-33 pattern, consolidation); (b) the
+`IsNonarchimedeanLocalField L` instance assembly; (c) the **ascent**: Herbrand `φ`/`ψ`, upper
+numbering (Serre IV §3), now with the complete finite-level floor under it. Honest frame:
+R1–R3 distant as ever; what is *done* is the lower-numbering chapter of L2 on actual local
+fields, in full generality.

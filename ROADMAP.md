@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 35 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 36 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -341,12 +341,21 @@ the block's promise**: the engine's data discharged (`he` unconditional; `hres` 
 surjectivity) and the showcase assembled — `ker θ₀ = G₁` on totally ramified extensions of
 actual local fields. **Pass 34 put the
 general-case reduction in place**: `ker θ₀ = G₁` for arbitrary finite separable `L/K` hangs on
-exactly one named lemma (`hresid`). **Honest next step (Pass 35):** prove `hresid` (the
-finite-level keystone `Ideal.Quotient.stabilizerHom_surjective` + finite Galois descent of
-residues — inventory the Invariant/Basic.lean statement shapes first); then P27/P28
-instantiations, the `IsNonarchimedeanLocalField L` assembly, or the ascent. No second boundary
-was ever stacked; nothing cardinal-sin posited; the surjection *follows* from the keystone
-applied to axiom-free bricks.
+exactly one named lemma (`hresid`). **Pass 35 built the orbit-polynomial bricks** (coefficients
+of `∏_{σ∈G₀}(X − σ•b)` are inertia-fixed; its residue is `(X − b̄)^{|G₀|}`). **Pass 36 proved
+`hresid` and closed the descent**: the residue image of the inertia-fixed integers is ALL of
+`𝓀_L` — write `|G₀| = p^e·m` with `p ∤ m`; the freshman's dream (`sub_pow_expChar_pow`) and
+`Polynomial.expand` place `−(b̄^{p^e})·m` at the `X^{p^e(m−1)}`-coefficient; invert `m` by
+`m^{q−2}`; the `p^e`-power map is the iterated Frobenius, injective hence surjective on the
+finite `𝓀_L` (no Hensel, no Lucas, no completeness, no cyclic generator) — hence
+**`ker θ₀ = G₁` unconditionally for every finite separable extension of nonarchimedean local
+fields** (`ker_tameCharacter_extensionIntegers_general`). The descent block (P29–36) is closed:
+every hypothesis of the abstract L2 lower-numbering theory is a theorem on actual local fields,
+in the general case. **Honest next step (Pass 37):** the Pass-27/28 instantiations at `𝒪_L`
+(additive-character kernels, the wild Sylow statement — near-one-liners, consolidation), the
+`IsNonarchimedeanLocalField L` instance assembly, or the ascent (Herbrand `φ`/`ψ`, upper
+numbering — Serre IV §3). Nothing cardinal-sin posited: `hresid` was *proved*, not assumed, and
+the general kernel theorem rests on axiom-free bricks alone.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
