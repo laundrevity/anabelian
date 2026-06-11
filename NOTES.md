@@ -3199,3 +3199,29 @@ statement — near-one-liners on the Pass-33 pattern, consolidation); (b) the
 numbering (Serre IV §3), now with the complete finite-level floor under it. Honest frame:
 R1–R3 distant as ever; what is *done* is the lower-numbering chapter of L2 on actual local
 fields, in full generality.
+
+## Post-pass addendum (same session) — the VM session-volume reset, verified (host ops)
+
+The dead-session disk problem was fixed host-side after the pass; recording the procedure
+because it WILL recur (every completed session leaves its workspace on the session volume
+until a reset):
+
+- The session volume (`/sessions`, ~9.8 G) is **`sessiondata.img`** inside
+  `~/Library/Application Support/Claude/vm_bundles/claudevm.bundle`; the VM's root disk is
+  `rootfs.img` (this is where `/var/tmp` probe environments live). **An app restart does NOT
+  garbage-collect dead session dirs** — the VM and both disks persist across app restarts —
+  and deleting conversations in the sidebar frees nothing either (dirs from four days prior
+  were still present).
+- Deleting `sessiondata.img` alone (app quit) was tried first, but the in-flight session's
+  shell bridge never reconnected, so whether the app recreates that image standalone is
+  unconfirmed. **Deleting the entire `claudevm.bundle` (app fully quit, ⌘Q) is the verified
+  reset**: on relaunch the app re-provisions the whole VM, `/sessions` came back with 9.3 G
+  free, and even the running conversation's shell reconnected cleanly to the fresh VM.
+- Cost: a bundle reset wipes `rootfs.img`, i.e. any module-probe environment — rebuild from
+  the recipe above (~15 min of calls).
+- Unchanged on the fresh VM (so it is the mount layer's policy, not stale state): the repo
+  mount denies `unlink` — file creation works, deletion fails with EPERM — so **`git commit`
+  from the sandbox is impossible** (lock-file cycling) and commits remain host-side. Check at
+  session start with `touch .unlinktest && rm .unlinktest` in the repo (if `rm` fails, the
+  leftover shows up in `git status`, which the clean-tree check will catch — have the host
+  remove it).
