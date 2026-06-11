@@ -1753,3 +1753,44 @@ construction. Recovers nothing from an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **Two of the three parents of
 `IsNonarchimedeanLocalField L` are discharged; the assembly hangs on local compactness.**
+
+### Pass 39 (2026-06-11) — the assembly, rung 2: the `Valued` framework on `L`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**.
+`Anabelian/ExtensionValued.lean` — six theorems (in-file `#print axioms`, standard-only;
+host-verified `lake build`, warning-clean):
+
+```
+'Anabelian.valued_integer_eq_of_compatible'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isDiscreteValuationRing_of_subring_eq'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_residueField_of_subring_eq'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.valued_integer_extensionValuativeRel'   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isDiscreteValuationRing_valued_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_residueField_valued_integer'     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The design discovery**: Mathlib's locally-compactness characterization for valued fields
+  (`CompactSpace 𝒪 ↔ CompleteSpace 𝒪 ∧ IsDiscreteValuationRing 𝒪 ∧ Finite 𝓀`,
+  `Topology/Algebra/Valued/LocallyCompact.lean`) is **`Valued`-native**, and Mathlib's
+  porting-helper instance makes `L` a `Valued` field **on the rung-1 structures, adopting the
+  given uniformity** — so the feared topology-identification seam does not exist:
+  `Valued.v = valuation L` is `rfl`. The spectral norm is needed only for the completeness
+  conjunct (deferred), not for the framework.
+- **`valued_integer_eq_of_compatible`** (abstract, reusable) — the helper-`Valued` integer
+  ring equals the valuation subring of any `Compatible` valuation (pure
+  `vle_iff_le`/`valuation_le_one_iff` bookkeeping).
+- **Transports** along subring equality via `RingEquiv.subringCongr`: DVR-ness
+  (`IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`) and residue-finiteness
+  (`ResidueField.mapEquiv`).
+- **Concrete trio**: under the rung-1 `letI`-tower, `L` is `Valued` with integer ring `= 𝒪_L`
+  (as subrings), which is a DVR (Pass 30, transported) with finite residue field (Pass 31,
+  transported) — **two of the three compactness conjuncts, discharged**.
+
+**Honesty.** NOT claimed: `CompleteSpace` (the third conjunct), `CompactSpace` of the
+integers, `LocallyCompactSpace L`, the class assembly. No global instances — the
+`letI`-tower in the statements is the hypothesis-parametrized pattern in topological
+clothing; D2 intact. No new `structure`/`class`; no owed witness; D1 N/A. Recovers nothing
+from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **The compactness criterion is two-thirds discharged;
+the assembly hangs on the completeness conjunct.**

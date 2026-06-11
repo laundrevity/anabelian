@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 38 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 39 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -369,9 +369,17 @@ finite-extension instance. Rung 1 built `extensionValuativeRel` (the relation on
 canonicity obligation, and Mathlib's own local-instance topology design says the same) and
 discharged parents 1 and 3 (`IsValuativeTopology` free upstream under the valuative topology;
 `IsNontrivial` by the Pass-30 uniformizer through the `Valuation.Compatible` bridge).
-**Honest next step (Pass 39):** `LocallyCompactSpace L` — the heavy parent — via the
-finite-dimensional route over the Pass-17 normed bridge; then the assembly theorem
-`IsNonarchimedeanLocalField L` itself; the base-independence theorem when towers arrive.
+**Pass 39 delivered the `Valued` framework on `L`**: Mathlib's compactness characterization
+(`CompactSpace 𝒪 ↔ CompleteSpace 𝒪 ∧ DVR ∧ Finite 𝓀`) is `Valued`-native, and Mathlib's
+porting helper makes `L` `Valued` *on the rung-1 structures with no topology identification at
+all* (the helper adopts the given uniformity; `Valued.v = valuation L` is `rfl`). Rung 2
+proved the integer-ring identity (`Valued` integers `= 𝒪_L`, pure `Compatible` bookkeeping —
+no spectral content) and transported two of the three compactness conjuncts (DVR from P30,
+finite residue from P31). **Honest next step (Pass 40):** the completeness conjunct
+(`CompleteSpace` of the integer ring — where the spectral norm finally enters, or an
+𝔪-adic argument), then `CompactSpace 𝒪 → LocallyCompactSpace L` (nbhd-of-zero + the
+group-homogeneity lemma), then the assembly theorem `IsNonarchimedeanLocalField L` itself;
+base-independence when towers arrive.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

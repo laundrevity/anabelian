@@ -3356,3 +3356,71 @@ predicted friction point). Then the assembly theorem `IsNonarchimedeanLocalField
 Later: base-independence (the canonicity obligation) when towers arrive. Honest frame: R1–R3
 distant; the assembly is infrastructure for the ascent, and the ascent is where the next real
 mathematics lives.
+
+---
+
+# Pass 39 — the assembly, rung 2: the `Valued` framework on `L` (2026-06-11)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved: continue the assembly — the local-compactness fight. (ii) Honest scope as
+re-planned mid-inventory: the fight decomposed far better than the Pass-38 pointer predicted —
+this rung delivers the `Valued` framework + two of three compactness conjuncts; completeness
+and the assembly are the next rung. (iii) Three successive inventory discoveries reshaped the
+route, each strictly shrinking it: (1) `LocallyCompactSpace.of_finiteDimensional_of_complete`
+exists upstream and needs no T2 (it quotients internally) — but better, (2) Mathlib's
+`Valued/LocallyCompact.lean` has the **`Valued`-native characterization**
+`CompactSpace 𝒪 ↔ CompleteSpace 𝒪 ∧ IsDiscreteValuationRing 𝒪 ∧ Finite 𝓀` — and best, (3)
+Mathlib's porting-helper instance (`Topology/Algebra/Valued/ValuativeRel.lean`) makes `L`
+`Valued` **on the rung-1 structures, adopting the given uniformity** — `Valued.v = valuation L`
+is `rfl`, so the feared topology-identification seam *does not exist*. The f.d.-TVS route and
+the spectral identification both became unnecessary for this rung; the spectral norm is
+deferred to exactly one place — the completeness conjunct (Pass 40). (iv) The integer-ring
+identity is pure rung-1 bookkeeping: `Valued`-integers `= {valuation L ≤ 1}` `= 𝒪_L` via
+`Compatible.vle_iff_le` + `valuation_le_one_iff`; the other two conjuncts are transports of
+P30/P31 along that subring equality.
+
+## What was built
+
+Per the ledger: `Anabelian/ExtensionValued.lean` — the abstract integer-ring identity, the two
+abstract transports (`RingEquiv.subringCongr` + the nested-name DVR transport +
+`ResidueField.mapEquiv`), and the concrete trio under the rung-1 `letI`-tower. Root import
+added.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the normed/valuative topology identification to be the pass's hard center | the porting-helper `Valued` instance adopts the given uniformity — the seam is `rfl` | inventory before fighting: the predicted battle was already won upstream |
+| spectral-norm content throughout | zero spectral content in the entire rung; it survives only in the completeness conjunct | route shrinkage is real progress even when no theorem is "hard" |
+| `Valued.integer` / `subringCongr` / DVR-transport names | `Valuation.integer` via `Valued.v`; `RingEquiv.subringCongr`; the DVR transport is the *nested* `IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing` | namespace nesting is a probe-catchable failure class (two 0.5 s iterations) |
+| `vle_iff_le` applied-form friction | `(... x 1).symm.trans (... x 1)` — explicit binders, one fix | same |
+| the `letI`-tower to fight instance resolution | `probe_chain` (the full tower, abstractly) fired first try | the helper instance's design is exactly compatible with the rung-1 `def`-discipline |
+| the P37 import-chain lesson to be learned | repeated it: P31's file absent from the new chain (P30's present), one host round-trip — while both *flagged* risks (the `↥`-defeq hops) passed | the discipline must be mechanical: before host hand-off, grep every project name in the new file against its transitive chain — added to the pass ritual below |
+
+All five substantive pieces were kernel-verified in-sandbox (probe runs 0.5–0.7 s) before the
+file existed; the committed file is name-substitution from checked code. The probe environment
+was extended with the analysis closure (+6117 modules, 1.33 GB) in two rsync calls.
+
+## Build + headline
+
+Host `lake build` green, warning-clean; all six audits standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: `L` is a `Valued` field on the rung-1 structures with
+integer ring `𝒪_L`, a DVR with finite residue field — the compactness criterion is two-thirds
+discharged, with no topology identification anywhere and no spectral content yet. The assembly
+hangs on the completeness conjunct.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 40
+
+The completeness conjunct: `CompleteSpace ↥((Valued.v).integer)` under the rung-1 tower —
+either via `CompleteSpace L` (the spectral seam at last: spectral norm complete for f.d. `L/K`,
++ closed-subring) or via the 𝔪-adic route (`Module.Finite` over the adically-complete `𝒪[K]`,
+P34's `exists_pow_maximalIdeal_le_map` giving adic-topology agreement) — inventory both, take
+the cheaper. Then: `CompactSpace` via the criterion's `.mpr`, the integers as a 𝓝0-neighborhood
+(`is_topological_valuation` at `γ = 1`), `IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup`,
+and the **assembly theorem `IsNonarchimedeanLocalField L`** — parents 1–3 + local compactness.
+Honest frame: one rung from the assembly closing; R1–R3 distant as ever.
