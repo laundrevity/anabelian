@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 37 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 38 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -361,7 +361,17 @@ actual local fields, with zero conditional hypotheses and zero axioms. **Honest 
 (Pass 38):** the `IsNonarchimedeanLocalField L` instance assembly (enables iterating the
 theory up towers), or the ascent (Herbrand `φ`/`ψ`, upper numbering — Serre IV §3). Nothing
 cardinal-sin posited: every input to every concrete statement is a named, proved prior
-theorem.
+theorem. **Pass 38 opened the assembly** (`IsNonarchimedeanLocalField L` — the gate to towers,
+intermediate base fields, and hence Herbrand's theorem): Mathlib defines the class (three
+parents: `IsValuativeTopology`, `LocallyCompactSpace`, `IsNontrivial`) but ships no
+finite-extension instance. Rung 1 built `extensionValuativeRel` (the relation on `L` from
+`𝒪_L`'s valuation, a `def` not an instance — base-independence across towers is a *named*
+canonicity obligation, and Mathlib's own local-instance topology design says the same) and
+discharged parents 1 and 3 (`IsValuativeTopology` free upstream under the valuative topology;
+`IsNontrivial` by the Pass-30 uniformizer through the `Valuation.Compatible` bridge).
+**Honest next step (Pass 39):** `LocallyCompactSpace L` — the heavy parent — via the
+finite-dimensional route over the Pass-17 normed bridge; then the assembly theorem
+`IsNonarchimedeanLocalField L` itself; the base-independence theorem when towers arrive.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

@@ -1714,3 +1714,42 @@ no owed witness; D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R
 Ledger delta: **0 / 0** — axiom-free. **Serre IV §§1–2 at finite level is now complete and
 unconditional on actual local fields: filtration, tame character, additive characters, and
 the wild/tame Sylow dichotomy.**
+
+### Pass 38 (2026-06-11) — the assembly, rung 1: the valuative structure on `L`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**.
+`Anabelian/ExtensionLocalField.lean` — toward `IsNonarchimedeanLocalField L` (in-file
+`#print axioms`, standard-only; host-verified `lake build`, warning-clean):
+
+```
+'Anabelian.extensionValuativeRel'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isNontrivial_ofValuation'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isNontrivial_extensionValuativeRel'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isValuativeTopology_extensionValuativeRel'   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`extensionValuativeRel`** — the valuative relation on `L` from `𝒪_L`'s valuation
+  (`ValuativeRel.ofValuation`), deliberately a `def`, NOT an instance: its base-independence
+  across towers (`extensionValuativeRel K L` vs the relation from an intermediate base) is a
+  **named canonicity obligation** for the pass that introduces towers; a global instance would
+  turn that propositional identity into a diamond. Mathlib's own `ValuativeRel.topologicalSpace`
+  is a `local instance` upstream "to avoid diamonds" — the design matches.
+- **`isNontrivial_ofValuation`** — reusable abstract bridge: a valuation on a field with an
+  element of value in `(0, 1)` induces a nontrivial valuative relation (via the
+  `Valuation.Compatible` API: `vle_iff_le`/`vlt_iff_lt` against the canonical valuation).
+- **`isNontrivial_extensionValuativeRel`** — **parent 3 of the class, discharged**: a Pass-30
+  uniformizer (`ValuationSubring.valuation_lt_one_iff` + `Valuation.ne_zero_iff`) witnesses
+  nontriviality.
+- **`isValuativeTopology_extensionValuativeRel`** — **parent 1, free**: under the valuative
+  topology, Mathlib's upstream `IsValuativeTopology` instance applies on the nose.
+
+**Honesty.** NOT claimed: `LocallyCompactSpace L` (parent 2 — next rung),
+`IsNonarchimedeanLocalField L` itself, base-independence. Rule-2 note: the construction is
+pinned against the degenerate model — the trivial relation also exists on `L`, and the
+nontriviality theorem is precisely the separation from it. No new `structure`/`class`; no
+owed witness (the canonicity obligation is a named future theorem, not an unproved
+load-bearing-hypothesis claim — categories kept distinct); D1 N/A; D2 respected by
+construction. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **Two of the three parents of
+`IsNonarchimedeanLocalField L` are discharged; the assembly hangs on local compactness.**

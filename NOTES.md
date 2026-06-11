@@ -3282,3 +3282,77 @@ Herbrand `φ`/`ψ` and upper numbering (Serre IV §3) — the next mathematical 
 statements about the absolute group. Honest frame: R1–R3 distant; the finite-level
 lower-numbering theory is a closed book on actual local fields, and the project's next
 genuinely new mathematics is the ascent.
+
+---
+
+# Pass 38 — the assembly, rung 1: the valuative structure on `L` (2026-06-11)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-delegated scope decision, taken: the **assembly** before the ascent — because
+Herbrand's theorem (the ascent's centerpiece and R1's eventual input) quantifies over
+intermediate extensions `L/L'/K`, which requires intermediate fields as *base* fields;
+ascent-first would strand a half-chapter at exactly the theorem that gives upper numbering its
+point. (ii) Honest scope: rung 1 of a 2–3-rung sub-block — the valuative structure and the
+cheap parents; local compactness deferred. (iii) Inventory verdicts: Mathlib's
+`IsNonarchimedeanLocalField` is three parents (`IsValuativeTopology` + `LocallyCompactSpace` +
+`IsNontrivial`) over `[Field] [ValuativeRel] [TopologicalSpace]`, everything else derived;
+**no finite-extension instance upstream** (the class's only mention in all of Mathlib is its
+defining file); no `ValuativeRel` on extensions upstream (`Valuation/Extension.lean` is
+relational — `IsValExtension`-style — not constructive). (iv) Design, D2-governed: `def`s +
+`letI` discharge, **no global instances** — `extensionValuativeRel` depends on the base `K`,
+and for towers the relations from different bases agree only up to a base-independence theorem
+(named canonicity obligation, future pass); Mathlib's own `ValuativeRel.topologicalSpace` is a
+`local instance` "to avoid diamonds", blessing exactly this pattern.
+
+## Environment
+
+Probe environment rebuilt from the Pass-36 recipe at the new scratch (post-reset `/sessions`,
+9.3 G free): **three calls** — toolchain (822 M after trim, `.ir` kept from the start this
+time), closure for the ValuativeRel/LocalField seed set (2342 modules, 0.62 G publics+ir),
+deps' privates+ir. All three substantive proofs of the pass were **kernel-verified in-sandbox
+before the file existed**: the nontriviality bridge, the concrete leg (generic over any
+`ValuationSubring` with a uniformizer — so the committed file is again name-substitution from
+checked code), and the free-parent smoke test. Probe runs 0.5–1.0 s.
+
+## What was built
+
+Per the ledger: `Anabelian/ExtensionLocalField.lean` — `extensionValuativeRel` (the relation
+on `L` from `𝒪_L`'s valuation), `isNontrivial_ofValuation` (reusable bridge),
+`isNontrivial_extensionValuativeRel` (parent 3 discharged via the Pass-30 uniformizer),
+`isValuativeTopology_extensionValuativeRel` (parent 1, free upstream). Root import added.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| assembly = heavy plumbing, "topology friction possible" | the class has exactly three parents and Mathlib's valuative-topology layer hands over `IsValuativeTopology` + `NonarchimedeanRing` for free under its blessed local instance | the friction concentrates entirely in `LocallyCompactSpace` — rung 2 is the whole fight |
+| a diamond-design dilemma to resolve ourselves | Mathlib's own comment ("not made into a global instance to avoid diamonds") prescribes the `def` + by-hand pattern | upstream and house discipline (D2) agree; no novel design needed |
+| `valuation_eq_zero_iff` to land on `x = 0` | it lands on the *relation* (`x ≤ᵥ 0`) — one extra hop through `vle_iff_le` + `le_zero_iff` | the probe env caught it in one 0.9 s iteration; cost ≈ zero |
+| concrete-leg friction at the subring valuation | `ValuationSubring.valuation_lt_one_iff` + `Valuation.ne_zero_iff` + `exact_mod_cast` — first try | the generic-over-`ValuationSubring` probe shape is the right de-risking unit |
+| a plain `def` of class type to be fine | linter: definitions of class type must be `@[reducible]`/`@[implicit_reducible]` (else TC/unification can't see through the wrapper) — upstream `ofValuation` carries the attribute for the same reason | one-attribute fix; the probe env can't catch lake-level linters, only elaboration |
+
+## Build + headline
+
+Host `lake build` green, warning-clean; all four audits standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: the assembly is open and two of the three parents of
+`IsNonarchimedeanLocalField L` are discharged — the valuative relation on `L` exists
+(canonically from `𝒪_L`, instance-free by design), its topology is valuative, and it is
+nontrivial. The assembly now hangs on exactly one parent: local compactness.** R1–R3
+untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 39
+
+**`LocallyCompactSpace L`** — the heavy parent: the finite-dimensional route (L ≅ Kⁿ as
+topological `K`-vector spaces; `K` locally compact + complete ⟹ `L` locally compact) over the
+Pass-17 normed bridge (`Valued.toNontriviallyNormedField`, the P29 idiom at ExtensionIntegers
+lines 119–125) — inventory Mathlib's finite-dimensional TVS/locally-compact lemmas first, and
+mind that the normed topology must be *identified* with the valuative topology of rung 1 (the
+predicted friction point). Then the assembly theorem `IsNonarchimedeanLocalField L` itself.
+Later: base-independence (the canonicity obligation) when towers arrive. Honest frame: R1–R3
+distant; the assembly is infrastructure for the ascent, and the ascent is where the next real
+mathematics lives.
