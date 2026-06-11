@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 36 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 37 (2026-06-10)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -351,11 +351,17 @@ finite `𝓀_L` (no Hensel, no Lucas, no completeness, no cyclic generator) — 
 **`ker θ₀ = G₁` unconditionally for every finite separable extension of nonarchimedean local
 fields** (`ker_tameCharacter_extensionIntegers_general`). The descent block (P29–36) is closed:
 every hypothesis of the abstract L2 lower-numbering theory is a theorem on actual local fields,
-in the general case. **Honest next step (Pass 37):** the Pass-27/28 instantiations at `𝒪_L`
-(additive-character kernels, the wild Sylow statement — near-one-liners, consolidation), the
-`IsNonarchimedeanLocalField L` instance assembly, or the ascent (Herbrand `φ`/`ψ`, upper
-numbering — Serre IV §3). Nothing cardinal-sin posited: `hresid` was *proved*, not assumed, and
-the general kernel theorem rests on axiom-free bricks alone.
+in the general case. **Pass 37 harvested the consolidation**: the general monogenicity theorem
+at `𝒪_L` (`closure_inertiaFixedIntegers_union_uniformizer_eq_top` — P34's engine + P36's cover,
+packaged once), and with it the Pass-27/28 quotient theory concrete and unconditional —
+`ker θ_i = G_{i+1}` and `G_i/G_{i+1} ↪ 𝓀_L⁺` for all `i ≥ 1`, `G₁` a `p`-group, and
+`p ∤ |G₀/G₁|`: **`G₁` is the normal Sylow `p`-subgroup of `G₀` for every finite separable
+extension of nonarchimedean local fields** — Serre IV §§1–2 complete at finite level, on
+actual local fields, with zero conditional hypotheses and zero axioms. **Honest next step
+(Pass 38):** the `IsNonarchimedeanLocalField L` instance assembly (enables iterating the
+theory up towers), or the ascent (Herbrand `φ`/`ψ`, upper numbering — Serre IV §3). Nothing
+cardinal-sin posited: every input to every concrete statement is a named, proved prior
+theorem.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

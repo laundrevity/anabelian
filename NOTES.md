@@ -3225,3 +3225,60 @@ until a reset):
   session start with `touch .unlinktest && rm .unlinktest` in the repo (if `rm` fails, the
   leftover shows up in `git status`, which the clean-tree check will catch — have the host
   remove it).
+
+---
+
+# Pass 37 — consolidation: the P27/P28 quotient theory concrete at `𝒪_L` (2026-06-10)
+
+## Restatement (i)–(iv), pre-search
+
+(i) User-approved (queue option (a)): instantiate the remaining abstract theorems at `𝒪_L` in
+the now-general case. (ii) Honest scope: near-one-liners on the P33/P36 pattern; one file,
+five thin theorems; the only "design" is the packaging. (iii) The feeder decision: factor the
+general monogenicity statement (`Subring.closure ((inertiaFixedIntegers ∪ {π})) = ⊤`) as a
+standalone theorem once, rather than re-deriving it inside each instantiation — it is the
+single input every P27/P28 statement shares, and it is a headline in its own right. (iv) The
+inputs inventory, all named priors: `hgen` = P34 engine + P36 cover; `hfix` at level `i`
+descends from level 0 along `ramificationGroup_antitone` (subtype repackaging, one lambda);
+`hsep` = the P23 Krull idiom (`Ideal.iInf_pow_eq_bot_of_isLocalRing` + P29 Noetherian);
+`CharP 𝓀_L p` = P31's transfer (consumed for the first time); finiteness = P29's
+decomposition-subgroup `instance` + subtype synthesis — **no `Finite`/`Fintype` hypotheses on
+any statement**.
+
+## What was built
+
+Per the ledger: `Anabelian/ExtensionWildTame.lean` — the general monogenicity feeder, the two
+P27 instantiations (`ker θ_i = G_{i+1}`, `G_i/G_{i+1} ↪ 𝓀_L⁺`, `i ≥ 1`), the two P28
+instantiations (`G₁` a `p`-group, `p ∤ |G₀/G₁|`). Root import added.
+
+## Pre-search expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| pure composition, no friction | one real miss: the descent chain never imports the abstract P27/P28 files (`AdditiveCharacter`, `WildInertia`) — first host build failed on unknown identifiers; two import lines fixed it | "in the root" ≠ "in the chain": check the import graph of the *new file's* chain, not the project's |
+| `[Finite ↥G₀]`-style hypotheses needed (P35/P36 precedent) | none needed anywhere — P29's decomposition-subgroup `instance` + subtype synthesis covers every finiteness demand; the feeder audited clean on the first build | the P35/P36 `[Fintype/Finite G₀]` hypotheses were already synthesizable — candidate cleanup pass, low priority |
+| `hsep` available concrete somewhere | only the ramification-level infimum was packaged (P29); the ideal-level form is re-derived inline by the P23 idiom, verbatim | the abstract/concrete seam is exactly one idiom wide |
+| binder-order risk on abstract heads | all five bodies elaborated on the first build that could see the imports | source-read signatures + verbatim-idiom reuse is reliable; no probe environment was needed for this pass |
+
+## Build + headline
+
+Host `lake build` green (8515 jobs), warning-clean, second attempt (import fix only); all five
+audits standard-only; zero `axiom` declarations project-wide. **HEADLINE: Serre IV §§1–2 at
+finite level is complete and unconditional on actual local fields — filtration, tame
+character `θ₀` with `ker θ₀ = G₁`, additive characters `θ_i` with `ker θ_i = G_{i+1}` and
+`G_i/G_{i+1} ↪ 𝓀_L⁺`, and `G₁` = the normal Sylow `p`-subgroup of `G₀` — for every finite
+separable extension of nonarchimedean local fields, zero conditional hypotheses, zero
+axioms.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 38
+
+(a) The `IsNonarchimedeanLocalField L` instance assembly — `L` itself a local field, enabling
+iteration up towers (`M/L/K`); plumbing-heavy, topology friction possible; (b) the **ascent**:
+Herbrand `φ`/`ψ` and upper numbering (Serre IV §3) — the next mathematical chapter, toward
+statements about the absolute group. Honest frame: R1–R3 distant; the finite-level
+lower-numbering theory is a closed book on actual local fields, and the project's next
+genuinely new mathematics is the ascent.

@@ -36,3 +36,4 @@ import Anabelian.InertiaFixedIntegers
 import Anabelian.ExtensionMonogenicGeneral
 import Anabelian.InertiaCharpoly
 import Anabelian.InertiaResidueCover
+import Anabelian.ExtensionWildTame
