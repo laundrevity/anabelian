@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 39 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 40 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -375,11 +375,18 @@ porting helper makes `L` `Valued` *on the rung-1 structures with no topology ide
 all* (the helper adopts the given uniformity; `Valued.v = valuation L` is `rfl`). Rung 2
 proved the integer-ring identity (`Valued` integers `= 𝒪_L`, pure `Compatible` bookkeeping —
 no spectral content) and transported two of the three compactness conjuncts (DVR from P30,
-finite residue from P31). **Honest next step (Pass 40):** the completeness conjunct
-(`CompleteSpace` of the integer ring — where the spectral norm finally enters, or an
-𝔪-adic argument), then `CompactSpace 𝒪 → LocallyCompactSpace L` (nbhd-of-zero + the
-group-homogeneity lemma), then the assembly theorem `IsNonarchimedeanLocalField L` itself;
-base-independence when towers arrive.
+finite residue from P31). **Pass 40 crossed the spectral seam as equalities**: P29's internal `hmem` exported (`𝒪_L` =
+the spectral unit ball), hence the rung-1 relation **equals** `ofValuation` of the spectral
+valuation (`ofValuation_congr`/`ofValuation_eq_of_same_subring`, new abstract bricks —
+equivalent valuations give *equal* relations, the class being `@[ext]`); `CompleteSpace L`
+holds spectrally (`spectralNorm.normedSpace` + `FiniteDimensional.complete`); and the
+group-uniformity uniqueness lemma (`uniformSpace_eq_of_isUniformAddGroup`) stands ready to
+carry completeness across. **Honest next step (Pass 41):** the `IsValuativeTopology`-uniqueness
+lemma (two topologies valuative for the same relation are equal — `TopologicalSpace.ext_nhds`
++ `mem_nhds_iff` both sides), completeness on the rung-1 tower, `CompactSpace` via the
+criterion's `.mpr`, `LocallyCompactSpace L`
+(`IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup`), and **the assembly theorem
+`IsNonarchimedeanLocalField L`**; base-independence when towers arrive.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

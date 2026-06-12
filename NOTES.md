@@ -3424,3 +3424,65 @@ the cheaper. Then: `CompactSpace` via the criterion's `.mpr`, the integers as a 
 (`is_topological_valuation` at `γ = 1`), `IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup`,
 and the **assembly theorem `IsNonarchimedeanLocalField L`** — parents 1–3 + local compactness.
 Honest frame: one rung from the assembly closing; R1–R3 distant as ever.
+
+---
+
+# Pass 40 — the assembly, rung 3: the spectral seam, crossed as equalities (2026-06-11)
+
+## Restatement + what was built
+
+(i) User-approved (emphatically): continue in-session per the freshly committed HANDOFF.md.
+(ii)–(iv) The handoff's own plan, executed as written: the keystone pair committed
+(`ofValuation_congr` — the class is `@[ext]`, so equivalent valuations give *equal* relations —
+and `ofValuation_eq_of_same_subring`), P29's internal `hmem` exported verbatim
+(`𝒪_L` = the spectral unit ball; same `maxHeartbeats` raise, same reason), hence
+**`extensionValuativeRel K L = ofValuation (spectral Valued.v)`** — the seam is an equality;
+`CompleteSpace L` proved spectrally (`spectralNorm.normedSpace` + `FiniteDimensional.complete`);
+and the uniformity-uniqueness brick (`uniformSpace_eq_of_isUniformAddGroup`, via
+`uniformity_eq_comap_nhds_zero` with the `IsRightUniformAddGroup` refinement instance-derived)
+ready for the transfer. Files: `ValuativeRelCongr.lean` (abstract trio),
+`ExtensionSpectralSeam.lean` (concrete trio). Root imports added.
+
+## Expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| `seminormedAddCommGroup`-keying friction at `spectralNorm.normedSpace` + `FiniteDimensional.complete` | the chain fired first probe, zero friction | the dFF spectral API is internally coherent under `letI` |
+| `uniformity_eq_comap_nhds_zero` keyed to `IsUniformAddGroup` | keyed to `IsRightUniformAddGroup`; the comm-group bridge is the instance `IsUniformAddGroup.isRightUniformAddGroup` | one probe iteration |
+| the P29 `hmem` copy to be the risky part | verbatim copy of host-verified code; the probes covered everything else | copying verified code is the *lowest*-risk move available |
+| (post-build) clean | 13 `unusedVariables` warnings: I had NAMED the `letI` binders in the STATEMENT-level blocks (`letI rk : ... :=`) — names nothing can reference — and my probe run showed these very warnings, which I filtered with `grep -v` instead of reading | **never filter probe warnings** — they are signal; statement binders are anonymous (`letI : T := ...`); and the gate is now mechanical: `scripts/preflight.sh` |
+
+**Process hardening (user-requested, committed this pass): `scripts/preflight.sh`** — the
+pre-commit gate: long-line check, named-statement-binder check, `scripts/chain_check.py` (the
+P37/P39 import-chain class, now comment-stripping so docstring prose and forward references
+don't false-positive — validates clean on all 43 files), and a full `lake build` failing on ANY
+warning. A pass is committable only if preflight exits 0; the sandbox runs the static checks
+pre-handoff, the host run is authoritative.
+
+All novel content kernel-verified in-sandbox pre-file (probe runs 0.5–0.7 s; env from P38–39
+reused warm). The chain-checker ran clean on both files before hand-off.
+
+## Build + headline
+
+Host `lake build` green, warning-clean; all six audits standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: the spectral seam is crossed as equalities — the rung-1
+relation literally equals the spectral relation, `L` is spectrally complete, and the
+uniformity-uniqueness brick is in place. All three conjuncts of the compactness criterion are
+now proved on one side of the seam or the other.** R1–R3 untouched.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free.
+
+## Scope: pointer to Pass 41 (the assembly closes)
+
+(1) The `IsValuativeTopology`-uniqueness lemma: two topologies valuative for the same relation
+are equal (`TopologicalSpace.ext_nhds` + `IsValuativeTopology.mem_nhds_iff` on both sides) —
+with it, rung-1 topology = spectral topology (the relations being EQUAL), hence rung-1
+uniformity = metric uniformity (`uniformSpace_eq_of_isUniformAddGroup`), hence
+`CompleteSpace L` on the tower; (2) the integer ring closed (`Valuation.integer` is a closed
+unit ball) ⟹ `CompleteSpace 𝒪`; (3) the criterion's `.mpr` ⟹ `CompactSpace 𝒪`; (4) the
+integers are a `𝓝 0`-neighborhood (`is_topological_valuation` at `γ = 1`) +
+`IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup` ⟹ `LocallyCompactSpace L`; (5)
+**`IsNonarchimedeanLocalField L`** — the assembly theorem, closing the block opened at
+Pass 38. Then: the canonicity obligation, then the ascent.

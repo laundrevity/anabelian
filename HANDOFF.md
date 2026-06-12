@@ -1,4 +1,12 @@
-# HANDOFF.md — session bootstrap (written after Pass 39, 2026-06-11)
+# HANDOFF.md — session bootstrap (written after Pass 39, updated after Pass 40, 2026-06-11)
+
+**Pass 40 is DONE** (this document's original "first task", executed in the same session that
+wrote it): `ValuativeRelCongr.lean` (the keystone pair + the group-uniformity uniqueness brick)
+and `ExtensionSpectralSeam.lean` (P29's `hmem` exported; the rung-1 relation EQUALS the
+spectral relation; `CompleteSpace L` spectrally). **YOUR FIRST TASK is Pass 41** — the
+assembly closes; the worked-out plan is in NOTES' Pass-40 "Scope: pointer to Pass 41" (five
+numbered steps from the `IsValuativeTopology`-uniqueness lemma to the assembly theorem
+`IsNonarchimedeanLocalField L`). Everything below remains accurate as background.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
 `CLAUDE.md` (the constitution — axiom budget, rule-2, commit-per-pass), `AXIOM_LEDGER.md`
@@ -86,11 +94,13 @@ valuation. More plumbing; inventory before choosing.
   checked code); `lake build` runs HOST-SIDE (ask the user; expect only the new file + root);
   commits run HOST-SIDE (the mount denies `unlink` — `git commit` in-sandbox is impossible;
   also in-sandbox `git status` leaves a stale `.git/index.lock` the user must `rm -f`).
-- **Pre-handoff mechanical check** (added after it failed twice, P37 + P39): every project name
-  used in a new file must be DEFINED in the file's transitive project-import chain — the root
-  `Anabelian.lean` reaching a file does NOT make it visible. Checker: BFS
-  `^import Anabelian\..*` from the new file, collect decl-names in the chain, diff against
-  project decl-names used in the file (python one-pager; reconstruct from this description).
+- **Pre-handoff mechanical gate (COMMITTED as `scripts/preflight.sh` after Pass 40)**: run the
+  static checks in-sandbox before every hand-off (long lines; named statement-level
+  `letI`/`haveI` binders — anonymous `letI : T := ...` is the rule; `scripts/chain_check.py`
+  for import-chain completeness, the P37/P39 failure class); the user runs the full
+  `scripts/preflight.sh` host-side (adds the `lake build` warning gate) before every commit.
+  **Never `grep -v` warnings out of probe output** — probe warnings are signal (the Pass-40
+  unusedVariables batch was visible in the probe and filtered away; it cost a host round-trip).
 - **Disk**: `/sessions` was reset this session (~9.3 G free at last check) but dead-session
   corpses accumulate (~1.5–3 G per session); the host-side fix (verified): quit Claude fully,
   delete `~/Library/Application Support/Claude/vm_bundles/claudevm.bundle`, relaunch — costs

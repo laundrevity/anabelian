@@ -1794,3 +1794,48 @@ from an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **The compactness criterion is two-thirds discharged;
 the assembly hangs on the completeness conjunct.**
+
+### Pass 40 (2026-06-11) — the assembly, rung 3: the spectral seam, crossed as equalities
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. Two files (in-file
+`#print axioms`, standard-only; host-verified `lake build`, warning-clean):
+
+`Anabelian/ValuativeRelCongr.lean` (abstract, project-agnostic):
+
+```
+'Anabelian.ofValuation_congr'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ofValuation_eq_of_same_subring'       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.uniformSpace_eq_of_isUniformAddGroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`ofValuation_congr`** — equivalent valuations induce **equal** valuative relations (the
+  class is `@[ext]`; `IsEquiv` is the pointwise `vle`-iff). Downstream topology
+  identifications become `rw`s.
+- **`ofValuation_eq_of_same_subring`** — same unit ball ⟹ same relation
+  (`isEquiv_iff_val_le_one` + `valuation_le_one_iff`).
+- **`uniformSpace_eq_of_isUniformAddGroup`** — at most one group uniformity per topology
+  (`uniformity_eq_comap_nhds_zero` on both sides; the `IsRightUniformAddGroup` refinement is
+  instance-derived).
+
+`Anabelian/ExtensionSpectralSeam.lean` (concrete, under P29's spectral `letI` block, same
+`maxHeartbeats` raise, same reason):
+
+```
+'Anabelian.mem_extensionIntegers_iff_mem_valued_integer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionValuativeRel_eq_spectral'            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.completeSpace_spectral'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`mem_extensionIntegers_iff_mem_valued_integer`** — **Pass 29's `hmem`, exported**: `𝒪_L`
+  is the spectral unit ball (proof verbatim from inside the `extensionIntegers` definition).
+- **`extensionValuativeRel_eq_spectral`** — the rung-1 relation **equals** the spectral one.
+- **`completeSpace_spectral`** — `L` complete in the spectral norm
+  (`spectralNorm.normedSpace` + `FiniteDimensional.complete` over the Pass-17 bridge).
+
+**Honesty.** NOT claimed: completeness on the rung-1 tower (needs the
+`IsValuativeTopology`-uniqueness lemma — Pass 41, probed route), `CompactSpace`,
+`LocallyCompactSpace L`, the class assembly. No new `structure`/`class`; no owed witness;
+D1 N/A; D2 intact. Recovers nothing from an abstract group; R1–R3 untouched.
+
+Ledger delta: **0 / 0** — axiom-free. **All three conjuncts of the compactness criterion are
+now proved on one side of the seam or the other; Pass 41 carries them across and assembles.**
