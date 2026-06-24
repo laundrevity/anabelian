@@ -6,6 +6,18 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 fail=0
 
+# 0. Clean tree: no untracked files outside .gitignore (orphan-prevention gate, added Pass 42).
+#    `git ls-files --others --exclude-standard` = untracked AND not ignored — exactly the orphan
+#    set. Staged/tracked files pass; stray untracked files (the 2026-05/06 orphan pattern, e.g.
+#    an unledgered axiom file) fail the gate. To clear: `git add` the file, or add it to .gitignore.
+#    This mechanically backstops CLAUDE.md's clean-tree rule: a pass cannot commit while orphans exist.
+orphans=$(git ls-files --others --exclude-standard)
+if [ -n "$orphans" ]; then
+  echo "== UNTRACKED FILES (git add, or add to .gitignore — clean-tree rule, CLAUDE.md) =="
+  echo "$orphans"
+  fail=1
+fi
+
 # 1. Line length ≤ 100 in CHARACTERS (house rule; matches the lake linter).
 #    NOT awk: macOS awk counts bytes, and the math glyphs (𝓀, −, ↪) are multibyte.
 long=$(python3 -c '

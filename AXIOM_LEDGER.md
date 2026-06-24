@@ -1883,3 +1883,28 @@ Ledger delta: **0 / 0** — axiom-free. **The assembly opened at Pass 38 is COMP
 `IsNonarchimedeanLocalField L` holds for every finite separable extension of nonarchimedean local
 fields — the gate to towers `M/L/K`, intermediate base fields, and hence the ascent (Herbrand,
 upper numbering, Serre IV §3) is now OPEN.**
+
+### Pass 42 (2026-06-24) — governance: an unledgered orphan found and discarded; count stays 0 / 0
+
+**No axiom entered the build; the active count is unchanged at `0 FOUNDATIONAL / 0 DEBT`.** Recorded
+here because the ledger's history must reflect a near-miss against its own central discipline.
+
+The session-start clean-tree check found `Anabelian/Reconstruction/Inputs.lean` — untracked since
+2026-06-12, never imported, never committed, **never entered in this ledger** — declaring **two
+`FOUNDATIONAL` axioms** (`localReciprocity_abelianization`, `padicUnitGroup_structure`; abelianized
+local reciprocity + the `Kˣ` structure theorem, for a conditional R1-floor). The committed ledger
+read `0 / 0` while the tree carried two axioms: the precise "working tree silently contradicts the
+ledger" failure the convention forbids. Because the file was never wired into `Anabelian.lean`,
+**no headline `#print axioms` was ever affected** — the `0 / 0` was and remains truthful for the
+committed build — but invisible-axiom work is not a permitted state.
+
+**Disposition: discarded** (host-side; user decision = cleanup-only, the R1-floor direction NOT
+adopted this session). Full incident record, including the two axiom statements preserved verbatim
+for a future *deliberate* R1-floor decision, is in `NOTES.md`'s Pass-42 entry. **Reclassification log
+untouched** (nothing was reclassified — the axioms never legitimately existed in the project).
+**Active axioms table unchanged:** still `*(none)* — 0 FOUNDATIONAL, 0 DEBT`.
+
+Should the R1-floor ever be taken deliberately, A1/A2 would be the ledger's first `FOUNDATIONAL`
+entries since the Pass-20 discharge, and would require: full schema entries here, a `ROADMAP.md`
+R1-spine section, and — because A1+A2 sit close to handing `q` to `G_K^ab` — an explicit argument
+that the conditional theorem does **not** trivially imply R1 (rule 5). Not this session.

@@ -3555,3 +3555,73 @@ prove `extensionValuativeRel K L = extensionValuativeRel K' L` for `K ⊆ K' ⊆
 the assembly was built to enable — intermediate fields can now serve as base fields carrying the
 full `IsNonarchimedeanLocalField` structure, making the quotient-compatibility (Herbrand's
 theorem) statable. R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 42 (2026-06-24) — governance/cleanup: orphan discard, R1-floor deferred, clean-tree gate
+
+**No mathematics; ledger delta 0 / 0.** A governance pass, triggered by the session-start
+clean-tree check (`CLAUDE.md`) finding the working tree dirty: two untracked files orphaned since
+2026-06-12 that the Pass-41 commit (2026-06-24) had passed over without resolving. This is a
+recurrence — smaller but more dangerous — of the 2026-05-31 orphan pattern the clean-tree rule
+exists to stop. Resolved this pass; the rule is now mechanically backstopped so it cannot recur.
+
+**The orphans found:**
+1. `Anabelian/Reconstruction/Inputs.lean` (created 2026-06-12 17:43; untracked; **not imported,
+   not in `Anabelian.lean`, not in any commit, not in `AXIOM_LEDGER.md`**). It introduced **two
+   `FOUNDATIONAL` axioms** for a "conditional R1-floor program" — i.e. a jump past L2/L3/L4 to a
+   conditional R1 reconstruction result, powered by axiomatized local class field theory. The
+   committed ledger said `0 / 0` while the tree carried 2 axioms: the exact contradiction
+   (`CLAUDE.md`: "the working tree must never silently contradict the ledger") the discipline
+   forbids. Because the file was never wired into the build, **no axiom ever entered the kernel** —
+   the committed `#print axioms` audits remain honestly standard-only — but as live-but-invisible
+   work it had to be resolved, not tolerated.
+2. `scripts/refactor.sh` (created 2026-06-12 17:22; untracked; never run — the `Anabelian/` tree is
+   still flat at 44 files). A well-formed one-shot flat→folders structural refactor.
+
+**Decision (user, this session): cleanup-only.** The R1-floor direction was **not** adopted; the
+canonicity-then-ascent ROADMAP course stands. Dispositions:
+- **`Inputs.lean`: DISCARDED** (host-side `rm`; the sandbox mount denies unlink). Following the
+  pre-Pass-25 precedent (discard + incident note), its content is preserved **here** so a future
+  *deliberate* R1-floor decision can re-derive it cheaply rather than re-discover it blind. The two
+  axioms, verbatim, were:
+  - **A1 `localReciprocity_abelianization`** (FOUNDATIONAL, L3): for `K/ℚ_p` finite,
+    `Nonempty (Field.absoluteGaloisGroupAbelianization K ≃ₜ* ProfiniteGrp.ProfiniteCompletion.completion (GrpCat.of Kˣ))`
+    — local reciprocity, abelianized (`G_K^ab ≅ Kˣ^`). Cite Neukirch ANT V; Serre LF XIV;
+    Cassels–Fröhlich VI. Discharge path: de Frutos-Fernández's external `LocalClassFieldTheory`.
+  - **A2 `padicUnitGroup_structure`** (FOUNDATIONAL, L1/L3): for `K/ℚ_p` finite of degree `d`,
+    `∃ q a, 1 < q ∧ ¬ p ∣ (q-1) ∧ Nonempty (Kˣ ≃* Multiplicative (ℤ × ZMod (q-1) × ZMod (p^a) × (Fin d → ℤ_[p])))`
+    — the `Kˣ` structure theorem. Cite Neukirch II.5.3 + II.5.7. (The author deferred identifying
+    the existential `q` with `|𝓀_K|`.)
+- **Why deferred, not adopted (the substantive call).** Axiomatizing L3 *is* ROADMAP-permitted as a
+  `FOUNDATIONAL` input for R1, so this is not the cardinal sin per se. But: (i) it was done
+  **unledgered and uncommitted** — process-invalid regardless of content; (ii) it would take the
+  ledger `0 → 2 FOUNDATIONAL` in one move, the breadth-without-depth / FOUNDATIONAL-stacking trap the
+  project disciplined against across Passes 6–20; (iii) **cardinal-sin proximity**: A1 + A2 together
+  nearly *hand you* the residue data of `K` from `G_K^ab` (read `q−1`'s prime-to-`p` part off the
+  abelianization), and "recover `q` from `G_K^ab`" is a named R1 target — so a conditional R1 theorem
+  on these inputs risks being a disguised rule-5 violation (an axiom that trivially implies the
+  target). The author's deferral of the `q = |𝓀_K|` identification is the fig leaf that keeps it on
+  the right side of the line; that very deferral shows the line was felt. **If/when the R1-floor is
+  taken, it must be a deliberate, ledgered decision** with a ROADMAP R1-spine section AND a proof the
+  conditional result does not trivially imply R1 — never something backed into via an untracked file.
+- **`refactor.sh`: TRACKED, NOT RUN.** Committed as an available maintenance tool (alongside
+  `preflight.sh`/`chain_check.py`); running it (a 44-file `git mv` + import rewrite) belongs in its
+  own dedicated pass with a host-side `lake build` to verify — mixing it into a governance commit
+  would make the diff unreviewable. The flat `Anabelian/` dir is a real smell; the refactor is the
+  fix, deferred to its own verified pass.
+
+**Mechanical fix so this cannot recur.** `scripts/preflight.sh` gains **clause 0**: the pre-commit
+gate now fails on any untracked file outside `.gitignore` (`git ls-files --others --exclude-standard`).
+Had this existed, the Pass-41 commit would have failed until the orphans were resolved. `.claude/`
+(local settings, expected-untracked per HANDOFF) is added to `.gitignore` so it is no longer flagged.
+The prose clean-tree rule failed twice (2026-05-31, 2026-06-12) precisely because nothing enforced
+it; clause 0 is the enforcement. `CLAUDE.md`'s rule text now points at it.
+
+**Tree after this pass (host-side, user-run):** `rm Anabelian/Reconstruction/Inputs.lean`, remove the
+empty `Anabelian/Reconstruction/` dir, `rm _probe_test_5` (a stray probe file this session created in
+the mount and could not unlink), `git add scripts/refactor.sh` + the governance/script edits, then
+`scripts/preflight.sh` must exit 0 (clause 0 now clean), then commit + push.
+
+**Ledger delta: 0 / 0.** No axiom entered the build at any point. No new `structure`/`class`; no owed
+witness; D1/D2 untouched. **Next math pass (Pass 43): the canonicity obligation** (base-independence
+of `extensionValuativeRel` across towers — `integralClosure` transitivity), then the ascent
+(Herbrand `φ`/`ψ`, upper numbering, Serre IV §3).

@@ -5,9 +5,17 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 41 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 42 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
+
+> **Pass 42 was a governance/cleanup pass, no mathematics** (ledger stays `0 / 0`). It discarded an
+> unledgered 2-axiom orphan (`Anabelian/Reconstruction/Inputs.lean`, a premature "conditional
+> R1-floor"; full record in `NOTES.md`/`AXIOM_LEDGER.md` Pass 42) and added a mechanical clean-tree
+> gate to `scripts/preflight.sh` so the orphan pattern cannot recur. **The R1-floor (axiomatizing L3
+> to reach a conditional R1 result) is a permitted-but-deferred future option, not adopted** — it
+> must be entered deliberately and ledgered, never via an untracked file. The next *math* pass
+> (Pass 43) is the canonicity obligation below, then the ascent.
 
 A structural note on the ladder, because it governs the whole project:
 
