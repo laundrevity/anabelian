@@ -1,12 +1,13 @@
-# HANDOFF.md — session bootstrap (written after Pass 42, 2026-06-24)
+# HANDOFF.md — session bootstrap (written after Pass 43, 2026-06-24)
 
 **State:** Pass 41 **closed the local-field assembly** — `IsNonarchimedeanLocalField L` for every
-finite separable `L/K` (`Anabelian/ExtensionLocalFieldInstance.lean`). Pass 42 was a
-**governance/cleanup pass, no mathematics**: it discarded an unledgered 2-axiom orphan
-(`Anabelian/Reconstruction/Inputs.lean`, a premature "conditional R1-floor") and added a mechanical
-clean-tree gate to `scripts/preflight.sh`. Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom`
-declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 43 — the canonicity
-obligation** (below).
+finite separable `L/K` (`Anabelian/ExtensionLocalFieldInstance.lean`). Pass 43 **discharged the
+canonicity obligation**: `extensionValuativeRel K L = extensionValuativeRel K' L` for every tower
+`K ⊆ K' ⊆ L` of finite separable extensions (`Anabelian/ExtensionCanonical.lean`, axiom-free) — the
+last L-rung prerequisite before the ascent, and the reason `extensionValuativeRel` was a `def` not an
+instance. (Pass 42 between them was governance: it discarded an unledgered 2-axiom orphan and added
+the `scripts/preflight.sh` clean-tree gate.) Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom`
+declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 44 — the ascent** (below).
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
 `CLAUDE.md` (the constitution — axiom budget, rule-2, commit-per-pass, clean-tree),
@@ -27,21 +28,34 @@ separable `L/K`; the full P27/P28 quotient theory concrete at `𝒪_L` (`G₁` =
 `L/K`, on the rung-1 valuative structure `extensionValuativeRel` (induced by `𝒪_L`). Parents 1
 (`IsValuativeTopology`) + 3 (`IsNontrivial`) from P38; parent 2 (`LocallyCompactSpace`) from P41 via
 `FiniteDimensional.proper` + the rung-1 = spectral topology identification (`isValuativeTopology_unique`).
-This opens towers `M/L/K` and intermediate base fields — the prerequisite for the ascent.
 
-## YOUR FIRST TASK — Pass 43: the canonicity obligation
+**Canonicity is DISCHARGED** (P43): `extensionValuativeRel K L = extensionValuativeRel K' L` for a
+tower `K ⊆ K' ⊆ L` of finite separable extensions (`Anabelian/ExtensionCanonical.lean`,
+`extensionValuativeRel_base_independent`). The relation depends only on `𝒪_L`, which is
+base-independent by integral-closure transitivity (self-consistency `𝒪[K'] = extensionIntegers K K'`
++ the transitivity engine `isIntegral_base_iff` + `RingEquiv.isIntegral_iff`). **Intermediate fields
+are now usable as base fields — the ascent is open.**
 
-**Goal:** discharge the base-independence of `extensionValuativeRel`, deferred since Pass 38 and the
-reason it is a `def` not an instance. For a tower `K ⊆ K' ⊆ L`, the valuative relation on `L` built
-from base `K` must equal the one built from base `K'`. This must land **before** the theory iterates
-up towers (the ascent needs intermediate fields as base fields).
+## YOUR FIRST TASK — Pass 44: the ascent (Herbrand `φ`/`ψ`, upper numbering)
 
-**Likely shape** (from the NOTES Pass-41 pointer): the relation depends only on the integral closure
-`𝒪_L`, which is base-independent because `integralClosure` is transitive (`integralClosure 𝒪[K] L =
-integralClosure (integralClosure 𝒪[K] K') L` over the tower — inventory the exact Mathlib name,
-`IsIntegralClosure`/`integralClosure_map`/transitivity API, before writing). State and prove
-`extensionValuativeRel K L = extensionValuativeRel K' L` for `K ⊆ K' ⊆ L`. Then the **ascent**:
-Herbrand `φ`/`ψ` and upper numbering `G^v(L/K)` (Serre IV §3), which the assembly was built to enable.
+**Goal:** begin the **ascent** — Serre IV §3. With the assembly (P41) and canonicity (P43) in hand,
+intermediate fields carry the full `IsNonarchimedeanLocalField` structure and serve as base fields,
+so the quotient-compatibility that Herbrand's theorem expresses is finally statable. Targets, in
+dependency order: (1) the **Herbrand functions** `φ_{L/K}`/`ψ_{L/K}` (the piecewise-linear transforms
+of the lower-numbering filtration); (2) the **upper numbering** `G^v(L/K) = G_{ψ(v)}` and Herbrand's
+theorem (upper numbering is what is compatible with quotients `Gal(L/K) ↠ Gal(M/K)`); (3) the limit
+`G^v ≤ Gal(K̄/K)`; eventually Hasse–Arf.
+
+**Before writing, inventory Mathlib's ramification API.** The L2 file
+(`Anabelian/RamificationFiltration.lean`) carries a literal `TODO: Define higher ramification` for
+`φ`/`ψ` — they are very likely **absent** from Mathlib (verify with grep/`exact?`/loogle; if genuinely
+absent, that absence is itself a deliverable — log it as the next sub-target, do **not** `axiom` past
+it). The lower-numbering filtration `ramificationGroup K (extensionIntegers K L) i` is in hand
+(P23–37); `φ`/`ψ` are integrals/sums over it. This is real multi-pass mathematics — scope a first
+concrete rung (e.g. the definition of `φ` and its monotonicity), do not attempt the whole of §3 at
+once. Use the local toolchain in the loop (Pass 43's lesson: the draft had been written without one,
+and three of its four errors were defeq/instance issues the compiler resolves instantly via
+`lake env lean` probes).
 
 ## Environment (verify, then trust)
 
@@ -75,12 +89,12 @@ Herbrand `φ`/`ψ` and upper numbering `G^v(L/K)` (Serre IV §3), which the asse
   `Nat.exists_eq_pow_mul_and_not_dvd`; `IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`
   (nested!); `RingEquiv.subringCongr`; `Valuation.integer` (not `Valued.integer`) via `Valued.v`.
 
-## The queue after Pass 43
+## The queue after Pass 44
 
-The **ascent**: Herbrand `φ`/`ψ`, upper numbering, Hasse–Arf (Serre IV §3). Separately, the
-**R1-floor** (axiomatizing L3 local class field theory to reach a *conditional* R1 reconstruction
-result) is a ROADMAP-permitted but **deferred** option — if taken, it must be a deliberate, ledgered
-decision (A1/A2 preserved in the NOTES Pass-42 entry) with an explicit rule-5 argument that the
-conditional theorem does not trivially imply R1. R1–R3 remain distant targets that must be earned,
-never axiomatized — the line between inputs and targets is drawn in `ROADMAP.md` and is the project's
-reason for existing.
+Continue the **ascent**: once `φ`/`ψ` and the upper numbering are in place, Herbrand's theorem and
+Hasse–Arf (Serre IV §3). Separately, the **R1-floor** (axiomatizing L3 local class field theory to
+reach a *conditional* R1 reconstruction result) is a ROADMAP-permitted but **deferred** option — if
+taken, it must be a deliberate, ledgered decision (A1/A2 preserved in the NOTES Pass-42 entry) with
+an explicit rule-5 argument that the conditional theorem does not trivially imply R1. R1–R3 remain
+distant targets that must be earned, never axiomatized — the line between inputs and targets is drawn
+in `ROADMAP.md` and is the project's reason for existing.

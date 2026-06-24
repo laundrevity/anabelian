@@ -5,17 +5,21 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 42 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 43 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Pass 42 was a governance/cleanup pass, no mathematics** (ledger stays `0 / 0`). It discarded an
-> unledgered 2-axiom orphan (`Anabelian/Reconstruction/Inputs.lean`, a premature "conditional
-> R1-floor"; full record in `NOTES.md`/`AXIOM_LEDGER.md` Pass 42) and added a mechanical clean-tree
-> gate to `scripts/preflight.sh` so the orphan pattern cannot recur. **The R1-floor (axiomatizing L3
-> to reach a conditional R1 result) is a permitted-but-deferred future option, not adopted** — it
-> must be entered deliberately and ledgered, never via an untracked file. The next *math* pass
-> (Pass 43) is the canonicity obligation below, then the ascent.
+> **Pass 43 DISCHARGED the canonicity obligation** (ledger stays `0 / 0`): for a tower `K ⊆ K' ⊆ L`
+> of finite separable extensions, `extensionValuativeRel K L = extensionValuativeRel K' L`
+> (`Anabelian/ExtensionCanonical.lean`, axiom-free — integral-closure transitivity + assembly
+> self-consistency; full record in `NOTES.md`/`AXIOM_LEDGER.md` Pass 43). This was the reason
+> `extensionValuativeRel` is a `def` not an instance, and the **last L-rung prerequisite before the
+> ascent**: intermediate fields are now usable as base fields, and the **ascent** (Herbrand
+> `φ`/`ψ`, upper numbering — Serre IV §3) is the next math frontier. (Pass 42 was governance: it
+> discarded an unledgered 2-axiom orphan, `Anabelian/Reconstruction/Inputs.lean`, a premature
+> "conditional R1-floor", and added a mechanical clean-tree gate to `scripts/preflight.sh`; the
+> R1-floor — axiomatizing L3 for a conditional R1 result — remains a permitted-but-deferred option,
+> to be entered deliberately and ledgered, never via an untracked file.)
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -402,11 +406,16 @@ relation equality, spectral side via `IsValuativeTopology.of_zero` + `Valued.mem
 `exists_setOf_restrict_le_iff`). The compactness-criterion route (P39–40 discharged all three of
 its conjuncts: DVR, finite residue, completeness) is thereby superseded for the *bare* assembly,
 but those theorems stand as genuine local-field structure — now also recovered *from* the class
-by Mathlib. The gate to towers and the ascent is OPEN. **Honest next step (Pass 42):** the
-**canonicity obligation** — base-independence of `extensionValuativeRel` across towers `M/L/K`
-(needed before iterating the theory up towers) — then the **ascent** (Herbrand `φ`/`ψ`, upper
-numbering — Serre IV §3), for which the assembly was built: intermediate fields as base fields
-make Herbrand's quotient theorem statable.
+by Mathlib. The gate to towers and the ascent is OPEN. **Pass 43 DISCHARGED the canonicity
+obligation** (`Anabelian/ExtensionCanonical.lean`, `extensionValuativeRel_base_independent`):
+base-independence of `extensionValuativeRel` across towers `M/L/K` — `extensionValuativeRel K L =
+extensionValuativeRel K' L` for `K ⊆ K' ⊆ L` finite separable, axiom-free. The relation depends
+only on `𝒪_L`, which is base-independent by integral-closure transitivity (the self-consistency
+`𝒪[K'] = extensionIntegers K K'`, i.e. `integer_extensionValuativeRel_eq`, + the transitivity engine
+`isIntegral_base_iff` + `RingEquiv.isIntegral_iff`). This was the reason `extensionValuativeRel` is a
+`def` not an instance, and the **last L-rung prerequisite before the ascent**. **Now unblocked — the
+next math frontier — is the ascent** (Herbrand `φ`/`ψ`, upper numbering — Serre IV §3), for which the
+assembly was built: intermediate fields as base fields make Herbrand's quotient theorem statable.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**

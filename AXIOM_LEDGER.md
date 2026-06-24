@@ -1908,3 +1908,57 @@ Should the R1-floor ever be taken deliberately, A1/A2 would be the ledger's firs
 entries since the Pass-20 discharge, and would require: full schema entries here, a `ROADMAP.md`
 R1-spine section, and — because A1+A2 sit close to handing `q` to `G_K^ab` — an explicit argument
 that the conditional theorem does **not** trivially imply R1 (rule 5). Not this session.
+
+### Pass 43 (2026-06-24) — the canonicity obligation DISCHARGED; count stays 0 / 0
+
+Introduced **zero** axioms; **discharged the canonicity obligation** deferred since Pass 38 — the
+base-independence of `extensionValuativeRel` across towers, the very reason it is a `def` and not an
+instance. `Anabelian/ExtensionCanonical.lean` proves (standard axioms only — in-file `#print axioms`):
+
+```
+'Anabelian.integer_extensionValuativeRel_eq'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isIntegral_base_iff'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionIntegers_base_independent'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionValuativeRel_base_independent'  depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`integer_extensionValuativeRel_eq`** — *self-consistency of the assembly*: under
+  `extensionValuativeRel K K'`, the integer ring `𝒪[K']` is exactly `extensionIntegers K K'` (the
+  integral closure of `𝒪[K]` in `K'`). Pure `Compatible` bookkeeping on the canonical valuation —
+  the `K'`-analogue of Pass 39's `valued_integer_eq_of_compatible`, without the `Valued`/uniformity
+  layer. (The high-confidence anchor; it built axiom-clean already in the draft.)
+- **`isIntegral_base_iff`** — *the transitivity engine*: for `x : L`, `IsIntegral ↥𝒪[K] x ↔
+  IsIntegral ↥(extensionIntegers K K') x`. Forward by base enlargement (`IsIntegral.tower_top`);
+  backward because `extensionIntegers K K'` is integral over `𝒪[K]` (`isIntegral_trans`, with the
+  `Algebra.IsIntegral ↥𝒪[K] ↥(extensionIntegers K K')` instance built from `mem_extensionIntegers_iff`
+  via `isIntegral_algebraMap_iff` through the injective subring inclusion). The two scalar towers
+  `𝒪[K] → 𝒪_{K'} → K'` and `𝒪[K] → 𝒪_{K'} → L` are built on Mathlib's **ambient** subring-algebra
+  instance (`Algebra.ofSubsemiring`, since `extensionIntegers K K'` is a subring of `K'` acting on
+  `L`) via the `extensionAlgebraMap` coercion (`coe_extensionAlgebraMap`) — no hand-rolled `Algebra`
+  instance (the draft's `algBL` conflicted with the ambient one and was deleted).
+- **`extensionIntegers_base_independent`** — the two valuation subrings of `L` coincide
+  (`extensionIntegers K L = extensionIntegers K' L`): `SetLike.ext` + `mem_extensionIntegers_iff`
+  reduces to `isIntegral_base_iff`, with the final bridge `IsIntegral ↥(extensionIntegers K K') x ↔
+  IsIntegral ↥𝒪[K'] x` along self-consistency (`RingEquiv.isIntegral_iff (RingEquiv.subringCongr …)`).
+- **`extensionValuativeRel_base_independent`** — **THE CANONICITY THEOREM**: for a tower
+  `K ⊆ K' ⊆ L` of finite separable extensions, `extensionValuativeRel K L = extensionValuativeRel
+  K' L`. `congrArg (ofValuation ∘ ·.valuation)` of the subring equality. It rests **only** on the
+  proved self-consistency + transitivity — not behind a hypothesis that trivially gives it away.
+
+**Mathlib API that did the real work:** `IsIntegral.tower_top` + `isIntegral_trans` (integral-closure
+transitivity), `isIntegral_algebraMap_iff` (reflect integrality through the injective subring
+inclusion), `RingEquiv.isIntegral_iff` (transport along self-consistency),
+`IsScalarTower.of_algebraMap_eq`, and the ambient `Algebra ↥(extensionIntegers K K') L`
+(`Algebra.ofSubsemiring`).
+
+**Not the cardinal sin**: a structural fact *about* the tower's valuation theory — the relation
+depends only on `𝒪_L`, which is base-independent by integral-closure transitivity — strictly below
+R1; recovers nothing from an abstract group. No new `structure`/`class`; no owed witness; D1 N/A;
+D2 untouched (integrality is the native characterisation, `mem_extensionIntegers_iff` is `Iff.rfl` —
+no spectral structure enters any statement). With this discharged, `extensionValuativeRel` could be
+promoted to an instance; we keep it a `def` (upstream diamond-avoidance) and expose the equality as a
+theorem, exactly as Mathlib does for its own local valuative structures.
+
+**Ledger delta: 0 / 0.** Axiom-free. **The last L-rung prerequisite before the ascent is
+discharged** — the theory may now iterate up towers `M/L/K` with intermediate fields as base fields.
+Next: the **ascent** (Herbrand `φ`/`ψ`, upper numbering — Serre IV §3).

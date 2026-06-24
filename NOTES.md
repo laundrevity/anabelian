@@ -3625,3 +3625,94 @@ the mount and could not unlink), `git add scripts/refactor.sh` + the governance/
 witness; D1/D2 untouched. **Next math pass (Pass 43): the canonicity obligation** (base-independence
 of `extensionValuativeRel` across towers — `integralClosure` transitivity), then the ascent
 (Herbrand `φ`/`ψ`, upper numbering, Serre IV §3).
+
+### Pass 43 (2026-06-24) — the canonicity obligation DISCHARGED: `extensionValuativeRel` base-independent across towers
+
+**Mathematics; ledger delta 0 / 0.** Discharged the obligation deferred since Pass 38 — the reason
+`extensionValuativeRel K L` is a `def` and not an instance. For a tower `K ⊆ K' ⊆ L` of finite
+separable extensions, the valuative relation on `L` built from the base `K` **equals** the one built
+from the intermediate base `K'` (carrying its Pass-41 extension local-field structure). This was the
+last L-rung prerequisite before the ascent: the theory can now iterate up towers with intermediate
+fields as base fields. `Anabelian/ExtensionCanonical.lean`, four theorems, all standard-axioms-only.
+
+## What was proved
+
+The relation depends only on the integral closure `𝒪_L`, which is base-independent because
+`integralClosure` is transitive. Two halves, then the assembly:
+
+- **Self-consistency** (`integer_extensionValuativeRel_eq`): under `extensionValuativeRel K K'`, the
+  integer ring `𝒪[K']` *is* `extensionIntegers K K'` (= integral closure of `𝒪[K]` in `K'`). Pure
+  `Compatible` bookkeeping on the canonical valuation (`Valuation.Compatible.vle_iff_le` both ways +
+  `mem_of_valuation_le_one`/`valuation_le_one`), the `K'`-analogue of Pass 39's
+  `valued_integer_eq_of_compatible` without the `Valued` layer. Built axiom-clean already in the
+  draft — the high-confidence anchor.
+- **Transitivity** (`isIntegral_base_iff`): for `x : L`, `IsIntegral ↥𝒪[K] x ↔ IsIntegral
+  ↥(extensionIntegers K K') x`. Forward = base enlargement (`IsIntegral.tower_top`); backward =
+  `extensionIntegers K K'` is integral over `𝒪[K]` (`isIntegral_trans`). This is the engine and the
+  only lemma the draft left broken (4 errors); see "How the draft was fixed" below.
+- **Subring base-independence** (`extensionIntegers_base_independent`): `extensionIntegers K L =
+  extensionIntegers K' L` as `ValuationSubring L`. `SetLike.ext` + `mem_extensionIntegers_iff` (which
+  is `Iff.rfl`) reduces membership to `isIntegral_base_iff`, then the bridge `IsIntegral
+  ↥(extensionIntegers K K') x ↔ IsIntegral ↥𝒪[K'] x` along self-consistency
+  (`RingEquiv.isIntegral_iff (RingEquiv.subringCongr hSC.symm) (by ext b; rfl)` — the `ext b; rfl`
+  compatibility went through unchanged once the engine compiled).
+- **THE CANONICITY THEOREM** (`extensionValuativeRel_base_independent`): `extensionValuativeRel K L
+  = extensionValuativeRel K' L`, by `congrArg (fun A => ofValuation A.valuation)` of the subring
+  equality. Rests only on self-consistency + transitivity — not behind a hypothesis that gives it
+  away.
+
+## How the draft was fixed (the engine, `isIntegral_base_iff`)
+
+The draft hand-rolled `letI algBL : Algebra ↥(extensionIntegers K K') L` and a fragile `rw` chain;
+4 errors. The fix, verified empirically with the local toolchain (the prior agent had none) via
+throwaway `lake env lean` probes before editing:
+
+- **Mathlib provides `Algebra ↥(extensionIntegers K K') L` ambiently** (`Algebra.ofSubsemiring` —
+  `extensionIntegers K K'` is a subring of `K'`, which acts on `L`), with `algebraMap … b =
+  algebraMap K' L ↑b` by `rfl`. The hand-rolled `algBL` *conflicted* with it (the "synthesized
+  instance not defeq" errors). **Deleted it; use the ambient one.**
+- `IsScalarTower ↥𝒪[K] ↥(extensionIntegers K K') L` (and the `… → K'` tower) do **not** infer — built
+  by hand with `IsScalarTower.of_algebraMap_eq`, both sides rewritten to a syntactically identical
+  `algebraMap K _ ↑r` (probe-confirmed: `algebraMap ↥𝒪[K] K' r = algebraMap K K' ↑r` and `algebraMap
+  ↥𝒪[K] L r = algebraMap K L ↑r` are both `rfl`; the seam is `hcoe`, the `extensionAlgebraMap`
+  coercion via `coe_extensionAlgebraMap`).
+- `Algebra.IsIntegral ↥𝒪[K] ↥(extensionIntegers K K')`: the elements are integral by
+  `mem_extensionIntegers_iff`, but in `K'` — lifted to the subring by `isIntegral_algebraMap_iff
+  Subtype.coe_injective` (needs the `… → K'` tower above).
+- Lint: `isIntegral_base_iff` doesn't use `[FiniteDimensional K' L]` ⟹ `omit [FiniteDimensional K' L]
+  in` (the `ExtensionIntegers.lean` precedent); the three goal-changing `show`s became `change` (the
+  `linter.style.show` gate). Both caught by the host `lake build` warning-gate, invisible to the
+  draft author.
+
+## Mathlib API that did the real work
+
+`IsIntegral.tower_top`, `isIntegral_trans` (integral-closure transitivity, `IsIntegralClosure/Basic`);
+`isIntegral_algebraMap_iff` (reflect integrality through an injective algebra map); `RingEquiv.isIntegral_iff`
+(transport along the self-consistency iso); `IsScalarTower.of_algebraMap_eq`; the ambient
+`Algebra.ofSubsemiring` subring-algebra instance.
+
+## Build + headline
+
+Host `lake build` green; new file `Anabelian/ExtensionCanonical.lean` imported in `Anabelian.lean`;
+`scripts/preflight.sh` CLEAN. All four `#print axioms` standard-only
+(`[propext, Classical.choice, Quot.sound]`); zero `axiom` declarations project-wide.
+**HEADLINE: `extensionValuativeRel K L = extensionValuativeRel K' L` for every tower `K ⊆ K' ⊆ L` of
+finite separable extensions of nonarchimedean local fields — base-independence proved, axiom-free.**
+Intermediate fields are now usable as base fields; the ascent is unblocked.
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (the four declarations are theorems; the only
+  objects are existing Mathlib structures — `ValuationSubring`, `ValuativeRel`), so **no rule-2
+  obligation**; **no owed witness** (no load-bearing-hypothesis come-apart is claimed — the tower
+  hypotheses are what make the statement typecheck, not a separately-claimed essential hypothesis).
+  D1 N/A; D2 untouched (no spectral structure in any statement — `mem_extensionIntegers_iff` is
+  `Iff.rfl`). Recovers nothing from an abstract group; R1–R3 untouched and distant.
+
+## Scope: the ascent (Pass 44)
+
+With canonicity discharged the **ascent** is unblocked: Herbrand's `φ`/`ψ` functions and the upper
+numbering `G^v(L/K)`, quotient-compatible (Serre IV §3) — the assembly was built precisely so that
+intermediate fields carry the full `IsNonarchimedeanLocalField` structure, making Herbrand's quotient
+theorem statable. Inventory Mathlib's ramification API (the L2 file carries a literal `TODO: Define
+higher ramification` for `φ`/`ψ`) before writing. R1–R3 remain the distant, must-be-earned targets.

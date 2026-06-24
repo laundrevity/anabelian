@@ -42,3 +42,4 @@ import Anabelian.ExtensionValued
 import Anabelian.ValuativeRelCongr
 import Anabelian.ExtensionSpectralSeam
 import Anabelian.ExtensionLocalFieldInstance
+import Anabelian.ExtensionCanonical
