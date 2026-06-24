@@ -3486,3 +3486,72 @@ integers are a `𝓝 0`-neighborhood (`is_topological_valuation` at `γ = 1`) +
 `IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup` ⟹ `LocallyCompactSpace L`; (5)
 **`IsNonarchimedeanLocalField L`** — the assembly theorem, closing the block opened at
 Pass 38. Then: the canonicity obligation, then the ascent.
+
+---
+
+# Pass 41 — the assembly closes: `IsNonarchimedeanLocalField L` (2026-06-24)
+
+## Restatement + what was built
+
+Returning to the project after a break; user reviewed the recent passes and greenlit Pass 41 (the
+assembly capstone). **One file, `Anabelian/ExtensionLocalFieldInstance.lean`**, three theorems:
+
+- **`isValuativeTopology_unique`** (abstract, reusable): two topologies on a `CommRing` that are
+  both valuative for the *same* `ValuativeRel` are equal. `IsValuativeTopology.mem_nhds_iff`
+  characterizes `s ∈ 𝓝 x` by the relation alone (RHS topology-independent), so the nhds filters
+  agree pointwise — `TopologicalSpace.ext_nhds` + `Filter.ext`. A two-line proof; the clean
+  formalization of the NOTES-plan "step 1".
+- **`locallyCompactSpace_extensionValuativeRel`** (parent 2): `L` is locally compact in its
+  rung-1 valuative topology.
+- **`isNonarchimedeanLocalField_extension`** (the capstone): assembles the three parents.
+
+## The route I actually took (and why it diverged from the Pass-40 pointer)
+
+The Pass-40 pointer planned the **compactness-criterion** route: complete `𝒪` on the rung-1
+tower (transfer `completeSpace_spectral` across the uniformity via
+`uniformSpace_eq_of_isUniformAddGroup`), `CompactSpace` via the criterion `.mpr`, then
+`LocallyCompactSpace`. During inventory I found a **shorter, more conceptual** route for the bare
+`LocallyCompactSpace`: `L` is a finite-dimensional normed space over `K`, and `K` is a local
+field hence proper (`ProperSpace.of_nontriviallyNormedField_of_weaklyLocallyCompactSpace`, exactly
+as Mathlib's own `LocalField/Basic.lean:163` does), so **`FiniteDimensional.proper K L : ProperSpace L`**
+and `ProperSpace → LocallyCompactSpace` is an instance. This bypasses the criterion, DVR, finite
+residue, RankOne, and the completeness transfer entirely. The topology identification (rung-1 =
+spectral) is still required — to transport `LocallyCompactSpace` from the spectral topology to the
+rung-1 topology — and is the genuine crux, but the abstract `isValuativeTopology_unique` brick +
+P40's `extensionValuativeRel_eq_spectral` made it clean. The criterion route is **not wasted**:
+P39–40's DVR/finite/completeness are real local-field structure (and Mathlib re-derives them *from*
+the assembled class for free).
+
+## Expectation vs. reality
+
+| I expected | Reality | Verdict |
+|------------|---------|---------|
+| the compactness-criterion route (NOTES-plan) | `FiniteDimensional.proper` gives `LocallyCompactSpace` far more directly; criterion superseded for the assembly | inventory before executing a stale plan; the conceptual proof was shorter |
+| spectral side `IsValuativeTopology` to be a grind | `IsValuativeTopology.of_zero` + `Valued.mem_nhds_zero` + `exists_setOf_restrict_le_iff` (with ambient relation set to `ofValuation Valued.v`, then `rw` the P40 equality) — one `simpa` | the `exists_setOf_restrict_le_iff` API is exactly the needed bridge |
+| `@IsValuativeTopology R _ t` to typecheck | wrong arity: the class takes `[CommRing][ValuativeRel][TopologicalSpace]`, so `@... R _ _ t` — `t` was landing in the `ValuativeRel` slot | one underscore; trivial once the error named it |
+| post-build warnings | exactly two style-linter warnings (maxHeartbeats comment; an unnecessary `show`) — both real, both fixed; preflight then CLEAN | the gate works; named binders (`letI rk :` etc., 2-space tactic level) did NOT warn |
+
+## Build + headline
+
+Host `lake build` green; `scripts/preflight.sh` CLEAN (8520 jobs, 44 files chain-checked, zero
+warnings). All three `#print axioms` standard-only; zero `axiom` declarations project-wide.
+**HEADLINE: the assembly opened at Pass 38 is COMPLETE — `IsNonarchimedeanLocalField L` for every
+finite separable extension `L/K` of nonarchimedean local fields, axiom-free.** The gate to towers
+`M/L/K` and the ascent (Herbrand, upper numbering) is open. R1–R3 untouched and distant as ever.
+
+## Ledger delta
+
+- **0 / 0.** Axiom-free. No new `structure`/`class`; no owed witness; D1 N/A; D2 intact.
+
+## Scope: pointer to Pass 42 (the canonicity obligation, then the ascent)
+
+(1) **The canonicity obligation** — `extensionValuativeRel` is a `def`, not an instance, because
+for a tower `M/L/K` the relation on `L` built from base `K` must agree with the one built from an
+intermediate base; this base-independence is the named obligation deferred since Pass 38. It must
+be discharged before the theory iterates up towers. Likely shape: the relation depends only on the
+integral closure `𝒪_L`, which is base-independent (`integralClosure` is transitive); state and
+prove `extensionValuativeRel K L = extensionValuativeRel K' L` for `K ⊆ K' ⊆ L`. (2) Then the
+**ascent**: Herbrand's `φ`/`ψ` functions and the upper numbering `G^v(L/K)` (Serre IV §3), which
+the assembly was built to enable — intermediate fields can now serve as base fields carrying the
+full `IsNonarchimedeanLocalField` structure, making the quotient-compatibility (Herbrand's
+theorem) statable. R1–R3 remain the distant, must-be-earned targets.

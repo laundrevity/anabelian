@@ -1839,3 +1839,47 @@ D1 N/A; D2 intact. Recovers nothing from an abstract group; R1–R3 untouched.
 
 Ledger delta: **0 / 0** — axiom-free. **All three conjuncts of the compactness criterion are
 now proved on one side of the seam or the other; Pass 41 carries them across and assembles.**
+
+### Pass 41 (2026-06-24) — the assembly closes: `IsNonarchimedeanLocalField L`
+
+Introduced **zero** axioms; ledger stays **`0 FOUNDATIONAL / 0 DEBT`**. One file
+(`Anabelian/ExtensionLocalFieldInstance.lean`; in-file `#print axioms` standard-only; host
+`lake build` warning-clean; `scripts/preflight.sh` CLEAN, 8520 jobs, 44 files chain-checked):
+
+```
+'Anabelian.isValuativeTopology_unique'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.locallyCompactSpace_extensionValuativeRel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isNonarchimedeanLocalField_extension'      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`isValuativeTopology_unique`** (abstract, reusable) — two topologies that are both valuative
+  for the *same* valuative relation are **equal**. `IsValuativeTopology.mem_nhds_iff` characterizes
+  `s ∈ 𝓝 x` purely by the relation (the RHS is topology-independent), so the neighborhood filters
+  agree pointwise (`TopologicalSpace.ext_nhds`).
+- **`locallyCompactSpace_extensionValuativeRel`** — **parent 2, discharged**: `L` is locally
+  compact in its rung-1 valuative topology. The honest conceptual proof: `L` is
+  finite-dimensional over the locally compact field `K` (spectral norm) ⟹ **proper**
+  (`FiniteDimensional.proper`) ⟹ locally compact; the rung-1 topology **equals** the spectral
+  topology (P40's `extensionValuativeRel_eq_spectral` + `isValuativeTopology_unique`; the spectral
+  side is `IsValuativeTopology` for the relation via `IsValuativeTopology.of_zero` +
+  `Valued.mem_nhds_zero` + `Valuation.exists_setOf_restrict_le_iff`), carrying the property across.
+- **`isNonarchimedeanLocalField_extension`** — **THE ASSEMBLY THEOREM**: every finite separable
+  `L/K` of nonarchimedean local fields is itself a nonarchimedean local field. Parents 1
+  (`IsValuativeTopology`) and 3 (`IsNontrivial`) from Pass 38, parent 2 (`LocallyCompactSpace`)
+  here, on the rung-1 valuative structure `extensionValuativeRel` (induced by `𝒪_L`, Pass 29).
+
+**Honesty.** The compactness-criterion route (Passes 39–40 discharged all three of its conjuncts:
+DVR, finite residue, completeness) would *also* assemble parent 2; this pass takes the shorter
+finite-dimensional-properness route for `LocallyCompactSpace` directly. The Pass 39/40 structural
+theorems remain genuine and independently useful — they are the local-field structure of `L`, now
+*also* recovered for free **from** `IsNonarchimedeanLocalField L` by Mathlib's derived instances.
+**Not the cardinal sin**: the assembly is a structural fact *about* a given extension's topology,
+strictly below R1; nothing is recovered from an abstract group. NOT claimed: base-independence of
+`extensionValuativeRel` across towers (the **canonicity obligation** — Pass 42; gates `M/L/K`
+iteration). No new `structure`/`class`; no owed witness; D1 N/A; D2 intact (spectral structures
+live entirely inside proofs via `letI`, none in any statement).
+
+Ledger delta: **0 / 0** — axiom-free. **The assembly opened at Pass 38 is COMPLETE:
+`IsNonarchimedeanLocalField L` holds for every finite separable extension of nonarchimedean local
+fields — the gate to towers `M/L/K`, intermediate base fields, and hence the ascent (Herbrand,
+upper numbering, Serre IV §3) is now OPEN.**

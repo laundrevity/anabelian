@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 40 (2026-06-11)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 41 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -381,12 +381,24 @@ valuation (`ofValuation_congr`/`ofValuation_eq_of_same_subring`, new abstract br
 equivalent valuations give *equal* relations, the class being `@[ext]`); `CompleteSpace L`
 holds spectrally (`spectralNorm.normedSpace` + `FiniteDimensional.complete`); and the
 group-uniformity uniqueness lemma (`uniformSpace_eq_of_isUniformAddGroup`) stands ready to
-carry completeness across. **Honest next step (Pass 41):** the `IsValuativeTopology`-uniqueness
-lemma (two topologies valuative for the same relation are equal — `TopologicalSpace.ext_nhds`
-+ `mem_nhds_iff` both sides), completeness on the rung-1 tower, `CompactSpace` via the
-criterion's `.mpr`, `LocallyCompactSpace L`
-(`IsCompact.locallyCompactSpace_of_mem_nhds_of_addGroup`), and **the assembly theorem
-`IsNonarchimedeanLocalField L`**; base-independence when towers arrive.
+carry completeness across. **Pass 41 CLOSED the assembly**
+(`Anabelian/ExtensionLocalFieldInstance.lean`): **`IsNonarchimedeanLocalField L` for every
+finite separable `L/K`** (`isNonarchimedeanLocalField_extension`) — parents 1
+(`IsValuativeTopology`) and 3 (`IsNontrivial`) from Pass 38, and **parent 2
+(`LocallyCompactSpace L`) discharged** by the honest conceptual route: `L` is finite-dimensional
+over the locally compact field `K` (spectral norm), hence **proper** (`FiniteDimensional.proper`),
+hence locally compact, and the rung-1 topology **equals** the spectral topology
+(`isValuativeTopology_unique` — the new abstract brick "two topologies valuative for one relation
+coincide", `IsValuativeTopology.mem_nhds_iff` + `TopologicalSpace.ext_nhds` — fed by P40's
+relation equality, spectral side via `IsValuativeTopology.of_zero` + `Valued.mem_nhds_zero` +
+`exists_setOf_restrict_le_iff`). The compactness-criterion route (P39–40 discharged all three of
+its conjuncts: DVR, finite residue, completeness) is thereby superseded for the *bare* assembly,
+but those theorems stand as genuine local-field structure — now also recovered *from* the class
+by Mathlib. The gate to towers and the ascent is OPEN. **Honest next step (Pass 42):** the
+**canonicity obligation** — base-independence of `extensionValuativeRel` across towers `M/L/K`
+(needed before iterating the theory up towers) — then the **ascent** (Herbrand `φ`/`ψ`, upper
+numbering — Serre IV §3), for which the assembly was built: intermediate fields as base fields
+make Herbrand's quotient theorem statable.
 
 **Structural-hygiene debts (distinct from `DEBT` axioms and Owed witnesses — instance/setup cleanups
 we owe before sustained work in a sub-area):**
