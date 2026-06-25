@@ -3872,3 +3872,71 @@ restricts almost definitionally), (b) **`φ`-transitivity** `φ_{L/K} = φ_{M/K}
 §3 Prop 15), and (c) the quotient relationship itself. This is where Pass 43's canonicity and the
 tower theory earn their keep. Also still deferred: concavity, the explicit piecewise-linear formula,
 the slope `φ'(u) = 1/(G_0 : G_u)`, Hasse–Arf. R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 46 (2026-06-25) — toward Herbrand: lower-numbering subgroup compatibility `H_u = H ∩ G_u`
+
+**Mathematics; ledger delta 0 / 0.** Built the first prerequisite for Herbrand's theorem — Serre IV
+§1 Prop. 2, the behavior of the lower numbering under a sub-extension. `Anabelian/RamificationSubgroup.lean`,
+7 declarations, all standard-axioms-only. The proof was short: the key facts are `rfl`.
+
+## What was proved
+
+For a tower `K ⊆ K' ⊆ L` and a **fixed** `A : ValuationSubring L`:
+
+- **`ramificationGroup_eq_comap`** (the headline, Serre IV §1 Prop. 2): `ramificationGroup K' A i =
+  (ramificationGroup K A i).comap decompositionRestrict` — the comap form of `H_u = H ∩ G_u`. Plus
+  the textbook intersection form **`ramificationGroup_map_eq`**: `(G_i^{K'}).map decompositionRestrict
+  = decompositionRestrict.range ⊓ G_i^K`.
+- **`decompositionRestrict`** — the restriction-of-scalars monoid hom `Gal(L/K') →* Gal(L/K)` (built
+  on `AlgEquiv.restrictScalars`), injective (`decompositionRestrict_injective`); the tower's group
+  inclusion.
+- supporting: `restrictScalars_smul_valuationSubring` (`σ.restrictScalars K • A = σ • A` — the
+  restriction acts on the valuation subring exactly as the original), `mem_stabilizer_restrictScalars`
+  (so it preserves the decomposition group), `decompositionRestrict_smul` (the actions on `↥A` agree,
+  **by `rfl`**).
+
+## Why it was easy (the key observation)
+
+The lower numbering is **intrinsic to `L`**: `G_i = {σ | ∀ a, σa − a ∈ 𝔪_A^{i+1}}` depends only on
+the action on `A`, not the base field `K`. Restriction of scalars (`AlgEquiv.restrictScalars`) leaves
+the underlying map `L → L` literally unchanged (`restrictScalars_apply`/`coe_restrictScalars` are
+`rfl`), so the action on `A` is **definitionally** the same — `decompositionRestrict_smul` is `rfl`,
+and `ramificationGroup_eq_comap` is then `simp [Subgroup.mem_comap, mem_ramificationGroup_iff,
+decompositionRestrict_smul]`. The only real work is the `ValuationSubring` stabilizer bookkeeping
+(`mem_pointwise_smul_iff_inv_smul_mem`). **Using the *same* `A` for both base fields is legitimate
+precisely because Pass 43 proved `𝒪_L` base-independent across the tower** — Prop. 2 is where that
+canonicity first pays off.
+
+## Mathlib API that did the real work
+
+`AlgEquiv.restrictScalars` (+ `restrictScalars_apply`/`coe_restrictScalars`, both `rfl`);
+`ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem`, `MulAction.mem_stabilizer_iff`;
+`Subgroup.mem_comap`, `Subgroup.map_comap_eq`; the project's `mem_ramificationGroup_iff`. The whole
+construction was probe-verified with `lake env lean` and compiled first try (the action-agreement
+`rfl` was confirmed before writing).
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(48 files chain-checked, 8524 jobs, zero warnings). All 7 `#print axioms` standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: Serre IV §1 Prop. 2 (`H_u = H ∩ G_u`) — the lower numbering
+of a sub-extension is the restriction of the lower numbering of the whole — proved axiom-free, in
+both `comap` and `map`/`∩` forms.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (`decompositionRestrict` is a `def` of a
+  `MonoidHom`; results are about `Subgroup`s) ⟹ no rule-2 come-apart obligation. Stated for a general
+  `A : ValuationSubring L` — **no finiteness or local-field hypothesis**, so no claimed-essential
+  hypothesis, **no owed witness**. D1 N/A; D2 N/A. Recovers nothing from an abstract group; R1–R3
+  untouched.
+
+## Scope: `φ`-transitivity, then Herbrand's theorem (Pass 47+)
+
+With Prop. 2 in hand, the next rung is **`φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV
+§3 Prop. 15): Prop. 2 relates the order sequences `|G_i|`, `|H_i|`, `|(G/H)_j|` across the tower,
+which is what makes the two Herbrand functions compose. Harder than Prop. 2 (it touches the integral
+formula and the quotient orders), but now unblocked. Then **Herbrand's theorem** `(G/H)^v = G^v H/H`
+(Prop. 14) — the upper numbering's defining quotient-compatibility, the capstone. Still deferred:
+concavity, the explicit piecewise-linear formula, the slope `φ'(u) = 1/(G_0 : G_u)`, Hasse–Arf.
+R1–R3 remain the distant, must-be-earned targets.

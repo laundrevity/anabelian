@@ -5,24 +5,26 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 45 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 46 (2026-06-25)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Passes 44–45 built the Herbrand machinery** (ledger stays `0 / 0`), all **absent from Mathlib**,
-> all axiom-free, on the lower-numbering filtration (Serre IV §3): **Pass 44** — the **Herbrand
+> **Passes 44–46 built the Herbrand machinery** (ledger stays `0 / 0`), all **absent from Mathlib**,
+> all axiom-free, on the lower-numbering filtration (Serre IV §§1, 3): **Pass 44** — the **Herbrand
 > function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (`Anabelian/HerbrandFunction.lean`), strictly monotone,
 > continuous, `φ(0)=0`, `φ=id` on `(-∞,0]`, `φ≤id` on `[0,∞)`; **Pass 45** — the inverse `ψ = φ⁻¹`
 > and the **upper numbering** `G^v(L/K) = G_{⌈ψ(v)⌉}` (`Anabelian/UpperNumbering.lean`): `φ`
 > surjective ⟹ `ψ` strictly monotone + continuous, `ψ(0)=0`, `ψ=id` on `(-∞,0]`; `G^v` with
-> `G^0=G_0`, antitone, eventually `⊥` (records in `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–45). **Next:
-> Herbrand's theorem** `(G/H)^v = G^v H/H` (the upper numbering's defining quotient-compatibility) and
-> its prerequisites — where Pass 43's canonicity and the tower theory earn their keep. This all built
-> on **Pass 43's canonicity** (intermediate fields usable as base fields) and the **Pass 41
-> assembly**. (Pass 42 was governance: it discarded an unledgered 2-axiom orphan and added a
-> mechanical clean-tree gate to `scripts/preflight.sh`; the R1-floor — axiomatizing L3 for a
-> conditional R1 result — remains a permitted-but-deferred option, never to be entered via an
-> untracked file.)
+> `G^0=G_0`, antitone, eventually `⊥`; **Pass 46** — the **subgroup compatibility** `H_u = H ∩ G_u`
+> (Serre IV §1 Prop. 2, `Anabelian/RamificationSubgroup.lean`, `ramificationGroup_eq_comap`), the
+> first prerequisite for Herbrand's theorem (records in `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–46).
+> **Next: `φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15), then **Herbrand's
+> theorem** `(G/H)^v = G^v H/H` (the upper numbering's defining quotient-compatibility) — where
+> Pass 43's canonicity and the tower theory earn their keep. This all built on **Pass 43's
+> canonicity** (intermediate fields usable as base fields) and the **Pass 41 assembly**. (Pass 42 was
+> governance: it discarded an unledgered 2-axiom orphan and added a mechanical clean-tree gate to
+> `scripts/preflight.sh`; the R1-floor — axiomatizing L3 for a conditional R1 result — remains a
+> permitted-but-deferred option, never to be entered via an untracked file.)
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -614,10 +616,13 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
   antitone ⟹ clean `intervalIntegral` analysis); the inverse `ψ = φ⁻¹` and the **upper numbering**
   `G^v(L/K) = G_{⌈ψ(v)⌉}` — **✅ Pass 45** (`Anabelian/UpperNumbering.lean`: `φ` surjective ⟹ `ψ` via
   `Function.invFun`, strictly monotone + continuous (order-iso → homeomorphism), `ψ(0)=0`, `ψ=id` on
-  `(-∞,0]`; `G^v` with `G^0=G_0`, antitone, eventually `⊥`, axiom-free); **remaining in (2):**
-  **Herbrand's theorem** `(G/H)^v = G^v H/H` (quotient-compatibility — the upper numbering's defining
-  property), via the subgroup compatibility `H_u = H ∩ G_u` (Serre IV §1 Prop 2) and `φ`-transitivity
-  `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop 15);
+  `(-∞,0]`; `G^v` with `G^0=G_0`, antitone, eventually `⊥`, axiom-free); the **subgroup compatibility**
+  `H_u = H ∩ G_u` (Serre IV §1 Prop 2) — **✅ Pass 46** (`Anabelian/RamificationSubgroup.lean`,
+  `ramificationGroup_eq_comap`/`_map_eq`: the lower numbering is intrinsic to `L`, so it restricts
+  along `Gal(L/K') ↪ Gal(L/K)`; the action agreement is `rfl`; uses the *same* `𝒪_L`, legitimate by
+  Pass 43); **remaining in (2):** `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop 15)
+  and then **Herbrand's theorem** `(G/H)^v = G^v H/H` (the upper numbering's defining
+  quotient-compatibility);
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.
   Prerequisite gaps for the local-field instantiation `A = 𝒪_L`: finite-extension-of-local-field

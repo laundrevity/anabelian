@@ -2060,3 +2060,44 @@ N/A.
 `(G/H)^v = G^v H/H` and its prerequisites — the lower-numbering subgroup compatibility `H_u = H ∩
 G_u` and `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3), where Pass 43's canonicity
 and the tower theory earn their keep.
+
+### Pass 46 (2026-06-25) — toward Herbrand: lower-numbering subgroup compatibility `H_u = H ∩ G_u` (Serre IV §1 Prop. 2); count stays 0 / 0
+
+Introduced **zero** axioms; built the first prerequisite for **Herbrand's theorem** — how the
+lower-numbering filtration behaves under a sub-extension. `Anabelian/RamificationSubgroup.lean`
+proves (standard axioms only — in-file `#print axioms`, all 7 decls):
+
+```
+'Anabelian.decompositionRestrict'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionRestrict_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_eq_comap'    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_map_eq'      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`ramificationGroup_eq_comap`** — Serre, *Local Fields*, IV §1 Prop. 2: for a tower `K ⊆ K' ⊆ L`,
+  `ramificationGroup K' A i = (ramificationGroup K A i).comap decompositionRestrict` (the comap form
+  of `H_u = H ∩ G_u`), with the textbook intersection form `ramificationGroup_map_eq`
+  (`(G_i^{K'}).map decompositionRestrict = decompositionRestrict.range ⊓ G_i^K`).
+- **`decompositionRestrict`** — the restriction-of-scalars monoid hom `Gal(L/K') →* Gal(L/K)`
+  (`AlgEquiv.restrictScalars`), injective; the tower's group inclusion.
+- The mathematical point: the lower numbering is **intrinsic to `L`** (the condition `∀ a, σa − a ∈
+  𝔪_A^{i+1}` depends only on the action on `A`, not the base field), so for the *same* `A` it
+  transfers verbatim along restriction of scalars. The **action agreement is `rfl`**
+  (`decompositionRestrict_smul`), so the whole proposition is subring/stabilizer bookkeeping. Using
+  the *same* `A` is exactly legitimised by **Pass 43** (`𝒪_L` base-independent across the tower).
+
+**Mathlib API that did the real work:** `AlgEquiv.restrictScalars` (`restrictScalars_apply`/
+`coe_restrictScalars` are `rfl`, so the actions agree definitionally);
+`ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem`, `MulAction.mem_stabilizer_iff`
+(the valuation-subring action / stabilizer bookkeeping); `Subgroup.mem_comap`,
+`Subgroup.map_comap_eq` (the two Prop-2 forms); the project's `mem_ramificationGroup_iff`.
+
+**Not the cardinal sin / rule-2.** A structural fact about a tower's ramification filtration —
+strictly below R1; recovers nothing from an abstract group. Stated for a **general** `A :
+ValuationSubring L` (no finiteness / local-field structure needed); local-field relevance is via
+`A = 𝒪_L` (base-independent by Pass 43). No new `structure`/`class` (`decompositionRestrict` is a
+`def` of a `MonoidHom`; the results are about `Subgroup`s); no owed witness; D1 N/A; D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. **Prop. 2 done.** Next toward Herbrand: **`φ`-transitivity**
+`φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15 — uses Prop. 2 to relate the order sequences),
+then the quotient relationship `(G/H)^v = G^v H/H` (Prop. 14) itself.
