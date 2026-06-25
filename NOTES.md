@@ -3940,3 +3940,36 @@ formula and the quotient orders), but now unblocked. Then **Herbrand's theorem**
 (Prop. 14) — the upper numbering's defining quotient-compatibility, the capstone. Still deferred:
 concavity, the explicit piecewise-linear formula, the slope `φ'(u) = 1/(G_0 : G_u)`, Hasse–Arf.
 R1–R3 remain the distant, must-be-earned targets.
+
+### Governance reconciliation (2026-06-25) — README un-frozen; consistency rule added (no pass number; ledger 0 / 0)
+
+**No mathematics; no pass number consumed** (the next *math* pass is Pass 47, `φ`-transitivity). A
+governance-only commit, at the user's request, to make all six governance files agree on the current
+state before resuming the ascent — and to mechanise that they stay agreeing.
+
+**The inconsistency found.** `README.md` was **frozen at Pass 20**: its "Current state" header said
+Pass 20, its governance-files blurb claimed "**zero `FOUNDATIONAL`, one `DEBT`**" (flatly wrong — and
+self-contradicting its own line further down that said `0/0`), and it omitted all 26 passes since
+(the descent, the assembly, canonicity, the entire Herbrand ascent). It had simply never been
+updated as the per-pass governance edits went to `ROADMAP`/`AXIOM_LEDGER`/`NOTES`/`HANDOFF`.
+
+**What was reconciled.**
+- **`README.md` rewritten** as a concise, **current**, forward-stable overview: project description,
+  the governance-file guide, a `Current state — Pass 46` section (ledger `0/0`, 48 files, Mathlib
+  v4.30.0, the L1/L2/L3–L4/R1–R3 strata at a high level), and the current frontier
+  (`φ`-transitivity → Herbrand). It now explicitly **mirrors** the authoritative status rather than
+  duplicating per-pass detail (which lives in `NOTES.md`), so it is cheap to keep in sync.
+- **`CLAUDE.md`**: added `README.md` and `HANDOFF.md` to the Repository-conventions list and a new
+  **"Governance consistency is paramount"** rule — every pass must leave all six governance files
+  telling one consistent current-state story; the *authoritative* source for each fact is fixed
+  (current pass/status = `ROADMAP.md` header; ledger count = `AXIOM_LEDGER.md` "Active axioms" table;
+  per-pass record = `NOTES.md`), the rest mirror it; historical log entries are immutable, only
+  current-state claims are kept in sync; session start now skims all six headers.
+- **`ROADMAP.md`**: the L2 stratum header (parenthetical was frozen at Pass 28) extended through Pass
+  46 (descent / assembly / canonicity / Herbrand ascent).
+- **`HANDOFF.md`**: the stale "44-file `Anabelian/` tree" note (the `refactor.sh` bullet) corrected to
+  48.
+
+**Verified consistent** (`grep`): every governance file's current-state header now reads Pass 46
+(next Pass 47), ledger `0 FOUNDATIONAL / 0 DEBT`, 48 project files. Historical per-pass entries
+untouched. **Ledger delta: 0 / 0**; preflight CLEAN; committed.

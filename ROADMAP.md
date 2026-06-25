@@ -459,7 +459,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26; additive characters `i ≥ 1` + level-0 dichotomy witness Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — **finite-level arc COMPLETE modulo monogenicity**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46; **next: `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration

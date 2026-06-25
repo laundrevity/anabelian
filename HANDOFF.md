@@ -89,7 +89,7 @@ rung (e.g. just `ψ` + its basic properties); do not attempt all of §3 at once.
   (`scripts/chain_check.py`), and a `lake build` warning gate. A pass is committable only if it exits 0.
   **Never `grep -v` warnings out of probe output** — probe warnings are signal.
 - **`scripts/refactor.sh`** (tracked, P42, **not yet run**): a one-shot flat→folders restructure of the
-  44-file `Anabelian/` tree. Belongs in its own dedicated pass with a host `lake build` to verify; do
+  (now 48-file) `Anabelian/` tree. Belongs in its own dedicated pass with a host `lake build` to verify; do
   not fold it into a math commit.
 
 ## House idioms (P36–41 vintage; older ones in NOTES P25–35)
