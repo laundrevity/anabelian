@@ -46,3 +46,4 @@ import Anabelian.ExtensionCanonical
 import Anabelian.HerbrandFunction
 import Anabelian.UpperNumbering
 import Anabelian.RamificationSubgroup
+import Anabelian.HerbrandSlope

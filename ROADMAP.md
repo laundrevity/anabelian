@@ -5,21 +5,23 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 46 (2026-06-25)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 47 (2026-06-25)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Passes 44–46 built the Herbrand machinery** (ledger stays `0 / 0`), all **absent from Mathlib**,
+> **Passes 44–47 built the Herbrand machinery** (ledger stays `0 / 0`), all **absent from Mathlib**,
 > all axiom-free, on the lower-numbering filtration (Serre IV §§1, 3): **Pass 44** — the **Herbrand
 > function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (`Anabelian/HerbrandFunction.lean`), strictly monotone,
 > continuous, `φ(0)=0`, `φ=id` on `(-∞,0]`, `φ≤id` on `[0,∞)`; **Pass 45** — the inverse `ψ = φ⁻¹`
 > and the **upper numbering** `G^v(L/K) = G_{⌈ψ(v)⌉}` (`Anabelian/UpperNumbering.lean`): `φ`
 > surjective ⟹ `ψ` strictly monotone + continuous, `ψ(0)=0`, `ψ=id` on `(-∞,0]`; `G^v` with
 > `G^0=G_0`, antitone, eventually `⊥`; **Pass 46** — the **subgroup compatibility** `H_u = H ∩ G_u`
-> (Serre IV §1 Prop. 2, `Anabelian/RamificationSubgroup.lean`, `ramificationGroup_eq_comap`), the
-> first prerequisite for Herbrand's theorem (records in `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–46).
-> **Next: `φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15), then **Herbrand's
-> theorem** `(G/H)^v = G^v H/H` (the upper numbering's defining quotient-compatibility) — where
+> (Serre IV §1 Prop. 2, `Anabelian/RamificationSubgroup.lean`, `ramificationGroup_eq_comap`); **Pass
+> 47** — the **slope** `φ'(u) = 1/(G_0 : G_u)` (`Anabelian/HerbrandSlope.lean`,
+> `herbrandPhi_hasDerivAt_Ioo`, via FTC), the defining derivative (records in
+> `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–47). **Next: `φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}`
+> (Serre IV §3 Prop. 15) and **Herbrand's theorem** `(G/H)^v = G^v H/H` — both gated on the
+> index-multiplicativity / quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5), where
 > Pass 43's canonicity and the tower theory earn their keep. This all built on **Pass 43's
 > canonicity** (intermediate fields usable as base fields) and the **Pass 41 assembly**. (Pass 42 was
 > governance: it discarded an unledgered 2-axiom orphan and added a mechanical clean-tree gate to
@@ -459,7 +461,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46; **next: `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47; **next: `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration
@@ -620,9 +622,13 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
   `H_u = H ∩ G_u` (Serre IV §1 Prop 2) — **✅ Pass 46** (`Anabelian/RamificationSubgroup.lean`,
   `ramificationGroup_eq_comap`/`_map_eq`: the lower numbering is intrinsic to `L`, so it restricts
   along `Gal(L/K') ↪ Gal(L/K)`; the action agreement is `rfl`; uses the *same* `𝒪_L`, legitimate by
-  Pass 43); **remaining in (2):** `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop 15)
-  and then **Herbrand's theorem** `(G/H)^v = G^v H/H` (the upper numbering's defining
-  quotient-compatibility);
+  Pass 43); the **slope** `φ'(u) = 1/(G_0 : G_u)` — **✅ Pass 47** (`Anabelian/HerbrandSlope.lean`,
+  `herbrandPhi_hasDerivAt_Ioo`: FTC on the integral definition, the integrand being locally constant
+  off the integer breakpoints — the defining derivative property, and the input to the
+  differentiation route to transitivity); **remaining in (2):** `φ`-transitivity
+  `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop 15) and **Herbrand's theorem** `(G/H)^v = G^v H/H`
+  (the upper numbering's defining quotient-compatibility) — both gated on the index-multiplicativity
+  / quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5), the hard arithmetic wall;
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.
   Prerequisite gaps for the local-field instantiation `A = 𝒪_L`: finite-extension-of-local-field

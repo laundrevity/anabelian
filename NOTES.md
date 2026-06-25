@@ -3973,3 +3973,63 @@ updated as the per-pass governance edits went to `ROADMAP`/`AXIOM_LEDGER`/`NOTES
 **Verified consistent** (`grep`): every governance file's current-state header now reads Pass 46
 (next Pass 47), ledger `0 FOUNDATIONAL / 0 DEBT`, 48 project files. Historical per-pass entries
 untouched. **Ledger delta: 0 / 0**; preflight CLEAN; committed.
+
+### Pass 47 (2026-06-25) — the slope `φ'(u) = 1/(G_0 : G_u)`
+
+**Mathematics; ledger delta 0 / 0.** Proved the defining derivative property of the Herbrand
+function (Serre IV §3): on each `(n, n+1)`, `φ` is affine with slope `|G_{n+1}|/|G_0| =
+1/(G_0 : G_u)`. `Anabelian/HerbrandSlope.lean`, 8 declarations, all standard-axioms-only.
+
+## What was proved + the method
+
+Because Pass 44 defined `φ(u) = ∫_0^u dt/(G_0 : G_t)` as a **literal interval integral**, the slope
+is a direct **fundamental theorem of calculus** application:
+
+- The integrand `t ↦ g_{⌈t⌉}/g_0` is **locally constant off the integer breakpoints**: on
+  `(n, n+1)` it equals the constant `g_{n+1}/g_0` (`Nat.floor_eq_on_Ico` ⟹ `EventuallyEq` to a
+  constant near `u` ⟹ `ContinuousAt` via `Filter.EventuallyEq.continuousAt`).
+- `intervalIntegral.integral_hasDerivAt_right` (FTC) then gives `HasDerivAt φ (integrand u) u`; the
+  `StronglyMeasurableAtFilter` side hypothesis is discharged from global measurability
+  (`Antitone.measurable`, the integrand being antitone). Result: `herbrandPhiSeq_hasDerivAt_Ioo`.
+- The negative side: for `u < 0` the integrand is the constant `1` (`= g_0/g_0`), so `φ` has slope
+  `1` (it is `id` there) — `herbrandPhiSeq_hasDerivAt_neg`. Plus the two `deriv` corollaries.
+- **Instantiated:** `herbrandPhi_hasDerivAt_Ioo` — `φ'_{L/K}(u) = |G_{n+1}|/|G_0|` for `u ∈ (n,n+1)`,
+  which is `1/(G_0 : G_{n+1}) = 1/(G_0 : G_u)` (`G_u = G_{⌈u⌉} = G_{n+1}`; Lagrange) — plus the neg
+  and `deriv` forms.
+
+Probe-verified with `lake env lean`; the `Ioo` slope compiled first try, the negative side needed
+one fix (`x ∈ Iio 0` → `x < 0` coercion). Both abstract engine + instantiation, as with `φ`/`ψ`.
+
+## Mathlib API that did the real work
+
+`intervalIntegral.integral_hasDerivAt_right` (FTC, primitive of an integrand continuous at the
+point); `Nat.floor_eq_on_Ico` (floor constant on `[n, n+1)`); `Filter.EventuallyEq.continuousAt` and
+`.eq_of_nhds`; `Antitone.measurable` + `AEStronglyMeasurable` (for `StronglyMeasurableAtFilter` via
+`Measure.restrict_univ`); Pass 44's `herbrandPhiSeq_intervalIntegrable`, `herbrandIntegrand_antitone`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(49 files chain-checked, 8525 jobs, zero warnings). All 8 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: `φ'_{L/K}(u) = 1/(G_0 : G_u)` — the Herbrand
+function's defining derivative — proved axiom-free, directly from the integral definition by FTC.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 come-apart obligation. The
+  `[Finite (A.decompositionSubgroup K)]` hypothesis is automatic at the finite level (gives
+  `|G_i| ≥ 1`) — a standing finiteness, **no owed witness**. D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Honest scope: this is NOT `φ`-transitivity (Pass 48+)
+
+The slope is the **input** to the differentiation route to transitivity, not transitivity itself.
+`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` compares slopes via the chain rule, which needs the
+**index-multiplicativity** `1/(G_0 : G_u) = 1/((G/H)_0 : (G/H)_{φ_{L/K'}(u)}) · 1/(H_0 : H_u)` —
+i.e. the quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5 / the quotient half of
+Herbrand's theorem). That is the genuinely multi-pass arithmetic wall, **deliberately not
+half-built** (a clean partial beats a half-discharge — the README incident's lesson). **Two honest
+options for Pass 48:** (a) attack the quotient relationship (hard); or (b) cash in clean
+`φ`-deepening now unlocked by the slope — the **explicit piecewise-linear formula**
+`φ(u) = (g_1+…+g_n+(u−n)g_{n+1})/g_0` on `[n,n+1]` (now provable from the slope + `φ(0)=0` via
+"equal derivative ⟹ equal", sidestepping Pass 44's endpoint obstruction) and **concavity** (the
+slopes `g_{n+1}/g_0` decrease since `g` does). R1–R3 remain the distant, must-be-earned targets.

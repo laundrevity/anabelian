@@ -2101,3 +2101,46 @@ ValuationSubring L` (no finiteness / local-field structure needed); local-field 
 **Ledger delta: 0 / 0.** Axiom-free. **Prop. 2 done.** Next toward Herbrand: **`φ`-transitivity**
 `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15 — uses Prop. 2 to relate the order sequences),
 then the quotient relationship `(G/H)^v = G^v H/H` (Prop. 14) itself.
+
+### Pass 47 (2026-06-25) — the slope `φ'(u) = 1/(G_0 : G_u)`; count stays 0 / 0
+
+Introduced **zero** axioms; proved the **defining derivative property** of the Herbrand function
+(Serre IV §3) — `φ` is affine on each `(n, n+1)` with slope `|G_{n+1}|/|G_0| = 1/(G_0 : G_u)`. This
+is the clean, self-contained prerequisite for the *differentiation* route to `φ`-transitivity.
+`Anabelian/HerbrandSlope.lean` proves (standard axioms only — in-file `#print axioms`, all 8 decls):
+
+```
+'Anabelian.herbrandPhi_hasDerivAt_Ioo' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_hasDerivAt_neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_deriv_Ioo'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_deriv_neg'      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`herbrandPhi_hasDerivAt_Ioo`** — for `u ∈ (n, n+1)`, `HasDerivAt (herbrandPhi K A)
+  (|G_{n+1}|/|G_0|) u`; with `herbrandPhi_hasDerivAt_neg` (`HasDerivAt φ 1 u` for `u < 0`, where
+  `φ = id`) and the two `deriv` forms. Abstract engines `herbrandPhiSeq_hasDerivAt_Ioo`/`_neg`.
+- **The method:** `φ(u) = ∫_0^u dt/(G_0 : G_t)` is a literal interval integral (Pass 44); its
+  integrand is **locally constant off the integer breakpoints** (`Nat.floor_eq_on_Ico`), hence
+  continuous there (`EventuallyEq` to a constant ⟹ `ContinuousAt`), and the **fundamental theorem of
+  calculus** (`intervalIntegral.integral_hasDerivAt_right`) differentiates the primitive. The slope
+  value `|G_{n+1}|/|G_0|` equals `1/(G_0 : G_{n+1}) = 1/(G_0 : G_u)` (Lagrange; `G_u = G_{⌈u⌉}`).
+
+**Mathlib API that did the real work:** `intervalIntegral.integral_hasDerivAt_right` (FTC);
+`Nat.floor_eq_on_Ico` (floor locally constant); `Filter.EventuallyEq.continuousAt`/`.eq_of_nhds`;
+`Antitone.measurable` (the `StronglyMeasurableAtFilter` hypothesis); Pass 44's
+`herbrandPhiSeq_intervalIntegrable`/`herbrandIntegrand_antitone`.
+
+**Not the cardinal sin / rule-2.** A structural fact about a given extension's `φ` — strictly below
+R1; recovers nothing from an abstract group. No new `structure`/`class`. The instantiation's
+`[Finite (A.decompositionSubgroup K)]` is automatic at the finite level and only gives `|G_i| ≥ 1` —
+a standing finiteness, no owed witness. D1 N/A; D2 N/A.
+
+**Honest scope: this is NOT `φ`-transitivity.** It is the slope, a *prerequisite* for the
+differentiation argument. Full transitivity `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` additionally needs the
+**index-multiplicativity** relating `|G_i|`, `|H_i| = |H ∩ G_i|` (Pass 46), and `|(G/H)_j|` across
+the tower (Serre's Lemma 5 / the quotient half of Herbrand's theorem) — the genuinely multi-pass
+arithmetic wall, deliberately **not** half-built here (a clean partial beats a half-discharge).
+
+**Ledger delta: 0 / 0.** Axiom-free. **The slope is in hand.** Next toward transitivity/Herbrand:
+either the quotient relationship `(G/H)_{φ(u)} = G_u H/H` (the hard arithmetic), or further clean
+`φ`-deepening now unlocked by the slope (the explicit piecewise-linear formula, concavity).
