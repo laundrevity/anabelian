@@ -2011,3 +2011,52 @@ no spectral/normed structure).
 **Ledger delta: 0 / 0.** Axiom-free. **The ascent is open and its first rung is built.** Next: the
 inverse `ψ = φ⁻¹` (reachable now from StrictMono + Continuous), then the upper numbering
 `G^v = G_{ψ(v)}` and Herbrand's theorem (Serre IV §3).
+
+### Pass 45 (2026-06-24) — the ascent, rung 2: the inverse `ψ = φ⁻¹` and the upper numbering; count stays 0 / 0
+
+Introduced **zero** axioms; continued the ascent (Serre IV §3) by **inverting `φ`** and **defining
+the upper numbering** `G^v(L/K)`. Both absent from Mathlib. `Anabelian/UpperNumbering.lean` proves
+(standard axioms only — in-file `#print axioms`, all 21 decls; key headlines):
+
+```
+'Anabelian.herbrandPsi'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPsi_continuous'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.upperRamificationGroup'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.upperRamificationGroup_zero'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.upperRamificationGroup_antitone'      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.upperRamificationGroup_eventually_bot' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`φ` surjective** (`herbrandPhiSeq_surjective`): `φ` is continuous, `→ +∞` at `+∞` (it dominates
+  `u/g_0`, the new lower bound `herbrandPhiSeq_div_le` since every order `≥ 1`) and `→ -∞` at `-∞`
+  (it is `id` there), hence onto `ℝ` (`Continuous.surjective`). With Pass 44's strict monotonicity,
+  `φ` is a homeomorphism `ℝ ≃ ℝ`.
+- **`ψ = φ⁻¹`** (`herbrandPsi`, via `Function.invFun`), with inverse identities `herbrandPhi_psi`
+  (`φ(ψ v)=v`), `herbrandPsi_phi` (`ψ(φ u)=u`), and `ψ` **strictly monotone**, **continuous** (via
+  `StrictMono.orderIsoOfSurjective` → `OrderIso.toHomeomorph`), `ψ(0)=0`, `ψ=id` on `(-∞,0]`. Built
+  abstractly (`herbrandPsiSeq`, reuse of Pass 44's pattern), then instantiated.
+- **The upper numbering** `G^v(L/K) = G_{⌈ψ(v)⌉}` (`upperRamificationGroup`) with **`G^0 = G_0`**
+  (inertia, `upperRamificationGroup_zero`), **antitone in `v`** (`upperRamificationGroup_antitone`),
+  and **eventually `⊥`** (`upperRamificationGroup_eventually_bot`, under the same separation
+  hypothesis as the lower numbering — via `ψ(φ i) = i`).
+
+**Mathlib API that did the real work:** `Continuous.surjective` + `tendsto_atTop_mono'` /
+`Tendsto.congr'` (surjectivity); `Function.invFun` + `rightInverse_invFun`/`leftInverse_invFun` (the
+inverse); `StrictMono.orderIsoOfSurjective` + `OrderIso.toHomeomorph` (ψ continuity);
+`intervalIntegral.integral_mono_on` (the `u/g_0` lower bound); `Nat.ceil_mono`/`Nat.ceil_natCast`,
+`exists_ramificationGroup_eq_bot` (the upper-numbering properties).
+
+**Not the cardinal sin / rule-2.** `ψ` and `G^v` are structural invariants of a given extension's
+ramification filtration — strictly below R1; nothing recovered from an abstract group. No new
+`structure`/`class` (`ψ` is a `def` of a real function; `G^v` a `def` of a `Subgroup`-valued
+function). `upperRamificationGroup` is **not vacuous** (`G^0 = G_0`, antitone, eventually `⊥` are
+proved constraints), but its **defining property — quotient-compatibility (Herbrand's theorem) — is
+the next rung, not claimed here.** The instantiation's `[Finite (A.decompositionSubgroup K)]` is
+automatic at the finite level and only gives `|G_i| ≥ 1` (needed for surjectivity / for `ψ` to
+exist) — a standing finiteness, not a claimed-essential hypothesis, so no owed witness. D1 N/A; D2
+N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. **The upper numbering exists.** Next: **Herbrand's theorem**
+`(G/H)^v = G^v H/H` and its prerequisites — the lower-numbering subgroup compatibility `H_u = H ∩
+G_u` and `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3), where Pass 43's canonicity
+and the tower theory earn their keep.

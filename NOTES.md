@@ -3805,3 +3805,70 @@ giving a continuous strictly-monotone bijection, hence an inverse). Then the **u
 `Gal(L/K) ↠ Gal(M/K)` — this is where the canonicity of Pass 43 and the tower theory earn their
 keep). Also deferred: concavity, the explicit piecewise-linear formula, and the slope/derivative
 `φ'(u) = 1/(G_0 : G_u)`. R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 45 (2026-06-24) — the ascent, rung 2: the inverse `ψ = φ⁻¹` and the upper numbering
+
+**Mathematics; ledger delta 0 / 0.** Inverted `φ` and defined the upper numbering — both absent from
+Mathlib, both axiom-free. `Anabelian/UpperNumbering.lean`, 21 declarations, all standard-axioms-only.
+
+## What was proved
+
+Pass 44 left `φ` strictly monotone + continuous. To invert it:
+
+- **`φ` is surjective onto `ℝ`** (`herbrandPhiSeq_surjective`): continuous, `→ -∞` at `-∞` (it is
+  `id` on `(-∞,0]`) and `→ +∞` at `+∞`. The latter needed a new **lower bound**
+  `herbrandPhiSeq_div_le`: every order is `≥ 1`, so the integrand is `≥ 1/g_0`, so `φ(u) ≥ u/g_0`
+  (the companion to Pass 44's `φ ≤ id`). Then `Continuous.surjective` from the two `Tendsto`s.
+- **`ψ = φ⁻¹`** (`herbrandPsi`), defined proof-free via `Function.invFun` (so the def carries no
+  hypotheses; the properties are theorems). Inverse identities `herbrandPhi_psi`/`herbrandPsi_phi`
+  from `rightInverse_invFun`/`leftInverse_invFun`. `ψ` **strictly monotone** (inverts the strict
+  `φ`, via `StrictMono.lt_iff_lt`), `ψ(0)=0`, `ψ=id` on `(-∞,0]`.
+- **`ψ` continuous** — the one delicate proof: `φ` strict-mono + surjective ⟹ an order isomorphism
+  `e : ℝ ≃o ℝ` (`StrictMono.orderIsoOfSurjective`, whose `coe` is `φ` by `rfl`), whose inverse is a
+  homeomorphism (`OrderIso.toHomeomorph`); bridged `ψ = ⇑e.symm` by injectivity of `φ`
+  (`orderIsoOfSurjective_self_symm_apply`), then `e.symm.toHomeomorph.continuous`.
+- **The upper numbering** `G^v(L/K) := G_{⌈ψ(v)⌉}` (`upperRamificationGroup`): `G^0 = G_0` (inertia,
+  since `ψ(0)=0` and `⌈0⌉₊=0`), **antitone in `v`** (`ψ` mono, `⌈·⌉₊` mono, filtration antitone),
+  **eventually `⊥`** (some `G_i=⊥` by Pass 24; take `v = φ(i)`, then `⌈ψ(φ i)⌉₊ = ⌈i⌉₊ = i`, so
+  `G^{φ(i)} = G_i = ⊥` — uses the inverse identity `ψ(φ i)=i`).
+
+Like `φ`, `ψ` is an abstract engine `herbrandPsiSeq (g : ℕ → ℝ)` (hyp `1 ≤ g i`) then instantiated.
+
+## Mathlib API that did the real work
+
+`Continuous.surjective`, `tendsto_atTop_mono'`, `tendsto_id.atTop_div_const`, `Tendsto.congr'`
+(surjectivity); `Function.invFun` + `rightInverse_invFun`/`leftInverse_invFun` (the inverse);
+`StrictMono.orderIsoOfSurjective` (+`coe_orderIsoOfSurjective` (`rfl`),
+`orderIsoOfSurjective_self_symm_apply`) + `OrderIso.toHomeomorph` (ψ continuity);
+`intervalIntegral.integral_mono_on` (lower bound); `Nat.ceil_mono`, `Nat.ceil_natCast`,
+`Nat.ceil_zero`, `exists_ramificationGroup_eq_bot` (upper numbering). All probe-verified with
+`lake env lean` before the project file — the OrderIso continuity bridge compiled first try.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(47 files chain-checked, 8523 jobs, zero warnings). All 21 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: the inverse Herbrand function `ψ = φ⁻¹` and the upper
+numbering `G^v(L/K) = G_{⌈ψ(v)⌉}` (Serre IV §3) — both absent from Mathlib — constructed axiom-free,
+with `ψ` strictly monotone + continuous and `G^v` satisfying `G^0=G_0`, antitone, eventually `⊥`.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (`ψ` is a `def` of a real function; `G^v` a
+  `def` of a `Subgroup`-valued function) ⟹ no rule-2 come-apart obligation. `upperRamificationGroup`
+  is **not vacuous** (`G^0=G_0`, antitone, eventually `⊥` are proved constraints), but its **defining
+  property — quotient-compatibility (Herbrand's theorem) — is the next rung, explicitly not claimed
+  here.** The `[Finite (A.decompositionSubgroup K)]` hypothesis is automatic at the finite level and
+  only ensures `|G_i| ≥ 1` (needed for surjectivity / for `ψ` to exist) — a standing finiteness, not
+  a claimed-essential hypothesis, **no owed witness**. D1 N/A; D2 N/A. Recovers nothing from an
+  abstract group; R1–R3 untouched.
+
+## Scope: Herbrand's theorem and its prerequisites (Pass 46+)
+
+The upper numbering's payoff is **Herbrand's theorem** `(G/H)^v = G^v H/H` — quotient-compatibility,
+the reason the upper numbering exists. It is genuinely multi-pass, needing (a) the lower-numbering
+**subgroup compatibility** `H_u = H ∩ G_u` (Serre IV §1 Prop 2 — fairly elementary, the congruence
+restricts almost definitionally), (b) **`φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV
+§3 Prop 15), and (c) the quotient relationship itself. This is where Pass 43's canonicity and the
+tower theory earn their keep. Also still deferred: concavity, the explicit piecewise-linear formula,
+the slope `φ'(u) = 1/(G_0 : G_u)`, Hasse–Arf. R1–R3 remain the distant, must-be-earned targets.
