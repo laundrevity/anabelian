@@ -1,18 +1,17 @@
-# HANDOFF.md — session bootstrap (written after Pass 43, 2026-06-24)
+# HANDOFF.md — session bootstrap (written after Pass 44, 2026-06-24)
 
-**State:** Pass 41 **closed the local-field assembly** — `IsNonarchimedeanLocalField L` for every
-finite separable `L/K` (`Anabelian/ExtensionLocalFieldInstance.lean`). Pass 43 **discharged the
-canonicity obligation**: `extensionValuativeRel K L = extensionValuativeRel K' L` for every tower
-`K ⊆ K' ⊆ L` of finite separable extensions (`Anabelian/ExtensionCanonical.lean`, axiom-free) — the
-last L-rung prerequisite before the ascent, and the reason `extensionValuativeRel` was a `def` not an
-instance. (Pass 42 between them was governance: it discarded an unledgered 2-axiom orphan and added
-the `scripts/preflight.sh` clean-tree gate.) Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom`
-declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 44 — the ascent** (below).
+**State:** Pass 43 **discharged the canonicity obligation** (`extensionValuativeRel K L =
+extensionValuativeRel K' L` for towers `K ⊆ K' ⊆ L`), the last L-rung prerequisite. **Pass 44
+opened the ascent**: the **Herbrand function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (Serre IV §3) — absent
+from Mathlib — is constructed on the lower-numbering filtration and proved strictly monotone,
+continuous, `φ(0)=0`, `φ=id` on `(-∞,0]`, `φ≤id` on `[0,∞)` (`Anabelian/HerbrandFunction.lean`,
+axiom-free). Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations project-wide — keep
+it that way. **YOUR FIRST TASK is Pass 45 — the inverse `ψ = φ⁻¹` and the upper numbering** (below).
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
 `CLAUDE.md` (the constitution — axiom budget, rule-2, commit-per-pass, clean-tree),
-`AXIOM_LEDGER.md` (state + the Pass-42 orphan incident record), `ROADMAP.md` (status header says
-Pass 42), and the **tail of `NOTES.md`** (Passes 38–42: the assembly close + the Pass-42 cleanup).
+`AXIOM_LEDGER.md` (state + tail Pass-44 entry), `ROADMAP.md` (status header says Pass 44), and the
+**tail of `NOTES.md`** (Passes 41–44: assembly close, canonicity, the Herbrand function).
 **Session start:** `git status` — the tree must be clean. `.claude/` is now `.gitignore`d, so a clean
 tree shows **nothing** untracked; `scripts/preflight.sh` clause 0 now *enforces* this (it fails on
 any untracked file outside `.gitignore`). If anything is untracked, resolve it before new work
@@ -30,44 +29,52 @@ separable `L/K`; the full P27/P28 quotient theory concrete at `𝒪_L` (`G₁` =
 `FiniteDimensional.proper` + the rung-1 = spectral topology identification (`isValuativeTopology_unique`).
 
 **Canonicity is DISCHARGED** (P43): `extensionValuativeRel K L = extensionValuativeRel K' L` for a
-tower `K ⊆ K' ⊆ L` of finite separable extensions (`Anabelian/ExtensionCanonical.lean`,
-`extensionValuativeRel_base_independent`). The relation depends only on `𝒪_L`, which is
-base-independent by integral-closure transitivity (self-consistency `𝒪[K'] = extensionIntegers K K'`
-+ the transitivity engine `isIntegral_base_iff` + `RingEquiv.isIntegral_iff`). **Intermediate fields
-are now usable as base fields — the ascent is open.**
+tower `K ⊆ K' ⊆ L` (`Anabelian/ExtensionCanonical.lean`, `extensionValuativeRel_base_independent`) —
+the relation depends only on `𝒪_L`, base-independent by integral-closure transitivity. Intermediate
+fields are now usable as base fields.
 
-## YOUR FIRST TASK — Pass 44: the ascent (Herbrand `φ`/`ψ`, upper numbering)
+**The ascent is OPEN, rung 1 built** (P44): the Herbrand function `φ`
+(`Anabelian/HerbrandFunction.lean`, `herbrandPhi K A`), defined literally as Serre's `∫_0^u dt/(G_0 :
+G_t)` on the lower-numbering filtration (`ramificationGroup`, P23). The integrand `g_{⌈t⌉}/g_0` is
+**antitone** (filtration decreases), so Mathlib's `intervalIntegral` API gives integrability,
+`herbrandPhi_strictMono`, `herbrandPhi_continuous`, `herbrandPhi_zero`, `herbrandPhi_eq_id` (`u≤0`),
+`herbrandPhi_le_self` (`u≥0`) — all axiom-free. Split into an abstract engine `herbrandPhiSeq (g : ℕ
+→ ℝ)` (reuse for `ψ`) + the instantiation. **StrictMono + Continuous are the precondition for `ψ`.**
 
-**Goal:** begin the **ascent** — Serre IV §3. With the assembly (P41) and canonicity (P43) in hand,
-intermediate fields carry the full `IsNonarchimedeanLocalField` structure and serve as base fields,
-so the quotient-compatibility that Herbrand's theorem expresses is finally statable. Targets, in
-dependency order: (1) the **Herbrand functions** `φ_{L/K}`/`ψ_{L/K}` (the piecewise-linear transforms
-of the lower-numbering filtration); (2) the **upper numbering** `G^v(L/K) = G_{ψ(v)}` and Herbrand's
-theorem (upper numbering is what is compatible with quotients `Gal(L/K) ↠ Gal(M/K)`); (3) the limit
-`G^v ≤ Gal(K̄/K)`; eventually Hasse–Arf.
+## YOUR FIRST TASK — Pass 45: the inverse `ψ = φ⁻¹` and the upper numbering
 
-**Before writing, inventory Mathlib's ramification API.** The L2 file
-(`Anabelian/RamificationFiltration.lean`) carries a literal `TODO: Define higher ramification` for
-`φ`/`ψ` — they are very likely **absent** from Mathlib (verify with grep/`exact?`/loogle; if genuinely
-absent, that absence is itself a deliverable — log it as the next sub-target, do **not** `axiom` past
-it). The lower-numbering filtration `ramificationGroup K (extensionIntegers K L) i` is in hand
-(P23–37); `φ`/`ψ` are integrals/sums over it. This is real multi-pass mathematics — scope a first
-concrete rung (e.g. the definition of `φ` and its monotonicity), do not attempt the whole of §3 at
-once. Use the local toolchain in the loop (Pass 43's lesson: the draft had been written without one,
-and three of its four errors were defeq/instance issues the compiler resolves instantly via
-`lake env lean` probes).
+**Goal:** continue the ascent (Serre IV §3). Now that `φ` is **strictly monotone + continuous** (P44),
+build `ψ = φ⁻¹` and then the upper numbering.
+
+1. **`ψ = φ⁻¹`.** `φ` is `StrictMono` + `Continuous`; it is unbounded above (slopes `≥ 1/g_0 > 0` on
+   an unbounded domain) and `φ(-1) ≥ -1`, so it is a continuous strictly-monotone bijection of
+   `[-1,∞)` (or `ℝ`) onto its range. Inventory Mathlib for the inverse-of-strict-mono-continuous API
+   (`StrictMono.orderIso`, `Continuous.strictMono...`, `OrderIso`/`Homeomorph` of an interval; or
+   build `ψ` as the explicit piecewise function and prove `φ ∘ ψ = id`). Prove `ψ` strictly monotone,
+   continuous, `ψ(0)=0`, and the **inverse identities** `φ (ψ v) = v`, `ψ (φ u) = u` on the range.
+2. **Upper numbering** `G^v(L/K) := G_{⌈ψ(v)⌉}` (Serre's definition via `ψ`), then **Herbrand's
+   theorem** — the upper numbering is compatible with quotients `Gal(L/K) ↠ Gal(M/K)`. This is where
+   P43 canonicity + the tower theory earn their keep; it is the hard, multi-pass part.
+
+**Method (the P43–44 lesson):** use the local toolchain **in the loop** — `lake build
+Anabelian.<File>` for the real build (≈3 s incremental), and `lake env lean <scratch>.lean` for fast
+throwaway probes of defeqs/instances/lemma names before committing to a proof. Scope ONE concrete
+rung (e.g. just `ψ` + its basic properties); do not attempt all of §3 at once.
 
 ## Environment (verify, then trust)
 
-- **Probe environment**: a detached `lean`/`pkgs` toolchain in some prior session's `/sessions/.../tmp`
-  may or may not survive a VM reset — test before trusting; rebuild from the NOTES-P36 recipe +
-  P38–41 closure extensions if gone (~5 calls, ~20 min). Probes are `module`-headed files run with
-  bare `lean` + the multi-package `LEAN_PATH`, publics + `.ir` only, ~0.5–1 s/iteration.
-- **Workflow** (the verified P36–41 rhythm): source-grep Mathlib for every name BEFORE writing;
-  kernel-verify every substantive proof abstractly in the probe env; **`lake build` runs HOST-SIDE**
-  (ask the user; expect only the new file + root); **commits run HOST-SIDE** (the sandbox mount
-  denies `unlink`, so in-sandbox `git commit`/`rm` are impossible, and in-sandbox `git status` leaves
-  a stale `.git/index.lock` the user must `rm -f`).
+- **Toolchain in-loop (P43–44 rhythm — preferred):** the host `lean`/`lake` (v4.30.0) is directly
+  usable. `lake build Anabelian.<File>` is the real build (≈3 s incremental once deps are cached);
+  `lake env lean <scratch>.lean` runs a throwaway probe with the full `LEAN_PATH` (import `Mathlib` +
+  the project module, `#print axioms`/`example`/`#synth` to settle defeqs, instances, lemma names
+  before editing the project file). Use it constantly — the P43 draft failed precisely because it was
+  written without a compiler. Keep probe files in the scratchpad (outside the repo, so clause 0 stays
+  clean). If running in a *sandboxed* session instead, the older detached-probe-env recipe (NOTES P36)
+  is the fallback, and `lake build`/`git commit` may need to run host-side (the mount can deny
+  `unlink`, leaving a stale `.git/index.lock` to `rm -f`).
+- **Workflow**: source-grep Mathlib for every name BEFORE writing; probe substantive proofs with
+  `lake env lean`; then `lake build` the project file; expect the new file + the root `Anabelian.lean`
+  edit only.
 - **Pre-commit gate**: `scripts/preflight.sh` (run host-side) — **clause 0 clean tree** (new, P42),
   long lines (chars not bytes), named statement-level binders, import-chain completeness
   (`scripts/chain_check.py`), and a `lake build` warning gate. A pass is committable only if it exits 0.
@@ -89,9 +96,9 @@ and three of its four errors were defeq/instance issues the compiler resolves in
   `Nat.exists_eq_pow_mul_and_not_dvd`; `IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`
   (nested!); `RingEquiv.subringCongr`; `Valuation.integer` (not `Valued.integer`) via `Valued.v`.
 
-## The queue after Pass 44
+## The queue after Pass 45
 
-Continue the **ascent**: once `φ`/`ψ` and the upper numbering are in place, Herbrand's theorem and
+Continue the **ascent**: with `ψ` and the upper numbering in place, Herbrand's theorem and
 Hasse–Arf (Serre IV §3). Separately, the **R1-floor** (axiomatizing L3 local class field theory to
 reach a *conditional* R1 reconstruction result) is a ROADMAP-permitted but **deferred** option — if
 taken, it must be a deliberate, ledgered decision (A1/A2 preserved in the NOTES Pass-42 entry) with

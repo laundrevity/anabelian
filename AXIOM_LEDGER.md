@@ -1962,3 +1962,52 @@ theorem, exactly as Mathlib does for its own local valuative structures.
 **Ledger delta: 0 / 0.** Axiom-free. **The last L-rung prerequisite before the ascent is
 discharged** — the theory may now iterate up towers `M/L/K` with intermediate fields as base fields.
 Next: the **ascent** (Herbrand `φ`/`ψ`, upper numbering — Serre IV §3).
+
+### Pass 44 (2026-06-24) — the ascent opens: the Herbrand function `φ` defined + foundational properties; count stays 0 / 0
+
+Introduced **zero** axioms; **opened the ascent** (Serre IV §3) by constructing the **Herbrand
+function** `φ`, genuinely **absent from Mathlib** (verified: `grep` for `herbrand` /
+`upperRamification` / `upperNumbering` over Mathlib = 0 hits; `RingTheory/Valuation/RamificationGroup.lean`
+defines only `G_0` and carries a literal `TODO: Define higher ramification groups in lower numbering`).
+Built on the project's own lower-numbering filtration (`ramificationGroup`, Pass 23).
+`Anabelian/HerbrandFunction.lean` proves (standard axioms only — in-file `#print axioms`, all 18 decls):
+
+```
+'Anabelian.herbrandPhi'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_strictMono'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_continuous'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_eq_id'       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_le_self'     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`herbrandPhi K A`** — Serre's `φ(u) = ∫_0^u dt/(G_0 : G_t)`, defined *literally as the integral*.
+  Split into a reusable analytic engine `herbrandPhiSeq` on an abstract decreasing order-sequence
+  `g i = |G_i|`, then instantiated on the real ramification orders `Nat.card (ramificationGroup K A i)`.
+- The key enabling observation: the integrand `t ↦ g_{⌈t⌉}/g_0` is **antitone** (because the
+  filtration decreases — `ramificationGroup_antitone`), hence interval-integrable
+  (`Antitone.intervalIntegrable`), making the whole analysis clean.
+- Properties (all instantiated, all standard-axioms-only): `herbrandPhi_zero` (`φ(0)=0`),
+  **`herbrandPhi_strictMono`** (strictly increasing — integrand `> 0` since every `|G_i| ≥ 1`),
+  `herbrandPhi_monotone`, **`herbrandPhi_continuous`** (`continuous_primitive`), `herbrandPhi_eq_id`
+  (`φ(u)=u` for `u ≤ 0`), `herbrandPhi_le_self` (`φ(u) ≤ u` for `u ≥ 0` — slopes `≤ 1` as `G_t ≤ G_0`,
+  the ramification content separating `φ` from `id`). **StrictMono + Continuous are exactly the
+  precondition for the inverse `ψ = φ⁻¹`** (the next rung).
+
+**Mathlib API that did the real work:** `intervalIntegral` (the construction is a literal interval
+integral); `Antitone.intervalIntegrable`; `intervalIntegral.integral_add_adjacent_intervals` +
+`integral_nonneg` (monotone) and `intervalIntegral_pos_of_pos_on` (strictMono); `continuous_primitive`
+(continuity); `integral_mono_on` + `integral_const` (`φ ≤ id`); `Subgroup.card_le_of_le` + `Nat.card_pos`
+(the orders are positive and decreasing, given `[Finite (A.decompositionSubgroup K)]`).
+
+**Not the cardinal sin / rule-2.** `φ` is a structural invariant — a reparametrisation of a given
+extension's ramification filtration — strictly below R1; recovers nothing from an abstract group. No
+new `structure`/`class` (the objects are `def`s of real functions). The instantiation carries
+`[Finite (A.decompositionSubgroup K)]`, which is **automatic at the intended finite level**
+(`A = 𝒪_L`, `L/K` finite, `decompositionSubgroup ⊆ L ≃ₐ[K] L`) and is needed only so the orders are
+positive (else `Nat.card = 0` and `φ ≡ 0`); a standing finiteness, **not** a claimed-essential
+hypothesis — no rule-2 come-apart, no owed witness. D1 N/A; D2 N/A (real analysis + `ramificationGroup`,
+no spectral/normed structure).
+
+**Ledger delta: 0 / 0.** Axiom-free. **The ascent is open and its first rung is built.** Next: the
+inverse `ψ = φ⁻¹` (reachable now from StrictMono + Continuous), then the upper numbering
+`G^v = G_{ψ(v)}` and Herbrand's theorem (Serre IV §3).

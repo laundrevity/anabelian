@@ -3716,3 +3716,92 @@ numbering `G^v(L/K)`, quotient-compatible (Serre IV §3) — the assembly was bu
 intermediate fields carry the full `IsNonarchimedeanLocalField` structure, making Herbrand's quotient
 theorem statable. Inventory Mathlib's ramification API (the L2 file carries a literal `TODO: Define
 higher ramification` for `φ`/`ψ`) before writing. R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 44 (2026-06-24) — the ascent opens: the Herbrand function `φ` (Serre IV §3, rung 1)
+
+**Mathematics; ledger delta 0 / 0.** Opened the **ascent** by constructing the Herbrand function
+`φ` and proving its foundational analytic properties, all axiom-free. `Anabelian/HerbrandFunction.lean`,
+18 declarations, all standard-axioms-only.
+
+## Inventory (done first, per the rule — the absence is itself a deliverable)
+
+`grep` over `.lake/packages/mathlib`: **`herbrand` = 0 hits, `upperRamification`/`upperNumbering` = 0
+hits.** Mathlib's `RingTheory/Valuation/RamificationGroup.lean` defines only `decompositionSubgroup`
+and `inertiaSubgroup` (`G_0`) and carries a literal `TODO: Define higher ramification groups in lower
+numbering`. So the **entire** ascent — lower-numbering `G_i`, Herbrand `φ`/`ψ`, upper numbering — is
+absent from Mathlib. The project's own lower-numbering filtration (`ramificationGroup`, Pass 23) is
+the foundation; this pass builds `φ` on it.
+
+## What was proved
+
+Serre defines `φ(u) = ∫_0^u dt/(G_0 : G_t)`. We define it **literally as that integral**, split into:
+
+- **An analytic engine** `herbrandPhiSeq (g : ℕ → ℝ)` on an abstract decreasing order-sequence
+  (`g i = |G_i|`), and
+- **the instantiation** `herbrandPhi K A := herbrandPhiSeq (fun i => Nat.card (ramificationGroup K A i))`.
+
+This separation mirrors Serre: §3's lemmas are about the *function*; the *ramification* enters only
+as "the filtration decreases". The enabling observation: the integrand `t ↦ g_{⌈t⌉}/g_0` is
+**`Antitone`** (the groups shrink as the level rises), hence `IntervalIntegrable`
+(`Antitone.intervalIntegrable`) — which makes every property a clean interval-integral fact:
+
+- `herbrandPhi_zero`: `φ(0) = 0` (`integral_same`).
+- **`herbrandPhi_strictMono`**: strictly increasing — integrand `> 0` (every `|G_i| ≥ 1`), via
+  `intervalIntegral_pos_of_pos_on` + `integral_add_adjacent_intervals`.
+- `herbrandPhi_monotone`: `Monotone` (corollary of StrictMono; also a standalone weaker-hypothesis
+  proof for the abstract engine via `integral_nonneg`).
+- **`herbrandPhi_continuous`**: `Continuous` (`continuous_primitive`).
+- `herbrandPhi_eq_id`: `φ(u) = u` for `u ≤ 0` (Serre's `[-1,0]` normalisation — there the acting
+  group is `G_0`, slope `(G_0:G_0)⁻¹ = 1`; `integral_congr` to the constant `1` + `integral_const`).
+- `herbrandPhi_le_self`: `φ(u) ≤ u` for `u ≥ 0` — slopes `g_{⌈t⌉}/g_0 ≤ 1` because `G_t ≤ G_0`
+  (`integral_mono_on` against the constant `1`). The genuine ramification content separating `φ`
+  from the identity.
+
+**StrictMono + Continuous are exactly what defining the inverse `ψ = φ⁻¹` needs** — the immediate
+next rung.
+
+## Why the integral definition (the design choice)
+
+The two candidate encodings were (a) the explicit floor-based piecewise-linear formula and (b)
+Serre's literal integral. (b) won: it is the most faithful to Serre, and — because the integrand is
+antitone — Mathlib's interval-integral API delivers integrability, monotonicity, strict
+monotonicity, AND continuity almost for free, where (a) would have needed a hand telescoping
+argument for monotonicity and a manual kink-continuity proof. Verified empirically with the local
+toolchain (`lake env lean` probes) before writing the project file.
+
+## Mathlib API that did the real work
+
+`intervalIntegral` (the def is a literal interval integral); `Antitone.intervalIntegrable`;
+`intervalIntegral.integral_add_adjacent_intervals`, `integral_nonneg`,
+`intervalIntegral.intervalIntegral_pos_of_pos_on` (mono/strictMono); `continuous_primitive`
+(continuity); `integral_mono_on`, `integral_const`, `integral_congr` (the `id`-comparisons);
+`Subgroup.card_le_of_le`, `Nat.card_pos`, `Nat.floor_mono` (the order sequence is positive +
+decreasing, given `[Finite (A.decompositionSubgroup K)]`).
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(46 files chain-checked, 8522 jobs, zero warnings). All 18 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: the Herbrand function `φ` of Serre IV §3 — absent from
+Mathlib — is constructed and shown strictly monotone, continuous, `φ(0)=0`, `φ=id` on `(-∞,0]`, and
+`φ ≤ id` on `[0,∞)`, axiom-free, on the real ramification filtration.** The ascent is open.
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (the objects are `def`s of real functions) ⟹
+  no rule-2 come-apart obligation. The instantiation's `[Finite (A.decompositionSubgroup K)]` is
+  **automatic at the intended finite level** (`A = 𝒪_L`, `L/K` finite) and is needed only so the
+  orders `|G_i|` are positive (else `Nat.card = 0` and `φ ≡ 0`) — a standing finiteness, **not** a
+  claimed-essential hypothesis, so **no owed witness**. D1 N/A; D2 N/A (real analysis +
+  `ramificationGroup`; no spectral/normed structure). Recovers nothing from an abstract group;
+  R1–R3 untouched.
+
+## Scope: the inverse `ψ` and the upper numbering (Pass 45)
+
+`ψ = φ⁻¹` is reachable now (`φ` is StrictMono + Continuous; needs the range/surjectivity onto
+`[-1,∞)` — `φ` is unbounded above since the slopes are `≥ 1/g_0 > 0` and the domain is unbounded —
+giving a continuous strictly-monotone bijection, hence an inverse). Then the **upper numbering**
+`G^v(L/K) = G_{ψ(v)}` and **Herbrand's theorem** (the upper numbering is compatible with quotients
+`Gal(L/K) ↠ Gal(M/K)` — this is where the canonicity of Pass 43 and the tower theory earn their
+keep). Also deferred: concavity, the explicit piecewise-linear formula, and the slope/derivative
+`φ'(u) = 1/(G_0 : G_u)`. R1–R3 remain the distant, must-be-earned targets.

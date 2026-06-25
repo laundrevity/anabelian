@@ -5,21 +5,22 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 43 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 44 (2026-06-24)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Pass 43 DISCHARGED the canonicity obligation** (ledger stays `0 / 0`): for a tower `K ⊆ K' ⊆ L`
-> of finite separable extensions, `extensionValuativeRel K L = extensionValuativeRel K' L`
-> (`Anabelian/ExtensionCanonical.lean`, axiom-free — integral-closure transitivity + assembly
-> self-consistency; full record in `NOTES.md`/`AXIOM_LEDGER.md` Pass 43). This was the reason
-> `extensionValuativeRel` is a `def` not an instance, and the **last L-rung prerequisite before the
-> ascent**: intermediate fields are now usable as base fields, and the **ascent** (Herbrand
-> `φ`/`ψ`, upper numbering — Serre IV §3) is the next math frontier. (Pass 42 was governance: it
-> discarded an unledgered 2-axiom orphan, `Anabelian/Reconstruction/Inputs.lean`, a premature
-> "conditional R1-floor", and added a mechanical clean-tree gate to `scripts/preflight.sh`; the
-> R1-floor — axiomatizing L3 for a conditional R1 result — remains a permitted-but-deferred option,
-> to be entered deliberately and ledgered, never via an untracked file.)
+> **Pass 44 opened the ascent** (ledger stays `0 / 0`): the **Herbrand function** `φ(u) =
+> ∫_0^u dt/(G_0 : G_t)` (Serre IV §3) — **absent from Mathlib** — is constructed on the
+> lower-numbering filtration and proved strictly monotone, continuous, `φ(0)=0`, `φ=id` on `(-∞,0]`,
+> `φ≤id` on `[0,∞)`, axiom-free (`Anabelian/HerbrandFunction.lean`; record in
+> `NOTES.md`/`AXIOM_LEDGER.md` Pass 44). StrictMono + Continuous set up the inverse `ψ = φ⁻¹` (next).
+> This built on **Pass 43's canonicity** (`extensionValuativeRel K L = extensionValuativeRel K' L`
+> for towers `K ⊆ K' ⊆ L`, the last L-rung prerequisite, making intermediate fields usable as base
+> fields) and the **Pass 41 assembly**. (Pass 42 was governance: it discarded an unledgered 2-axiom
+> orphan, `Anabelian/Reconstruction/Inputs.lean`, a premature "conditional R1-floor", and added a
+> mechanical clean-tree gate to `scripts/preflight.sh`; the R1-floor — axiomatizing L3 for a
+> conditional R1 result — remains a permitted-but-deferred option, never to be entered via an
+> untracked file.)
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -456,10 +457,13 @@ we owe before sustained work in a sub-area):**
 
 ### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity, monogenicity-conditional, Pass 25; come-apart exhibit Pass 26; additive characters `i ≥ 1` + level-0 dichotomy witness Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — **finite-level arc COMPLETE modulo monogenicity**)   ·   DEBT: medium-high
 
-**ABSENT** from Mathlib (re-confirmed Passes 11 and 22: `RamificationGroup.lean` is still the entire
-ramification API and is definition-only — decomposition/inertia subgroups; no filtration `G_i`, no
-Herbrand function, no upper numbering; the file carries a literal `TODO: Define higher ramification
-groups in lower numbering`).
+**ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
+entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration
+`G_i`, no Herbrand function, no upper numbering; the file carries a literal `TODO: Define higher
+ramification groups in lower numbering`; `grep herbrand`/`upperNumbering` over Mathlib = 0 hits,
+Pass 44). The project supplies the missing pieces: the lower-numbering filtration `G_i` (Pass 23)
+and now the **Herbrand function `φ`** (Pass 44, `Anabelian/HerbrandFunction.lean`); `ψ` and the
+upper numbering are still to come.
 
 - **Pass 23 (`Anabelian/RamificationFiltration.lean`) — lower numbering DEFINED + basic theory,
   axiom-free, on the corrected architecture.** In Mathlib's own `ValuationSubring` setting (the
@@ -601,7 +605,12 @@ groups in lower numbering`).
   27** (monogenicity-conditional; the `1 ≤ i` dichotomy witnessed); wild `G_1` pro-`p` (the
   embeddings are in hand — needs `CharP 𝓀 p` plumbing); the canonical `𝔪^i/𝔪^(i+1)`-valued
   characters (also the right home for the uniformizer-twist question, Pass 27);
-  (2) the **Herbrand function** `φ`/`ψ` and upper numbering `G^v(L/K)`, quotient-compatible;
+  (2) the **Herbrand function** `φ` — **✅ Pass 44** (`Anabelian/HerbrandFunction.lean`: `φ(u) =
+  ∫_0^u dt/(G_0 : G_t)` defined literally as the integral, strictly monotone, continuous, `φ(0)=0`,
+  `φ=id` on `(-∞,0]`, `φ≤id` on `[0,∞)`, axiom-free, on the lower-numbering filtration; integrand
+  antitone ⟹ clean `intervalIntegral` analysis); **remaining in (2):** the inverse `ψ = φ⁻¹`
+  (reachable now from StrictMono + Continuous) and the upper numbering `G^v(L/K) = G_{ψ(v)}`,
+  quotient-compatible (Herbrand's theorem);
   (3) the **limit** `G^v ≤ Gal(K̄/K)` (upper numbering is what passes to the inverse limit — the
   degeneracy above is the lower numbering's failure to do so, seen at the limit); (4) Hasse–Arf.
   Prerequisite gaps for the local-field instantiation `A = 𝒪_L`: finite-extension-of-local-field
