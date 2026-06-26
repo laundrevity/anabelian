@@ -4099,3 +4099,62 @@ the **quotient relationship** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Serre Lemma 5), 
 project-built quotient-ramification theory); or (b) the remaining clean deepening — **concavity** of
 `φ` (slopes antitone) and the **`ψ` slope / closed form** (symmetric to P47/P48). R1–R3 remain the
 distant, must-be-earned targets.
+
+### Pass 49 (2026-06-26) — the slope of the inverse `ψ`
+
+**Mathematics; ledger delta 0 / 0.** Proved the derivative of `ψ = φ⁻¹` (Serre IV §3), the symmetric
+counterpart of Pass 47's `φ` slope. `Anabelian/HerbrandPsiSlope.lean`, 8 declarations, all
+standard-axioms-only.
+
+## Scope choice (concavity blocked, so the `ψ` slope)
+
+Re-confirmed the transitivity wall. Of the two clean fallbacks, **concavity is blocked**: Mathlib's
+`concaveOn_of_deriv`/`Differentiable...concaveOn` need `DifferentiableOn ℝ φ (interior)`, which `φ`
+fails at its integer breakpoints — concavity would need a from-scratch piecewise/gluing argument. The
+**`ψ` slope** is clean (the inverse function theorem applies directly), so I took it.
+
+## What was proved + the method
+
+Where `ψ(v) ∈ (n, n+1)`, `ψ'(v) = |G_0|/|G_{n+1}| = (G_0 : G_{ψ(v)})` (`herbrandPsi_hasDerivAt`) — the
+ramification *index*, exactly inverting `φ' = 1/(G_0 : G_u)`. Via **`HasDerivAt.of_local_left_inverse`**
+(the inverse function theorem), fed by:
+- Pass 47's `φ` slope `herbrandPhiSeq_hasDerivAt_Ioo` at the point `ψ(v) ∈ (n,n+1)`;
+- Pass 45's `ψ` continuity (`herbrandPsiSeq_continuous`);
+- the inverse identity `φ(ψ y) = y` (`herbrandPhiSeq_psiSeq`, here as an `∀ᶠ`);
+- `f' = g_{n+1}/g_0 ≠ 0`; and `(g_{n+1}/g_0)⁻¹ = g_0/g_{n+1}` by `inv_div`.
+
+Plus the negative side `herbrandPsi_hasDerivAt_neg` (`ψ' = 1` for `v < 0`, since `ψ = id` there —
+`herbrandPsiSeq_eq_id` ⟹ `ψ =ᶠ id` near `v` ⟹ `hasDerivAt_id.congr_of_eventuallyEq`), the two `deriv`
+forms, and the instantiations. Probe-verified with `lake env lean`; both abstract slope and the
+negative side compiled first try.
+
+## Mathlib API that did the real work
+
+`HasDerivAt.of_local_left_inverse` (inverse function theorem for `𝕜 → 𝕜`); `inv_div`;
+`HasDerivAt.congr_of_eventuallyEq` + `hasDerivAt_id`; Pass 47's `herbrandPhiSeq_hasDerivAt_Ioo` and
+Pass 45's `herbrandPsiSeq_continuous`/`herbrandPhiSeq_psiSeq`/`herbrandPsiSeq_eq_id`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(51 files chain-checked, 8527 jobs, zero warnings). All 8 `#print axioms` standard-only; zero `axiom`
+declarations project-wide. **HEADLINE: the inverse Herbrand function's slope `ψ'(v) = (G_0 : G_{ψ(v)})`
+— proved axiom-free by the inverse function theorem, completing the `φ`/`ψ` derivative picture.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation. The
+  `[Finite (A.decompositionSubgroup K)]` hypothesis is automatic at the finite level (gives
+  `|G_i| ≥ 1`, so `φ` is a bijection and `ψ` exists) — a standing finiteness, **no owed witness**.
+  D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Scope: still NOT transitivity (Pass 50+)
+
+The Herbrand pair `φ`/`ψ` now has its full analytic theory (monotonicity, continuity, slopes,
+`φ`'s closed form). `φ`-transitivity still needs the **quotient relationship**
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Serre Lemma 5), the multi-pass wall (absent from Mathlib — would
+need a project-built quotient-ramification theory: how `i_{K'/K}(σ̄)` relates to the `i_{L/K}` of
+lifts). **Pass 50 options:** (a) begin that quotient theory (a multi-pass project of its own — and
+the honest next big step); or (b) the last clean deepening — the `φ`/`ψ` **closed-form equivalences**
+or **concavity** (the latter needs the piecewise argument). R1–R3 remain the distant, must-be-earned
+targets.

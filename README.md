@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 48 (2026-06-26)
+## Current state — Pass 49 (2026-06-26)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 50 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 51 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -47,8 +47,9 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   (Passes 38–41). The **canonicity** of `extensionValuativeRel` across towers (Pass 43). The
   **Herbrand ascent**: the function `φ` (Pass 44), its inverse `ψ` and the **upper numbering** `G^v`
   (Pass 45), the lower-numbering **subgroup compatibility** `H_u = H ∩ G_u` (Pass 46), the
-  **slope** `φ'(u) = 1/(G_0 : G_u)` (Pass 47), and the **explicit piecewise-linear formula**
-  `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` (Pass 48).
+  **slope** `φ'(u) = 1/(G_0 : G_u)` (Pass 47), the **explicit piecewise-linear formula**
+  `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` (Pass 48), and the **`ψ` slope**
+  `ψ'(v) = (G_0 : G_{ψ(v)})` (Pass 49).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -57,8 +58,9 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
 
 **Current frontier:** `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15) and
 Herbrand's theorem `(G/H)^v = G^v H/H` — the upper numbering's defining quotient-compatibility. With
-`φ` now concrete (slope, Pass 47; closed form, Pass 48), the remaining wall is the
-index-multiplicativity / quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5).
+the `φ`/`ψ` analytic theory now complete (monotonicity, continuity, both slopes, `φ`'s closed form),
+the remaining wall is the index-multiplicativity / quotient relationship `(G/H)_{φ(u)} = G_u H/H`
+(Serre Lemma 5) — which would need a project-built quotient-ramification theory.
 
 ## Build
 

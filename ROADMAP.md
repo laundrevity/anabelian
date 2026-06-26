@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 48 (2026-06-26)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 49 (2026-06-26)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -20,8 +20,10 @@ anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 > 47** — the **slope** `φ'(u) = 1/(G_0 : G_u)` (`Anabelian/HerbrandSlope.lean`,
 > `herbrandPhi_hasDerivAt_Ioo`, via FTC); **Pass 48** — the **explicit piecewise-linear formula**
 > `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` on `[n,n+1]` (`Anabelian/HerbrandFormula.lean`,
-> `herbrandPhi_eq_affine_formula`, read off the integral) (records in `NOTES.md`/`AXIOM_LEDGER.md`
-> Passes 44–48). **Next: `φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15) and
+> `herbrandPhi_eq_affine_formula`); **Pass 49** — the **`ψ` slope** `ψ'(v) = (G_0 : G_{ψ(v)})`
+> (`Anabelian/HerbrandPsiSlope.lean`, `herbrandPsi_hasDerivAt`, via the inverse function theorem),
+> completing the `φ`/`ψ` derivative picture (records in `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–49).
+> **Next: `φ`-transitivity** `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop. 15) and
 > **Herbrand's theorem** `(G/H)^v = G^v H/H` — both gated on the
 > index-multiplicativity / quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5), where
 > Pass 43's canonicity and the tower theory earn their keep. This all built on **Pass 43's
@@ -463,7 +465,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48; **next: `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; **next: `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration
@@ -629,7 +631,10 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
   off the integer breakpoints — the defining derivative property); the **explicit piecewise-linear
   formula** `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` on `[n,n+1]` — **✅ Pass 48**
   (`Anabelian/HerbrandFormula.lean`, `herbrandPhi_eq_affine_formula`/`herbrandPhi_natCast`: read off
-  the integral via `integral_congr_ae` + `sum_integral_adjacent_intervals`); **remaining in (2):**
+  the integral via `integral_congr_ae` + `sum_integral_adjacent_intervals`); the **`ψ` slope**
+  `ψ'(v) = (G_0 : G_{ψ(v)})` — **✅ Pass 49** (`Anabelian/HerbrandPsiSlope.lean`,
+  `herbrandPsi_hasDerivAt`, via the inverse function theorem — the reciprocal of `φ`'s slope,
+  completing the derivative picture); **remaining in (2):**
   `φ`-transitivity `φ_{L/K} = φ_{M/K} ∘ φ_{L/M}` (Serre IV §3 Prop 15) and **Herbrand's theorem**
   `(G/H)^v = G^v H/H` — both gated on the index-multiplicativity / quotient relationship
   `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5), the hard arithmetic wall (verified absent from Mathlib);

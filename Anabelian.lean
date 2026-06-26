@@ -48,3 +48,4 @@ import Anabelian.UpperNumbering
 import Anabelian.RamificationSubgroup
 import Anabelian.HerbrandSlope
 import Anabelian.HerbrandFormula
+import Anabelian.HerbrandPsiSlope

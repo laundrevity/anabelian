@@ -2189,3 +2189,46 @@ Mathlib, deliberately not half-built.
 **Ledger delta: 0 / 0.** Axiom-free. **The `φ` analytic theory is now concrete** (slope + closed
 form). Next toward transitivity/Herbrand: the quotient relationship (the wall), or the remaining
 clean `φ`/`ψ`-deepening (concavity, the `ψ` slope/formula).
+
+### Pass 49 (2026-06-26) — the slope of the inverse `ψ`; count stays 0 / 0
+
+Introduced **zero** axioms; proved the derivative of `ψ = φ⁻¹` (Serre IV §3), the symmetric
+counterpart of Pass 47's `φ` slope. Where `ψ(v) ∈ (n, n+1)`, `ψ'(v) = |G_0|/|G_{n+1}| =
+(G_0 : G_{ψ(v)})` — the ramification *index* itself, exactly inverting `φ' = 1/(G_0 : G_u)`. (Chose
+this clean fallback after re-confirming the transitivity wall and finding **concavity blocked** —
+Mathlib's `concaveOn_of_deriv` needs `DifferentiableOn`, which `φ` fails at its breakpoints.)
+`Anabelian/HerbrandPsiSlope.lean` proves (standard axioms only — in-file `#print axioms`, all 8 decls):
+
+```
+'Anabelian.herbrandPsi_hasDerivAt'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPsi_hasDerivAt_neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPsi_deriv'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPsi_deriv_neg'      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`herbrandPsi_hasDerivAt`** — `ψ'(v) = |G_0|/|G_{n+1}|` where `ψ(v) ∈ (n, n+1)`; with
+  `herbrandPsi_hasDerivAt_neg` (`ψ' = 1` for `v < 0`, where `ψ = id`) and the two `deriv` forms.
+  Abstract engines `herbrandPsiSeq_hasDerivAt`/`_neg`.
+- **The method:** the **inverse function theorem** `HasDerivAt.of_local_left_inverse`, fed by Pass
+  47's `φ` slope (`herbrandPhiSeq_hasDerivAt_Ioo` at `ψ(v) ∈ (n,n+1)`), Pass 45's `ψ` continuity, and
+  the inverse identity `φ ∘ ψ = id` (`herbrandPhiSeq_psiSeq`); `(g_{n+1}/g_0)⁻¹ = g_0/g_{n+1}` by
+  `inv_div`. The negative side: `ψ = id` near `v < 0` (Pass 45's `herbrandPsiSeq_eq_id`) ⟹
+  `congr_of_eventuallyEq` of `hasDerivAt_id`.
+
+**Mathlib API that did the real work:** `HasDerivAt.of_local_left_inverse` (inverse function
+theorem); `inv_div`; `HasDerivAt.congr_of_eventuallyEq` + `hasDerivAt_id`; Pass 47's `φ` slope,
+Pass 45's `herbrandPsiSeq_continuous`/`herbrandPhiSeq_psiSeq`/`herbrandPsiSeq_eq_id`.
+
+**Not the cardinal sin / rule-2.** A structural fact about a given extension's `ψ` — strictly below
+R1; recovers nothing from an abstract group. No new `structure`/`class`. The instantiation's
+`[Finite (A.decompositionSubgroup K)]` is automatic at the finite level (gives `|G_i| ≥ 1`, so `φ` is
+a bijection and `ψ` exists) — a standing finiteness, no owed witness. D1 N/A; D2 N/A.
+
+**Honest scope: still NOT `φ`-transitivity.** The `φ`/`ψ` derivative picture is now complete and
+symmetric, but transitivity still needs the quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre
+Lemma 5), the multi-pass wall verified absent from Mathlib, not touched here.
+
+**Ledger delta: 0 / 0.** Axiom-free. **The Herbrand pair's derivative theory is complete.** Next
+toward transitivity/Herbrand: the quotient relationship (the wall — would need a project-built
+quotient-ramification theory), or the remaining clean deepening (the `φ`/`ψ` closed forms,
+concavity via a from-scratch piecewise argument).
