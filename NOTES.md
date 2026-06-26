@@ -4033,3 +4033,69 @@ options for Pass 48:** (a) attack the quotient relationship (hard); or (b) cash 
 `φ(u) = (g_1+…+g_n+(u−n)g_{n+1})/g_0` on `[n,n+1]` (now provable from the slope + `φ(0)=0` via
 "equal derivative ⟹ equal", sidestepping Pass 44's endpoint obstruction) and **concavity** (the
 slopes `g_{n+1}/g_0` decrease since `g` does). R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 48 (2026-06-26) — the explicit piecewise-linear formula for `φ`
+
+**Mathematics; ledger delta 0 / 0.** Proved the closed form of the Herbrand function (Serre IV §3),
+the concrete counterpart of Pass 47's slope. `Anabelian/HerbrandFormula.lean`, 7 declarations, all
+standard-axioms-only.
+
+## Wall check first, then scope
+
+Per the discipline, re-confirmed the transitivity/Herbrand **wall**: `grep` over Mathlib found no
+higher-ramification quotient API (only `RamificationIdx` quotient-algebra instances, unrelated). So
+full `φ`-transitivity remains the multi-pass wall; I took the clean, high-value `φ`-deepening
+HANDOFF flagged — the explicit formula.
+
+## What was proved + the method
+
+`φ(n) = (|G_1|+…+|G_n|)/|G_0|` (`herbrandPhi_natCast`) and, on `[n,n+1]`,
+`φ(u) = (|G_1|+…+|G_n|+(u−n)·|G_{n+1}|)/|G_0|` (`herbrandPhi_eq_affine_formula`). Read off the
+**integral** definition (Pass 44), not the slope — which turned out cleaner:
+
+- The crux `herbrandSeq_integral_sub_Icc`: over `[a,b] ⊆ [n,n+1]`, `∫_a^b dt/(G_0:G_t) =
+  (b−a)·g_{n+1}/g_0`. The key observation that avoids endpoint pain: the interval integral only sees
+  `Ι a b = Ioc a b`, which **excludes the left endpoint**, so the only a.e.-exceptional point is the
+  right breakpoint `n+1` (null) — `integral_congr_ae` against the constant then `integral_const`.
+- `herbrandPhiSeq_natCast`: `φ(n) = ∫_0^n` splits via `sum_integral_adjacent_intervals` into
+  `Σ_{k<n} ∫_k^{k+1} = Σ_{k<n} g_{k+1}/g_0`.
+- `herbrandPhiSeq_affine`: `φ(u) = ∫_0^n + ∫_n^u = φ(n) + (u−n)·g_{n+1}/g_0`
+  (`integral_add_adjacent_intervals` + the crux). Combined into the closed form by `ring`.
+
+Why the integral route over integrating Pass 47's slope: the slope route would need the *right*
+derivative at each left endpoint `n`, which fails the FTC continuity hypothesis at `n=0` (integrand
+value `1` ≠ right-limit `g_1/g_0`). The integral route's `Ι = Ioc` left-openness dodges this entirely.
+
+Probe-verified with `lake env lean`; the integer values compiled after fixing a `↑(k+1)` vs `↑k+1`
+cast and the `Ι`→`Set.uIoc` notation, then the affine part went through directly.
+
+## Mathlib API that did the real work
+
+`intervalIntegral.integral_congr_ae` (+ `Set.uIoc_of_le`, `compl_mem_ae_iff`/`measure_singleton` for
+the a.e. statement, `Nat.floor_eq_on_Ico` for the constant value); `sum_integral_adjacent_intervals`,
+`integral_add_adjacent_intervals`, `integral_const`; `Finset.sum_div`/`sum_congr`; Pass 44's
+`herbrandPhiSeq_intervalIntegrable`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN
+(50 files chain-checked, 8526 jobs, zero warnings). All 7 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: the explicit piecewise-linear formula for the Herbrand
+function — `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` on `[n,n+1]` — proved axiom-free, read off
+the integral definition.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation. The
+  `[Finite (A.decompositionSubgroup K)]` hypothesis is automatic at the finite level (gives
+  `|G_i| ≥ 1`) — a standing finiteness, **no owed witness**. D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Scope: still NOT transitivity (Pass 49+)
+
+The `φ` analytic theory is now concrete (Pass 47 slope + Pass 48 closed form), which makes the
+order-arithmetic across a tower explicit — a genuine prerequisite. But `φ`-transitivity still needs
+the **quotient relationship** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Serre Lemma 5), the multi-pass wall
+(absent from Mathlib). **Pass 49 options:** (a) attack the quotient relationship (hard — would need a
+project-built quotient-ramification theory); or (b) the remaining clean deepening — **concavity** of
+`φ` (slopes antitone) and the **`ψ` slope / closed form** (symmetric to P47/P48). R1–R3 remain the
+distant, must-be-earned targets.

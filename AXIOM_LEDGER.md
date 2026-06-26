@@ -2144,3 +2144,48 @@ arithmetic wall, deliberately **not** half-built here (a clean partial beats a h
 **Ledger delta: 0 / 0.** Axiom-free. **The slope is in hand.** Next toward transitivity/Herbrand:
 either the quotient relationship `(G/H)_{φ(u)} = G_u H/H` (the hard arithmetic), or further clean
 `φ`-deepening now unlocked by the slope (the explicit piecewise-linear formula, concavity).
+
+### Pass 48 (2026-06-26) — the explicit piecewise-linear formula for `φ`; count stays 0 / 0
+
+Introduced **zero** axioms; proved the **closed form** of the Herbrand function (Serre IV §3):
+`φ(n) = (|G_1|+…+|G_n|)/|G_0|` and, on `[n,n+1]`, `φ(u) = (|G_1|+…+|G_n|+(u−n)·|G_{n+1}|)/|G_0|` —
+the concrete counterpart of Pass 47's slope. Confirmed first the transitivity/Herbrand **wall is
+real** (`grep` over Mathlib: no higher-ramification quotient API), so took this clean, high-value
+`φ`-deepening. `Anabelian/HerbrandFormula.lean` proves (standard axioms only — in-file `#print
+axioms`, all 7 decls):
+
+```
+'Anabelian.herbrandPhi_natCast'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_eq_affine_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`herbrandPhi_eq_affine_formula`** (headline) — for `u ∈ [n, n+1]`, the explicit formula;
+  **`herbrandPhi_natCast`** — the integer values `φ(n) = (Σ_{i<n} |G_{i+1}|)/|G_0|`. Abstract engines
+  `herbrandPhiSeq_eq_affine_formula`/`_natCast`/`_affine` on an order sequence `g`.
+- **The method (read off the integral, not the slope):** because `φ(u) = ∫_0^u dt/(G_0:G_t)` (Pass
+  44), the integrand is the constant `g_{n+1}/g_0` on each unit interval — and crucially the interval
+  integral `∫_a^b` only sees `Ι a b = Ioc a b`, which **excludes the left endpoint**, so the sole
+  a.e.-exceptional point is the right breakpoint (null). Hence `herbrandSeq_integral_sub_Icc`
+  (`∫_a^b = (b−a)·g_{n+1}/g_0` for `[a,b] ⊆ [n,n+1]`, via `integral_congr_ae`), then
+  `sum_integral_adjacent_intervals` (split `∫_0^n`) for the integer values and
+  `integral_add_adjacent_intervals` for the affine remainder. This sidesteps the breakpoint-derivative
+  bookkeeping the slope route would have needed.
+
+**Mathlib API that did the real work:** `intervalIntegral.integral_congr_ae` (+ `Set.uIoc_of_le`,
+`measure_singleton`/`compl_mem_ae_iff` for the a.e. statement); `sum_integral_adjacent_intervals`,
+`integral_add_adjacent_intervals`, `integral_const`; `Nat.floor_eq_on_Ico`; Pass 44's
+`herbrandPhiSeq_intervalIntegrable`.
+
+**Not the cardinal sin / rule-2.** A structural fact about a given extension's `φ` — strictly below
+R1; recovers nothing from an abstract group. No new `structure`/`class`. The instantiation's
+`[Finite (A.decompositionSubgroup K)]` is automatic at the finite level (gives `|G_i| ≥ 1`) — a
+standing finiteness, no owed witness. D1 N/A; D2 N/A.
+
+**Honest scope: still NOT `φ`-transitivity.** The closed form makes the order-arithmetic across a
+tower explicit (a genuine prerequisite), but transitivity additionally needs the quotient
+relationship `(G/H)_{φ(u)} = G_u H/H` (Serre Lemma 5) — the multi-pass wall verified absent from
+Mathlib, deliberately not half-built.
+
+**Ledger delta: 0 / 0.** Axiom-free. **The `φ` analytic theory is now concrete** (slope + closed
+form). Next toward transitivity/Herbrand: the quotient relationship (the wall), or the remaining
+clean `φ`/`ψ`-deepening (concavity, the `ψ` slope/formula).

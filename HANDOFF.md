@@ -1,20 +1,21 @@
-# HANDOFF.md — session bootstrap (written after Pass 47, 2026-06-25)
+# HANDOFF.md — session bootstrap (written after Pass 48, 2026-06-26)
 
 **State:** Pass 43 **discharged the canonicity obligation** (the last L-rung prerequisite). **Passes
-44–47 built the Herbrand machinery** (Serre IV §§1, 3, all absent from Mathlib, all axiom-free): the
+44–48 built the Herbrand machinery** (Serre IV §§1, 3, all absent from Mathlib, all axiom-free): the
 **Herbrand function** `φ` (`Anabelian/HerbrandFunction.lean`, P44 — strictly monotone, continuous),
 its inverse **`ψ = φ⁻¹` + the upper numbering** `G^v(L/K) = G_{⌈ψ(v)⌉}` (`Anabelian/UpperNumbering.lean`,
 P45), the **subgroup compatibility** `H_u = H ∩ G_u` (Serre IV §1 Prop. 2,
-`Anabelian/RamificationSubgroup.lean`, P46), and the **slope** `φ'(u) = 1/(G_0 : G_u)`
-(`Anabelian/HerbrandSlope.lean`, P47 — via FTC, the defining derivative). Ledger is **`0 FOUNDATIONAL
-/ 0 DEBT`**, zero `axiom` declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 48 —
-`φ`-transitivity / Herbrand's theorem (the wall), or a clean `φ`-deepening sub-rung** (below).
+`Anabelian/RamificationSubgroup.lean`, P46), the **slope** `φ'(u) = 1/(G_0 : G_u)`
+(`Anabelian/HerbrandSlope.lean`, P47), and the **explicit piecewise-linear formula** for `φ`
+(`Anabelian/HerbrandFormula.lean`, P48). Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom`
+declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 49 — `φ`-transitivity /
+Herbrand's theorem (the wall), or a clean `φ`/`ψ`-deepening sub-rung** (below).
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
 `CLAUDE.md` (the constitution — axiom budget, rule-2, commit-per-pass, clean-tree, **governance
-consistency**), `AXIOM_LEDGER.md` (state + tail Pass-47 entry), `ROADMAP.md` (status header says
-Pass 47), and the **tail of `NOTES.md`** (Passes 41–47: assembly, canonicity, Herbrand `φ`/`ψ` +
-upper numbering, Prop. 2, the slope).
+consistency**), `AXIOM_LEDGER.md` (state + tail Pass-48 entry), `ROADMAP.md` (status header says
+Pass 48), and the **tail of `NOTES.md`** (Passes 41–48: assembly, canonicity, Herbrand `φ`/`ψ` +
+upper numbering, Prop. 2, the slope, the explicit formula).
 **Session start:** `git status` — the tree must be clean. `.claude/` is now `.gitignore`d, so a clean
 tree shows **nothing** untracked; `scripts/preflight.sh` clause 0 now *enforces* this (it fails on
 any untracked file outside `.gitignore`). If anything is untracked, resolve it before new work
@@ -36,7 +37,7 @@ tower `K ⊆ K' ⊆ L` (`Anabelian/ExtensionCanonical.lean`, `extensionValuative
 the relation depends only on `𝒪_L`, base-independent by integral-closure transitivity. Intermediate
 fields are now usable as base fields.
 
-**The ascent is OPEN, rungs 1–4 built** (P44–47): the Herbrand function `φ`
+**The ascent is OPEN, rungs 1–5 built** (P44–48): the Herbrand function `φ`
 (`Anabelian/HerbrandFunction.lean`, `herbrandPhi K A`, Serre's `∫_0^u dt/(G_0 : G_t)`; integrand
 antitone ⟹ clean `intervalIntegral` analysis ⟹ `herbrandPhi_strictMono`/`_continuous`/`_zero`/`_eq_id`
 /`_le_self`), its inverse `ψ` (`Anabelian/UpperNumbering.lean`, `herbrandPsi K A` via
@@ -44,31 +45,32 @@ antitone ⟹ clean `intervalIntegral` analysis ⟹ `herbrandPhi_strictMono`/`_co
 `herbrandPhi_psi`/`herbrandPsi_phi`), the **upper numbering** `upperRamificationGroup K A v =
 G_{⌈ψ(v)⌉}` (`_zero` = `G_0`, `_antitone`, `_eventually_bot`), the **subgroup compatibility**
 `H_u = H ∩ G_u` (`Anabelian/RamificationSubgroup.lean`, `ramificationGroup_eq_comap`/`_map_eq`, the
-restriction `decompositionRestrict : Gal(L/K') →* Gal(L/K)`), and the **slope** `φ'(u) = 1/(G_0:G_u)`
-(`Anabelian/HerbrandSlope.lean`, `herbrandPhi_hasDerivAt_Ioo`, via FTC). Both `φ`/`ψ` are abstract
-engines `herbrandPhiSeq`/`herbrandPsiSeq (g : ℕ → ℝ)` + the ramification instantiation. All axiom-free.
+restriction `decompositionRestrict : Gal(L/K') →* Gal(L/K)`), the **slope** `φ'(u) = 1/(G_0:G_u)`
+(`Anabelian/HerbrandSlope.lean`, `herbrandPhi_hasDerivAt_Ioo`, via FTC), and the **explicit
+piecewise-linear formula** `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|`
+(`Anabelian/HerbrandFormula.lean`, `herbrandPhi_eq_affine_formula`/`herbrandPhi_natCast`, read off the
+integral). Both `φ`/`ψ` are abstract engines `herbrandPhiSeq`/`herbrandPsiSeq (g : ℕ → ℝ)` + the
+ramification instantiation. All axiom-free.
 
-## YOUR FIRST TASK — Pass 48: toward `φ`-transitivity / Herbrand's theorem
+## YOUR FIRST TASK — Pass 49: toward `φ`-transitivity / Herbrand's theorem
 
 **Goal:** `φ`-transitivity `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` (Serre IV §3 Prop. 15) and Herbrand's
-theorem `(G/H)^v = G^v H/H` (Prop. 14). Serre's differentiation route is now set up: both sides of
-the transitivity identity are continuous, piecewise-affine, agree at `0`, so compare slopes — and
-the slope is Pass 47's `φ'(u) = 1/(G_0 : G_u)`. **The remaining wall is the index-multiplicativity**
-`1/(G_0:G_u) = 1/((G/H)_0 : (G/H)_{φ_{L/K'}(u)}) · 1/(H_0 : H_u)`, i.e. the quotient relationship
-`(G/H)_{φ(u)} = G_u H/H` (Serre's Lemma 5 / the quotient half of Herbrand's theorem). That is
-genuinely **hard, multi-pass arithmetic** — `H_u = H ∩ G_u` (P46) is in hand, but the *quotient*
-filtration `(G/H)_j` and its relation to `G`'s via `φ` is the open piece (inventory whether Mathlib
-has any quotient-ramification API — likely not).
+theorem `(G/H)^v = G^v H/H` (Prop. 14). `φ` is now fully concrete (slope P47, closed form P48), so
+the differentiation/order-arithmetic route is set up. **The remaining wall is the
+index-multiplicativity** `1/(G_0:G_u) = 1/((G/H)_0 : (G/H)_{φ_{L/K'}(u)}) · 1/(H_0 : H_u)`, i.e. the
+quotient relationship `(G/H)_{φ(u)} = G_u H/H` (Serre's Lemma 5 / the quotient half of Herbrand's
+theorem). That is genuinely **hard, multi-pass arithmetic** — `H_u = H ∩ G_u` (P46) is in hand, but
+the *quotient* filtration `(G/H)_j` of `Gal(K'/K)` and its relation to `G`'s via `φ` is the open
+piece. **Mathlib has no quotient-ramification API** (verified P48); building it is a project of its
+own (how `i_{K'/K}(σ̄)` relates to the `i_{L/K}` of lifts).
 
-**If the wall is too big this pass, take a clean `φ`-deepening sub-rung instead** (each genuinely
-useful and now unblocked by the slope, none of them half-building transitivity):
-- the **explicit piecewise-linear formula** `φ(u) = (g_1+…+g_n+(u−n)g_{n+1})/g_0` on `[n,n+1]` — now
-  reachable from the slope + `φ(0)=0` via "equal derivative on the interval ⟹ equal" (`Pass 44`'s
-  endpoint obstruction is sidestepped by the derivative route);
-- **concavity** of `φ` (the slopes `g_{n+1}/g_0` decrease since `g` is antitone);
-- the **`ψ` slope** (symmetric to Pass 47, via `HasDerivAt` of the inverse).
+**If the wall is too big this pass, take a clean `φ`/`ψ`-deepening sub-rung instead** (each genuinely
+useful, none half-building transitivity):
+- **concavity** of `φ` (the slopes `g_{n+1}/g_0` decrease since `g` is antitone) — Serre uses it;
+- the **`ψ` slope / closed form** (symmetric to P47/P48; `ψ` is the inverse, so `ψ'(v) = 1/φ'(ψ(v))`
+  and `ψ` is piecewise-linear with the reciprocal slopes).
 
-**Method (the P43–47 rhythm):** local toolchain **in the loop** — `lake build Anabelian.<File>`
+**Method (the P43–48 rhythm):** local toolchain **in the loop** — `lake build Anabelian.<File>`
 (≈3 s incremental) for the real build, `lake env lean <scratch>.lean` for throwaway probes before
 committing. Scope tightly; one rung. **Do not half-build transitivity** (clean partial > half-discharge).
 
@@ -112,11 +114,11 @@ rung (e.g. just `ψ` + its basic properties); do not attempt all of §3 at once.
   `Nat.exists_eq_pow_mul_and_not_dvd`; `IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`
   (nested!); `RingEquiv.subringCongr`; `Valuation.integer` (not `Valued.integer`) via `Valued.v`.
 
-## The queue after Pass 48
+## The queue after Pass 49
 
 Continue the **ascent**: `φ`-transitivity and **Herbrand's theorem** `(G/H)^v = G^v H/H`, then
 Hasse–Arf and the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3); also still available as clean sub-rungs —
-concavity of `φ`, the explicit piecewise-linear formula, the `ψ` slope. Separately, the **R1-floor**
+concavity of `φ`, the `ψ` slope / closed form. Separately, the **R1-floor**
 (axiomatizing L3 local class field theory to
 reach a *conditional* R1 reconstruction result) is a ROADMAP-permitted but **deferred** option — if
 taken, it must be a deliberate, ledgered decision (A1/A2 preserved in the NOTES Pass-42 entry) with

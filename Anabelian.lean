@@ -47,3 +47,4 @@ import Anabelian.HerbrandFunction
 import Anabelian.UpperNumbering
 import Anabelian.RamificationSubgroup
 import Anabelian.HerbrandSlope
+import Anabelian.HerbrandFormula
