@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 53 (2026-07-03)
+## Current state — Pass 54 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 55 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 56 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -56,10 +56,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   (generator-free), with Lemma 1 `σ ∈ G_i ↔ i < i_G(σ)`, its calculus, and `i_H = i_G` on
   subextensions by `rfl` (Pass 51); **surjectivity of the quotient restriction** — `𝒪_L` is
   Galois-stable (integral closure), so `D(𝒪_L) = ⊤` and `D(A) ⧸ H ≃* D(A ∩ K')`: the `(G/H)`
-  of Herbrand's theorem, realized (Pass 52); and the **concrete `i_G`** —
-  `i_G(σ) = v_L(σx − x)` (`lowerIndex_eq_addVal`) with Lemma 1 in generator form, under the
-  monogenicity package as named binders (`hfix` free at `𝒪_L`; `hgen` an honest named
-  boundary) (Pass 53).
+  of Herbrand's theorem, realized (Pass 52); the **concrete `i_G`** —
+  `i_G(σ) = v_L(σx − x)` (`lowerIndex_eq_addVal`) with Lemma 1 in generator form (Pass 53);
+  and the **monogenicity discharge** — `𝒪_L = 𝒪_K[x]` (Serre III §6 Prop. 12, finite-residue
+  case), making the concrete `i_G` **unconditional**: `∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`
+  (Pass 54).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -71,10 +72,10 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
 `(G/H)_{φ_{L/K'}(u)} = G_u H/H`, the wall between the completed `φ`/`ψ` analytic theory and both
 `φ`-transitivity (Prop. 15) and Herbrand's theorem `(G/H)^v = G^v H/H` (Prop. 14). The
 group-theoretic skeleton (Pass 50), the `i_G` function with its filtration characterization
-(Pass 51), surjectivity of the quotient restriction (Pass 52 — the lifts exist), and the
-concrete `i_G(σ) = v_L(σx − x)` (Pass 53, under the monogenicity package) are built; what
-remains for Prop. 3 is the lift-set arithmetic itself, plus the optional-but-recommended
-discharge of the monogenicity hypothesis (Serre III §6 Prop. 12).
+(Pass 51), surjectivity of the quotient restriction (Pass 52 — the lifts exist), the concrete
+`i_G(σ) = v_L(σx − x)` (Pass 53), and the monogenicity discharge making it unconditional
+(Pass 54) are all built; Prop. 3's lift-set arithmetic — two divisibilities comparing
+`σ̄y − y` with `∏ (sx − x)` over the lifts — is the entire remaining wall.
 
 ## Build
 

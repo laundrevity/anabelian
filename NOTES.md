@@ -4477,3 +4477,88 @@ the residue-finiteness (P36 arc) and uniformizer packages; a self-contained pass
 convert P53's conditional statements into unconditional ones at `𝒪_L`. (b) first is the
 recommended order — it de-conditionalizes before the wall. R1–R3 remain the distant,
 must-be-earned targets.
+
+### Pass 54 (2026-07-03) — the monogenicity discharge: `𝒪_L = 𝒪_K[x]`
+
+**Mathematics; ledger delta 0 / 0 — and P53's one named hypothesis became a theorem.** Serre
+III §6 Prop. 12 in the finite-residue case: `𝒪_L` is monogenic over `𝒪_K` for every finite
+separable extension of a nonarchimedean local field; hence the concrete `i_G` is
+**unconditional**. `Anabelian/ExtensionMonogenicDischarge.lean`, 5 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF option (a), the recommended de-conditionalization)
+
+P53 left exactly one named binder in the `i_G` theory: `hgen`. The classical proof of Prop. 12
+runs through the minimal polynomial of a residue generator, its separability, a monic lift,
+and a Taylor expansion. **None of that was needed**: with residue fields *finite* (P36), the
+explicit polynomial `X^n − 1` (`n = |𝓀_L^×|`) does everything the minpoly does.
+
+## The route (no minpoly, no Taylor)
+
+1. `g` := cyclic generator of `𝓀_L^×` (`IsCyclic.exists_generator`); `x₀` a lift. Every
+   residue is `0` or `g^k` (`isOfFinOrder_of_finite` + `mem_powers_iff_mem_zpowers` to convert
+   `ℤ`-powers to `ℕ`-powers), so `𝒪_K[x₀]` covers residues — the engine's `hres` for free.
+2. `y₀ := x₀^n − 1 ∈ 𝔪` (Lagrange `g^n = 1`). The "derivative" is the explicit unit `n·x₀^n`:
+   `(n : 𝓀_L) = |𝓀_L| − 1 = −1 ≠ 0` (`Nat.card_units` + `FiniteField.cast_card_eq_zero` —
+   the cardinality vanishes in its own characteristic; works uniformly in equal and mixed
+   characteristic).
+3. If `y₀ ∈ 𝔪²`: correct `x := x₀(1 + π₀)`. The **binomial tail**
+   `(1+t)^m = 1 + mt + t²a` (`exists_pow_one_add_eq`, 8-line induction, `propext`-only) gives
+   `x^n − 1 = y₀ + (x₀^n·n)·π₀ + (x₀^n·a)·π₀²`; first and third terms in `𝔪²`, middle term
+   `unit · π₀ ∉ 𝔪²` — so `x^n − 1 ∈ 𝔪 ∖ 𝔪²`. (Serre's `x + π` correction in multiplicative
+   form; the unit-cancellation `π₀ = v⁻¹(v·π₀) ∈ 𝔪²`-contradiction replaces the valuation
+   count.)
+4. `𝔪 ∖ 𝔪²` spans `𝔪` (`maximalIdeal_eq_span_of_mem_of_notMem_sq` — new reusable DVR brick,
+   via P53's `addVal` bridge: `addVal = 1` exactly). So `x^n − 1` is a uniformizer **inside**
+   `𝒪_K[x]`, and P32's engine (`closure_subring_union_uniformizer_eq_top`, `he` from P33's
+   `exists_pow_maximalIdeal_le_map`) gives `closure(𝒪_K[x] ∪ {x^n−1}) = ⊤`; the union
+   collapses (`Set.union_eq_self_of_subset_right` + `Subring.closure_eq`). Assembly factored
+   as `closure_union_singleton_eq_top`.
+
+**Payoff:** `exists_generator_lowerIndex_eq_addVal` — `∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`,
+no hypotheses. The P51–54 `i_G` theory is now hypothesis-free at `𝒪_L`.
+
+## What this does NOT discharge (no conflation)
+
+The P25/27/28 character theorems' package needs an *inertia-fixed* generating subring
+(`hfix` over `G_0`); `𝒪_K[x]` is not inertia-fixed (`x` moves under inertia — that movement
+IS `i_G`). That route was closed separately by P32–34 via `inertiaFixedIntegers`.
+
+## Probe experience (2 mechanical rounds)
+
+`ℕ∞` numerals vs `((k:ℕ):ℕ∞)` casts blocked two `rw`s (restated the `have`s with explicit
+casts and used `.mp`/`.mpr` term-style); `residue` vs `Ideal.Quotient.mk` is defeq but not
+syntactic — `rw` on a `residue`-form fails against an `mk`-form goal; route the fact through a
+`have hres0 : residue … = 0` and apply `Ideal.Quotient.eq_zero_iff_mem.mp` (term-level defeq is
+fine). `Nat.card_units` takes `α` **explicitly**. `Fintype.card_units` was avoided entirely
+(instance-mismatch between `Fintype.ofFinite` and the `DecidableEq`-derived instance) — the
+`Nat.card` API (`pow_card_eq_one'`, `Nat.card_units`, `Nat.card_pos`) is instance-agnostic and
+strictly cleaner here.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN.
+All 5 `#print axioms` standard-only (the binomial tail is `propext`-only); zero `axiom`
+declarations project-wide. **HEADLINE: `𝒪_L` is monogenic over `𝒪_K` (Serre III §6 Prop. 12,
+finite-residue case), proved axiom-free — and with it the concrete `i_G` is unconditional:
+`∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. The named-binder discipline of P25–P53
+  paid out exactly as designed: the hypothesis was carried honestly, then **proved**, and every
+  downstream statement de-conditionalizes by substitution. D1 N/A; D2 untouched. R1–R3
+  untouched.
+
+## Scope: Prop. 3 is now the entire remaining wall (Pass 55+)
+
+Everything Prop. 3 needs is in place: lifts exist (P52), `i_G = v_L(σx − x)` with a real `x`
+(P53–54), `i_H = i_G` (P51), `𝔪_B` reflection (P50). **Pass 55: begin Prop. 3** —
+`i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)`. Serre's proof: `y` generates `𝒪_{K'}/𝒪_K`,
+`x` generates `𝒪_L/𝒪_{K'}` (both now theorems — note the second needs `K'` as a local field:
+the P38–41 assembly + P43 canonicity provide exactly that); compare `a := σ̄y − y` with
+`b := ∏_{s ↦ σ̄} (sx − x)` via **two divisibilities** (`a ∣ b` from `y ∈ 𝒪_{K'}[x]`-side
+arithmetic, `b ∣ a` from the product over the coset); then `addVal` both sides. Scope ONE
+divisibility direction per pass if needed; clean partial > half-discharge. R1–R3 remain the
+distant, must-be-earned targets.

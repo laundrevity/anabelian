@@ -2438,3 +2438,55 @@ stays inside Pass 29's proofs. R1–R3 untouched.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3 (the sum formula — lifts exist by P52,
 currency concrete by P53), or first the `hgen` discharge (Serre III §6 Prop. 12).
+
+### Pass 54 (2026-07-03) — the monogenicity discharge: `𝒪_L = 𝒪_K[x]`; count stays 0 / 0
+
+**No axiom added, none needed — and a standing named hypothesis became a theorem.** Pass 53's
+concrete-`i_G` theory carried one named binder: `hgen` (a single ring generator of `𝒪_L` over
+`𝒪_K`). Pass 54 proves it — Serre III §6 Prop. 12 in the finite-residue case — so the concrete
+`i_G` at `𝒪_L` is now **unconditional**. `Anabelian/ExtensionMonogenicDischarge.lean`,
+5 declarations, all standard-axioms-only.
+
+```
+'Anabelian.exists_pow_one_add_eq'                       depends on axioms: [propext]
+'Anabelian.maximalIdeal_eq_span_of_mem_of_notMem_sq'    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.closure_union_singleton_eq_top'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_generator_extensionIntegers'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_generator_lowerIndex_eq_addVal'       depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`exists_generator_extensionIntegers`** (headline) — **`𝒪_L` is monogenic over `𝒪_K`** for
+  every finite separable `L/K` over a nonarchimedean local field:
+  `∃ x, Subring.closure (range (𝒪_K → 𝒪_L) ∪ {x}) = ⊤`. The route exploits **finite** residue
+  fields (Pass 36) to avoid all minimal-polynomial/Taylor machinery: lift a cyclic generator
+  `g` of `𝓀_L^×` (covers all residues: `0` or `g^k`); `y₀ := x₀^n − 1` (`n = |𝓀_L^×|`) lies in
+  `𝔪` (Lagrange); if `y₀ ∈ 𝔪²`, correct `x := x₀(1+π₀)` — the binomial tail
+  `(1+π₀)^n = 1 + nπ₀ + π₀²a` gives `x^n − 1 = y₀ + (n·x₀^n)π₀ + (…)π₀²` with `n·x₀^n` a
+  **unit** (`(n : 𝓀_L) = |𝓀_L| − 1 = −1 ≠ 0`), so `x^n − 1 ∈ 𝔪 ∖ 𝔪²` — a uniformizer
+  **inside `𝒪_K[x]`**; Pass 32's generation engine (+ Pass 33's unconditional `he`) closes it.
+- **`exists_generator_lowerIndex_eq_addVal`** (payoff) — `∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`,
+  unconditional: Pass 53's identification with its last named hypothesis discharged. The
+  `i_G` theory (P51–54) now has **zero** named hypotheses at `𝒪_L`.
+- Supporting bricks: the **binomial tail** `(1+t)^m = 1 + mt + t²a` (any `CommRing`; audits
+  `propext`-only) and the **DVR brick** `𝔪 ∖ 𝔪² spans 𝔪`
+  (`maximalIdeal_eq_span_of_mem_of_notMem_sq`, via Pass 53's `addVal` bridge) — both reusable.
+
+**What this does NOT discharge.** The Pass-25/27/28 *character* theorems' `(hgen, hfix)`
+package needs an *inertia-fixed* generating subring; `𝒪_K[x]` is not inertia-fixed. That route
+was closed separately (Passes 32–34, `inertiaFixedIntegers`). No conflation.
+
+**Mathlib API that did the real work:** `IsCyclic.exists_generator` + `pow_card_eq_one'` +
+`Nat.card_units` + `FiniteField.cast_card_eq_zero` (the residue arithmetic);
+`isOfFinOrder_of_finite` + `IsOfFinOrder.mem_powers_iff_mem_zpowers` (`ℤ`-powers → `ℕ`-powers);
+`IsDiscreteValuationRing.eq_unit_mul_pow_irreducible`/`addVal_def'`/`addVal_uniformizer`/
+`irreducible_iff_uniformizer` + `Associated.irreducible` (the DVR brick); Pass 32's
+`closure_subring_union_uniformizer_eq_top` + Pass 33's `exists_pow_maximalIdeal_le_map`;
+`Ideal.Quotient.eq_zero_iff_mem`/`mk_eq_mk_iff_sub_mem`.
+
+**Not the cardinal sin / rule-2.** Structure of given fields — strictly below R1; recovers
+nothing from an abstract group. No new `structure`/`class`; no owed witness; D1 N/A; D2 stays
+inside the Pass-29 proofs. R1–R3 untouched.
+
+**Ledger delta: 0 / 0** (and one long-standing named hypothesis of the `i_G` arc eliminated —
+the same species of progress as an axiom discharge, one level down). Next: Serre IV §1
+Prop. 3 — the sum formula — the last wall before Lemma 5.
