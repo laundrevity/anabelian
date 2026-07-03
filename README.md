@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 50 (2026-07-02)
+## Current state — Pass 51 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 52 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 53 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -52,19 +52,22 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `ψ'(v) = (G_0 : G_{ψ(v)})` (Pass 49), and the **quotient-restriction skeleton** toward Serre's
   Lemma 5 — `decompositionQuotient : D(A) →* D(A ∩ K')`, exactness of
   `Gal(L/K') → Gal(L/K) → Gal(K'/K)` at the decomposition level, inertia preservation
-  `G_0(L/K) → G_0(K'/K)` (Pass 50).
+  `G_0(L/K) → G_0(K'/K)` (Pass 50) — and **Serre's `i_G` function** `lowerIndex : D(A) → ℕ∞`
+  (generator-free), with Lemma 1 `σ ∈ G_i ↔ i < i_G(σ)`, its calculus, and `i_H = i_G` on
+  subextensions by `rfl` (Pass 51).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
   (absolute Galois groups) while recovering nothing from an abstract group; the targets remain
   untouched and must be *earned*, never axiomatized.
 
-**Current frontier:** the ramification arithmetic of the quotient — Serre IV §3 Lemma 5
+**Current frontier:** the ramification arithmetic of the quotient — Serre IV §1 Prop. 3
+(`i_{K'/K}(σ̄) = (1/e') Σ i_{L/K}(s)` over the lifts `s` of `σ̄`), feeding IV §3 Lemma 5
 `(G/H)_{φ_{L/K'}(u)} = G_u H/H`, the wall between the completed `φ`/`ψ` analytic theory and both
 `φ`-transitivity (Prop. 15) and Herbrand's theorem `(G/H)^v = G^v H/H` (Prop. 14). The
-group-theoretic skeleton under it (the quotient restriction on decomposition groups, its kernel,
-inertia preservation) is built (Pass 50); what remains is the arithmetic core — how `i_{K'/K}(σ̄)`
-relates to the `i_{L/K}` of the lifts of `σ̄` — plus surjectivity of the quotient restriction.
+group-theoretic skeleton (Pass 50) and the `i_G` function with its filtration characterization
+(Pass 51) are built; what remains for Prop. 3 is the concrete `i_G(σ) = v_L(σx − x)` via
+monogenicity, the lift analysis, and surjectivity of the quotient restriction.
 
 ## Build
 

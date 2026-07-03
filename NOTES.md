@@ -4245,3 +4245,77 @@ the genuine multi-pass wall. **Pass 51 options:** (a) begin that arithmetic — 
 function itself (`i(σ) = v_L(σπ − π)` / `inf_a v(σa − a)`) as a project object with its basic
 theory, the currency Lemma 5 is stated in; or (b) surjectivity of `decompositionQuotient` in the
 finite/local setting. R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 51 (2026-07-03) — Serre's `i_G` function (`lowerIndex`), IV §1 Lemma 1 abstract form
+
+**Mathematics; ledger delta 0 / 0.** Minted the currency of the quotient-ramification arithmetic:
+Serre's `i_G`, generator-free, with its filtration characterization and calculus, plus the second
+half of IV §1 Prop. 2. `Anabelian/RamificationIndex.lean`, 13 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF option (a): the first arithmetic brick)
+
+Pass 50 built the quotient skeleton; everything toward Lemma 5 now runs through Serre's
+`i_G(σ)` (IV §1: `i_G(σ) = v_L(σx − x)`, `σ ∈ G_i ⇔ i_G(σ) ≥ i + 1`; Prop. 3 states the
+`i_{K'/K}` sum formula in it). This pass defines `i_G` **generator-free** — as the `ℕ∞`-valued
+sup `lowerIndex K A σ = sup {n | ∀ a ∈ A, σa − a ∈ 𝔪_A^n}` — so no monogenicity is needed yet;
+Lemma 1's generator-free half becomes provable now, and the `v_L(σx − x)` identification is
+deferred to the monogenic setting (Prop. 3) that actually needs it.
+
+## What was proved + the method
+
+- **`mem_ramificationGroup_iff_lt_lowerIndex` (HEADLINE**, Serre IV §1 Lemma 1 abstract form**)**:
+  `σ ∈ G_i ↔ (i : ℕ∞) < i_G(σ)`. Forward: `i + 1` is in the defining set, `le_biSup`. Backward:
+  `lt_biSup_iff` produces `n > i` in the set, and the set is downward closed
+  (`Ideal.pow_le_pow_right`). Serre's inequality form `↔ i + 1 ≤ i_G(σ)` via
+  `ENat.add_one_le_iff`.
+- **The calculus, each a one-liner from Lemma 1 + subgroup structure**: `lowerIndex_inv`
+  (`inv_mem_iff`), `min_lowerIndex_le_lowerIndex_mul` (`mul_mem`), `lowerIndex_conj` (class
+  function — P23's `ramificationGroup_normal`), `lowerIndex_one` (= `⊤`),
+  `lowerIndex_eq_top_iff_forall`, and `lowerIndex_eq_top_iff` (`= ⊤ ↔ σ = 1` under Krull
+  separation, via P23's `iInf_ramificationGroup_eq_bot`).
+- **`lowerIndex_decompositionRestrict`** — `i_H = i_G` on `H` (IV §1 Prop. 2's second half; P46
+  proved the subgroup half `H_u = H ∩ G_u`): **`rfl`**. The defining condition is intrinsic to
+  `A` and P46's `decompositionRestrict_smul` action agreement is definitional — the probe
+  confirmed `rfl` closes it on the first try.
+- **The `ℕ∞` interface**: two small public lemmas — `enat_le_of_forall_natCast_lt` (naturals are
+  cofinal below any `x : ℕ∞`: to prove `x ≤ y` check every natural below `x`) and
+  `enat_eq_of_forall_natCast_lt_iff` — kept public for the coming Prop.-3 arithmetic; everything
+  else runs on `lt_biSup_iff`/`le_biSup`/`ENat.eq_top_iff_forall_gt`.
+
+Probe-verified with `lake env lean`; the probe compiled **first try** (only fix: Mathlib has
+deprecated `push_neg` → `push Not`).
+
+## Mathlib API that did the real work
+
+`lt_biSup_iff` + `le_biSup` (the entire sup layer); `ENat.add_one_le_iff` +
+`ENat.eq_top_iff_forall_gt` + `lift ... using ne_top`; `Ideal.pow_le_pow_right`;
+`Subgroup.Normal.conj_mem`; `inv_mem_iff`/`mul_mem`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN. All
+13 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE: Serre's
+`i_G` function, generator-free (`lowerIndex : D(A) → ℕ∞`), with IV §1 Lemma 1
+`σ ∈ G_i ↔ i < i_G(σ)`, its calculus, and `i_H = i_G` on subextensions (Prop. 2's second half,
+by `rfl`) — all axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (`lowerIndex` is a `def` into `ℕ∞`) ⟹ no
+  rule-2 obligation. The separation hypothesis in `lowerIndex_eq_top_iff` is inherited from P23's
+  `iInf_ramificationGroup_eq_bot` under the same governance (finite level: holds; `𝒪[K̄]`:
+  provably fails — both witnessed in P22/P23; as there, no irremovability claim for this
+  conclusion) — **no owed witness**. D1 N/A; D2 N/A. R1–R3 untouched.
+
+## Scope: the currency, NOT the sum formula (Pass 52+)
+
+Deliberately absent: **Serre IV §1 Prop. 3** `i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)` — the
+real arithmetic wall. Its needs: the concrete `i_G(σ) = v_L(σx − x)` (monogenicity — the
+project's `ExtensionMonogenic*` arc from the descent), the lift analysis over
+`decompositionQuotient` (P50), and `e' = e_{L/K'}`. **Pass 52 options:** (a) the concrete
+identification `i_G(σ) = v(σx − x)` in the monogenic setting — the bridge between `lowerIndex`
+and the generator arithmetic, Prop. 3's precondition; (b) surjectivity of
+`decompositionQuotient` at the finite/local level (also on Prop. 3's critical path — the sum
+ranges over the lifts of `σ̄`, which must exist); or (c) the `ψ` closed form (last clean analytic
+deepening). R1–R3 remain the distant, must-be-earned targets.

@@ -2284,3 +2284,57 @@ arithmetic, the multi-pass wall.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the ramification arithmetic of the quotient
 (Serre Lemma 5), then `φ`-transitivity (Prop. 15) and Herbrand's theorem (Prop. 14).
+
+### Pass 51 (2026-07-03) — Serre's `i_G` function (`lowerIndex`); count stays 0 / 0
+
+**No axiom added, none needed.** Pass 51 minted the currency the quotient-ramification arithmetic
+(Serre IV §1 Prop. 3 → IV §3 Lemma 5 → `φ`-transitivity → Herbrand) is denominated in: Serre's
+`i_G` function, generator-free, with IV §1 Lemma 1 (abstract form) and its calculus.
+`Anabelian/RamificationIndex.lean`, 13 declarations, all standard-axioms-only.
+
+```
+'Anabelian.enat_le_of_forall_natCast_lt'                    depends on axioms: [propext, Quot.sound]
+'Anabelian.enat_eq_of_forall_natCast_lt_iff'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex'                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smul_sub_mem_pow_of_le'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_ramificationGroup_iff_lt_lowerIndex'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_ramificationGroup_iff_add_one_le_lowerIndex' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_one'                                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_eq_top_iff_forall'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_eq_top_iff'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_inv'                                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.min_lowerIndex_le_lowerIndex_mul'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_conj'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_decompositionRestrict'                depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`lowerIndex K A σ : ℕ∞`** — `i_G(σ) = sup {n | ∀ a ∈ A, σa − a ∈ 𝔪_A^n}`: the filtration
+  side of Serre's Lemma 1 taken as the *definition* (generator-free — no monogenicity needed at
+  this level). `i_G(1) = ⊤`; `= ⊤ ↔ σ ∈ every G_i`; `= ⊤ ↔ σ = 1` under Krull separation (via
+  Pass 23's `iInf_ramificationGroup_eq_bot`, same governance as there).
+- **`mem_ramificationGroup_iff_lt_lowerIndex`** — the headline (IV §1 Lemma 1, abstract form):
+  `σ ∈ G_i ↔ i < i_G(σ)`; Serre's inequality form `↔ i + 1 ≤ i_G(σ)` alongside.
+- **The calculus** — `i(σ⁻¹) = i(σ)`, `i(στ) ≥ min (i(σ), i(τ))`, `i(τστ⁻¹) = i(σ)` (class
+  function, via Pass 23 normality): each a one-liner from Lemma 1 + the `G_i` subgroup structure.
+- **`lowerIndex_decompositionRestrict`** — IV §1 Prop. 2's *second half* (Pass 46 proved the
+  subgroup half): `i_H = i_G` on `H` for the tower `K ⊆ K' ⊆ L` — **proved by `rfl`** (the
+  condition is intrinsic to `A`; Pass 46's action agreement is definitional).
+
+**Mathlib API that did the real work:** `lt_biSup_iff`/`le_biSup` (the sup characterization);
+`ENat.add_one_le_iff`, `ENat.eq_top_iff_forall_gt` (the `ℕ∞` interface, plus two small project
+lemmas `enat_le_of_forall_natCast_lt`/`enat_eq_of_forall_natCast_lt_iff` — naturals are cofinal
+below any `x : ℕ∞`); `Ideal.pow_le_pow_right` (downward closure); `Subgroup.Normal.conj_mem`.
+
+**Not the cardinal sin / rule-2.** Structure of the Galois action of given fields — strictly
+below R1; recovers nothing from an abstract group. No new `structure`/`class` (`lowerIndex` is a
+`def` into `ℕ∞`). The separation hypothesis in `lowerIndex_eq_top_iff` is inherited from Pass
+23's `iInf_ramificationGroup_eq_bot` (holds at finite level, provably fails at `𝒪[K̄]`; as in
+Pass 23, no claim that it is irremovable from this conclusion) — no owed witness. D1 N/A; D2 N/A.
+
+**Honest scope: the currency, NOT the sum formula.** Deliberately absent: Serre IV §1 Prop. 3
+`i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)` (the real arithmetic wall — needs monogenicity and
+the lift analysis) and the concrete identification `i_G(σ) = v_L(σx − x)` (needs the
+`ExtensionMonogenic*` arc; deferred to the pass that consumes it).
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3 (the sum formula), feeding Lemma 5, then
+`φ`-transitivity (Prop. 15) and Herbrand's theorem (Prop. 14).
