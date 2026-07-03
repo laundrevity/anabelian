@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 67, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 68, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-67 entry), `ROADMAP.md`
-(status header says Pass 67), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-68 entry), `ROADMAP.md`
+(status header says Pass 68), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,22 +61,38 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 68: `e' = |H_0|`
+## YOUR FIRST TASK — Pass 69: the inertia matching (toward `e' = |H_0|`)
 
-**Done**: P65 (profile), P66 (double count), P67 (`φ`-bridge). **The one remaining input to
-Lemma 5's numerical heart**: identify P59's `addVal`-form ramification index
-`e' = addVal_{𝒪_L}(ι π_B)` with `Nat.card (H_0)` — the classical `e = |G_0|` for `L/K'`
-(`H_0` = inertia of `L/K'` = `ramificationGroup K' (𝒪_L) 0`; note `L/K'` GALOIS with
-`D_{K'} = ⊤` (P55), so `e·f = n` splits as `|H_0|·f = |H|` — the unramified part has size
-`f`). **Inventory first**: the descent arc (`Extension/RamificationData`,
-`Extension/TotallyRamified`, `Reduction/*`, P28–37 NOTES) — what exists about `e`, `f`,
-`e·f = n`, `|G_0| = e` at `𝒪_L`? Possible routes: (a) via the totally-ramified subextension
-`L/L₀` (`L₀` = inertia fixed field) if the descent built it; (b) directly:
-`addVal_{𝒪_L}(ι π_B)` counts `𝔪_B·𝒪_L = 𝔪^{e'}`, and `|H_0| = e'` via the tame/wild
-theory's counting — check `Extension/RamificationData`'s `exists_pow_maximalIdeal_le_map`
-neighborhood for exact-`e` statements. This may be multi-pass; scope the first honest
-brick. After it: the numerical Lemma 5 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` assembles
-(P63+P65+P66+P67+P68), then the set-level Lemma 5 via P51's membership forms; then
+**The target**: apply Mathlib's `Ideal.card_inertia_eq_ramificationIdxIn`
+(`Nat.card (P.inertia G) = ramificationIdxIn p S`, in
+`Mathlib/NumberTheory/RamificationInertia/Galois.lean` — READ ITS SECTION VARIABLES first:
+it runs on a group `G` acting on `S` with `[IsGaloisGroup …]`-style hypotheses, Dedekind
+domains, `Module.Finite`, `IsTorsionFree`, `P.LiesOver p`, `P.IsMaximal`, separable residue)
+with `R := ↥B`, `S := ↥(𝒪_L)` (the P68 `comapAlgebra`), `p := 𝔪_B`, `P := 𝔪_L`,
+`G := D_{K'}(𝒪_L)` (≅ `Gal(L/K')` by P55's `D = ⊤`; the `MulSemiringAction` on `↥𝒪_L` is
+Mathlib's decomposition action). Bricks, likely one pass each:
+- **(A) The instance package**: `IsDedekindDomain ↥B`/`↥𝒪_L` (from the DVR instances —
+  check whether Mathlib infers Dedekind from DVR automatically), `Module.Finite ↥B ↥𝒪_L`
+  (route: `𝒪_L` finite over `𝒪_K` (P32's `Module.Finite` instance in
+  `Extension/Monogenic`) + restriction along `𝒪_K → B`… or integrality + Noetherian),
+  `Algebra.IsTorsionFree ↥B ↥𝒪_L` (injective algebraMap into a domain),
+  `𝔪_L.LiesOver 𝔪_B` (P50's `mem_maximalIdeal_of_comapRingHom` gives comap ⊇; equality by
+  maximality), separable residue (finite fields — P36 + `Algebra.IsSeparable` of finite
+  fields), and the `IsGaloisGroup`/invariance hypothesis for the `D_{K'}`-action (fixed
+  points of the action on `↥𝒪_L` = image of `B` — this is P55's
+  `exists_comapRingHom_eq_of_forall_smul_eq` in instance form!).
+- **(B) The inertia matching**: Mathlib's `Ideal.inertia G P` (read its def in
+  `RamificationInertia/Inertia.lean`) vs the project's
+  `ramificationGroup K' (𝒪_L) 0 ≤ D_{K'}(𝒪_L)`: both are "acts trivially on `S/P`";
+  P23's `ramificationGroup_zero` (= `inertiaSubgroup` = kernel of the residue action)
+  should make this a kernel-vs-kernel comparison. Conclude `Nat.card (𝔪_L.inertia D) =
+  Nat.card (ramificationGroup K' (𝒪_L) 0)`.
+- **(C) `ramificationIdxIn = ramificationIdx`** (single prime — `ramificationIdxIn` is the
+  common value over primes; with one maximal ideal this should be
+  `ramificationIdxIn_eq_ramificationIdx`-style, check the Galois file) + P68 ⟹
+  **`e' = |H_0|`**.
+After (A)–(C): the numerical Lemma 5 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` assembles
+(P63+P65+P66+P67+`e'=|H_0|`), then the set-level Lemma 5 via P51's membership forms; then
 Prop. 14/15.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
@@ -104,7 +120,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 68
+## The queue after Pass 69
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

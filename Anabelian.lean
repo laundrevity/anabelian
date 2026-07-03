@@ -42,6 +42,7 @@ import Anabelian.Quotient.IndexProfile
 import Anabelian.Quotient.LiftDvd
 import Anabelian.Quotient.LiftSet
 import Anabelian.Quotient.MinpolyBound
+import Anabelian.Quotient.RamificationIdx
 import Anabelian.Quotient.SumFormula
 import Anabelian.Quotient.Surjective
 import Anabelian.Ramification.AdditiveCharacter

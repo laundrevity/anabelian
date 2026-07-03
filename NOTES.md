@@ -5287,3 +5287,48 @@ pending only `e' = |H_0|`.**
 Next (Pass 68): `e' = |H_0|` — inventory the descent's `e`-facts (`Extension/
 RamificationData`, `Extension/TotallyRamified`, P28–37) before designing; possibly
 multi-pass.
+
+### Pass 68 (2026-07-03) — `e'` in ideal form (the `e' = |H_0|` identification, left half)
+
+**Mathematics; ledger delta 0 / 0 — and a decisive inventory find.** Mathlib's
+`Mathlib/NumberTheory/RamificationInertia/` tree (Basic/Ramification/Inertia/Galois/
+HilbertTheory/Unramified) contains **`Ideal.card_inertia_eq_ramificationIdxIn`** —
+`Nat.card (P.inertia G) = ramificationIdxIn p S` for a Galois group action over Dedekind
+domains with separable residue extension. Residue fields here are finite (P36), so
+**`e' = |H_0|` reduces to identifying the project's objects with Mathlib's** — no
+fundamental-identity machinery needs building. `Anabelian/Quotient/RamificationIdx.lean`,
+4 declarations, standard-axioms-only.
+
+## What was proved
+
+- **`comapAlgebra`**: `Algebra ↥B ↥(𝒪_L)` := `(comapRingHom K' A).toAlgebra` — Mathlib's
+  `Ideal.ramificationIdx` is now Algebra-based (`ramificationIdx (p : Ideal R) (P : Ideal
+  S)` with `algebraMap R S` implicit — a signature change from the older RingHom form; bit
+  the probe once). No canonical instance exists between these subtypes (different ambient
+  fields) ⟹ no diamond. `algebraMap_comapAlgebra : algebraMap ↥B ↥A = comapRingHom K' A`
+  is `rfl`.
+- **`map_maximalIdeal_comapRingHom`**: `Ideal.map ι 𝔪_B = 𝔪_L^n` where
+  `(n:ℕ∞) = addVal(ι π_B)`: `Irreducible.maximalIdeal_eq` + `Ideal.map_span` +
+  `eq_unit_mul_pow_irreducible` + `span_singleton_eq_span_singleton` (associates) +
+  `span_singleton_pow` (rewrite ORDER matters: expose `span{ϖ}^n` before folding to `𝔪^n`).
+- **`ramificationIdx_comapRingHom`**: `Ideal.ramificationIdx 𝔪_B 𝔪_L = n` via
+  `ramificationIdx_spec`; the non-inclusion `𝔪^n ⊄ 𝔪^{n+1}` by evaluating `ϖ^n` through
+  P53's `mem_maximalIdeal_pow_iff_le_addVal`.
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: Pass 59's `addVal`-form `e'` IS
+Mathlib's `Ideal.ramificationIdx 𝔪_B 𝔪_L` (on the new `comapAlgebra` scaffold) — the left
+half of the `e' = |H_0|` identification, axiom-free; Mathlib's
+`card_inertia_eq_ramificationIdxIn` supplies `|inertia| = e` once the right half (instance
+package + inertia matching) lands.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** `comapAlgebra` instantiates the existing `Algebra` class — no new
+`structure`/`class`, no rule-2 obligation; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 69): the instance package (Dedekind/finite/torsion-free/LiesOver/separable-residue
+/IsGaloisGroup-invariance — note the invariance is P55's fixed-points descent in instance
+form) and the inertia matching (`Ideal.inertia` vs `ramificationGroup … 0` — kernel vs
+kernel via P23's `ramificationGroup_zero`); then `e' = |H_0|`, the numerical Lemma 5, the
+set-level Lemma 5, Prop. 15, Prop. 14.

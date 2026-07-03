@@ -2963,3 +2963,33 @@ standard-axioms-only.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: `e' = |H_0|` (the classical `e = |G_0|` at the
 subextension), the last input to `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.
+
+### Pass 68 (2026-07-03) — `e'` in ideal form (toward `e' = |H_0|`); count stays 0 / 0
+
+**No axiom added, none needed — and a discovery**: Mathlib HAS `|inertia| = e`
+(`Ideal.card_inertia_eq_ramificationIdxIn`, Dedekind + separable residue, both satisfied
+here), so `e' = |H_0|` is an identification program, not a re-proof. This pass is its left
+half. `Anabelian/Quotient/RamificationIdx.lean`, 4 declarations, all standard-axioms-only.
+
+```
+'Anabelian.comapAlgebra'                                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.algebraMap_comapAlgebra'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_maximalIdeal_comapRingHom'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationIdx_comapRingHom'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`comapAlgebra`** — `Algebra ↥B ↥(𝒪_L)` via `comapRingHom.toAlgebra` (Mathlib's
+  `RamificationInertia` API is Algebra-based; no canonical instance exists between these
+  subtypes, so no diamond; `algebraMap_comapAlgebra` is `rfl`).
+- **`map_maximalIdeal_comapRingHom`** — `𝔪_B·𝒪_L = 𝔪_L^n` with `(n:ℕ∞) = addVal(ι π_B)`:
+  `𝔪_B = (π_B)`, `ι π_B = u·ϖ^n`, spans of associates agree.
+- **`ramificationIdx_comapRingHom`** — `Ideal.ramificationIdx 𝔪_B 𝔪_L = n`
+  (`ramificationIdx_spec`; the strictness `𝔪^n ⊄ 𝔪^{n+1}` via Pass 53's `addVal` bridge):
+  **Pass 59's `addVal`-form `e'` IS Mathlib's ideal-theoretic ramification index.**
+
+**Not the cardinal sin / rule-2.** DVR/ideal bookkeeping — strictly below R1. `e' = |H_0|`
+NOT claimed (its right half — instance package + inertia matching — is next). The
+`comapAlgebra` instance instantiates the existing `Algebra` class (no new `structure`/
+`class`, no rule-2 obligation); no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free.
