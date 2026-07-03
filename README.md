@@ -23,7 +23,7 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 63 (2026-07-03)
+## Current state — Pass 64 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
 Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 65 project files, ~8500 build jobs, warning-free).
@@ -85,6 +85,10 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
   (absolute Galois groups) while recovering nothing from an abstract group; the targets remain
   untouched and must be *earned*, never axiomatized.
+
+*(Pass 64 restructured the source tree: `Anabelian/` is now nine content folders —
+`Galois`, `FiniteField`, `Reduction`, `Ramification`, `Herbrand`, `Extension`, `LocalField`,
+`Quotient`, `ForMathlib` — with module paths updated and declaration names unchanged.)*
 
 **Current frontier:** with **Serre IV §1 Prop. 3 proved** (Pass 63 — the fourteen-pass
 quotient arc P50–63, all axiom-free), the next target is **Serre IV §3 Lemma 5**

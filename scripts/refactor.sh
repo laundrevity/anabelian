@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-shot structural refactor (post-Pass 40): flat Anabelian/ -> six content folders.
+# One-shot structural refactor (updated Pass 64): flat Anabelian/ -> nine content folders.
 # Declaration names are UNCHANGED; only module paths move. Verify with scripts/preflight.sh.
 # macOS sed syntax (host-run). Run once from anywhere: scripts/refactor.sh
 set -euo pipefail
@@ -49,10 +49,33 @@ ExtensionLocalField LocalField/ValuativeRel
 ExtensionValued LocalField/Valued
 ExtensionSpectralSeam LocalField/SpectralSeam
 ValuativeRelCongr ForMathlib/ValuativeRelCongr
+ExtensionLocalFieldInstance LocalField/Instance
+ExtensionCanonical LocalField/Canonical
+HerbrandFunction Herbrand/Function
+UpperNumbering Herbrand/UpperNumbering
+HerbrandSlope Herbrand/Slope
+HerbrandFormula Herbrand/Formula
+HerbrandPsiSlope Herbrand/PsiSlope
+RamificationSubgroup Ramification/Subgroup
+RamificationIndex Ramification/LowerIndex
+RamificationIndexGenerator Ramification/LowerIndexGenerator
+ExtensionMonogenicDischarge Extension/MonogenicDischarge
+RamificationQuotient Quotient/Basic
+RamificationQuotientSurjective Quotient/Surjective
+SubextensionCharPoly Quotient/CharPoly
+RamificationLiftSet Quotient/LiftSet
+ExtensionComapIntegers Quotient/ComapIntegers
+RamificationLiftDvd Quotient/LiftDvd
+RamificationAddVal Quotient/AddVal
+ExtensionGeneratorRep Quotient/GeneratorRep
+RamificationMinpolyBound Quotient/MinpolyBound
+RamificationDivision Quotient/Division
+RamificationSumFormula Quotient/SumFormula
 "
 
 mkdir -p Anabelian/Galois Anabelian/FiniteField Anabelian/Reduction \
-         Anabelian/Ramification Anabelian/Extension Anabelian/LocalField Anabelian/ForMathlib
+         Anabelian/Ramification Anabelian/Extension Anabelian/LocalField Anabelian/ForMathlib \
+         Anabelian/Herbrand Anabelian/Quotient
 
 # 1. Moves (git-tracked renames).
 echo "$TABLE" | while read -r old new; do

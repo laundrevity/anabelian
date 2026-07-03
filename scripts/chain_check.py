@@ -65,7 +65,10 @@ def chain_of(path: str) -> set[str]:
 
 def main() -> int:
     files = sorted(
-        "Anabelian/" + f for f in os.listdir("Anabelian") if f.endswith(".lean")
+        os.path.join(root, f)
+        for root, _, names in os.walk("Anabelian")
+        for f in names
+        if f.endswith(".lean")
     )
     code = {f: read_code(f) for f in files}
     all_project: set[str] = set()

@@ -5159,3 +5159,28 @@ membership forms of P51/P53 mediate). Sub-bricks to scope: the `max` over the fi
 sum-vs-`φ` computation (`Σ_h min(i_H-ish…)` — Serre's Lemma 4-flavored counting); then
 Lemma 5, Prop. 15 (`φ`-transitivity), Prop. 14 (Herbrand). R1–R3 remain the distant,
 must-be-earned targets.
+
+### Pass 64 (2026-07-03) — governance: the flat→folders refactor
+
+**Infrastructure; ledger delta 0 / 0; no mathematical content changed.** The restructure
+deferred since Pass 42 ran as its own dedicated pass, per the rule that created it.
+
+- `scripts/refactor.sh`: table extended from the Pass-40 snapshot (44 entries) to all 64
+  files. New folders for the two post-P42 arcs: **`Herbrand/`** (Function, UpperNumbering,
+  Slope, Formula, PsiSlope — P44–49) and **`Quotient/`** (Basic, Surjective, CharPoly,
+  LiftSet, ComapIntegers, LiftDvd, AddVal, GeneratorRep, MinpolyBound, Division, SumFormula
+  — P50–63); P41/P43 → `LocalField/Instance`/`Canonical`; P46/P51/P53 →
+  `Ramification/Subgroup`/`LowerIndex`/`LowerIndexGenerator`; P54 →
+  `Extension/MonogenicDischarge`.
+- Executed as git-tracked renames (`git mv`); imports rewritten by exact-line-anchored sed
+  (no substring hazards); root `Anabelian.lean` regenerated sorted. **Declaration names
+  unchanged** — only module paths moved.
+- Tooling made folder-aware: `preflight.sh` clause 1 (`glob` → recursive) and clause 2
+  (`grep` → `-r --include`), `chain_check.py` (`os.listdir` → `os.walk`). The
+  module-name→path mapping in `chain_check.py`'s `chain_of` already handled dots→slashes.
+- Full rebuild verified (every module re-elaborated under its new name — including the
+  ~15-min `Quotient/LiftDvd`); `scripts/preflight.sh` CLEAN; every `#print axioms` audit
+  re-ran standard-only.
+
+**HEADLINE: the source tree is now nine content folders; zero mathematical drift (renames
+only, declaration names stable, audits re-verified).**

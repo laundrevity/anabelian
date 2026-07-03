@@ -2860,3 +2860,23 @@ No new `structure`/`class`; no owed witness; D1 N/A; D2 stays inside the Pass-29
 **Ledger delta: 0 / 0. Prop. 3 rests on `propext`, `Classical.choice`, `Quot.sound` — and
 nothing else.** Next: Serre IV §3 Lemma 5, then Prop. 15 (`φ`-transitivity) and Prop. 14
 (Herbrand's theorem).
+
+### Pass 64 (2026-07-03) — governance: the flat→folders refactor; count stays 0 / 0
+
+**No axiom added, none needed; no mathematical content changed.** The structural refactor
+deferred since Pass 42 (`scripts/refactor.sh`, "its own dedicated pass") executed: the flat
+`Anabelian/` tree (64 files) became nine content folders — `Galois`, `FiniteField`,
+`Reduction`, `Ramification`, `Herbrand`, `Extension`, `LocalField`, `Quotient`,
+`ForMathlib`. The script's table was extended from its Pass-40 snapshot (44 entries) to all
+64 files (the P41–63 additions: `LocalField/Instance`, `LocalField/Canonical`, the
+`Herbrand/` arc P44–49, `Ramification/Subgroup`+`LowerIndex`+`LowerIndexGenerator`,
+`Extension/MonogenicDischarge`, and the eleven-file `Quotient/` arc P50–63 ending in
+`Quotient/SumFormula` = Prop. 3). All moves are git-tracked renames; **module paths changed,
+declaration names unchanged**; import lines rewritten by exact-line match; the root
+`Anabelian.lean` regenerated sorted. `scripts/preflight.sh` (line-length glob, named-binder
+grep) and `scripts/chain_check.py` (file walk) updated to recurse into folders. Full
+rebuild + preflight verified post-move (all `#print axioms` re-ran: standard-only
+throughout).
+
+**Ledger delta: 0 / 0** — nothing proved, nothing assumed; the audit surface is unchanged
+and re-verified under the new paths.

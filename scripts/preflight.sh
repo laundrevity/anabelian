@@ -22,7 +22,7 @@ fi
 #    NOT awk: macOS awk counts bytes, and the math glyphs (𝓀, −, ↪) are multibyte.
 long=$(python3 -c '
 import glob, sys
-for path in sorted(glob.glob("Anabelian/*.lean")) + ["Anabelian.lean"]:
+for path in sorted(glob.glob("Anabelian/**/*.lean", recursive=True)) + ["Anabelian.lean"]:
     for i, line in enumerate(open(path, encoding="utf-8"), 1):
         n = len(line.rstrip("\n"))
         if n > 100:
@@ -32,7 +32,7 @@ if [ -n "$long" ]; then echo "== LONG LINES =="; echo "$long"; fail=1; fi
 
 # 2. Named statement-level letI/haveI binders (heuristic: 4-space indent = statement block).
 #    Names there are never referenceable -> guaranteed unusedVariables warnings.
-named=$(grep -nE '^ {4}(letI|haveI) [A-Za-z_][A-Za-z0-9_]* :' Anabelian/*.lean || true)
+named=$(grep -rnE '^ {4}(letI|haveI) [A-Za-z_][A-Za-z0-9_]* :' Anabelian --include='*.lean' || true)
 if [ -n "$named" ]; then echo "== NAMED STATEMENT BINDERS (anonymize: 'letI : T := ...') =="; echo "$named"; fail=1; fi
 
 # 3. Import-chain completeness (the Pass-37/39 failure class).
