@@ -5,11 +5,11 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 51 (2026-07-03)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 52 (2026-07-03)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Passes 44–51 built the Herbrand machinery and opened the quotient theory** (ledger stays
+> **Passes 44–52 built the Herbrand machinery and opened the quotient theory** (ledger stays
 > `0 / 0`), all **absent from Mathlib**,
 > all axiom-free, on the lower-numbering filtration (Serre IV §§1, 3): **Pass 44** — the **Herbrand
 > function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (`Anabelian/HerbrandFunction.lean`), strictly monotone,
@@ -33,10 +33,15 @@ anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 > **Lemma 1** `σ ∈ G_i ↔ i < i_G(σ)`, the calculus (`i(σ⁻¹) = i(σ)`,
 > `i(στ) ≥ min`, class function, `= ⊤ ↔ σ = 1` under separation), and **`i_H = i_G` on `H`**
 > (IV §1 Prop. 2's second half — by `rfl`) — the currency the quotient arithmetic is denominated
-> in (records in `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–51).
+> in; **Pass 52** — **surjectivity of the quotient restriction**
+> (`Anabelian/RamificationQuotientSurjective.lean`): `𝒪_L` is Galois-stable (integral closure),
+> so `D(𝒪_L) = ⊤` and `decompositionQuotient` is **surjective** (via
+> `restrictNormalHom_surjective`), giving the first-isomorphism packaging
+> `D(A) ⧸ H ≃* D(A ∩ K')` — the `(G/H)` of Herbrand's theorem, realized (records in
+> `NOTES.md`/`AXIOM_LEDGER.md` Passes 44–52).
 > **Next: the sum formula** — Serre IV §1 Prop. 3 `i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)`
-> (the real arithmetic wall; needs monogenicity — the `ExtensionMonogenic*` arc — and
-> surjectivity of `decompositionQuotient` sits here too), feeding IV §3 Lemma 5
+> (the real arithmetic wall; needs the concrete `i_G(σ) = v(σx − x)` via monogenicity — the
+> `ExtensionMonogenic*` arc; the lifts now exist by Pass 52), feeding IV §3 Lemma 5
 > `(G/H)_{φ_{L/K'}(u)} = G_u H/H`, then **`φ`-transitivity** `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}`
 > (Prop. 15) and **Herbrand's theorem** `(G/H)^v = G^v H/H` (Prop. 14), where Pass 43's
 > canonicity and the tower theory earn their keep. This all built on **Pass 43's
@@ -478,7 +483,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **next: the Prop. 3 sum formula → Lemma 5 → `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; **next: the Prop. 3 sum formula → Lemma 5 → `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration

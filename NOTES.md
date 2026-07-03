@@ -4319,3 +4319,76 @@ and the generator arithmetic, Prop. 3's precondition; (b) surjectivity of
 `decompositionQuotient` at the finite/local level (also on Prop. 3's critical path — the sum
 ranges over the lifts of `σ̄`, which must exist); or (c) the `ψ` closed form (last clean analytic
 deepening). R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 52 (2026-07-03) — surjectivity of the quotient restriction; `D(A) ⧸ H ≃* D(A ∩ K')`
+
+**Mathematics; ledger delta 0 / 0.** Discharged one of Pass 50's two named gaps — surjectivity
+of `decompositionQuotient` — and packaged the quotient theory into the first isomorphism
+`D(A) ⧸ H ≃* D(A ∩ K')`. `Anabelian/RamificationQuotientSurjective.lean`, 7 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF option (b), taken because it was short — and it was)
+
+The HANDOFF flagged that surjectivity might be nearly free if the canonical valuation subring is
+stable under the whole Galois group. It is, for a structural reason cleaner than valuation
+uniqueness: **`extensionIntegers K L` is the integral closure of `𝒪_K` in `L` (P29,
+membership `= IsIntegral` by `Iff.rfl`), and integral closure is Galois-stable.** The probe
+compiled first try (the only fix: an unused-section-variable warning — `[Normal K L]` moved from
+the section `variable` block to the declarations that use it).
+
+## What was proved + the method
+
+- **`smul_extensionIntegers`**: `σ • 𝒪_L = 𝒪_L` for every `σ ∈ Gal(L/K)` —
+  `mem_pointwise_smul_iff_inv_smul_mem` + `mem_extensionIntegers_iff` reduces it to
+  `IsIntegral 𝒪_K (σ⁻¹ x) ↔ IsIntegral 𝒪_K x`, which is `IsIntegral.map` along
+  `(σ.restrictScalars ↥𝒪[K]).toAlgHom` (both directions via `σ`/`σ⁻¹`; the
+  `Algebra ↥𝒪[K] L` + `IsScalarTower` instances all fire automatically).
+- **`decompositionSubgroup_extensionIntegers_eq_top`**: `D(𝒪_L) = ⊤` — every automorphism
+  decomposes at the canonical subring. The integral-closure form of Serre's "complete ⟹ unique
+  valuation extension ⟹ D = G" (IV §1).
+- **`decompositionQuotient_surjective`** (abstract): `[Normal K L]`, `[Normal K K']`, and full
+  stability `∀ σ, σ • A = A` ⟹ surjective. Lift `τ̄` by
+  `AlgEquiv.restrictNormalHom_surjective`; stability puts the lift in `D(A)`; `Subtype.ext`
+  finishes (the P50 `decompositionQuotient` literally applies `restrictNormalHom`). Stability is
+  a *sufficient* hypothesis discharged at `𝒪_L`; no necessity claim (rule-2: no owed witness).
+- **`decompositionRestrict_range_normal`**: `H = range (decompositionRestrict)` is normal in
+  `D(A)` — it *is* a kernel by P50's exactness (`rw [← decompositionQuotient_ker];
+  infer_instance`).
+- **`decompositionQuotientEquiv`** (+ `_extensionIntegers` instantiation):
+  `D(A) ⧸ range (decompositionRestrict) ≃* D(A ∩ K')` via `quotientMulEquivOfEq` (ker = range)
+  + `quotientKerEquivOfSurjective`. **The `(G/H)` of Herbrand's theorem `(G/H)^v = G^v H/H` now
+  exists as an honest quotient isomorphic to the subextension's decomposition group.**
+
+## Mathlib API that did the real work
+
+`AlgEquiv.restrictNormalHom_surjective` (via `liftNormal`); `IsIntegral.map` +
+`AlgEquiv.restrictScalars` (stability); `QuotientGroup.quotientKerEquivOfSurjective` +
+`QuotientGroup.quotientMulEquivOfEq`; `Subgroup.eq_top_iff'`;
+`MulAction.mem_stabilizer_iff`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN. All
+7 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE: the quotient
+restriction `D(𝒪_L) → D(𝒪_L ∩ K')` is surjective (𝒪_L is Galois-stable, D(𝒪_L) = ⊤), and
+`D(A) ⧸ H ≃* D(A ∩ K')` — the (G/H) of Herbrand's theorem, realized axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (`decompositionQuotientEquiv` is a `def`
+  of a `MulEquiv`) ⟹ no rule-2 obligation. The abstract surjectivity's stability hypothesis is
+  discharged at the instantiation — presented as sufficient, no necessity/irremovability claim
+  ⟹ **no owed witness**. D1 N/A; D2 remains localized inside P29's `extensionIntegers` proof
+  (this file uses only the `IsIntegral` membership). R1–R3 untouched.
+
+## Scope: the lifts exist; the sum over them is the wall (Pass 53+)
+
+Both P50 gaps are now closed except the one that *is* the wall: Serre IV §1 **Prop. 3**
+`i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)`. Its remaining prerequisite is the **concrete
+`i_G`**: `i_G(σ) = v(σx − x)` for a monogenic generator `x` of `𝒪_L/𝒪_K` — the bridge from
+P51's `lowerIndex` sup to generator arithmetic (Serre's one-generator reduction:
+`∀ a, σa − a ∈ 𝔪^n ↔ σx − x ∈ 𝔪^n`, using that `a` is a polynomial in `x`). **Pass 53:**
+check what the `ExtensionMonogenic*` arc (P29–37 descent) provides as the generator statement,
+then prove the one-generator reduction and `lowerIndex = (𝔪-adic order of) σx − x`. After that:
+Prop. 3 itself, then Lemma 5 → `φ`-transitivity (Prop. 15) → Herbrand (Prop. 14). R1–R3 remain
+the distant, must-be-earned targets.

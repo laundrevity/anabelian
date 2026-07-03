@@ -51,3 +51,4 @@ import Anabelian.HerbrandFormula
 import Anabelian.HerbrandPsiSlope
 import Anabelian.RamificationQuotient
 import Anabelian.RamificationIndex
+import Anabelian.RamificationQuotientSurjective

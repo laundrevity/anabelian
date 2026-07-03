@@ -2338,3 +2338,54 @@ the lift analysis) and the concrete identification `i_G(σ) = v_L(σx − x)` (n
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3 (the sum formula), feeding Lemma 5, then
 `φ`-transitivity (Prop. 15) and Herbrand's theorem (Prop. 14).
+
+### Pass 52 (2026-07-03) — surjectivity of the quotient restriction; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 52 discharged one of Pass 50's two named gaps: the
+quotient restriction `decompositionQuotient : D(A) →* D(A ∩ K')` is **surjective** at the
+canonical `A = 𝒪_L`, and with Pass 50's exactness this packages into the first isomorphism
+`D(A) ⧸ H ≃* D(A ∩ K')`. `Anabelian/RamificationQuotientSurjective.lean`, 7 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.decompositionQuotient_surjective'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionRestrict_range_normal'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotientEquiv'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smul_extensionIntegers'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionSubgroup_extensionIntegers_eq_top'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_extensionIntegers_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotientEquiv_extensionIntegers'    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`smul_extensionIntegers`** — `σ • 𝒪_L = 𝒪_L` for every `σ ∈ Gal(L/K)`: Pass 29's
+  membership is `IsIntegral 𝒪_K` definitionally, and integrality transfers along the
+  `𝒪_K`-algebra map `σ` (`IsIntegral.map`, both ways via `σ⁻¹`). Hence
+  **`D(𝒪_L) = ⊤`** (`decompositionSubgroup_extensionIntegers_eq_top`) — the integral-closure
+  form of "the valuation of a complete field extends uniquely" (why Serre's decomposition group
+  is the whole Galois group).
+- **`decompositionQuotient_surjective`** — abstract: full stability of `A` + `L/K`, `K'/K`
+  normal ⟹ surjective (lift via `AlgEquiv.restrictNormalHom_surjective`, stability lands it in
+  `D(A)`). Stability is *sufficient*, discharged at `𝒪_L`; no necessity claim.
+- **`decompositionQuotientEquiv`** — `D(A) ⧸ range (decompositionRestrict) ≃* D(A ∩ K')`
+  (`decompositionRestrict_range_normal`: the range is a kernel by Pass 50, hence normal;
+  `QuotientGroup.quotientKerEquivOfSurjective` + `quotientMulEquivOfEq`). Instantiated at
+  `𝒪_L`: the subextension's decomposition data **is** the quotient `G/H` — the object of
+  Herbrand's theorem `(G/H)^v = G^v H/H`, realized.
+
+**Mathlib API that did the real work:** `AlgEquiv.restrictNormalHom_surjective` (the lift);
+`IsIntegral.map` + `AlgEquiv.restrictScalars` (Galois-stability of the integral closure);
+`QuotientGroup.quotientKerEquivOfSurjective` / `quotientMulEquivOfEq`; `Subgroup.eq_top_iff'`.
+
+**Not the cardinal sin / rule-2.** Group-theoretic structure of a tower of given fields —
+strictly below R1; recovers nothing from an abstract group. No new `structure`/`class`
+(`decompositionQuotientEquiv` is a `def` of a `MulEquiv`). The abstract stability hypothesis is
+discharged at the instantiation (sufficient, not claimed necessary) — no owed witness. D1 N/A;
+D2 stays inside Pass 29's proof (this file touches `extensionIntegers` only through its
+`IsIntegral` membership; all `#print axioms` standard-only).
+
+**Honest scope: the lifts exist; the sum over them is still the wall.** Serre IV §1 Prop. 3
+`i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)` remains untouched — it needs the concrete
+`i_G(σ) = v(σx − x)` (monogenicity) and the actual lift-set arithmetic.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the concrete `i_G` via monogenicity, then Prop. 3,
+feeding Lemma 5 → `φ`-transitivity → Herbrand's theorem.
