@@ -2546,3 +2546,48 @@ witness; D1 N/A; D2 stays inside the Pass-29 proofs.
 **Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3's two divisibilities — `a ∣ b`
 (coefficient-telescoping on `σ̄f − f`, evaluated at `x`) and `b ∣ a` (the monic division
 `g(X) − y = f·q` pushed along `σ̄`), then the `addVal` bookkeeping.
+
+### Pass 56 (2026-07-03) — the lift-set identity; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 56 made Prop. 3's product `∏_{s ↦ σ̄} (s·x − x)`
+computable: the fiber of `decompositionQuotient` is a coset of `H` **explicitly** (a
+bijection, not just the abstract first-isomorphism statement of Pass 52), and transporting
+Serre's polynomial (Pass 55) along a lift **is** the fiber product.
+`Anabelian/RamificationLiftSet.lean`, 6 declarations, all standard-axioms-only.
+
+```
+'Anabelian.map_fullProdXSubSMul'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_fullProdXSubSMul_eval'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_decompositionRestrict'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_mul_decompositionRestrict' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionFiberEquiv'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionFiberEquiv_apply_coe'               depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`decompositionFiberEquiv`** — for any `s₀`, `h ↦ s₀ · decompositionRestrict h` is a
+  bijection `D_{K'}(A) ≃ {s | decompositionQuotient s = decompositionQuotient s₀}`:
+  injectivity from Pass 46 (`decompositionRestrict_injective` + left cancellation),
+  surjectivity from Pass 50's exactness (`s₀⁻¹s ∈ ker = range`). Sums and products over the
+  lifts of `σ̄` transport to `H` along it (`_apply_coe` is `rfl`, the `Equiv.prod_comp` hook).
+- **`map_fullProdXSubSMul`** (headline) — `(∏_{h ∈ H} (X − h·x)).map s₀ = ∏_{h ∈ H}
+  (X − (s₀ · dr h)·x)`: `map` distributes over the product and the per-factor identity
+  `s₀ • (h • x) = (s₀ · dr h) • x` is **definitional** (Pass 46's action agreement is `rfl` —
+  the proof is four lines). Evaluated at `x` (`map_fullProdXSubSMul_eval`): `∏_{h} (x −
+  (s₀ · dr h)·x)` — Prop. 3's product over the lifts, `H`-parametrized, up to sign.
+- Pointwise composite triviality (`decompositionQuotient_decompositionRestrict = 1`) and
+  fiber-stability (`decompositionQuotient_mul_decompositionRestrict`) as the supporting
+  bookkeeping.
+
+**Mathlib API that did the real work:** `Polynomial.map_prod`/`map_sub`/`map_X`/`map_C` +
+`Polynomial.eval_prod`; `Equiv.ofBijective`; `MonoidHom.mem_ker` + `mul_inv_cancel_left`/
+`mul_left_cancel`; `MulSemiringAction.toRingAut` (Pass 23's device, now transporting
+polynomials).
+
+**Not the cardinal sin / rule-2.** Reindexing bookkeeping for a tower of given fields —
+strictly below R1; recovers nothing from an abstract group. Neither divisibility of Prop. 3
+is claimed. No new `structure`/`class` (`decompositionFiberEquiv` is a `def` of an `Equiv`);
+no owed witness; D1 N/A; D2 untouched.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the telescoping direction `a ∣ b` (P25's engine on
+`σ̄F − F` over `𝒪_L ∩ K'`, now reducible to bookkeeping via the P55 descent + this pass's
+transport), or the division direction `b ∣ a`.

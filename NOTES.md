@@ -4645,3 +4645,75 @@ intermediate field) — the substrate of IV §1 Prop. 3, axiom-free.**
 - **(ii) `b ∣ a`**: the monic division `g(X) − y = f·q` in `(𝒪_L ∩ K')[X]` (`Monic.divModByMonic`
   machinery or `modByMonic` + degree argument), transported along `σ̄`, evaluated at `x`.
 R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 56 (2026-07-03) — the lift-set identity (Prop. 3's reindexing layer)
+
+**Mathematics; ledger delta 0 / 0.** The fiber of `decompositionQuotient` over `σ̄` is the
+coset `s₀·H` as an explicit bijection, and Serre's polynomial transported along a lift is the
+fiber product — Prop. 3's `∏_{s ↦ σ̄}` is now computable in `H`-parametrized form.
+`Anabelian/RamificationLiftSet.lean`, 6 declarations, all standard-axioms-only.
+
+## Scope choice (HANDOFF option (A) — the hinge of direction (i))
+
+Prop. 3's direction (i) evaluates `σ̄f − f` at `x`; since `f(x) = 0` (P55), the value is
+`(σ̄f)(x)`, and the whole game is knowing that `σ̄f` — the polynomial with `σ̄`-transported
+coefficients — is `∏_{s ↦ σ̄} (X − s·x)`. That identity plus the fiber parametrization is
+this pass; it is pure bookkeeping over P46/P50/P55, and the probe compiled essentially first
+try (one dead tactic block removed — see below).
+
+## What was proved + the method
+
+- **`map_fullProdXSubSMul` (HEADLINE)**: `(∏_{h ∈ H} (X − C (h•x))).map (toRingAut s₀)
+  = ∏_{h ∈ H} (X − C ((s₀ * decompositionRestrict h) • x))`. `Polynomial.map_prod` +
+  `map_sub/map_X/map_C`, then `congr 1` closes the per-factor goal — **the identity
+  `s₀ • (h • x) = (s₀ * dr h) • x` is definitional** (P46's `decompositionRestrict_smul` is
+  `rfl`, and the subgroup-product action unfolds to composition). The probe's prepared
+  `mul_smul`-rewrite block was dead code; `congr 1` alone finishes.
+- **`map_fullProdXSubSMul_eval`**: at `x`, the transported polynomial is
+  `∏_{h} (x − (s₀ * dr h) • x)` (`Polynomial.eval_prod`) — up to the sign `(−1)^{|H|}`,
+  Prop. 3's `∏_{s ↦ σ̄} (s·x − x)`, parametrized by `H`.
+- **`decompositionFiberEquiv`**: `h ↦ s₀ * dr h` is a bijection `H ≃ fiber(σ̄)`
+  (`Equiv.ofBijective`): injective by P46's `decompositionRestrict_injective` +
+  `mul_left_cancel`; surjective by P50's exactness — `s₀⁻¹s ∈ ker (decompositionQuotient)
+  = range (decompositionRestrict)`. With `_apply_coe` (`rfl`) as the transport hook: any
+  `∑`/`∏` over the lifts of `σ̄` becomes a `∑`/`∏` over `H` by `Equiv.prod_comp`-style
+  reindexing. (This is the *explicit* form of P52's first-isomorphism packaging — the
+  bijection itself, which the abstract `MulEquiv` does not directly give.)
+- Supporting: `decompositionQuotient_decompositionRestrict` (`= 1`, pointwise composite
+  triviality via `DFunLike.congr_fun`) and `decompositionQuotient_mul_decompositionRestrict`.
+
+## Mathlib API that did the real work
+
+`Polynomial.map_prod` + `map_sub`/`map_X`/`map_C` + `eval_prod`; `Equiv.ofBijective`;
+`MonoidHom.mem_ker`, `mul_inv_cancel_left`, `mul_left_cancel`;
+`MulSemiringAction.toRingAut` (P23's ring-automorphism device, here transporting
+polynomials). House note: the style linter rejects goal-changing `show` — use `change`
+(bit this pass once).
+
+## Build + headline
+
+Host `lake build` green (zero warnings after the `show`→`change` fix); new file imported in
+`Anabelian.lean`; `scripts/preflight.sh` CLEAN. All 6 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: the lift-set identity — the fiber of
+`decompositionQuotient` is the coset `s₀·H` as an explicit bijection, and
+`f.map s₀ = ∏_{h ∈ H} (X − (s₀·dr h)·x)` — Prop. 3's product over the lifts is computable,
+axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 untouched. R1–R3 untouched.
+
+## Scope: the reindexing exists; the divisibilities are next (Pass 57+)
+
+**Pass 57 options** (Prop. 3's two directions):
+- **(i) `a ∣ b`**: coefficients of `σ̄F − F` (over `B = 𝒪_L ∩ K'`) are `σ̄c − c`, each
+  divisible by `a = σ̄y − y` — P25's `smul_sub_dvd_of_mem_closure` in the `D(B)`-action,
+  needing `B = 𝒪_K[y]`-form generation: P54's `exists_generator_extensionIntegers` at
+  `(K, K')` gives `𝒪_{K'} = 𝒪_K[y]`; the transport `𝒪_{K'} ≅ B` (P43-flavor: `𝒪_L ∩ K' =
+  𝒪_{K'}` for the tower — the base-independence of the integral closure) may need its own
+  brick — check `ExtensionCanonical.lean` first. Then evaluate at `x` via P55 descent + P56
+  transport: `(σ̄F − F).map (comapRingHom)` evaluated at `x` = `(σ̄f)(x) − 0` = `±b`.
+- **(ii) `b ∣ a`**: monic division `g(X) − ι y = F·q` over `B` (F monic by P55; remainder
+  vanishes by the degree/root argument), transported along `σ̄`, evaluated at `x`.
+R1–R3 remain the distant, must-be-earned targets.
