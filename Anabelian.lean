@@ -37,6 +37,7 @@ import Anabelian.Quotient.CharPoly
 import Anabelian.Quotient.ComapIntegers
 import Anabelian.Quotient.Division
 import Anabelian.Quotient.GeneratorRep
+import Anabelian.Quotient.IndexProfile
 import Anabelian.Quotient.LiftDvd
 import Anabelian.Quotient.LiftSet
 import Anabelian.Quotient.MinpolyBound

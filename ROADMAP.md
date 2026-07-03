@@ -5,11 +5,11 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 64 (2026-07-03)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 65 (2026-07-03)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Passes 44–64 built the Herbrand machinery and opened the quotient theory** (ledger stays
+> **Passes 44–65 built the Herbrand machinery and opened the quotient theory** (ledger stays
 > `0 / 0`), all **absent from Mathlib**,
 > all axiom-free, on the lower-numbering filtration (Serre IV §§1, 3): **Pass 44** — the **Herbrand
 > function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (`Anabelian/HerbrandFunction.lean`), strictly monotone,
@@ -118,10 +118,16 @@ anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 > nine content folders — `Galois`, `FiniteField`, `Reduction`, `Ramification`, `Herbrand`,
 > `Extension`, `LocalField`, `Quotient`, `ForMathlib`; module paths changed, declaration
 > names unchanged; `preflight.sh`/`chain_check.py` now recurse; full rebuild verified).
-> **Next: Serre IV §3 Lemma 5** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` — convert the `i`-identity
-> into the `φ`-renumbering statement (the `inf`/`min` arguments of Serre's proof; the
-> `lowerIndex`-vs-`φ` bridge is P51's Lemma-1 forms + P44–48's `φ` formulas), then
-> **`φ`-transitivity** (Prop. 15) and **Herbrand's theorem** (Prop. 14)
+> **Pass 65** — **the fiber index profile** (`Anabelian/Quotient/IndexProfile.lean`, the
+> first Lemma-5 brick): with a coset/fiber maximizer `s₁` (exists by finiteness),
+> **`i_{L/K}(s₁·h) = min(i_H(h), j)` for every `h ∈ H`** (`j = i(s₁)` — Serre's `j(σ̄)`),
+> `Normal`-free coset form + fiber form + the **`Σ min` sum form**
+> `Σ_{s ↦ σ̄} i(s) = Σ_h min(i_H(h), j)` — all pure P51 calculus.
+> **Next: the `Σ min`-vs-`φ` counting** — `Σ_{h ∈ H} min(i_H(h), m)` against P48's piecewise
+> `φ`-formula (+ identifying P59's `addVal`-form `e'` with `|H_0|`), yielding
+> `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`; then **Lemma 5** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` via
+> P51's membership forms, then **`φ`-transitivity** (Prop. 15) and **Herbrand's theorem**
+> (Prop. 14)
 > `(G/H)_{φ_{L/K'}(u)} = G_u H/H`, then **`φ`-transitivity** `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}`
 > (Prop. 15) and **Herbrand's theorem** `(G/H)^v = G^v H/H` (Prop. 14), where Pass 43's
 > canonicity and the tower theory earn their keep. This all built on **Pass 43's
@@ -563,7 +569,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** (nine content folders, tooling recursive) Pass 64; **next: Lemma 5 → `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **IN-PROGRESS** (architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** Pass 64; the **fiber index profile** (`i(s₁·h) = min(i_H(h), j)` + the `Σ min` form) Pass 65; **next: the `Σ min`-vs-`φ` counting → Lemma 5 → `φ`-transitivity → Herbrand's theorem**)   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration

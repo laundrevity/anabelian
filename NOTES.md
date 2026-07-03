@@ -5184,3 +5184,40 @@ deferred since Pass 42 ran as its own dedicated pass, per the rule that created 
 
 **HEADLINE: the source tree is now nine content folders; zero mathematical drift (renames
 only, declaration names stable, audits re-verified).**
+
+### Pass 65 (2026-07-03) — the fiber index profile (Lemma 5, brick A)
+
+**Mathematics; ledger delta 0 / 0.** Serre IV §3, the counting inside Lemma 5's proof: for
+a fiber maximizer `s₁`, `i_{L/K}(s₁·h) = min(i_H(h), j)` for every `h ∈ H` — hence
+`Σ_{s ↦ σ̄} i(s) = Σ_h min(i_H(h), j)`, the shape the Herbrand `φ` counts.
+`Anabelian/Quotient/IndexProfile.lean`, 4 declarations, all standard-axioms-only.
+
+## Method
+
+Everything is P51 calculus; no new ramification input. The heart
+(`lowerIndex_mul_decompositionRestrict_eq_min`, abstract + `Normal`-free, stated on the
+coset `s₁·drH`): `≥ min` is the subgroup inequality (`min_lowerIndex_le_lowerIndex_mul`)
+with `i(dr h) = i_H(h)` (P51's `rfl` lemma). For `≤`: if `i(s₁) ≤ i_H(h)`, maximality gives
+`i(s₁h) ≤ i(s₁) = min`; if `i_H(h) < i(s₁)`, suppose `i_H(h) < i(s₁h)` — then
+`i_H(h) = i(dr h) = i(s₁⁻¹·(s₁·dr h)) ≥ min(i(s₁), i(s₁h)) > i_H(h)` (`lowerIndex_inv` +
+`inv_mul_cancel_left`), absurd. Maximizers exist by `Finset.exists_max_image` (the coset
+reparametrizes to itself under `h ↦ h₀h`, so the coset max IS a profile hypothesis);
+fiber packaging via P56's `decompositionQuotient_mul_decompositionRestrict`; the `Σ min`
+form by `Finset.sum_congr`.
+
+House note: the `unusedFintypeInType` linter rejects `[Fintype …]` hypotheses not appearing
+in the statement — use `[Finite …]` + `Fintype.ofFinite` in the proof (bit this pass once;
+the sum lemma keeps `[Fintype]` since `∑ h : _` needs it in the type).
+
+## Build + headline
+
+`lake build` green, warning-free; preflight CLEAN. **HEADLINE: the fiber index profile —
+`i(s₁·h) = min(i_H(h), j)` for a fiber maximizer, with the `Σ min` sum form — Lemma 5's
+brick (A), axiom-free.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 66): the double-count `Σ_{h ∈ H} min(i_H(h), m) = Σ_{k<m} |H_k|` (level sets via
+P51's `mem_ramificationGroup_iff_lt_lowerIndex`), then the P48 `φ`-identification, toward
+`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` and Lemma 5.

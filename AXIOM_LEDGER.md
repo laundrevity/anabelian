@@ -2880,3 +2880,33 @@ throughout).
 
 **Ledger delta: 0 / 0** — nothing proved, nothing assumed; the audit surface is unchanged
 and re-verified under the new paths.
+
+### Pass 65 (2026-07-03) — the fiber index profile (Lemma 5, brick A); count stays 0 / 0
+
+**No axiom added, none needed.** The first brick of Serre IV §3 Lemma 5: with a fiber
+maximizer `s₁` (`j = i(s₁)` — Serre's `j(σ̄)`), the lower indices over the whole fiber are
+`i_{L/K}(s₁·h) = min(i_H(h), j)`, so Pass 63's sum formula reads
+`e'·i_{K'/K}(σ̄) = Σ_{h ∈ H} min(i_H(h), j)`. `Anabelian/Quotient/IndexProfile.lean`,
+4 declarations, all standard-axioms-only.
+
+```
+'Anabelian.lowerIndex_mul_decompositionRestrict_eq_min'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_coset_lowerIndex_eq_min'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_fiber_lowerIndex_eq_min'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.sum_lowerIndex_fiber_eq_sum_min'                 depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`lowerIndex_mul_decompositionRestrict_eq_min`** (the heart, abstract and `Normal`-free):
+  `s₁` maximal on its coset ⟹ `i(s₁·dr h) = min(i_H(h), i(s₁))`. Pure Pass 51 calculus:
+  `≥` is `min_lowerIndex_le_lowerIndex_mul` + `i_H = i_G` (`rfl`); `≤` in the hard case via
+  `dr h = s₁⁻¹·(s₁·dr h)` + `lowerIndex_inv`, on pain of `i_H(h) < i_H(h)`.
+- Maximizers exist by finiteness (`Finset.exists_max_image`; `[Finite]` in the types,
+  `Fintype.ofFinite` in proofs — the `unusedFintypeInType` linter enforced the distinction);
+  fiber-language packaging via Pass 56's coset stability; and the **`Σ min` sum form**.
+
+**Not the cardinal sin / rule-2.** Order bookkeeping for a given tower — strictly below R1.
+Lemma 5 itself is NOT claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the `Σ min`-vs-`φ` counting (the double-count
+`Σ_h min(i_H(h), m) = Σ_{k<m} |H_k|`, then P48's `φ`-formula), toward
+`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.
