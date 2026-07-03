@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 65 (2026-07-03)
+## Current state — Pass 66 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 66 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 67 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -79,9 +79,10 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   kills `x` is zero (Pass 61); **Prop. 3's direction (ii), proved** —
   `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B` (Pass 62); **SERRE IV §1
   PROP. 3, PROVED** — the sum formula `i_{K'/K}(σ̄) · e' = Σ_{s ↦ σ̄} i_{L/K}(s)`,
-  generator-free, axiom-free (Pass 63); and the **fiber index profile** toward Lemma 5 —
+  generator-free, axiom-free (Pass 63); the **fiber index profile** toward Lemma 5 —
   `i(s₁·h) = min(i_H(h), j)` for a fiber maximizer `s₁`, with the `Σ min` sum form
-  (Pass 65).
+  (Pass 65); and the **double count** — `Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|` via level sets
+  and Pass 51's Lemma 1 (Pass 66).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -98,9 +99,10 @@ quotient arc P50–63, all axiom-free), the next target is **Serre IV §3 Lemma 
 statement — and through it **`φ`-transitivity** (Prop. 15) and **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14), the upper numbering's defining quotient-compatibility. The
 `φ`/`ψ` analytic theory (Passes 44–49) and the full quotient arithmetic (Passes 50–63) are
-in place, and the fiber index profile (Pass 65) converts the sum formula into
-`e'·i_{K'/K}(σ̄) = Σ_h min(i_H(h), j)`; what remains for Lemma 5 is the `Σ min`-vs-`φ`
-counting against Pass 48's piecewise formula, then the membership-level renumbering.
+in place, and the fiber index profile (Pass 65) + the double count (Pass 66) convert the
+sum formula into `e'·i_{K'/K}(σ̄) = Σ_{k<j} |H_k|`; what remains for Lemma 5 is the
+`φ`-bridge (Pass 48's formula + the `ℕ∞`-to-`ℝ` cast + `e' = |H_0|`), then the
+membership-level renumbering.
 
 ## Build
 

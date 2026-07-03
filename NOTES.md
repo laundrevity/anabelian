@@ -5221,3 +5221,37 @@ brick (A), axiom-free.**
 Next (Pass 66): the double-count `Σ_{h ∈ H} min(i_H(h), m) = Σ_{k<m} |H_k|` (level sets via
 P51's `mem_ramificationGroup_iff_lt_lowerIndex`), then the P48 `φ`-identification, toward
 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` and Lemma 5.
+
+### Pass 66 (2026-07-03) — the double count (Lemma 5, brick B1)
+
+**Mathematics; ledger delta 0 / 0.** `Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|` — the level-set
+double count that evaluates Pass 65's `Σ min`.
+`Anabelian/Ramification/LowerIndexCount.lean`, 2 declarations, standard-axioms-only; the
+probe compiled first try.
+
+## Method
+
+`enat_min_coe_eq_sum` (generic): `min x (m:ℕ∞) = Σ_{k ∈ range m} (if (k:ℕ∞) < x then 1
+else 0)` by induction (`Finset.sum_range_succ`; the `n < x` case bumps the min via
+`ENat.add_one_le_iff`, the `x ≤ n` case freezes it). Then `sum_min_lowerIndex_eq`:
+`simp_rw` the decomposition, `Finset.sum_comm`, and per level `k` rewrite the indicator
+predicate along **P51's Lemma 1** (`mem_ramificationGroup_iff_lt_lowerIndex`), finish with
+`Finset.sum_boole` + `Fintype.card_subtype` + `Nat.card_eq_fintype_card`. Stated for ANY
+`(K, A)` with `[Fintype D]` — at the assembly it applies to `H = D_{K'}(𝒪_L)`.
+
+**Where the arc now stands:** P63 (sum formula) + P65 (profile) + P66 (double count) give,
+for a fiber maximizer with finite `j`: `e'·i_{K'/K}(σ̄) = Σ_{k<j} (Nat.card H_k : ℕ∞)`.
+
+## Build + headline
+
+`lake build` green (2.6 s); preflight CLEAN. **HEADLINE: the double count
+`Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|`, axiom-free — Pass 63's sum formula now reads
+`e'·i_{K'/K}(σ̄) = Σ_{k<j} |H_k|`.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 67): the `φ`-bridge — `(Σ_{k<m} Nat.card H_k : ℝ) = |H_0|·(φ_{L/K'}(m−1)+1)`
+via P48's `herbrandPhi_natCast` (check `ramificationOrders`' def) — and, separately, the
+`e' = |H_0|` identification (inventory the descent's `e` facts first). Then
+`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`, then set-level Lemma 5.

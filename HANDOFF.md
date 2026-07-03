@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 65, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 66, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-65 entry), `ROADMAP.md`
-(status header says Pass 65), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-66 entry), `ROADMAP.md`
+(status header says Pass 66), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,22 +61,27 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 66: the `Σ min`-vs-`φ` counting
+## YOUR FIRST TASK — Pass 67: the `φ`-bridge
 
-**Done at P65 (brick (A))**: the profile + the `Σ min` form. **Now (brick (B))**: evaluate
-`Σ_{h ∈ H} min(i_H(h), m)` against the Herbrand `φ` of the subextension `L/K'`. Key
-observations for the design: `Σ_{h ∈ H} min(i_H(h), m) = Σ_{k=0}^{m−1} |H_k|` (count
-level-sets: `min(i_H(h), m) = #{k < m | k < i_H(h)}` and `k < i_H(h) ↔ h ∈ H_k` — P51's
-`mem_ramificationGroup_iff_lt_lowerIndex`! — then swap the double count); and
-`Σ_{k=0}^{m−1} |H_k| = |H_0|·(φ_{L/K'}(m−1) + 1)` by P48's
-`herbrandPhi_natCast`/`_eq_affine_formula` (`φ(n) = (Σ_{i=1}^n |H_i|)/|H_0|` — mind the
-off-by-one conventions and the ℕ∞-vs-ℝ bridge: `φ` is ℝ-valued, the sum is ℕ∞ — the
-statement to aim for is the ℕ-level count `Σ_h min(i_H(h), m) = Σ_{k<m} |H_k|` first (pure
-counting, no φ), then the ℝ-identification as a separate lemma). Also needed eventually:
-identifying P59's `addVal`-form `e'` with `|H_0|` (the ramification index two ways) —
-possibly its own brick. Scope ONE of these; the double-counting lemma
-`Σ_h min(i_H(h), m) = Σ_{k<m} Nat.card H_k` (in ℕ∞ or ℕ) is the natural Pass 66.
-- Then Lemma 5's set-level statement via P51's Lemma-1 membership forms; then Prop. 14/15.
+**Done**: P65 (profile + `Σ min` form) and P66 (the double count). **Now**: identify
+`Σ_{k<m} |H_k|` with the Herbrand `φ` of `L/K'`. Ingredients: P48's `herbrandPhi_natCast`
+(`φ(n) = (Σ_{i ∈ range n} ramificationOrders (i+1)) / ramificationOrders 0`, ℝ-valued, with
+`ramificationOrders K A i = (Nat.card (ramificationGroup K A i) : ℝ)` — check its exact
+def in `Herbrand/Formula.lean`); the `ℕ∞`-to-`ℝ` cast of the P66 sum (finite naturals — a
+`Nat.cast_sum`-level bridge, but mind the `ℕ∞` side: `Σ (Nat.card … : ℕ∞)` is the cast of
+the `ℕ`-sum `Σ Nat.card …`); and the split `Σ_{k<m} |H_k| = |H_0| + Σ_{k<m−1} |H_{k+1}|`
+(for `m ≥ 1`) matching `φ`'s `i+1`-indexed numerator. Target shape (Serre):
+
+> for `m ≥ 1`: `(Σ_{k<m} Nat.card H_k : ℝ) = (Nat.card H_0) · (φ_{L/K'}(m−1) + 1)`.
+
+Separately (needed to consume `e'`): **`e' = |H_0|`** — P59's `addVal`-form
+`addVal_{𝒪_L}(ι π_B)` equals `Nat.card (H_0)`-as-ramification-index. This is a REAL brick
+(the classical `e = |G_0|` for the extension `L/K'` — inventory what the descent/P28-P37
+arc already has about `e`; `Extension/RamificationData` had `𝔪^e ≤ π𝒪` forms). If the
+`e' = |H_0|` identification is heavy, Pass 67 = the `φ`-bridge alone (pure P48 + casts) and
+`e' = |H_0|` is Pass 68. Then Lemma 5's numerical heart
+`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` assembles, then the set-level Lemma 5 via P51's
+membership forms; then Prop. 14/15.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -103,7 +108,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 66
+## The queue after Pass 67
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

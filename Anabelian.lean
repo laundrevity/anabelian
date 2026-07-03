@@ -47,6 +47,7 @@ import Anabelian.Ramification.AdditiveCharacter
 import Anabelian.Ramification.Exhibit
 import Anabelian.Ramification.Filtration
 import Anabelian.Ramification.LowerIndex
+import Anabelian.Ramification.LowerIndexCount
 import Anabelian.Ramification.LowerIndexGenerator
 import Anabelian.Ramification.Subgroup
 import Anabelian.Ramification.TameCharacter

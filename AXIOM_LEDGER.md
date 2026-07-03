@@ -2910,3 +2910,30 @@ Lemma 5 itself is NOT claimed. No new `structure`/`class`; no owed witness; D1/D
 **Ledger delta: 0 / 0.** Axiom-free. Next: the `Σ min`-vs-`φ` counting (the double-count
 `Σ_h min(i_H(h), m) = Σ_{k<m} |H_k|`, then P48's `φ`-formula), toward
 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.
+
+### Pass 66 (2026-07-03) — the double count (Lemma 5, brick B1); count stays 0 / 0
+
+**No axiom added, none needed.** `Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|` for any extension's
+decomposition group (`Anabelian/Ramification/LowerIndexCount.lean`, 2 declarations, all
+standard-axioms-only).
+
+```
+'Anabelian.enat_min_coe_eq_sum'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.sum_min_lowerIndex_eq'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`enat_min_coe_eq_sum`** (generic `ℕ∞`): `min x m = Σ_{k<m} [k < x]` — the level-set
+  decomposition, by induction on `m`.
+- **`sum_min_lowerIndex_eq`**: decompose, swap (`Finset.sum_comm`), and each level set IS a
+  ramification group — Pass 51's Lemma 1 `k < i(σ) ↔ σ ∈ G_k` — so the inner sum is
+  `|G_k|` (`Finset.sum_boole` + `Fintype.card_subtype` + `Nat.card_eq_fintype_card`).
+- With Pass 63 + Pass 65, the sum formula now reads
+  **`e'·i_{K'/K}(σ̄) = Σ_{k<j} |H_k|`** — the numerator of Pass 48's `φ`-formula up to the
+  `k = 0` term.
+
+**Not the cardinal sin / rule-2.** Counting for a given filtration — strictly below R1. The
+`φ`-bridge and Lemma 5 are NOT claimed. No new `structure`/`class`; no owed witness;
+D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the `φ`-bridge (P48's formula + casts) and the
+`e' = |H_0|` identification, toward `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.
