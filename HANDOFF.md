@@ -1,88 +1,87 @@
-# HANDOFF.md — session bootstrap (written after Pass 58, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 59, 2026-07-03)
 
-**State:** the **quotient arc is 9 bricks in** (P50–58), on the complete Herbrand `φ`/`ψ`
+**State:** the **quotient arc is 10 bricks in** (P50–59), on the complete Herbrand `φ`/`ψ`
 analytic theory (P44–49). P50: skeleton. P51: `i_G`. P52: surjectivity. P53–54: concrete
-`i_G = v_L(σx − x)`, unconditional. P55: Serre's polynomial + descent. P56: the lift-set
-identity. P57: `𝒪_L ∩ K' = 𝒪_{K'}` + telescoping + `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)`.
-**P58: Prop. 3 direction (i), PROVED** (`Anabelian/RamificationLiftDvd.lean`):
-**`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L`** — the equivariance
-`ι(σ̄ • c) = s₀ • ι(c)` (P50 packaged; polynomial level `(σ̄ • F).map ι = (F.map ι).map s₀`),
-the generic `dvd_eval_of_dvd_coeff`, the abstract assembly
-(`comapRingHom_smul_sub_dvd_liftProd`), and the hypothesis-free `𝒪_L` form
-(`exists_generator_dvd_liftProd`: one `y` carrying BOTH the concrete `i_{K'/K}` and the
-divisibility for every `x`, `s₀`). Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom`
-declarations project-wide — keep it that way. **YOUR FIRST TASK is Pass 59 — direction (ii)
-or the `addVal` bookkeeping** (below). **Build caution:** `RamificationLiftDvd.lean`
-elaborates slowly (~15 min; instance-heavy instantiation) — clean, but budget for it; prefer
-putting new Prop.-3 bricks in fresh files.
+`i_G`, unconditional. P55: Serre's polynomial + descent. P56: the lift-set identity. P57:
+`𝒪_L ∩ K' = 𝒪_{K'}` + telescoping + `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)`. P58: **direction
+(i) `a ∣ b` PROVED**. **P59: the `addVal` bookkeeping**
+(`Anabelian/RamificationAddVal.lean`): the **`e'`-dilation**
+`addVal_A (ι c) = addVal_B c · addVal_A (ι π_B)` (behind it `isUnit_comapRingHom_iff` — units
+transfer both ways along `ι`), the **fiber sum**
+`addVal (∏_h (x − (s₀·dr h)·x)) = Σ_h lowerIndex K 𝒪_L (s₀·dr h)`, and generic
+`addVal_neg`/`addVal_prod`. **Both sides of Prop. 3's sum formula are `addVal`-readable; the
+only gaps left are direction (ii) (`b ∣ a`) and the assembly.** Ledger is **`0 FOUNDATIONAL /
+0 DEBT`**, zero `axiom` declarations project-wide — keep it that way. **YOUR FIRST TASK is
+Pass 60 — the polynomial-representation brick** (below). **Build caution:**
+`RamificationLiftDvd.lean` (P58) elaborates slowly (~15 min) — put new bricks in fresh files
+(P59 did: 2.8 s).
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-58 entry), `ROADMAP.md`
-(status header says Pass 58), and the **tail of `NOTES.md`** (Passes 50–58: the quotient arc).
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-59 entry), `ROADMAP.md`
+(status header says Pass 59), and the **tail of `NOTES.md`** (Passes 50–59: the quotient arc).
 **Session start:** `git status` — the tree must be clean (`.claude/` and `claude.last` are
 `.gitignore`d); `scripts/preflight.sh` clause 0 *enforces* this.
 
-## The Prop. 3 assembly map (Serre IV §1) — updated
+## The Prop. 3 endgame (Serre IV §1)
 
-**Target:** for `σ̄ ≠ 1` in `D(B)`: `ι(σ̄y − y)` and `b = ∏_{s ↦ σ̄} (s·x − x)` **associated**
-in `𝒪_L`; then `addVal` + P57(3) + the `e'`-dilation give
-`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`. Status: **(i) `a ∣ b` DONE (P58)** (note: P58's
-product is `∏ (x − s·x)`; `b`'s sign convention `∏ (s·x − x)` differs by `(−1)^{|H|}` —
-handle at assembly time via `Associated`/units or `dvd` symmetry `p ∣ q ↔ p ∣ −q`). Remaining:
+**Target:** for `σ̄ ≠ 1` in `D(B)`: `Associated (ι(σ̄y − y)) (∏_{s ↦ σ̄} (s·x − x))` in
+`𝒪_L`, then `addVal` both sides:
+`addVal_L (ι a) = addVal_B a · e'` (P59 dilation) `= i_{K'/K}(σ̄) · e'` (P57(3));
+`addVal_L b = Σ_h i_{L/K}(s₀·dr h)` (P59 fiber sum) — giving
+**`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`** (Prop. 3; the `∏(x − s·x)` vs `∏(s·x − x)`
+sign is `(−1)^{|H|}`, a unit — `Associated` absorbs it, or use `addVal_neg`/`addVal_prod`
+directly). Status: **(i) `a ∣ b` DONE (P58); bookkeeping DONE (P59).** Remaining:
 
-- **(ii) `b ∣ a`**: `y`'s image in `𝒪_L` is a polynomial in `x` over `𝒪_K`'s image
-  (from P54's `𝒪_L = 𝒪_K[x]` — extract a polynomial representation from
-  `Subring.closure`-membership: an element of `closure (range ι₀ ∪ {x})` is `P.eval x` for
-  some `P` over the base — this **representation brick** may itself be a pass: closure of
-  `range ∪ {x}` = image of `Polynomial.eval x ∘ map` … check Mathlib `Algebra.adjoin`
-  machinery: `Algebra.adjoin_singleton_eq_range_aeval` is the model, but over the subring
-  base — consider recasting P54's statement via `Algebra.adjoin ↥𝒪[K] {x}`). Then Serre:
-  `G := g − C y` over `B` kills `x` after `ι`… division by P55's monic `F` in `B[X]`,
-  remainder vanishes (degree `< |H| = [L:K']` + `K'`-independence of powers of `x` — from
-  `L = K'(x)`), transport the identity along `σ̄` (coefficients in `B`), map along `ι`,
-  evaluate at `x`: `−ι(a) = (σ̄f)(x)·(…)`, so `b ∣ ι(a)`.
-- **(iii) `addVal` bookkeeping**: `addVal_L` of the fiber product `= Σ_h i_{L/K}(s₀·dr h)`
-  (P53–54's concrete `i_G` per factor + `addVal` multiplicativity `(addVal).map_mul` /
-  `map_prod`); the **`e'`-dilation** `addVal_L (ι c) = e' · addVal_B c` with
-  `e' := addVal_L (ι π_B)` — self-contained DVR brick (use P53's
-  `mem_maximalIdeal_pow_iff_le_addVal` on both sides + P50's
-  `mem_maximalIdeal_of_comapRingHom`); combine with P57(3).
+- **(1) The polynomial-representation brick (PASS 60)**: every element of
+  `Subring.closure ((f.range : Set S) ∪ {x})` (for `f : R →+* S`) is `(P.map f).eval x` for
+  some `P : Polynomial R` — by `Subring.closure_induction` (constants: `C`; `x`: `X`; closed
+  under `+`, `−`, `*`). Purely generic — state it for any ring hom; then at `𝒪_L`:
+  `y`'s image `ι y ∈ 𝒪_L = 𝒪_K[x]` (P54) is `(g.map (extensionAlgebraMap K L)).eval x`.
+- **(2) Direction (ii) `b ∣ a`**: `G := (image of g in B[X]) − C y` kills… — Serre: divide
+  `G` by P55's monic `F` in `B[X]` (`Polynomial.modByMonic`/`divByMonic`,
+  `modByMonic_add_div`), remainder `r` has degree `< natDegree F = |H|` (P55) and its
+  `ι`-image kills `x` (since `(G.map ι).eval x = g(x) − ι y = 0` and `(F·q).map ι` kills `x`
+  via `f(x) = 0`) — so `r`'s image vanishes at `x`; `K'`-independence of `1, x, …, x^{d−1}`
+  (`d = [L:K']`, from `L = K'(x)` ⟸ `𝒪_L = 𝒪_K[x]` — extract via
+  `IntermediateField.adjoin`/`Algebra.adjoin` or a power-basis argument; **this
+  independence sub-brick may be its own pass**) forces `r`'s image `= 0`… careful: `r` has
+  `B`-coefficients; its image killing `x` with degree `< d` forces all coefficients zero.
+  Then transport `G = F·q + r` along `σ̄` (all coefficients in `B`), map along `ι`, evaluate
+  at `x`: `g(x) − ι(σ̄y) = (σ̄f)(x)·((σ̄q).map ι).eval x`, LHS `= ι y − ι (σ̄y) = −ι(a)`,
+  `(σ̄f)(x) = ±b` (P56) ⟹ `b ∣ ι(a)`.
+- **(3) The assembly**: `associated_of_dvd_dvd` + the `addVal` readings ⟹ Prop. 3. (May
+  fold into (2)'s pass if short, else its own.)
 
 **Key names:** P50 `RamificationQuotient.lean` (`comapRingHom`,
-`algebraMap_decompositionQuotient_smul`, `mem_maximalIdeal_of_comapRingHom`); P51
-`RamificationIndex.lean` (`lowerIndex`, Lemma-1 forms, `ℕ∞` cofinality); P53
-`RamificationIndexGenerator.lean` (`mem_maximalIdeal_pow_iff_le_addVal`,
-`lowerIndex_eq_addVal`); P54 `ExtensionMonogenicDischarge.lean`
-(`exists_generator_extensionIntegers`, `maximalIdeal_eq_span_of_mem_of_notMem_sq`); P55
-`SubextensionCharPoly.lean` (`fullProdXSubSMul*`, `exists_fullProdXSubSMul_lift*` — `F`
-monic + degree!); P56 `RamificationLiftSet.lean` (`map_fullProdXSubSMul(_eval)`,
-`decompositionFiberEquiv`); P57 `ExtensionComapIntegers.lean` (`extensionIntegers_comap_eq`,
-`comapIntegersEquiv`, DVR-on-`B`, `baseToComapRingHom`, `exists_generator_comap_spec`); P58
-`RamificationLiftDvd.lean` (`dvd_eval_of_dvd_coeff`, `comapRingHom_decompositionQuotient_smul`,
-`map_comapRingHom_smul`, `comapRingHom_smul_sub_dvd_liftProd`,
-`exists_generator_dvd_liftProd`); P25 `TameInjectivity.lean` (`smul_sub_dvd_of_mem_closure`).
+`algebraMap_decompositionQuotient_smul`); P53 `RamificationIndexGenerator.lean`
+(`mem_maximalIdeal_pow_iff_le_addVal`, `lowerIndex_eq_addVal`); P54
+`ExtensionMonogenicDischarge.lean` (`exists_generator_extensionIntegers`); P55
+`SubextensionCharPoly.lean` (`fullProdXSubSMul*` incl. `_natDegree`,
+`exists_fullProdXSubSMul_lift*` — `F` monic + degree); P56 `RamificationLiftSet.lean`
+(`map_fullProdXSubSMul(_eval)`, `decompositionFiberEquiv`); P57
+`ExtensionComapIntegers.lean` (`extensionIntegers_comap_eq`, `comapIntegersEquiv`,
+DVR-on-`B`, `baseToComapRingHom`, `exists_generator_comap_spec`); P58
+`RamificationLiftDvd.lean` (`dvd_eval_of_dvd_coeff`, `map_comapRingHom_smul`,
+`comapRingHom_smul_sub_dvd_liftProd`, `exists_generator_dvd_liftProd`); P59
+`RamificationAddVal.lean` (`addVal_neg`, `addVal_prod`, `isUnit_comapRingHom_iff`,
+`addVal_comapRingHom`, `addVal_liftProd`); P25 `TameInjectivity.lean`
+(`smul_sub_dvd_of_mem_closure`).
 
-## YOUR FIRST TASK — Pass 59: one brick
+## YOUR FIRST TASK — Pass 60: the polynomial-representation brick
 
-- **(A) The `e'`-dilation + fiber-sum bookkeeping** ((iii)) — RECOMMENDED first: it is
-  self-contained DVR/`ℕ∞` arithmetic with no new representation machinery, and after it the
-  only gap in Prop. 3 is (ii). Deliverables: `addVal_comapRingHom` (`addVal_L (ι c) = e' ·
-  addVal_B c`, `e' := addVal_L (ι π_B)` — nonzero, finite) and `addVal_liftProd`
-  (`addVal_L (∏_h (x − (s₀·dr h)·x)) = Σ_h lowerIndex K 𝒪_L (s₀·dr h)` via P53–54 per
-  factor + `AddValuation`-of-product; mind `⊤` cases — cleanest for `σ̄ ≠ 1` where each
-  factor is nonzero... actually factors can still vanish only if `s·x = x`; for a generator
-  `x`, `s·x = x ⟹ s = 1` ⟹ fiber of `σ̄ ≠ 1` has no such `s` — that no-vanishing lemma
-  needs `x` generating over `𝒪_K`, `s ≠ 1`: `s·x = x` + `s` fixes `𝒪_K`-image + generation
-  ⟹ `s` fixes all of `𝒪_L` ⟹ `s = 1` — cf. P23's `iInf_ramificationGroup_eq_bot` ending).
-- **(B) The polynomial-representation brick** (unblocks (ii)): every element of
-  `Subring.closure (range ι₀ ∪ {x})` is `(P.map ι₀).eval x` for some `P : Polynomial ↥𝒪[K]`
-  — by `Subring.closure_induction` (mirror P25's engine structure), or via an
-  `Algebra.adjoin` recast. Self-contained.
-- Do NOT attempt (ii) whole; clean partial > half-discharge.
+> `theorem exists_polynomial_eval_of_mem_closure {R S} [CommRing R] [CommRing S]
+> (f : R →+* S) {x z : S} (hz : z ∈ Subring.closure ((f.range : Set S) ∪ {x})) :
+> ∃ P : Polynomial R, (P.map f).eval x = z`
 
-**Method (the P43–58 rhythm):** inventory first; `lake env lean` probes; every Mathlib name
-source-grepped; `lake build Anabelian.<File>`; scope tightly; fresh file per brick (see the
-build caution).
+by `Subring.closure_induction` (mirror P25's engine structure: mem-cases `C r`/`X`; `0`/`1`;
+`add`/`neg`/`mul` via `map_add` etc. of eval∘map). Instantiate at `𝒪_L`: from P54's
+generator, `∀ z : ↥𝒪_L, ∃ g : Polynomial ↥𝒪[K], (g.map (extensionAlgebraMap K L)).eval x
+= z` — in particular for `z := comapRingHom … y`. If short, begin (2)'s division setup in
+the same pass — but do NOT half-build the independence sub-brick; clean partial >
+half-discharge.
+
+**Method (the P43–59 rhythm):** inventory first; `lake env lean` probes; every Mathlib name
+source-grepped; `lake build Anabelian.<File>`; fresh file.
 
 ## Environment (verify, then trust)
 
@@ -93,24 +92,24 @@ build caution).
 
 ## House idioms (recent vintage; older in NOTES P25–41)
 
-- `ext` on polynomials over a subring descends to ambient-field coercions — wrap element
-  lemmas in `congrArg Subtype.val` (bit P58).
-- `rw` needs syntactically matching coercion forms (`⇑e.toRingHom`, not `⇑↑e`); hand-rolled
-  subtype equivs beat `subringCongr`; structure fields by plain defeq application (P57).
-- Goal-changing `show` → `change` (P56). Orbit-vs-whole-`G` products (P55). `𝒪[K]` is a
-  `Subring` (P55). `ℕ∞` casts explicit; `residue` vs `mk` defeq-not-syntactic; `Nat.card`
-  API; P25 lemmas take `A` implicitly; narrow `variable` blocks; `push Not`;
-  `_root_.mem_nonunits_iff` (P50–54).
-- DVR/`ℕ∞` toolkit: P51 cofinality, P53 `mem_maximalIdeal_pow_iff_le_addVal`, P54
-  `maximalIdeal_eq_span_of_mem_of_notMem_sq` + `exists_pow_one_add_eq`, P57 DVR-on-`B`.
-- D2 lives entirely inside proofs; P52–58 consumed only `IsIntegral`-level API.
+- `rw [h]` substitutes everywhere and stales `have`s phrased pre-substitution — rewrite with
+  the primitive lemma (`addVal_def' u hπ n`) instead of a stored `have` (bit P59).
+- `Irreducible.not_isUnit` (not `.not_unit`) (P59). `ext` on polynomials over a subring
+  descends to ambient coercions — wrap element lemmas in `congrArg Subtype.val` (P58).
+- Coercion forms must match syntactically for `rw` (`⇑e.toRingHom` not `⇑↑e`); hand-rolled
+  subtype equivs; structure fields by plain defeq application (P57).
+- `show`→`change` (P56); orbit-vs-whole-`G` (P55); `𝒪[K]` is a `Subring` (P55); `ℕ∞` casts
+  explicit; `residue` vs `mk`; `Nat.card` API; P25 lemmas take `A` implicitly; narrow
+  `variable` blocks; `push Not`; `_root_.mem_nonunits_iff` (P50–54).
+- DVR/`ℕ∞` toolkit: P51 cofinality, P53 bridge, P54 span-brick + binomial tail, P57 DVR-on-`B`,
+  P59 `addVal_neg`/`addVal_prod`/dilation.
+- D2 lives entirely inside proofs; P52–59 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 59
+## The queue after Pass 60
 
-The remaining Prop. 3 bricks ((ii)'s representation + division, (iii) if not taken), the
-**Prop. 3 assembly** (`Associated` + the sum formula `e'·i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_G(s)`),
-→ IV §3 **Lemma 5** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` → **`φ`-transitivity** (Prop. 15) +
-**Herbrand's theorem** (Prop. 14) → Hasse–Arf. Optional: `ψ` closed form / `φ` concavity.
-The **R1-floor** stays deferred. R1–R3 remain distant targets that must be earned, never
-axiomatized — the line between inputs and targets is drawn in `ROADMAP.md` and is the
+(2) direction (ii) (division + independence sub-brick) → (3) the **Prop. 3 assembly**
+(`e'·i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`) → IV §3 **Lemma 5** → **`φ`-transitivity**
+(Prop. 15) + **Herbrand's theorem** (Prop. 14) → Hasse–Arf. Optional: `ψ` closed form / `φ`
+concavity. The **R1-floor** stays deferred. R1–R3 remain distant targets that must be earned,
+never axiomatized — the line between inputs and targets is drawn in `ROADMAP.md` and is the
 project's reason for existing.

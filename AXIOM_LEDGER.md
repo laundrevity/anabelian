@@ -2688,3 +2688,45 @@ touching it should expect the cost.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: direction (ii) (`b ∣ a`, the monic division), then
 the `addVal` bookkeeping (fiber sum + `e'`-dilation), then the Prop. 3 assembly.
+
+### Pass 59 (2026-07-03) — the `addVal` bookkeeping; count stays 0 / 0
+
+**No axiom added, none needed.** Both sides of Prop. 3's sum formula are now `addVal`-readable:
+the left through the `e'`-dilation, the right through the fiber sum.
+`Anabelian/RamificationAddVal.lean`, 5 declarations, all standard-axioms-only.
+
+```
+'Anabelian.addVal_neg'                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.addVal_prod'                                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isUnit_comapRingHom_iff'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.addVal_comapRingHom'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.addVal_liftProd'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`isUnit_comapRingHom_iff`** — units transfer both ways along `ι : B = A ∩ K' → A`:
+  forward because the `A`-inverse of `ι c` is the image of `(c : K')⁻¹` (`map_inv₀` +
+  inverse uniqueness in `L`), which is integral (it IS the inverse in `A`), hence in `B`.
+  The multiplicative counterpart of Pass 50's `mem_maximalIdeal_of_comapRingHom`.
+- **`addVal_comapRingHom`** (the `e'`-dilation) — `addVal_A (ι c) = addVal_B c ·
+  addVal_A (ι π_B)`: write `c = u·π^n` (`eq_unit_mul_pow_irreducible`), units go to units
+  (`addVal_eq_zero_iff`), so the upstairs valuation is `n·e'`; the `c = 0` case is
+  `⊤ · e' = ⊤` via `ENat.top_mul` (`e' ≠ 0` because `ι π_B` is a non-unit by the transfer).
+- **`addVal_liftProd`** (the fiber sum) — at `𝒪_L` with a generator `x`:
+  `addVal (∏_h (x − (s₀·dr h)·x)) = Σ_h lowerIndex K 𝒪_L (s₀·dr h)`: generic `addVal_prod`
+  (product ↦ sum, `Finset.induction_on`) + per-factor Passes 53–54
+  (`lowerIndex_eq_addVal`, `hfix` free by Pass 32) + `addVal_neg` for the sign.
+- Generic bricks `addVal_neg` (mutual divisibility + `addVal_le_iff_dvd`) and `addVal_prod`
+  kept reusable.
+
+**Mathlib API that did the real work:** `addVal_le_iff_dvd`, `addVal_eq_zero_iff`,
+`addVal_def'`, `addVal_mul`/`addVal_pow`/`addVal_zero`, `eq_unit_mul_pow_irreducible`;
+`ENat.top_mul`; `map_inv₀` + `eq_inv_of_mul_eq_one_right` + `mul_inv_cancel₀`;
+`Finset.induction_on`; `nsmul_eq_mul`.
+
+**Not the cardinal sin / rule-2.** Valuation bookkeeping for a tower of given fields —
+strictly below R1; recovers nothing from an abstract group. No divisibility, no assembly
+claimed. No new `structure`/`class`; no owed witness; D1 N/A; D2 stays inside the Pass-29
+proofs.
+
+**Ledger delta: 0 / 0.** Axiom-free. The sum formula now lacks only direction (ii)
+(`b ∣ a`) and the final assembly.

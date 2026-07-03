@@ -4880,3 +4880,78 @@ each be their own pass; clean partial > half-discharge. After (ii): the `addVal`
 ((iii): `addVal` of the fiber product = `Σ_h i_G(s₀·dr h)` via P53–54 + P56; the
 `e'`-dilation `addVal_L ∘ ι = e' · addVal_B`), then the Prop. 3 assembly. R1–R3 remain the
 distant, must-be-earned targets.
+
+### Pass 59 (2026-07-03) — the `addVal` bookkeeping (Prop. 3's measuring layer)
+
+**Mathematics; ledger delta 0 / 0.** Both sides of Serre IV §1 Prop. 3's sum formula are now
+readable through `addVal`: the left side via the `e'`-dilation along the tower inclusion, the
+right side via the fiber sum. `Anabelian/RamificationAddVal.lean`, 5 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF option (A) — self-contained DVR/`ℕ∞` arithmetic first)
+
+As recommended: no new representation machinery, pure valuation bookkeeping; after this pass
+the sum formula lacks only direction (ii) and the assembly.
+
+## What was proved + the method
+
+- **`isUnit_comapRingHom_iff`**: `IsUnit (ι c) ↔ IsUnit c` for `ι : B = A ∩ K' → A`. The
+  nontrivial direction: from a unit `w` with `↑w = ι c`, the inverse `↑w⁻¹` has underlying
+  `L`-value `(algebraMap K' L c)⁻¹ = algebraMap K' L (c⁻¹)` (`map_inv₀` + uniqueness of
+  inverses in `L`), and it lies in `A` (it is `↑w⁻¹`!), so `(c : K')⁻¹ ∈ B` (`mem_comap`)
+  and `c` is a unit (`mul_inv_cancel₀`). The multiplicative sibling of P50's `𝔪`-reflection.
+- **`addVal_comapRingHom`** (the `e'`-dilation): `addVal_A (ι c) = addVal_B c ·
+  addVal_A (ι π_B)` for `π_B` irreducible. `c = u·π^n` ⟹ `ι c = ι u · (ι π)^n` with `ι u` a
+  unit (`addVal_eq_zero_iff`), so `addVal = n • e' = ↑n · e'` (`nsmul_eq_mul`); the `c = 0`
+  case is `⊤ = ⊤ · e'` via `ENat.top_mul` and `e' ≠ 0` (from the unit transfer:
+  `ι π_B` is a non-unit). Stated abstractly for any DVR pair `(A, B)` — at `𝒪_L` the
+  instances are P35 + P57.
+- **`addVal_liftProd`** (the fiber sum): at `𝒪_L`, generator `x`,
+  `addVal (∏_h (x − (s₀·dr h)·x)) = Σ_h i_{L/K}(s₀·dr h)` — `addVal_prod` (generic, 6-line
+  `Finset.induction_on`), then per factor P53's `lowerIndex_eq_addVal` (with `hgen` the
+  explicit hypothesis — the assembly pass will feed P54's generator once, shared with P58's
+  divisibility) and `addVal_neg` for `x − s·x = −(s·x − x)`.
+- Generic bricks: `addVal_neg` (mutual divisibility + `addVal_le_iff_dvd` — no unit
+  juggling), `addVal_prod`.
+
+Probe: 2 mechanical rounds (`Irreducible.not_unit` → `not_isUnit`; in the dilation, rewrite
+with `addVal_def' u hπ n` directly instead of a pre-substituted `have` — `rw [hu]`
+substitutes `c` everywhere and stales any `have` phrased in terms of `c`).
+
+## Mathlib API that did the real work
+
+`addVal_le_iff_dvd`, `addVal_eq_zero_iff`, `addVal_def'`, `addVal_mul`/`addVal_pow`,
+`eq_unit_mul_pow_irreducible`; `ENat.top_mul`; `map_inv₀`, `eq_inv_of_mul_eq_one_right`,
+`mul_inv_cancel₀`, `isUnit_iff_exists_inv`; `Finset.induction_on`; `nsmul_eq_mul`.
+
+## Build + headline
+
+Host `lake build` green (2.8 s — fresh file, per the P58 build caution); imported in
+`Anabelian.lean`; `scripts/preflight.sh` CLEAN. All 5 `#print axioms` standard-only; zero
+`axiom` declarations project-wide. **HEADLINE: the `addVal` bookkeeping of Prop. 3 — the
+`e'`-dilation `addVal_A(ι c) = addVal_B(c)·e'` (with the two-way unit transfer) and the fiber
+sum `addVal(∏_{s ↦ σ̄}(x − s·x)) = Σ_{s ↦ σ̄} i_{L/K}(s)` — both sides of the sum formula
+`addVal`-readable, axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 stays inside P29's proofs.
+  R1–R3 untouched.
+
+## Scope: direction (ii) is the last gap (Pass 60+)
+
+**Pass 60 options:**
+- **(B) The polynomial-representation brick** (unblocks (ii)): every element of
+  `Subring.closure (↑(RingHom.range ι₀) ∪ {x})` is `(P.map ι₀).eval x` for some
+  `P : Polynomial` over the base — `Subring.closure_induction` (mirror P25's engine), or an
+  `Algebra.adjoin` recast. Then `y`'s image in `𝒪_L` is `g(x)` with `g` over `𝒪_K`.
+- Then **(ii) itself**: the monic division `G := g_B − C y = F·q + r` in `B[X]` (`F` = P55's
+  monic descent; `Polynomial.modByMonic` + degree), remainder-vanishing via the
+  `K'`-independence of `1, x, …, x^{d−1}` (`d = natDegree F = |H|`, P55; independence from
+  `L = K'(x)` ⟸ `𝒪_L = 𝒪_K[x]`), transport along `σ̄` (coefficients in `B`), map along
+  `ι`, evaluate at `x` ⟹ `b ∣ ι(a)`.
+- Then the **assembly**: `Associated (ι a) b` (`associated_of_dvd_dvd`, mind the
+  `∏(x − s·x)` vs `∏(s·x − x)` sign — `(−1)^{|H|}`, a unit) ⟹ `addVal` equal ⟹ with P57(3),
+  P59's dilation + fiber sum: **`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`** — Prop. 3.
+R1–R3 remain the distant, must-be-earned targets.

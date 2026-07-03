@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 58 (2026-07-03)
+## Current state — Pass 59 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 60 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 61 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -70,7 +70,9 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `B = 𝒪_L ∩ K'` — one `y` with `B = 𝒪_K[y]`, the coefficient telescoping
   `(σ̄y − y) ∣ (σ̄c − c)`, and the concrete `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)` (Pass 57); and
   **Prop. 3's direction (i), proved** — `ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L`,
-  hypothesis-free (Pass 58).
+  hypothesis-free (Pass 58); and the **`addVal` bookkeeping** — the `e'`-dilation
+  `addVal_A(ι c) = addVal_B(c)·e'` and the fiber sum
+  `addVal(∏_{s ↦ σ̄}(x − s·x)) = Σ i_{L/K}(s)` (Pass 59).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -87,10 +89,11 @@ group-theoretic skeleton (Pass 50), the `i_G` function with its filtration chara
 (Pass 54), Serre's polynomial `∏_{h}(X − h·x)` with its descent to `𝒪_L ∩ K'` (Pass 55), the
 lift-set identity making `∏_{s ↦ σ̄}` computable (Pass 56), and the `𝒪_L ∩ K' = 𝒪_{K'}`
 identification with the coefficient telescoping and the concrete
-`i_{K'/K}(σ̄) = addVal(σ̄y − y)` (Pass 57), and direction (i) itself — `a ∣ b`, assembled and
-hypothesis-free at `𝒪_L` (Pass 58) — are all built; what remains of Prop. 3 is direction
-(ii) (the monic division `g(X) − y = f·q` giving `b ∣ a`) and the final `addVal` bookkeeping
-(the fiber sum and the `e'`-dilation).
+`i_{K'/K}(σ̄) = addVal(σ̄y − y)` (Pass 57), direction (i) itself — `a ∣ b`, assembled and
+hypothesis-free at `𝒪_L` (Pass 58) — and the `addVal` bookkeeping (the `e'`-dilation and the
+fiber sum, Pass 59) are all built; what remains of Prop. 3 is direction (ii) (the
+polynomial-representation brick, then the monic division `g(X) − y = f·q` giving `b ∣ a`) and
+the final assembly.
 
 ## Build
 
