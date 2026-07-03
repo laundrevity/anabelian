@@ -2937,3 +2937,29 @@ D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the `φ`-bridge (P48's formula + casts) and the
 `e' = |H_0|` identification, toward `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.
+
+### Pass 67 (2026-07-03) — the `φ`-bridge (Lemma 5, brick B2); count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/Herbrand/SumBridge.lean`, 3 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.sum_ramificationOrders_range_succ'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.natCast_sum_natCard_eq'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.sum_natCard_enat_eq'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`sum_ramificationOrders_range_succ`** — `Σ_{k ≤ n} |G_k| = |G_0|·(φ(n) + 1)`: Pass 48's
+  `herbrandPhi_natCast` with the `k = 0` term absorbed (`Finset.sum_range_succ'` +
+  `mul_div_cancel₀`).
+- The two cast forms tie it to Pass 66's `ℕ∞` output: `natCast_sum_natCard_eq` (the
+  `Nat.card` sum read in `ℝ` — `ramificationOrders` is definitionally the cast) and
+  `sum_natCard_enat_eq` (`ℕ∞` sum = cast of `ℕ` sum, `Nat.cast_sum`).
+- The Lemma-5 numerical chain is now fully typed: P63 + P65 + P66 in `ℕ∞`, cast down to `ℕ`
+  and up to `ℝ`, then this bridge — pending only `e' = |H_0|`.
+
+**Not the cardinal sin / rule-2.** Cast/sum bookkeeping — strictly below R1. No new
+`structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: `e' = |H_0|` (the classical `e = |G_0|` at the
+subextension), the last input to `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`.

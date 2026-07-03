@@ -5255,3 +5255,35 @@ Next (Pass 67): the `φ`-bridge — `(Σ_{k<m} Nat.card H_k : ℝ) = |H_0|·(φ_
 via P48's `herbrandPhi_natCast` (check `ramificationOrders`' def) — and, separately, the
 `e' = |H_0|` identification (inventory the descent's `e` facts first). Then
 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)`, then set-level Lemma 5.
+
+### Pass 67 (2026-07-03) — the `φ`-bridge (Lemma 5, brick B2)
+
+**Mathematics; ledger delta 0 / 0.** `Σ_{k ≤ n} |G_k| = |G_0|·(φ(n) + 1)` + the two cast
+forms connecting Pass 66's `ℕ∞` count to Pass 48's `ℝ`-valued `φ`.
+`Anabelian/Herbrand/SumBridge.lean`, 3 declarations, standard-axioms-only; probe compiled
+first try (one `omit [Finite …] in` for the cast-only lemma — the unused-section-variable
+gate again).
+
+## Method
+
+`Finset.sum_range_succ'` splits off the `k = 0` term; `herbrandPhi_natCast` (P48) gives the
+`k ≥ 1` sum as `|G_0|·φ(n)`; `mul_div_cancel₀` absorbs. The `Nat.card`-`ℝ` form is
+term-by-term `rfl` (`ramificationOrders` IS the cast); the `ℕ∞`-`ℕ` form is
+`Nat.cast_sum`.
+
+**The Lemma-5 numerical chain, fully typed:** `e'·i_{K'/K}(σ̄) =_{ℕ∞} Σ_{k<j} |H_k|`
+(P63+P65+P66) `=_{cast}` the `ℕ`-sum `=_{ℝ}` `|H_0|·(φ_{L/K'}(j−1)+1)` (this pass, at
+`H = D_{K'}(𝒪_L)`, `j = n+1`). Missing input: `e' = |H_0|`.
+
+## Build + headline
+
+`lake build` green (2.4 s); preflight CLEAN. **HEADLINE: the `φ`-bridge
+`Σ_{k≤n} |G_k| = |G_0|·(φ(n)+1)`, axiom-free — the Lemma-5 numerical chain is fully typed,
+pending only `e' = |H_0|`.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 68): `e' = |H_0|` — inventory the descent's `e`-facts (`Extension/
+RamificationData`, `Extension/TotallyRamified`, P28–37) before designing; possibly
+multi-pass.
