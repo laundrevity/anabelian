@@ -5332,3 +5332,42 @@ Next (Pass 69): the instance package (Dedekind/finite/torsion-free/LiesOver/sepa
 form) and the inertia matching (`Ideal.inertia` vs `ramificationGroup … 0` — kernel vs
 kernel via P23's `ramificationGroup_zero`); then `e' = |H_0|`, the numerical Lemma 5, the
 set-level Lemma 5, Prop. 15, Prop. 14.
+
+### Pass 69 (2026-07-03) — the `IsGaloisGroup` package (the `e' = |H_0|` gateway)
+
+**Mathematics; ledger delta 0 / 0.** `IsGaloisGroup (D_{K'}(𝒪_L)) ↥B ↥𝒪_L` — Mathlib's
+gateway class for the `RamificationInertia` machinery — established as an instance, its
+three components each an existing project brick repackaged.
+`Anabelian/Quotient/GaloisGroup.lean`, 4 instances, standard-axioms-only; probe compiled
+first try.
+
+## Method
+
+Mathlib's `IsGaloisGroup G A B` = `{ faithful : FaithfulSMul G B, commutes : SMulCommClass
+G A B, isInvariant : Algebra.IsInvariant A B G }` (read from
+`FieldTheory/Galois/IsGaloisGroup.lean`). For `G = D_{K'}(𝒪_L)`, `A = B = 𝒪_L ∩ K'`,
+`B = 𝒪_L`:
+- **faithful**: agree on `A` ⟹ agree on `L` by `mem_or_inv_mem` + `map_inv₀` +
+  `inv_injective` — the exact argument that ends P23's `iInf_ramificationGroup_eq_bot`,
+  stated abstractly for any `(K', A)`.
+- **commutes**: `b • s = comapRingHom b * s` (P68's `comapAlgebra`, `Algebra.smul_def` +
+  the `rfl` `algebraMap_comapAlgebra`), `smul_mul'`, and `g • ι(b) = ι(b)` by
+  `AlgEquiv.commutes` (decomposition elements are `K'`-algebra maps). Abstract.
+- **isInvariant**: exactly P55's fixed-points descent; `D_{K'}(𝒪_L) = ⊤` (P55) converts
+  `∀ g : D, g • b = b` into `∀ σ : Gal(L/K'), σ b = b`. At `𝒪_L` (the instance needs the
+  tower + `[FiniteDimensional K' L] [IsGalois K' L]`).
+
+## Build + headline
+
+`lake build` green (2.9 s); preflight CLEAN. **HEADLINE: `D_{K'}(𝒪_L)` is a Galois group
+for `B ⊆ 𝒪_L` in Mathlib's sense (faithful + commuting + invariant), axiom-free — the
+gateway to `card_inertia_eq_ramificationIdxIn` is open.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** All four declarations instantiate existing Mathlib classes — no new
+`structure`/`class`, no rule-2 obligation; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 70): the remaining instances (`IsDedekindDomain` likely automatic;
+`Module.Finite ↥B ↥𝒪_L` via P32 + restrictScalars along the P60 tower; torsion-free;
+`𝔪_L.LiesOver 𝔪_B` from P50+P59; separable residue via finite-fields-perfect) and the
+inertia matching (`Ideal.inertia` vs `ramificationGroup K' 𝒪_L 0`).

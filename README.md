@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 68 (2026-07-03)
+## Current state — Pass 69 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 69 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 70 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -83,9 +83,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `i(s₁·h) = min(i_H(h), j)` for a fiber maximizer `s₁`, with the `Σ min` sum form
   (Pass 65); the **double count** — `Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|` via level sets
   and Pass 51's Lemma 1 (Pass 66); the **`φ`-bridge** —
-  `Σ_{k≤n} |G_k| = |G_0|·(φ(n)+1)` with the cast forms (Pass 67); and **`e'` in ideal
+  `Σ_{k≤n} |G_k| = |G_0|·(φ(n)+1)` with the cast forms (Pass 67); **`e'` in ideal
   form** — `Ideal.ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)` on the new `comapAlgebra`
-  scaffold (Pass 68).
+  scaffold (Pass 68); and the **`IsGaloisGroup` package** — `D_{K'}(𝒪_L)` is a Galois group
+  for `B ⊆ 𝒪_L` (faithful, commuting, invariant — Pass 55's descent in instance form)
+  (Pass 69).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -107,8 +109,9 @@ sum formula into `e'·i_{K'/K}(σ̄) = Σ_{k<j} |H_k|`, and the `φ`-bridge (Pas
 right side as `|H_0|·(φ_{L/K'}(j−1)+1)`; for `e' = |H_0|`, Mathlib's
 `Ideal.card_inertia_eq_ramificationIdxIn` (`|inertia| = e`) applies once the project's
 objects are identified with the ideal-theoretic ones — Pass 68 did the `e'` half
-(`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`); the inertia matching and instance package
-remain, then the membership-level renumbering.
+(`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`) and Pass 69 the `IsGaloisGroup` gateway; the
+remaining instances and the inertia matching are next, then the membership-level
+renumbering.
 
 ## Build
 

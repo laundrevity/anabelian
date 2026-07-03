@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 68, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 69, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-68 entry), `ROADMAP.md`
-(status header says Pass 68), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-69 entry), `ROADMAP.md`
+(status header says Pass 69), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,35 +61,32 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 69: the inertia matching (toward `e' = |H_0|`)
+## YOUR FIRST TASK — Pass 70: remaining instances + the inertia matching
 
-**The target**: apply Mathlib's `Ideal.card_inertia_eq_ramificationIdxIn`
-(`Nat.card (P.inertia G) = ramificationIdxIn p S`, in
-`Mathlib/NumberTheory/RamificationInertia/Galois.lean` — READ ITS SECTION VARIABLES first:
-it runs on a group `G` acting on `S` with `[IsGaloisGroup …]`-style hypotheses, Dedekind
-domains, `Module.Finite`, `IsTorsionFree`, `P.LiesOver p`, `P.IsMaximal`, separable residue)
-with `R := ↥B`, `S := ↥(𝒪_L)` (the P68 `comapAlgebra`), `p := 𝔪_B`, `P := 𝔪_L`,
-`G := D_{K'}(𝒪_L)` (≅ `Gal(L/K')` by P55's `D = ⊤`; the `MulSemiringAction` on `↥𝒪_L` is
-Mathlib's decomposition action). Bricks, likely one pass each:
-- **(A) The instance package**: `IsDedekindDomain ↥B`/`↥𝒪_L` (from the DVR instances —
-  check whether Mathlib infers Dedekind from DVR automatically), `Module.Finite ↥B ↥𝒪_L`
-  (route: `𝒪_L` finite over `𝒪_K` (P32's `Module.Finite` instance in
-  `Extension/Monogenic`) + restriction along `𝒪_K → B`… or integrality + Noetherian),
-  `Algebra.IsTorsionFree ↥B ↥𝒪_L` (injective algebraMap into a domain),
-  `𝔪_L.LiesOver 𝔪_B` (P50's `mem_maximalIdeal_of_comapRingHom` gives comap ⊇; equality by
-  maximality), separable residue (finite fields — P36 + `Algebra.IsSeparable` of finite
-  fields), and the `IsGaloisGroup`/invariance hypothesis for the `D_{K'}`-action (fixed
-  points of the action on `↥𝒪_L` = image of `B` — this is P55's
-  `exists_comapRingHom_eq_of_forall_smul_eq` in instance form!).
-- **(B) The inertia matching**: Mathlib's `Ideal.inertia G P` (read its def in
-  `RamificationInertia/Inertia.lean`) vs the project's
-  `ramificationGroup K' (𝒪_L) 0 ≤ D_{K'}(𝒪_L)`: both are "acts trivially on `S/P`";
-  P23's `ramificationGroup_zero` (= `inertiaSubgroup` = kernel of the residue action)
-  should make this a kernel-vs-kernel comparison. Conclude `Nat.card (𝔪_L.inertia D) =
-  Nat.card (ramificationGroup K' (𝒪_L) 0)`.
-- **(C) `ramificationIdxIn = ramificationIdx`** (single prime — `ramificationIdxIn` is the
-  common value over primes; with one maximal ideal this should be
-  `ramificationIdxIn_eq_ramificationIdx`-style, check the Galois file) + P68 ⟹
+**Done**: P68 (`comapAlgebra`, `ramificationIdx 𝔪_B 𝔪_L = e'`), P69 (`IsGaloisGroup`).
+**Remaining for `card_inertia_eq_ramificationIdxIn`** (its exact hypothesis list, verified
+at P69: `[IsDedekindDomain R] [IsDedekindDomain S] [Module.Finite R S] [IsTorsionFree R S]
+(hp : p ≠ ⊥) [P.LiesOver p] [P.IsMaximal] [Algebra.IsSeparable (R⧸p) (S⧸P)]` on section
+variables `[Group G] [MulSemiringAction G S] [IsGaloisGroup G R S] [Finite G]`):
+- **(A) Remaining instances**: `IsDedekindDomain` (probe first — likely automatic from the
+  DVR instances via PIR); `Module.Finite ↥B ↥𝒪_L` — route: P32's
+  `Module.Finite ↥𝒪[K] ↥𝒪_L` + `Module.Finite.of_restrictScalars_finite` along the tower
+  `𝒪_K → B → 𝒪_L` (needs `Algebra ↥𝒪[K] ↥B` via `baseToComapRingHom.toAlgebra` +
+  `IsScalarTower` from P60's commuting square `ι ∘ baseToComap = extensionAlgebraMap`);
+  `IsTorsionFree ↥B ↥𝒪_L` (check the exact class name in the lemma — domains + injective
+  algebraMap); `𝔪_L.LiesOver 𝔪_B` (comap identity: P50's `mem_maximalIdeal_of_comapRingHom`
+  one way, P59's `isUnit_comapRingHom_iff` the other); `[Finite D_{K'}]` ✓ hypothesis;
+  `Algebra.IsSeparable (↥B⧸𝔪_B) (↥𝒪_L⧸𝔪_L)` — both residue fields finite (P36 for 𝒪_L;
+  `B⧸𝔪_B` embeds in it), finite fields are perfect, perfect ⟹ separable (grep the exact
+  Mathlib instance chain).
+- **(B) The inertia matching**: `Ideal.inertia G P` (find its def — grep `inertia` in
+  `Mathlib/RingTheory/Ideal/Pointwise.lean` / the Invariant files; NOTE it was NOT found at
+  `def Ideal.inertia` in the obvious places — locate precisely first) vs
+  `ramificationGroup K' (𝒪_L) 0`: both "act trivially mod `P`"; P23's
+  `ramificationGroup_zero`/`mem_ramificationGroup_iff` (σa − a ∈ 𝔪) should make the
+  membership-level comparison direct. Conclude the `Nat.card` equality.
+- **(C) Application**: `ramificationIdxIn_eq_ramificationIdx` (single-prime; in the Galois
+  file, needs the primesOver machinery) + P68's `ramificationIdx = e'` + (B) ⟹
   **`e' = |H_0|`**.
 After (A)–(C): the numerical Lemma 5 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` assembles
 (P63+P65+P66+P67+`e'=|H_0|`), then the set-level Lemma 5 via P51's membership forms; then
@@ -120,7 +117,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 69
+## The queue after Pass 70
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

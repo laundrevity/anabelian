@@ -2993,3 +2993,34 @@ NOT claimed (its right half — instance package + inertia matching — is next)
 `class`, no rule-2 obligation); no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free.
+
+### Pass 69 (2026-07-03) — the `IsGaloisGroup` package (toward `e' = |H_0|`); count stays 0 / 0
+
+**No axiom added, none needed.** `D_{K'}(𝒪_L)` is a Galois group for `B ⊆ 𝒪_L` in Mathlib's
+sense — the gateway hypothesis of `card_inertia_eq_ramificationIdxIn`.
+`Anabelian/Quotient/GaloisGroup.lean`, 4 instances, all standard-axioms-only.
+
+```
+'Anabelian.faithfulSMul_decomposition'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smulCommClass_decomposition'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isInvariant_decomposition'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isGaloisGroup_decomposition'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`faithfulSMul_decomposition`** (abstract, any `(K', A)`): automorphisms agreeing on the
+  integers agree on `L` — the valuation dichotomy (`mem_or_inv_mem` + `map_inv₀`), the P23
+  ending as an instance.
+- **`smulCommClass_decomposition`** (abstract): `g • (b • s) = b • (g • s)` — `b • s =
+  ι(b)·s` (P68's `comapAlgebra` + `Algebra.smul_def`), `smul_mul'`, and decomposition
+  elements fix `ι(b)` (`AlgEquiv.commutes`).
+- **`isInvariant_decomposition`** (at `𝒪_L`): fixed points of the action = image of `B` —
+  P55's `exists_comapRingHom_eq_of_forall_smul_eq`, with `D_{K'}(𝒪_L) = ⊤` (P55) converting
+  subgroup-fixedness to `Gal(L/K')`-fixedness.
+- **`isGaloisGroup_decomposition`** — the bundle.
+
+**Not the cardinal sin / rule-2.** Instance packaging of existing project theorems into
+existing Mathlib classes — strictly below R1; no new `structure`/`class`; no owed witness;
+D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the remaining instance package
+(Dedekind/Module.Finite/torsion-free/LiesOver/separable-residue) + the inertia matching.
