@@ -3086,3 +3086,30 @@ no owed witness; D1/D2 N/A.
 below R1. No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free.
+
+### Pass 72 (2026-07-03) — THE NUMERICAL LEMMA 5, PROVED; count stays 0 / 0
+
+**No axiom added, none needed.** Serre IV §3's numerical identity — the heart of Lemma 5:
+
+> for every `σ̄ ≠ 1`: **`i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1`**
+
+(`Anabelian/Quotient/NumericalLemmaFive.lean`, `exists_lowerIndex_eq_herbrandPhi` — with the
+fiber maximizer `s₁`, its full index profile, and the finiteness data `j(σ̄), i_{K'/K}(σ̄) ∈ ℕ`
+all exposed for the set-level consumer). 1 declaration, standard-axioms-only, **no
+`Fintype` hypothesis** (finiteness is automatic from finite-dimensionality).
+
+```
+'Anabelian.exists_lowerIndex_eq_herbrandPhi'                depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+**Pure assembly** — every link a named pass: P63 (Prop. 3 at the maximizer) → P65 (fiber
+profile `i(s₁h) = min(i_H(h), j)`) → P66 (double count `Σ min = Σ_{k<j} |H_k|`; `j` finite
+for `σ̄ ≠ 1` by P51's `lowerIndex_eq_top_iff` under the DVR separations, via P29's
+Noetherian + Krull) → P71 (`e' = |H₀|`) → P67 (`ℕ∞`→`ℕ`→`ℝ` casts + the `φ`-bridge
+`Σ_{k≤n}|H_k| = |H₀|(φ(n)+1)`); the degenerate `j = 0` case rides on P44's `φ(−1) = −1`.
+
+**Not the cardinal sin / rule-2.** A numerical identity for a given tower — strictly below
+R1. The set-level Lemma 5 / Prop. 15 / Prop. 14 are NOT claimed. No new `structure`/`class`;
+no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — through 72 passes.

@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 71, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 72, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-71 entry), `ROADMAP.md`
-(status header says Pass 71), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-72 entry), `ROADMAP.md`
+(status header says Pass 72), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,35 +61,24 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 72: assemble the numerical Lemma 5
+## YOUR FIRST TASK — Pass 73: begin the set-level Lemma 5
 
-**Everything is proved; this is pure assembly.** Target (Serre IV §3, the numerical heart
-of Lemma 5): for `σ̄ = decompositionQuotient s₀ ≠ 1`-flavored (via a fiber maximizer with
-FINITE `j`),
-
-> **`i_{K'/K}(σ̄) · e' = e' · (φ_{L/K'}(j−1) + 1)`, i.e.
-> `i_{K'/K}(σ̄) = φ_{L/K'}(j−1) + 1` in the appropriate cast**,
-
-from: P63 (`i_{K'/K}(σ̄)·e'_{ℕ∞} = Σ_h i_{L/K}(s₀·dr h)`, any lift `s₀` — instantiate at
-the P65 fiber maximizer `s₁`), P65 (`Σ_h i(s₁·dr h) = Σ_h min(i_H(h), j)` with
-`j = i_{L/K}(s₁)`), P66 (`Σ_h min(i_H(h), m) = Σ_{k<m} |H_k|` in `ℕ∞` — needs `j = (m:ℕ∞)`
-finite: for `σ̄ ≠ 1`, `j ≠ ⊤` since `s₁ ≠ 1` — `s₁ = 1` would give `σ̄ = 1`; use P51's
-`lowerIndex_eq_top_iff` with separation (P29's `iInf_ramificationGroup_extensionIntegers`
-provides the Krull hypothesis at `𝒪_L`... check exact name/location) — OR sidestep: case
-`j = ⊤` makes both sides `⊤` if `σ̄ = 1`… cleanest is `σ̄ ≠ 1 → s₁ ≠ 1 → j ≠ ⊤`), P67
-(`sum_natCard_enat_eq` casts the `ℕ∞`-sum to `ℕ`; `natCast_sum_natCard_eq` reads the
-`ℕ`-sum in `ℝ` as `|H₀|·(φ_{L/K'}(m−1)+1)` — CAREFUL: P67's `φ`-side is at
-`(K', extensionIntegers K' L)`-instantiation? NO — P67 is generic in `(K, A)`; instantiate
-at `(K', extensionIntegers K L)` so `ramificationOrders` and `herbrandPhi` are those of the
-`H`-filtration ✓ same `A = 𝒪_L`, base `K'`), and P71 (`e' = |H₀|` in `ℕ∞`). Design the
-final statement carefully: the mixed `ℕ∞`/`ℝ` shape suggests TWO statements — an `ℕ∞`-level
-`i_{K'/K}(σ̄) · e' = Σ_{k<j} |H_k|` (pure `ℕ∞`, no `φ`) and the `ℝ`-level readout
-`(i-value as ℕ) = φ_{L/K'}(j−1) + 1` via `ENat.toNat`/cast plumbing (`i_{K'/K}(σ̄) ≠ ⊤`
-for `σ̄ ≠ 1` by P51's `lowerIndex_eq_top_iff` at `B` — the separation hypothesis at `B` via
-the P57 iso or directly `B` DVR ⟹ Noetherian ⟹ P23's
-`iInf_ramificationGroup_eq_bot_of_isNoetherianRing`). Scope: the `ℕ∞`-level identity is one
-clean pass if the cast plumbing gets long; clean partial > half-discharge. After: the
-set-level Lemma 5 via P51's membership forms; then Prop. 14/15.
+**Target (multi-pass):** Serre IV §3 Lemma 5, `(G/H)_{φ_{L/K'}(u)} = G_u H/H` — in project
+terms, for `u ≥ 0`-real (or first the ℕ-indexed core): the image of
+`ramificationGroup K (𝒪_L) ·` under `decompositionQuotient` equals the `B`-filtration at
+the `φ`-renumbered index. **Membership route** (both inclusions from P72): for `σ̄ ≠ 1`,
+`σ̄ ∈ (G/H)-filtration at v ↔ v < i_{K'/K}(σ̄)` (P51's Lemma-1 at `B`) `↔ v <
+φ_{L/K'}(j−1) + 1` (P72) — and on the other side, `∃ lift s ∈ G_u ↔ u < j(σ̄)` (the
+maximizer + P51's Lemma-1 at `𝒪_L`, using P72's exposed profile). The bridge between
+`v < φ(j−1)+1` and `⌈ψ(v)⌉`-style bounds is P44–49's `φ`/`ψ` machinery (strict monotonicity
+`herbrandPhi_strictMono`, the inverse identities, P48's formulas). DESIGN FIRST: pick the
+statement form — Serre's real-indexed `(G/H)_{φ(u)} = image of G_u` vs the ℕ-indexed
+`decompositionQuotient-image of G_u = B-filtration at ⌈φ(u)⌉`-style — and mind that the
+project's lower numbering is ℕ-indexed (P23) while `φ` is ℝ-valued; P45's upper-numbering
+`⌈·⌉` conventions are the precedent. Scope the first brick (e.g. the image-membership
+characterization `σ̄ ∈ image (G_u → (G/H)) ↔ u < j(σ̄)`, pure P51/P72); clean partial >
+half-discharge. Then Lemma 5, Prop. 15 (`φ`-transitivity via the ψ-composition), Prop. 14
+(Herbrand).
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -116,7 +105,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 72
+## The queue after Pass 73
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

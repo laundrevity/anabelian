@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 71 (2026-07-03)
+## Current state — Pass 72 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 72 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 73 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -89,8 +89,10 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   for `B ⊆ 𝒪_L` (faithful, commuting, invariant — Pass 55's descent in instance form)
   (Pass 69); the **inertia matching + instance package** — the project's `G₀` IS
   Mathlib's `Ideal.inertia 𝔪_L D` (by `pow_one`), with LiesOver/Module.Finite/torsion-free/
-  separable-residue all in place (Pass 70); and **`e' = |H₀|`, proved** —
-  `(|H₀| : ℕ∞) = addVal(ι π_B)`, the classical `e = |inertia|` for `L/K'` (Pass 71).
+  separable-residue all in place (Pass 70); **`e' = |H₀|`, proved** —
+  `(|H₀| : ℕ∞) = addVal(ι π_B)`, the classical `e = |inertia|` for `L/K'` (Pass 71); and
+  **THE NUMERICAL LEMMA 5, proved** — `i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1` for every
+  `σ̄ ≠ 1` (Pass 72).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -113,10 +115,10 @@ right side as `|H_0|·(φ_{L/K'}(j−1)+1)`; for `e' = |H_0|`, Mathlib's
 `Ideal.card_inertia_eq_ramificationIdxIn` (`|inertia| = e`) applies once the project's
 objects are identified with the ideal-theoretic ones — Pass 68 did the `e'` half
 (`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`), Pass 69 the `IsGaloisGroup` gateway, Pass 70
-the inertia matching plus every remaining instance, and Pass 71 closed the application:
-**`e' = |H₀|`**. Every input to the numerical Lemma 5
-`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` is now proved; its assembly is next, then the
-membership-level renumbering.
+the inertia matching plus every remaining instance, Pass 71 closed `e' = |H₀|`, and Pass 72
+assembled **the numerical Lemma 5**: `i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1`. What remains
+is the set-level Lemma 5 (the subgroup identity, via Pass 51's membership forms and the
+`φ`/`ψ` monotonicity), then `φ`-transitivity (Prop. 15) and Herbrand's theorem (Prop. 14).
 
 ## Build
 

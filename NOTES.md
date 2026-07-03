@@ -5460,3 +5460,54 @@ Lemma 5's numerical heart is now on the board.**
 Next (Pass 72): assemble the numerical Lemma 5 — the `ℕ∞`-level
 `i_{K'/K}(σ̄)·e' = Σ_{k<j}|H_k|` (P63+P65+P66, with `j` finite for `σ̄ ≠ 1`), then the
 `ℝ`-level readout via P67 + P71 ⟹ `i_{K'/K}(σ̄) = φ_{L/K'}(j−1) + 1`.
+
+### Pass 72 (2026-07-03) — THE NUMERICAL LEMMA 5, proved (the assembly)
+
+**Mathematics; ledger delta 0 / 0 — a MILESTONE.** Serre IV §3's numerical identity
+`i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1` for every `σ̄ ≠ 1` — the identity from which
+Lemma 5, `φ`-transitivity (Prop. 15), and Herbrand's theorem (Prop. 14) all follow.
+`Anabelian/Quotient/NumericalLemmaFive.lean`, 1 declaration, standard-axioms-only.
+
+## The statement (designed for its consumer)
+
+`exists_lowerIndex_eq_herbrandPhi`: for `σ̄ = dq s₀ ≠ 1`, there exist `s₁` (same fiber),
+`m, a : ℕ` with: the fiber-maximizer profile `∀ h, i(s₁·dr h) = min(i_H(h), m)`;
+`(m : ℕ∞) = i_{L/K}(s₁)` (Serre's `j(σ̄)`); `(a : ℕ∞) = i_{K'/K}(σ̄)`; and
+`(a : ℝ) = φ_{L/K'}(m − 1) + 1`. The profile and the two finiteness certificates are
+exactly what the set-level Lemma 5 will consume. No `Fintype` hypothesis — `Finite D` is
+automatic and `Fintype.ofFinite` supplies the proof-internal sums.
+
+## The assembly (every link a named pass)
+
+P65's maximizer + profile → `s₁ ≠ 1` (else `σ̄ = 1`) → `j ≠ ⊤` and `i(σ̄) ≠ ⊤` (P51's
+`lowerIndex_eq_top_iff`; separation from `Ideal.iInf_pow_eq_bot_of_isLocalRing` — 𝒪_L
+Noetherian by P29, `B` by DVR) → P63 at `s₁` (any irreducible `π_B`) → P65 profile sums →
+P66 double count → P71 (`addVal(ι π) = (|H₀| : ℕ∞)`) → P67 (`sum_natCard_enat_eq` down to
+`ℕ`, `natCast_sum_natCard_eq` up to `ℝ`) → cancel `|H₀| ≠ 0` → case `m = 0` via
+`herbrandPhi_eq_id` (`φ(−1) = −1`), case `m = n+1` via the cast-argument identity.
+
+## Probe experience (cast-plumbing lessons, now catalogued)
+
+Four rounds, all cast/plumbing: (1) `WithTop.ne_top_iff_exists` produces WithTop-coe, the
+statements use `Nat.cast` — defeq but NOT syntactic; normalize the obtained equation with
+`exact_mod_cast` into a `Nat.cast`-form `have` immediately. (2) `rw` direction on the
+normalized equation. (3) `Nat.pos_iff` doesn't exist (use `.ne'` on the `<` directly /
+`Nat.card_pos`). (4) keep `ramificationOrders` as a single ATOM in the `ℝ`-endgame — no
+`field_simp`/`linarith` across the def; a `push_cast; rfl` step identifies
+`↑(a·card) = ↑a · ramificationOrders` and `mul_right_cancel₀` finishes.
+
+## Build + headline
+
+`lake build` green, warning-free; preflight CLEAN. **HEADLINE: THE NUMERICAL LEMMA 5 —
+`i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1` for every `σ̄ ≠ 1` — proved axiom-free, assembled
+from nine named passes (P63–P71) with zero new mathematics in the assembly itself.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 73+): **the set-level Lemma 5** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` — membership
+form: `σ̄ ∈ (G/H)_v ↔ v < i(σ̄)` (P51's Lemma 1 at `B`) `↔ v < φ(j−1)+1` (P72) `↔
+ψ(v)-side bound on j` (P44–48 `φ`/`ψ` monotonicity/inverse) `↔ ∃ lift s ∈ G_{⌈·⌉}` (P51 at
+`𝒪_L` + the maximizer); design the indexing carefully (the project's filtration is
+ℕ-indexed, Serre's statement is ℝ-indexed via P45's `⌈·⌉` conventions). Then Prop. 15 and
+Prop. 14.

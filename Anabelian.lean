@@ -45,6 +45,7 @@ import Anabelian.Quotient.InertiaSetup
 import Anabelian.Quotient.LiftDvd
 import Anabelian.Quotient.LiftSet
 import Anabelian.Quotient.MinpolyBound
+import Anabelian.Quotient.NumericalLemmaFive
 import Anabelian.Quotient.RamificationIdx
 import Anabelian.Quotient.SumFormula
 import Anabelian.Quotient.Surjective
