@@ -5511,3 +5511,43 @@ form: `σ̄ ∈ (G/H)_v ↔ v < i(σ̄)` (P51's Lemma 1 at `B`) `↔ v < φ(j−
 `𝒪_L` + the maximizer); design the indexing carefully (the project's filtration is
 ℕ-indexed, Serre's statement is ℝ-indexed via P45's `⌈·⌉` conventions). Then Prop. 15 and
 Prop. 14.
+
+### Pass 73 (2026-07-03) — SERRE IV §3 LEMMA 5, proved (Herbrand's renumbering lemma)
+
+**Mathematics; ledger delta 0 / 0 — a MILESTONE.** The set-level Lemma 5:
+`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊` for every
+`u : ℕ` — Serre's `(G/H)_{φ_{L/K'}(u)} = G_u H/H`, the statement that makes the upper
+numbering quotient-compatible. `Anabelian/Quotient/LemmaFive.lean`, 4 declarations,
+standard-axioms-only.
+
+## Design
+
+ℕ-indexed with `⌈·⌉₊` on the `φ`-side (the P45 convention: Serre's real-indexed lower
+numbering is `G_v = G_{⌈v⌉}`). Both memberships go through P51's Lemma 1:
+- LHS: `σ̄ ∈ (G_u).map dq ↔ u < j(σ̄)` (`decompositionQuotient_mem_map_iff`) — `⟸` the
+  maximizer `s₁ ∈ G_u`; `⟹` any lift's index is `≤ j` (`lowerIndex_le_of_profile`: every
+  fiber element is `s₁·dr h` by P56's bijection, and the P72 profile caps it at `m`).
+- RHS: `σ̄ ∈ B-filtration at ⌈φ(u)⌉ ↔ ⌈φ(u)⌉ < i_{K'/K}(σ̄) = a`, and the **ceiling
+  bridge** `⌈φ(u)⌉ < a ↔ u < m` (`ceil_herbrandPhi_lt_iff`): `u ≤ m−1 ⟹ φ(u) ≤ φ(m−1) =
+  a−1 ⟹ ⌈φ(u)⌉ ≤ a−1` (`Nat.ceil_le`); `u ≥ m ⟹ φ(u) ≥ φ(m) > φ(m−1) = a−1 ⟹ ⌈φ(u)⌉ > a−1`
+  (`Nat.lt_ceil`) — P44's strict monotonicity; `m = 0` via `φ(−1) = −1` (both sides
+  false/`a = 0`).
+- Glue: P52's surjectivity produces the lift; `σ̄ = 1` is `Subgroup.one_mem` on both sides.
+
+Probe: 3 mechanical rounds (`Subgroup.mem_map.mpr` for the set-coe membership; `hapos`
+scoping for the final `omega`; `σ̄` with a combining macron is not a valid identifier —
+use plain names in binders).
+
+## Build + headline
+
+`lake build` green (2.8 s); preflight CLEAN. **HEADLINE: SERRE IV §3 LEMMA 5 —
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H` — proved in Lean 4, axiom-free, for every finite tower over
+a nonarchimedean local field. The renumbering that Herbrand's theorem is made of.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 74+): Prop. 15 (`φ`-transitivity — recommended first brick: the
+index-multiplicativity `(G_0:G_u) = ((G/H)_0:(G/H)_{⌈φ(u)⌉})·(H_0:H_u)` from Lemma 5 + P46,
+pure group theory) and Prop. 14 (**Herbrand's theorem** — Lemma 5 read through P45's upper
+numbering, gated on the `ψ`-composition form of transitivity).

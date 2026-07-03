@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 72, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 73, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-72 entry), `ROADMAP.md`
-(status header says Pass 72), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-73 entry), `ROADMAP.md`
+(status header says Pass 73), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,24 +61,36 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 73: begin the set-level Lemma 5
+## YOUR FIRST TASK — Pass 74: Herbrand's theorem (Prop. 14), or Prop. 15
 
-**Target (multi-pass):** Serre IV §3 Lemma 5, `(G/H)_{φ_{L/K'}(u)} = G_u H/H` — in project
-terms, for `u ≥ 0`-real (or first the ℕ-indexed core): the image of
-`ramificationGroup K (𝒪_L) ·` under `decompositionQuotient` equals the `B`-filtration at
-the `φ`-renumbered index. **Membership route** (both inclusions from P72): for `σ̄ ≠ 1`,
-`σ̄ ∈ (G/H)-filtration at v ↔ v < i_{K'/K}(σ̄)` (P51's Lemma-1 at `B`) `↔ v <
-φ_{L/K'}(j−1) + 1` (P72) — and on the other side, `∃ lift s ∈ G_u ↔ u < j(σ̄)` (the
-maximizer + P51's Lemma-1 at `𝒪_L`, using P72's exposed profile). The bridge between
-`v < φ(j−1)+1` and `⌈ψ(v)⌉`-style bounds is P44–49's `φ`/`ψ` machinery (strict monotonicity
-`herbrandPhi_strictMono`, the inverse identities, P48's formulas). DESIGN FIRST: pick the
-statement form — Serre's real-indexed `(G/H)_{φ(u)} = image of G_u` vs the ℕ-indexed
-`decompositionQuotient-image of G_u = B-filtration at ⌈φ(u)⌉`-style — and mind that the
-project's lower numbering is ℕ-indexed (P23) while `φ` is ℝ-valued; P45's upper-numbering
-`⌈·⌉` conventions are the precedent. Scope the first brick (e.g. the image-membership
-characterization `σ̄ ∈ image (G_u → (G/H)) ↔ u < j(σ̄)`, pure P51/P72); clean partial >
-half-discharge. Then Lemma 5, Prop. 15 (`φ`-transitivity via the ψ-composition), Prop. 14
-(Herbrand).
+**Both are now Lemma-5 corollaries; scope one.**
+- **(A) Herbrand's theorem** `(G/H)^v = G^v H/H` (Prop. 14): the upper numbering (P45:
+  `upperRamificationGroup K A v = G_{⌈ψ(v)⌉}`) of the quotient equals the image of the
+  upper numbering. Route: `(G/H)^v = (G/H)_{⌈ψ_{K'/K}(v)⌉}` (P45 def at `B`) and
+  `G^v H/H = (G_{⌈ψ_{L/K}(v)⌉}).map dq = B-filtration at ⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉` (P73);
+  so Herbrand reduces to the **numerical compatibility**
+  `⌈ψ_{K'/K}(v)⌉ = ⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉` — which is where **`φ`-transitivity**
+  `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` (equivalently `ψ_{L/K} = ψ_{L/K'} ∘ ψ_{K'/K}`) enters.
+- **(B) `φ`-transitivity** (Prop. 15) FIRST (Serre's own order): differentiate! P47–49
+  built the slopes: `φ_{L/K}' (u) = 1/(G_0 : G_u)`; chain rule on `φ_{K'/K} ∘ φ_{L/K'}`
+  gives slope `1/((G/H)_0 : (G/H)_{φ(u)}) · 1/(H_0 : H_u)`, and **Lemma 5 (P73) +
+  `H_u = H ∩ G_u` (P46) + `e' = |H₀|`-flavored counting give the index-multiplicativity**
+  `(G_0 : G_u) = ((G/H)_0 : (G/H)_{φ(u)})·(H_0 : H_u)` — then two continuous functions with
+  a.e.-equal derivatives and equal value at 0 agree (P44's continuity + an
+  `ae`/`StrictMonoOn` argument, or Serre's elementary piecewise-linear route via P48's
+  formulas — the piecewise route avoids measure theory: both sides are piecewise linear
+  with matching breakpoints/slopes... design carefully; possibly the INTEGER-POINT route:
+  both sides agree at ℕ-points by P48's formula + Lemma-5 counting, and are affine between
+  consecutive integers... note `φ_{K'/K} ∘ φ_{L/K'}` breakpoints are at integers `u` since
+  `φ_{L/K'}(ℕ-breakpoints of φ_{K'/K}-input)`... nontrivial: `φ_{K'/K}`'s breakpoints are
+  at integers `v`, hit when `φ_{L/K'}(u) ∈ ℕ` — Serre's argument uses left/right
+  derivatives everywhere; consider the P47–49 derivative route with one-sided derivatives).
+  This is REAL work — likely 2–4 passes. Inventory P47–49's exact derivative statements
+  first.
+Recommended: start with (B)'s first brick — the **index-multiplicativity at integer u**:
+`(G_0 : G_u) = ((G/H)_0 : (G/H)_{⌈φ(u)⌉})·(H_0 : H_u)` from P73 + P46 + the card
+bookkeeping (all group-theoretic, no analysis) — it is the arithmetic heart; the analytic
+gluing comes after. Clean partial > half-discharge.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -105,7 +117,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 73
+## The queue after Pass 74
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

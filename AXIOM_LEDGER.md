@@ -3113,3 +3113,37 @@ R1. The set-level Lemma 5 / Prop. 15 / Prop. 14 are NOT claimed. No new `structu
 no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — through 72 passes.
+
+### Pass 73 (2026-07-03) — SERRE IV §3 LEMMA 5, PROVED; count stays 0 / 0
+
+**No axiom added, none needed — Herbrand's renumbering lemma is a theorem.**
+
+> for every `u : ℕ`:
+> **`(ramificationGroup K (𝒪_L) u).map (decompositionQuotient)
+>   = ramificationGroup K (𝒪_L ∩ K') ⌈φ_{L/K'}(u)⌉₊`**
+
+(`Anabelian/Quotient/LemmaFive.lean`, `map_ramificationGroup_eq_ceil` — Serre's
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H`, with the `⌈·⌉₊` convention matching Pass 45's real-indexed
+upper numbering). 4 declarations, all standard-axioms-only.
+
+```
+'Anabelian.lowerIndex_le_of_profile'                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_mem_map_iff'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ceil_herbrandPhi_lt_iff'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_ramificationGroup_eq_ceil'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `lowerIndex_le_of_profile` — the P72 profile bounds the whole fiber (P56's coset
+  bijection). `decompositionQuotient_mem_map_iff` — **`σ̄` has a lift in `G_u ↔ u <
+  j(σ̄)`** (P51's Lemma 1 both ways). `ceil_herbrandPhi_lt_iff` — the ceiling bridge
+  `⌈φ(u)⌉ < a ↔ u < m` given `a = φ(m−1)+1 ∈ ℕ` (P44's strict monotonicity through
+  `Nat.ceil`; `m = 0` rides on `φ(−1) = −1`).
+- **`map_ramificationGroup_eq_ceil`** — membership on both sides: lifts exist (P52); for
+  `σ̄ ≠ 1`, P72 supplies `(s₁, m, a)` and `σ̄ ∈ LHS ↔ u < m ↔ ⌈φ(u)⌉ < a ↔ σ̄ ∈ RHS`;
+  `σ̄ = 1` trivial.
+
+**Not the cardinal sin / rule-2.** The renumbering identity for a given tower — strictly
+below R1. Prop. 15 / Prop. 14 NOT claimed. No new `structure`/`class`; no owed witness;
+D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 73 passes.

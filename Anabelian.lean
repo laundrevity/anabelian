@@ -42,6 +42,7 @@ import Anabelian.Quotient.GeneratorRep
 import Anabelian.Quotient.IndexProfile
 import Anabelian.Quotient.InertiaCard
 import Anabelian.Quotient.InertiaSetup
+import Anabelian.Quotient.LemmaFive
 import Anabelian.Quotient.LiftDvd
 import Anabelian.Quotient.LiftSet
 import Anabelian.Quotient.MinpolyBound
