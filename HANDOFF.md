@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 70, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 71, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-70 entry), `ROADMAP.md`
-(status header says Pass 70), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-71 entry), `ROADMAP.md`
+(status header says Pass 71), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,24 +61,34 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 71: the application — `e' = |H₀|`
+## YOUR FIRST TASK — Pass 72: assemble the numerical Lemma 5
 
-All hypotheses are in place (P68 `comapAlgebra` + `ramificationIdx = e'`; P69
-`IsGaloisGroup`; P70 everything else + the definitional inertia matching). Assemble:
+**Everything is proved; this is pure assembly.** Target (Serre IV §3, the numerical heart
+of Lemma 5): for `σ̄ = decompositionQuotient s₀ ≠ 1`-flavored (via a fiber maximizer with
+FINITE `j`),
 
-> `Nat.card (ramificationGroup K' (𝒪_L) 0) = addVal_{𝒪_L}(ι π_B)`-as-ℕ
+> **`i_{K'/K}(σ̄) · e' = e' · (φ_{L/K'}(j−1) + 1)`, i.e.
+> `i_{K'/K}(σ̄) = φ_{L/K'}(j−1) + 1` in the appropriate cast**,
 
-via: `ramificationGroup_zero_eq_inertia` (P70) → `card_inertia_eq_ramificationIdxIn`
-(Mathlib; `G := ↥(D_{K'}(𝒪_L))`, `p := 𝔪_B ≠ ⊥` from the DVR's `not_a_field'`) →
-`ramificationIdxIn_eq_ramificationIdx` (check its exact form in the Galois file — it may
-need `[p.IsMaximal]` or the primesOver machinery; the single prime here is `𝔪_L`) → P68's
-`ramificationIdx_comapRingHom`. Mind: `Finite G` from the `[Fintype]` hypothesis;
-`Ideal.Quotient.field` may need `letI` for the separable-residue hypothesis to fire (P70's
-instance is stated on the quotient CommRings — check it synthesizes as-is). Statement shape:
-for `π : ↥B` irreducible and `(n : ℕ∞) = addVal(ι π)`:
-`Nat.card (ramificationGroup K' (extensionIntegers K L) 0) = n` — or cleaner, directly
-`(Nat.card (ramificationGroup K' (𝒪_L) 0) : ℕ∞) = addVal(ι π)`. After it: the numerical
-Lemma 5 `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` assembles (P63+P65+P66+P67+P71), then the
+from: P63 (`i_{K'/K}(σ̄)·e'_{ℕ∞} = Σ_h i_{L/K}(s₀·dr h)`, any lift `s₀` — instantiate at
+the P65 fiber maximizer `s₁`), P65 (`Σ_h i(s₁·dr h) = Σ_h min(i_H(h), j)` with
+`j = i_{L/K}(s₁)`), P66 (`Σ_h min(i_H(h), m) = Σ_{k<m} |H_k|` in `ℕ∞` — needs `j = (m:ℕ∞)`
+finite: for `σ̄ ≠ 1`, `j ≠ ⊤` since `s₁ ≠ 1` — `s₁ = 1` would give `σ̄ = 1`; use P51's
+`lowerIndex_eq_top_iff` with separation (P29's `iInf_ramificationGroup_extensionIntegers`
+provides the Krull hypothesis at `𝒪_L`... check exact name/location) — OR sidestep: case
+`j = ⊤` makes both sides `⊤` if `σ̄ = 1`… cleanest is `σ̄ ≠ 1 → s₁ ≠ 1 → j ≠ ⊤`), P67
+(`sum_natCard_enat_eq` casts the `ℕ∞`-sum to `ℕ`; `natCast_sum_natCard_eq` reads the
+`ℕ`-sum in `ℝ` as `|H₀|·(φ_{L/K'}(m−1)+1)` — CAREFUL: P67's `φ`-side is at
+`(K', extensionIntegers K' L)`-instantiation? NO — P67 is generic in `(K, A)`; instantiate
+at `(K', extensionIntegers K L)` so `ramificationOrders` and `herbrandPhi` are those of the
+`H`-filtration ✓ same `A = 𝒪_L`, base `K'`), and P71 (`e' = |H₀|` in `ℕ∞`). Design the
+final statement carefully: the mixed `ℕ∞`/`ℝ` shape suggests TWO statements — an `ℕ∞`-level
+`i_{K'/K}(σ̄) · e' = Σ_{k<j} |H_k|` (pure `ℕ∞`, no `φ`) and the `ℝ`-level readout
+`(i-value as ℕ) = φ_{L/K'}(j−1) + 1` via `ENat.toNat`/cast plumbing (`i_{K'/K}(σ̄) ≠ ⊤`
+for `σ̄ ≠ 1` by P51's `lowerIndex_eq_top_iff` at `B` — the separation hypothesis at `B` via
+the P57 iso or directly `B` DVR ⟹ Noetherian ⟹ P23's
+`iInf_ramificationGroup_eq_bot_of_isNoetherianRing`). Scope: the `ℕ∞`-level identity is one
+clean pass if the cast plumbing gets long; clean partial > half-discharge. After: the
 set-level Lemma 5 via P51's membership forms; then Prop. 14/15.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
@@ -106,7 +116,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 71
+## The queue after Pass 72
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

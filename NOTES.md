@@ -5422,3 +5422,41 @@ definitionally. The application (`e' = |H₀|`) is next.**
 new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 71): apply `card_inertia_eq_ramificationIdxIn` +
 `ramificationIdxIn_eq_ramificationIdx` + P68 ⟹ `e' = |H₀|`; then the numerical Lemma 5.
+
+### Pass 71 (2026-07-03) — `e' = |H₀|`, proved (the identification closes)
+
+**Mathematics; ledger delta 0 / 0.** The classical `e = |inertia|` for the Galois extension
+`L/K'`: `(|H₀| : ℕ∞) = addVal_{𝒪_L}(ι π_B)` for any irreducible `π_B`.
+`Anabelian/Quotient/InertiaCard.lean`, 2 declarations, standard-axioms-only.
+
+## Method (four rewrites over the P68–70 package)
+
+`ramificationGroup_zero_eq_inertia` (P70, definitional) →
+`Ideal.card_inertia_eq_ramificationIdxIn` (Mathlib — every hypothesis from P68's
+`comapAlgebra`, P69's `IsGaloisGroup`, P70's instances; `𝔪_B ≠ ⊥` =
+`IsDiscreteValuationRing.not_a_field'`) → `ramificationIdxIn_eq_ramificationIdx`
+(single-prime, `G` explicit) → P68's `ramificationIdx_comapRingHom`. The `ℕ∞` form handles
+`addVal ≠ ⊤` via `addVal_eq_top_iff` + `WithTop.ne_top_iff_exists`. Two probe rounds
+(unused-`Fintype` lint — `Finite D` is automatic from finite-dimensionality — and a
+`mod_cast` that preferred `congrArg`).
+
+## The four-pass identification, in retrospect (P68–71)
+
+`e'`-in-ideal-form (68) → `IsGaloisGroup` (69) → instances + definitional inertia matching
+(70) → application (71). Mathlib's `RamificationInertia` tree did the heavy lifting
+(`|inertia| = e` itself); the project supplied the objects and the bridges — zero axioms
+throughout, and two design decisions (P23's `Ideal.inertia`-based filtration, P51's
+generator-free `lowerIndex`) made the matchings definitional or one-line.
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: `e' = |H₀|` — the ramification
+index of `L/K'` is the cardinality of its inertia group, proved axiom-free. Every input to
+Lemma 5's numerical heart is now on the board.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 72): assemble the numerical Lemma 5 — the `ℕ∞`-level
+`i_{K'/K}(σ̄)·e' = Σ_{k<j}|H_k|` (P63+P65+P66, with `j` finite for `σ̄ ≠ 1`), then the
+`ℝ`-level readout via P67 + P71 ⟹ `i_{K'/K}(σ̄) = φ_{L/K'}(j−1) + 1`.

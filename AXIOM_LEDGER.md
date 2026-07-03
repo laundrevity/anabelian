@@ -3059,3 +3059,30 @@ below R1; all declarations instantiate existing Mathlib classes; no new `structu
 no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the application ⟹ `e' = |H₀|`.
+
+### Pass 71 (2026-07-03) — `e' = |H₀|`, PROVED; count stays 0 / 0
+
+**No axiom added, none needed.** The identification program (P68–71) closes: the classical
+`e = |inertia|` for `L/K'`, in the project's vocabulary.
+`Anabelian/Quotient/InertiaCard.lean`, 2 declarations, all standard-axioms-only.
+
+```
+'Anabelian.natCard_ramificationGroup_zero_eq'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.natCast_card_ramificationGroup_zero_eq_addVal'   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`natCast_card_ramificationGroup_zero_eq_addVal`** — for any irreducible `π` of
+  `B = 𝒪_L ∩ K'`: `(Nat.card (ramificationGroup K' (𝒪_L) 0) : ℕ∞) = addVal_{𝒪_L}(ι π)` —
+  **`e' = |H₀|`**. Four rewrites: P70's definitional inertia matching → Mathlib's
+  `card_inertia_eq_ramificationIdxIn` (hypothesis package P68–70; `𝔪_B ≠ ⊥` from the DVR's
+  `not_a_field'`) → `ramificationIdxIn_eq_ramificationIdx` (single prime) → P68's
+  `ramificationIdx_comapRingHom`. (`Finite D` was automatic — the `Fintype` hypothesis
+  wasn't even needed.)
+- **Every input to Lemma 5's numerical heart `i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j − 1)` is now
+  proved** (P63 sum formula, P65 fiber profile, P66 double count, P67 `φ`-bridge, P71
+  `e' = |H₀|`); the assembly is the next pass.
+
+**Not the cardinal sin / rule-2.** The closing application for a given tower — strictly
+below R1. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free.

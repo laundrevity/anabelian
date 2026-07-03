@@ -40,6 +40,7 @@ import Anabelian.Quotient.Division
 import Anabelian.Quotient.GaloisGroup
 import Anabelian.Quotient.GeneratorRep
 import Anabelian.Quotient.IndexProfile
+import Anabelian.Quotient.InertiaCard
 import Anabelian.Quotient.InertiaSetup
 import Anabelian.Quotient.LiftDvd
 import Anabelian.Quotient.LiftSet
