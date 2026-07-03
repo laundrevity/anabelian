@@ -5371,3 +5371,54 @@ Next (Pass 70): the remaining instances (`IsDedekindDomain` likely automatic;
 `Module.Finite ↥B ↥𝒪_L` via P32 + restrictScalars along the P60 tower; torsion-free;
 `𝔪_L.LiesOver 𝔪_B` from P50+P59; separable residue via finite-fields-perfect) and the
 inertia matching (`Ideal.inertia` vs `ramificationGroup K' 𝒪_L 0`).
+
+### Pass 70 (2026-07-03) — remaining instances + the inertia matching
+
+**Mathematics; ledger delta 0 / 0.** The full hypothesis package for
+`card_inertia_eq_ramificationIdxIn`, and a pleasant surprise: **the inertia matching is
+definitional**. `Anabelian/Quotient/InertiaSetup.lean`, 7 declarations,
+standard-axioms-only.
+
+## The definitional dividend
+
+Mathlib's `Ideal.inertia G I` (found in `RingTheory/Ideal/Defs.lean`, an `abbrev` for
+`AddSubgroup.inertia`) is `{g | ∀ x, g•x − x ∈ I}` — and Pass 23 defined
+`ramificationGroup K A i := (𝔪^(i+1)).inertia (D)` from exactly this device. So
+`ramificationGroup K' A 0 = (𝔪_A).inertia (D_{K'}(A))` is `rw [ramificationGroup];
+norm_num` (`pow_one`). The HANDOFF's anticipated "kernel-vs-kernel comparison" evaporated.
+
+## The instances
+
+- `isTorsionFree_comap` (`Module.IsTorsionFree ↥B ↥𝒪_L`): domains + injective inclusion;
+  `isRegular_iff_ne_zero` + `mul_left_cancel₀` (note the current `IsTorsionFree` is the
+  `IsRegular → IsSMulRegular` formulation).
+- `liesOver_maximalIdeal` (`𝔪_L.LiesOver 𝔪_B`, generic `(K', A)`): `le_antisymm` of P50's
+  `mem_maximalIdeal_of_comapRingHom` and P59's `isUnit_comapRingHom_iff` (the `LiesOver`
+  field is `over : p = P.under A`; anonymous-constructor form — the `where over :=` form
+  hit a parse quirk).
+- `baseComapAlgebra` (`Algebra ↥𝒪[K] ↥B` via `baseToComapRingHom.toAlgebra`) +
+  `isScalarTower_baseComap` (`IsScalarTower.of_algebraMap_eq'` fed by P60's commuting
+  square — verbatim) + `moduleFinite_comap` (`Module.Finite.of_restrictScalars_finite` on
+  P32's `Module.Finite ↥𝒪[K] ↥𝒪_L`).
+- `isSeparable_residue`: `letI := Ideal.Quotient.field` on both quotients; `Finite` of
+  `𝒪_L`'s residue (P36, defeq `ResidueField`), `Finite` of `B`'s via `Finite.of_injective`
+  along the (automatic, LiesOver-derived) `algebraMap` of quotients (fields ⟹ injective);
+  `Module.Finite.of_finite` ⟹ algebraic ⟹ Mathlib's finite-field separability chain closes
+  by `infer_instance`.
+
+Probe-verified as automatic: `IsDedekindDomain` for both rings (DVR ⟹ PIR ⟹ Dedekind; note
+`Quotient.ComapIntegers` must be in the import chain for `B`'s DVR instance to be found —
+the P60 import-visibility idiom again).
+
+## Build + headline
+
+`lake build` green (3.2 s); preflight CLEAN. **HEADLINE: every hypothesis of Mathlib's
+`|inertia| = e` is in place, and the project's `G₀` IS Mathlib's `Ideal.inertia` —
+definitionally. The application (`e' = |H₀|`) is next.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** All declarations instantiate existing classes or match existing definitions — no
+new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 71): apply `card_inertia_eq_ramificationIdxIn` +
+`ramificationIdxIn_eq_ramificationIdx` + P68 ⟹ `e' = |H₀|`; then the numerical Lemma 5.

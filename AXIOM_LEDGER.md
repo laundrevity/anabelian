@@ -3024,3 +3024,38 @@ D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the remaining instance package
 (Dedekind/Module.Finite/torsion-free/LiesOver/separable-residue) + the inertia matching.
+
+### Pass 70 (2026-07-03) — remaining instances + the inertia matching; count stays 0 / 0
+
+**No axiom added, none needed.** Every hypothesis of Mathlib's
+`card_inertia_eq_ramificationIdxIn` is now available.
+`Anabelian/Quotient/InertiaSetup.lean`, 7 declarations, all standard-axioms-only.
+
+```
+'Anabelian.ramificationGroup_zero_eq_inertia'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isTorsionFree_comap'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.liesOver_maximalIdeal'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.baseComapAlgebra'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isScalarTower_baseComap'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.moduleFinite_comap'                              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isSeparable_residue'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The inertia matching is definitional**: `ramificationGroup K' A 0 = (𝔪_A).inertia
+  (D_{K'}(A))` — Pass 23 built the filtration FROM `Ideal.inertia (𝔪^(i+1))`, so the
+  anticipated "kernel-vs-kernel comparison" is `rw [ramificationGroup]; norm_num` (i.e.
+  `pow_one`). A design dividend four months old.
+- `isTorsionFree_comap` (domains + injective inclusion), `liesOver_maximalIdeal` (P50's
+  `𝔪`-reflection + P59's two-way unit transfer), `baseComapAlgebra` +
+  `isScalarTower_baseComap` (P60's commuting square is literally the tower axiom),
+  `moduleFinite_comap` (P32's finiteness restricted along the tower), `isSeparable_residue`
+  (P36 finite residue + embedding + finite ⟹ algebraic ⟹ separable over a finite (hence
+  perfect) field — Mathlib's chain).
+- Probe-verified as automatic: `IsDedekindDomain` for both rings (from the P35/P57 DVR
+  instances), and the perfect-field separability chain.
+
+**Not the cardinal sin / rule-2.** Instance plumbing + a definitional matching — strictly
+below R1; all declarations instantiate existing Mathlib classes; no new `structure`/`class`;
+no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the application ⟹ `e' = |H₀|`.
