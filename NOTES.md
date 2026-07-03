@@ -5099,3 +5099,63 @@ Next: Pass 63 — the assembly: obtain `x` (P54) and `y` (P57) once; P58's `a �
 `b ∣ a` ⟹ mutual divisibility ⟹ `addVal` equal (`addVal_le_iff_dvd` both ways); read LHS
 by P57(3) + P59's dilation, RHS by P59's fiber sum ⟹
 **`e'·i_{K'/K}(σ̄) = Σ_h i_{L/K}(s₀·dr h)`** — Prop. 3.
+
+### Pass 63 (2026-07-03) — SERRE IV §1 PROP. 3, proved (the sum formula)
+
+**Mathematics; ledger delta 0 / 0 — a MILESTONE.** The sum formula
+`i_{K'/K}(σ̄) · e' = Σ_{h} i_{L/K}(s₀·dr h)` — Serre IV §1 Prop. 3, the arithmetic engine of
+Lemma 5 / `φ`-transitivity / Herbrand's theorem, and the wall first named at Pass 47 — is
+proved, axiom-free. `Anabelian/RamificationSumFormula.lean`, 1 declaration,
+standard-axioms-only; **the probe compiled on the first try** (all fourteen feeding bricks
+fit exactly).
+
+## The statement (and two design wins)
+
+`lowerIndex_decompositionQuotient_mul_eq_sum`: for every `s₀` and every irreducible `π` of
+`B`, `lowerIndex K B (dq s₀) * addVal_{𝒪_L}(ι π) = Σ_h lowerIndex K 𝒪_L (s₀ * dr h)`.
+- **Generator-free**: `lowerIndex` is intrinsic (P51's design decision paying out at the
+  finish line) — `x`, `y`, `F`, `g` all disappear from the statement.
+- **Uniform in `σ̄`**: no `σ̄ ≠ 1` hypothesis. At `σ̄ = 1` the LHS is `⊤·e' = ⊤` and the RHS
+  sum contains `lowerIndex 1 = ⊤` — the `ℕ∞` design (P51) absorbs Serre's "both sides are
+  `+∞`" convention silently.
+
+## The proof (eight lines)
+
+`x` from P54; `y` from P57's spec; `F` from P55; **h1** `= ι(σ̄y−y) ∣ ∏` (P58's abstract
+telescoping direction, fed by P55's descent + P57's telescoping); **h2** `= ∏ ∣ ι(σ̄y−y)`
+(P62's division direction); mutual divisibility ⟹ `addVal` equal (`addVal_le_iff_dvd` both
+ways + `le_antisymm`); rewrite the left by P59's `addVal_comapRingHom` (the `e'`-dilation)
+and P57(3) (`i_{K'/K} = addVal_B(σ̄y−y)`), the right by P59's `addVal_liftProd` (the fiber
+sum). Done.
+
+## The arc, in retrospect (P50–63, fourteen passes, `0/0` throughout)
+
+Skeleton (50) → currency `i_G` (51) → surjectivity (52) → concrete `i_G` (53) →
+monogenicity discharge (54) → Serre's polynomial + descent (55) → lift-set identity (56) →
+`𝒪_L ∩ K' = 𝒪_{K'}` + telescoping (57) → direction (i) (58) → `addVal` bookkeeping (59) →
+representation + `L = K'(x)` (60) → remainder-vanishing (61) → direction (ii) (62) →
+**assembly (63)**. Every pass one rung, nothing half-built, zero axioms at every step — the
+discipline the ledger exists to enforce, applied to a fourteen-pass wall.
+
+## Build + headline
+
+`lake build` green (2.7 s, fresh file); preflight CLEAN. `#print axioms`:
+`[propext, Classical.choice, Quot.sound]` — nothing else. **HEADLINE: SERRE IV §1 PROP. 3 —
+`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)` — proved in Lean 4 from the standard axioms,
+with zero project axioms.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched — this
+is structure of a *given* tower, recovering nothing from an abstract group.
+
+## Next (Pass 64+): Serre IV §3 Lemma 5
+
+Convert the `i`-sum into the `φ`-renumbering statement `(G/H)_{φ_{L/K'}(u)} = G_u H/H`:
+Serre's proof takes `σ̄ ≠ 1`, sets `j(σ̄) := max_{s ↦ σ̄} i_G(s)` and shows
+`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j(σ̄) − 1)` by comparing the sum formula with `φ`'s explicit
+form (P48's piecewise formula / P44's integral; the `H_u = H ∩ G_u` of P46 and the Lemma-1
+membership forms of P51/P53 mediate). Sub-bricks to scope: the `max` over the fiber; the
+sum-vs-`φ` computation (`Σ_h min(i_H-ish…)` — Serre's Lemma 4-flavored counting); then
+Lemma 5, Prop. 15 (`φ`-transitivity), Prop. 14 (Herbrand). R1–R3 remain the distant,
+must-be-earned targets.

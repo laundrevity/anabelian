@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 62 (2026-07-03)
+## Current state — Pass 63 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 64 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 65 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -76,29 +76,24 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `L = K'(x)` layer** — every integer of `L` is `g(x)` for `g` over `𝒪_K`, and the same
   generator generates `L` as a field over every intermediate `K'` (Pass 60); and the
   **remainder-vanishing brick** — a polynomial over `B` of degree `< [L:K']` whose image
-  kills `x` is zero (Pass 61); and **Prop. 3's direction (ii), proved** —
-  `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B` (Pass 62).
+  kills `x` is zero (Pass 61); **Prop. 3's direction (ii), proved** —
+  `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B` (Pass 62); and **SERRE IV §1
+  PROP. 3, PROVED** — the sum formula `i_{K'/K}(σ̄) · e' = Σ_{s ↦ σ̄} i_{L/K}(s)`,
+  generator-free, axiom-free (Pass 63).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
   (absolute Galois groups) while recovering nothing from an abstract group; the targets remain
   untouched and must be *earned*, never axiomatized.
 
-**Current frontier:** the ramification arithmetic of the quotient — Serre IV §1 Prop. 3
-(`i_{K'/K}(σ̄) = (1/e') Σ i_{L/K}(s)` over the lifts `s` of `σ̄`), feeding IV §3 Lemma 5
-`(G/H)_{φ_{L/K'}(u)} = G_u H/H`, the wall between the completed `φ`/`ψ` analytic theory and both
-`φ`-transitivity (Prop. 15) and Herbrand's theorem `(G/H)^v = G^v H/H` (Prop. 14). The
-group-theoretic skeleton (Pass 50), the `i_G` function with its filtration characterization
-(Pass 51), surjectivity of the quotient restriction (Pass 52 — the lifts exist), the concrete
-`i_G(σ) = v_L(σx − x)` (Pass 53), the monogenicity discharge making it unconditional
-(Pass 54), Serre's polynomial `∏_{h}(X − h·x)` with its descent to `𝒪_L ∩ K'` (Pass 55), the
-lift-set identity making `∏_{s ↦ σ̄}` computable (Pass 56), and the `𝒪_L ∩ K' = 𝒪_{K'}`
-identification with the coefficient telescoping and the concrete
-`i_{K'/K}(σ̄) = addVal(σ̄y − y)` (Pass 57), direction (i) itself — `a ∣ b` (Pass 58), the
-`addVal` bookkeeping (Pass 59), and the representation + `L = K'(x)` layer (Pass 60) are all
-built, the remainder-vanishing degree count is proved (Pass 61), and direction (ii)
-`b ∣ a` is proved (Pass 62); what remains of Prop. 3 is only the final assembly —
-`Associated` + the `addVal` readings ⟹ `e'·i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`.
+**Current frontier:** with **Serre IV §1 Prop. 3 proved** (Pass 63 — the fourteen-pass
+quotient arc P50–63, all axiom-free), the next target is **Serre IV §3 Lemma 5**
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H` — converting the `i`-sum identity into the `φ`-renumbering
+statement — and through it **`φ`-transitivity** (Prop. 15) and **Herbrand's theorem**
+`(G/H)^v = G^v H/H` (Prop. 14), the upper numbering's defining quotient-compatibility. The
+`φ`/`ψ` analytic theory (Passes 44–49) and the full quotient arithmetic (Passes 50–63) are
+in place; what remains for Lemma 5 is the `inf`/`min` argument of Serre's proof, bridging
+`lowerIndex` (Pass 51's Lemma-1 forms) to the `φ` formulas (Passes 47–48).
 
 ## Build
 

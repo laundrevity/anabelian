@@ -62,3 +62,4 @@ import Anabelian.RamificationAddVal
 import Anabelian.ExtensionGeneratorRep
 import Anabelian.RamificationMinpolyBound
 import Anabelian.RamificationDivision
+import Anabelian.RamificationSumFormula

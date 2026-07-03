@@ -2824,3 +2824,39 @@ D1 N/A; D2 untouched.
 
 **Ledger delta: 0 / 0.** Axiom-free. Both Prop. 3 divisibilities now hold for the same `y`
 and the same product; only the assembly remains.
+
+### Pass 63 (2026-07-03) — SERRE IV §1 PROP. 3, PROVED; count stays 0 / 0
+
+**No axiom added, none needed — the quotient-arithmetic wall is down, axiom-free.** The sum
+formula, Serre IV §1 Prop. 3:
+
+> `i_{K'/K}(σ̄) · e' = Σ_{h ∈ H} i_{L/K}(s₀ · dr h)`
+
+for every `σ̄ = decompositionQuotient s₀` and every irreducible `π` of `B = 𝒪_L ∩ K'`
+(`e' = addVal_{𝒪_L}(ι π)`), for a tower `K ⊆ K' ⊆ L` over a nonarchimedean local field
+(`K'/K` normal, `L/K'` Galois). `Anabelian/RamificationSumFormula.lean`, 1 declaration,
+standard-axioms-only.
+
+```
+'Anabelian.lowerIndex_decompositionQuotient_mul_eq_sum'     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Generator-free**: `i` is Pass 51's `lowerIndex`; the `x` and `y` of the proof do not
+  appear in the statement. **No `σ̄ ≠ 1` hypothesis**: `ℕ∞` handles it (both sides `⊤`).
+- **Eight lines of assembly over fourteen passes of substrate**: choose `x` (P54) and `y`
+  (P57); `ι(σ̄y − y)` and `∏_{s ↦ σ̄}(x − s·x)` divide each other (P58 + P62); mutual
+  divisibility ⟹ equal `addVal` (`addVal_le_iff_dvd` + `le_antisymm`); left side reads as
+  `i_{K'/K}(σ̄)·e'` (P59 dilation + P57(3)), right side as the fiber sum (P59, per-factor
+  P53–54).
+- This was the wall first named at **Pass 47** ("the transitivity wall — the quotient
+  relationship, not half-built") and re-verified absent from Mathlib at Passes 48–49. It
+  fell in fourteen single-rung passes (P50–63), each axiom-free, none half-built.
+
+**Not the cardinal sin / rule-2.** A quantitative identity for a given tower — strictly
+below R1; recovers nothing from an abstract group. Lemma 5 / `φ`-transitivity / Herbrand are
+NOT claimed (Prop. 3 is their input; the `φ`-renumbering conversion is real further work).
+No new `structure`/`class`; no owed witness; D1 N/A; D2 stays inside the Pass-29 proofs.
+
+**Ledger delta: 0 / 0. Prop. 3 rests on `propext`, `Classical.choice`, `Quot.sound` — and
+nothing else.** Next: Serre IV §3 Lemma 5, then Prop. 15 (`φ`-transitivity) and Prop. 14
+(Herbrand's theorem).

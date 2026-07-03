@@ -1,133 +1,110 @@
-# HANDOFF.md — session bootstrap (written after Pass 62, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 63, 2026-07-03)
 
-**State:** the **quotient arc is 11 bricks in** (P50–60), on the complete Herbrand `φ`/`ψ`
-analytic theory (P44–49). P50: skeleton. P51: `i_G`. P52: surjectivity. P53–54: concrete
-`i_G`, unconditional. P55: Serre's polynomial + descent. P56: lift-set identity. P57:
-`𝒪_L ∩ K' = 𝒪_{K'}` + telescoping + `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)`. P58: **direction
-(i) `a ∣ b` PROVED**. P59: **the `addVal` bookkeeping** (`e'`-dilation + fiber sum). **P60:
-the representation + `L = K'(x)` layer** (`Anabelian/ExtensionGeneratorRep.lean`):
-`exists_polynomial_map_eval_eq` (generic: closure membership IS polynomial representation;
-at `𝒪_L`: `exists_polynomial_generator_rep` — every integer is
-`(g.map (extensionAlgebraMap K L)).eval x`), the commuting square
-`comapRingHom_comp_baseToComapRingHom` (`ι ∘ (𝒪_K → B) = extensionAlgebraMap K L`), and
-**`adjoin_generator_eq_top`** (`IntermediateField.adjoin K' {(x:L)} = ⊤` for any
-intermediate `K'`). **P61: the remainder-vanishing brick**
-(`Anabelian/RamificationMinpolyBound.lean`): `eq_zero_of_map_comapRingHom_eval_eq_zero` — a
-polynomial over `B` of degree `< |D_{K'}(𝒪_L)| = [L:K']` whose `ι`-image kills `x` is ZERO
-(minpoly degree count; note `IsGalois.card_aut_eq_finrank` is Nat.card-valued). Ledger is
-**`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations project-wide — keep it that way.
-**P62: direction (ii) `b ∣ a` PROVED** (`Anabelian/RamificationDivision.lean`,
-`liftProd_dvd_comapRingHom_smul_sub` — for EVERY `y ∈ B`; the division argument is uniform
-in `y`). **YOUR FIRST TASK is Pass 63 — the Prop. 3 ASSEMBLY**: obtain `x` (P54) and `y`
-(P57 `exists_generator_comap_spec`) once; P58 `a ∣ b` (its `hdvd` from P57) + P62 `b ∣ a` ⟹
-mutual divisibility ⟹ `addVal` equal (`addVal_le_iff_dvd` + `le_antisymm`); LHS
-`= addVal_B(σ̄y−y)·e'` (P59 `addVal_comapRingHom`) `= i_{K'/K}(σ̄)·e'` (P57(3)); RHS
-`= Σ_h i_{L/K}(s₀·dr h)` (P59 `addVal_liftProd`) ⟹
-**`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`** — Prop. 3. Mind: `e'` needs an irreducible
-`π_B` (P57 DVR-on-`B` + `exists_irreducible`); the two P58/P62 products are literally the
-same expression ✓. **Build caution:** `RamificationLiftDvd.lean` (P58) elaborates slowly
-(~15 min) — put new bricks in fresh files (P59/P60 did: ~3 s each).
+**State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
+(P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
+
+> `lowerIndex_decompositionQuotient_mul_eq_sum`
+> (`Anabelian/RamificationSumFormula.lean`):
+> **`i_{K'/K}(σ̄) · e' = Σ_{h ∈ H} i_{L/K}(s₀ · dr h)`**
+> for every `σ̄ = decompositionQuotient s₀` and every irreducible `π` of `B = 𝒪_L ∩ K'`
+> (`e' = addVal_{𝒪_L}(ι π)`); tower `K ⊆ K' ⊆ L` over a nonarchimedean local field,
+> `K'/K` normal, `L/K'` Galois. Generator-free (P51's intrinsic `lowerIndex`), uniform in
+> `σ̄` (`ℕ∞`: both sides `⊤` at `σ̄ = 1`). `#print axioms`: standard-only.
+
+Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations project-wide, through
+all 63 passes — keep it that way. **YOUR FIRST TASK is Pass 64 — begin Serre IV §3 Lemma 5**
+(below). **Build caution:** `RamificationLiftDvd.lean` (P58) elaborates slowly (~15 min);
+all other files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-62 entry), `ROADMAP.md`
-(status header says Pass 62), and the **tail of `NOTES.md`** (Passes 50–62: the quotient
-arc). **Session start:** `git status` — the tree must be clean (`.claude/` and `claude.last`
-are `.gitignore`d); `scripts/preflight.sh` clause 0 *enforces* this.
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-63 entry), `ROADMAP.md`
+(status header says Pass 63), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
+`git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
+`scripts/preflight.sh` clause 0 *enforces* this.
 
-## The Prop. 3 endgame (Serre IV §1)
+## Where the mathematics stands
 
-**Target:** `Associated (ι(σ̄y − y)) (∏_{s ↦ σ̄} (s·x − x))` in `𝒪_L`, then `addVal`:
-LHS `= i_{K'/K}(σ̄)·e'` (P59 dilation + P57(3)); RHS `= Σ_h i_{L/K}(s₀·dr h)` (P59 fiber
-sum) ⟹ **`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`** (Prop. 3). Status: (i) `a ∣ b` DONE
-(P58); bookkeeping DONE (P59); representation + `L = K'(x)` DONE (P60). Remaining:
+**Complete, axiom-free strata:** L1 finite/local Galois theory (P1–21); the L2 lower
+filtration + tame/wild theory (P22–28); the descent (`𝒪_L`, `ker θ₀ = G₁`) (P29–37); the
+assembly (`IsNonarchimedeanLocalField L`) (P38–41); canonicity (P43); the Herbrand `φ`/`ψ`
+analytic theory (P44–49: monotone, continuous, both slopes, `φ`'s closed form, upper
+numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic through Prop. 3**
+(P50–63).
 
-- **(1) The remainder-vanishing brick (PASS 61)**: for `r : Polynomial ↥B` with
-  `(r.map ι).eval x = 0` and `r.natDegree < Fintype.card (D_{K'}(𝒪_L))`: **`r = 0`**.
-  Route: (a) `r_{K'} := r.map B.subtype` (or the subring inclusion hom into `K'`) — nonzero
-  if `r ≠ 0` (`Polynomial.map_injective`, subtype injective); (b) `aeval (x:L) r_{K'} = 0` —
-  value-level: the coercion `𝒪_L →+* L` (i.e. `(extensionIntegers K L).subtype`) applied to
-  `(r.map ι).eval x`; chain `Polynomial.eval_map`/`Polynomial.hom_eval₂`/
-  `Polynomial.eval₂_map` to reassociate the three homs `↥B → 𝒪_L → L` vs `↥B → K' → L`
-  (they agree: `ι` then coe = `algebraMap K' L` then coe — `rfl`-level on values); (c)
-  degree count: `minpoly K' (x:L)` has `natDegree = finrank K' K'⟮x⟯`
-  (`IntermediateField.adjoin.finrank`, integrality from `FiniteDimensional K' L`)
-  `= finrank K' L` (P60 `adjoin_generator_eq_top` — note `K'⟮x⟯ = ⊤` and
-  `finrank of ⊤`: `IntermediateField.finrank_top`? check exact form; possibly easier via
-  `(adjoin_generator_eq_top …) ▸`) `= Fintype.card (L ≃ₐ[K'] L)`
-  (`IsGalois.card_aut_eq_finrank`, needs `[IsGalois K' L]`) `= Fintype.card (D_{K'}(𝒪_L))`
-  (P55's `decompositionSubgroup_extensionIntegers_restrict_eq_top`; card of `⊤`-subgroup vs
-  group — `Nat.card`/`Fintype.card` juggling, prefer `Nat.card`); (d)
-  `minpoly.degree_le_of_ne_zero` (check exact signature/namespace) contradicts (b)+(c).
-- **(2) The division + `b ∣ a` (Pass 62)**: `g` := P60's representation of `ι y`… careful:
-  represent `comapRingHom … y` (in `𝒪_L`) as `(g.map (extensionAlgebraMap K L)).eval x`;
-  move `g` to `B[X]` via `baseToComapRingHom` (the commuting square makes the two routes
-  agree); `G := g_B − C y`; `(G.map ι).eval x = 0`; divide by P55's monic `F`
-  (`Polynomial.modByMonic_add_div`), remainder kills `x` after `ι` (since `f(x) = 0`),
-  degree `< natDegree F = |H|` (P55 `_natDegree` + `degree_modByMonic_lt`) ⟹ `r = 0` by
-  (1); so `G = F·(G /ₘ F)`; apply the `σ̄`-action (coefficients in `B`), map along `ι`,
-  evaluate at `x`: `g(x) − ι(σ̄y) = (σ̄f)(x)·(…)` (the LHS uses that `σ̄` fixes `g_B`'s
-  base coefficients — P57's `smul_baseToComapRingHom_range_eq`-flavored fact at the
-  polynomial level, cf. P58's `map_comapRingHom_smul`), LHS `= ι y − ι(σ̄y) = −ι(a)`,
-  `(σ̄f)(x) = ∏ (x − (s₀·dr h)·x)` (P56) ⟹ `∏ ∣ ι(a)`.
-- **(3) The assembly (Pass 63)**: `associated_of_dvd_dvd` (mind the `(−1)^{|H|}` sign
-  between `∏(x − s·x)` and `∏(s·x − x)` — absorbable by `Associated`/`addVal_neg`-per-factor)
-  + the `addVal` readings ⟹ Prop. 3.
+**The Prop.-3 toolkit (P50–63), by file** — everything Lemma 5 will draw on:
+- `RamificationQuotient` (P50): `decompositionQuotient`, exactness, `comapRingHom` +
+  `𝔪`-reflection. `RamificationIndex` (P51): `lowerIndex : ℕ∞`, Lemma-1 forms
+  (`mem_ramificationGroup_iff_lt_lowerIndex`, `_add_one_le_`), calculus, `i_H = i_G` (`rfl`),
+  `ℕ∞` cofinality helpers. `RamificationQuotientSurjective` (P52): `D(𝒪_L) = ⊤`,
+  `decompositionQuotientEquiv`. `RamificationIndexGenerator` (P53): the `addVal` bridge
+  `mem_maximalIdeal_pow_iff_le_addVal`, `lowerIndex_eq_addVal`.
+  `ExtensionMonogenicDischarge` (P54): `exists_generator_extensionIntegers` (monogenicity),
+  `maximalIdeal_eq_span_of_mem_of_notMem_sq`, the binomial tail. `SubextensionCharPoly`
+  (P55): `fullProdXSubSMul` (whole-`G` product) + monic descent `F`, `D_{K'}(𝒪_L) = ⊤`.
+  `RamificationLiftSet` (P56): `decompositionFiberEquiv` (fiber = coset `s₀·H`, explicit),
+  `map_fullProdXSubSMul(_eval)`. `ExtensionComapIntegers` (P57):
+  `extensionIntegers_comap_eq` (`𝒪_L ∩ K' = 𝒪_{K'}`), DVR-on-`B`, `baseToComapRingHom`,
+  `exists_generator_comap_spec` (generator + telescoping + `i_{K'/K} = addVal_B(σ̄y−y)`).
+  `RamificationLiftDvd` (P58): direction (i) + `map_comapRingHom_smul` +
+  `dvd_eval_of_dvd_coeff`. `RamificationAddVal` (P59): `addVal_neg/_prod`, the
+  `e'`-dilation `addVal_comapRingHom`, the fiber sum `addVal_liftProd`.
+  `ExtensionGeneratorRep` (P60): polynomial representation, `adjoin_generator_eq_top`
+  (`L = K'(x)`). `RamificationMinpolyBound` (P61): the remainder-vanishing degree count.
+  `RamificationDivision` (P62): direction (ii). `RamificationSumFormula` (P63): **Prop. 3**.
 
-**Key names:** P50 `RamificationQuotient.lean` (`comapRingHom`); P53
-`RamificationIndexGenerator.lean` (bridge, `lowerIndex_eq_addVal`); P54
-`ExtensionMonogenicDischarge.lean` (`exists_generator_extensionIntegers`); P55
-`SubextensionCharPoly.lean` (`fullProdXSubSMul*` incl. `_natDegree` + `_eval`,
-`exists_fullProdXSubSMul_lift*`, `decompositionSubgroup_extensionIntegers_restrict_eq_top`);
-P56 `RamificationLiftSet.lean` (`map_fullProdXSubSMul(_eval)`); P57
-`ExtensionComapIntegers.lean` (`extensionIntegers_comap_eq`, DVR-on-`B`,
-`baseToComapRingHom`, `exists_generator_comap_spec`, `smul_baseToComapRingHom_range_eq`);
-P58 `RamificationLiftDvd.lean` (`dvd_eval_of_dvd_coeff`, `map_comapRingHom_smul`,
-`exists_generator_dvd_liftProd`); P59 `RamificationAddVal.lean` (`addVal_neg/_prod`,
-`isUnit_comapRingHom_iff`, `addVal_comapRingHom`, `addVal_liftProd`); P60
-`ExtensionGeneratorRep.lean` (`exists_polynomial_map_eval_eq`,
-`comapRingHom_comp_baseToComapRingHom`, `exists_polynomial_generator_rep`,
-`adjoin_generator_eq_top`).
+## YOUR FIRST TASK — Pass 64: begin Serre IV §3 Lemma 5
 
-## YOUR FIRST TASK — Pass 61: the remainder-vanishing brick
+**Target (multi-pass):** `(G/H)_{φ_{L/K'}(u)} = G_u H/H` — in project terms: the image of
+`ramificationGroup K (𝒪_L)` under `decompositionQuotient` equals the `B`-filtration at
+`φ_{L/K'}(u)` (`B = 𝒪_L ∩ K'`; real-indexing via the `⌈·⌉` conventions of P45's upper
+numbering). Serre's proof (IV §3, before Prop. 14): for `σ̄ ≠ 1` set
+`j(σ̄) := max_{s ↦ σ̄} i_{L/K}(s)` and prove
 
-As specified in (1) above. Scope: the single theorem (with whatever small value-level
-`eval₂`-reassociation lemmas it needs) + nothing else; it is the last genuinely new
-mathematics before Prop. 3 (Pass 62 is gluing, Pass 63 is bookkeeping). Inventory the exact
-Mathlib forms first: `minpoly.degree_le_of_ne_zero` vs `minpoly.natDegree_le`-family,
-`IntermediateField.adjoin.finrank`, `IsGalois.card_aut_eq_finrank`, `finrank` of `⊤`
-(`IntermediateField.finrank_top'`?), `Subgroup` card-of-top. Watch the `Fintype` vs
-`Nat.card` idiom (P54).
+> **`i_{K'/K}(σ̄) − 1 = φ_{L/K'}(j(σ̄) − 1)`**
 
-**Method (the P43–60 rhythm):** inventory first; `lake env lean` probes **from the project
-root** (never `cd` into the scratchpad — `lake env` loses the search path and elan may pull
-a stray toolchain; bit P60); every Mathlib name source-grepped; fresh file.
+by combining Prop. 3 (P63) with the counting `Σ_{s ↦ σ̄} i(s) = Σ_{h ∈ H} min(i_H(h), j)`:
+if `s₁` attains the max `j`, then `i(s₁·dr h) = min(i_H(h), j)` (uses P51's calculus
+`min_lowerIndex_le_lowerIndex_mul` + the max-attainment), and `Σ_h min(i_H(h), m)` is
+`e'`-times-`φ`-affine by P48's piecewise formula. Sub-bricks, one per pass:
+- **(A) `i(s₁·dr h) = min(i_H-image(h), j)` when `s₁` attains the max** — purely
+  `lowerIndex`-level (P51 calculus + `lowerIndex_decompositionRestrict`); a clean first
+  brick.
+- **(B) the `Σ min`-vs-`φ` counting** — bridge to P48's `herbrandPhi_eq_affine_formula`
+  (also needs identifying P59's `addVal`-form `e'` with the index form `|H_0|`-of-`H` —
+  possibly its own brick).
+- Then Lemma 5's set-level statement via P51's Lemma-1 membership forms; then Prop. 14/15.
+
+**Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
+root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
+partial > half-discharge.
 
 ## Environment (verify, then trust)
 
 - **Toolchain in-loop:** host `lean`/`lake` (v4.30.0). Sandboxed fallback: NOTES P36 recipe.
 - **Pre-commit gate**: `scripts/preflight.sh` — clause 0 clean tree, ≤100-char lines, named
   statement-level `letI`/`haveI` binders, import-chain completeness, warning-free build.
-- **`scripts/refactor.sh`** (P42, **not yet run**): flat→folders; its own pass only.
+- **`scripts/refactor.sh`** (P42, **not yet run**): flat→folders; its own pass only — with
+  65 files the flat directory is due; consider making a near-term pass the refactor pass.
 
 ## House idioms (recent vintage; older in NOTES P25–41)
 
-- Probes run from the project root only (P60). `ExtensionComapIntegers` does NOT pull in
-  `comapRingHom` — import `RamificationQuotient` explicitly when using it (P60).
-- `rw [h]` stales pre-substitution `have`s — rewrite with primitive lemmas (P59).
-  `Irreducible.not_isUnit` (P59). `congrArg Subtype.val` under polynomial `ext` (P58).
-  Coercion forms must match syntactically; hand-rolled subtype equivs; plain defeq structure
-  fields (P57). `show`→`change` (P56). `𝒪[K]` is a `Subring` (P55). `ℕ∞` casts explicit;
-  `Nat.card` API; narrow `variable` blocks; `push Not` (P50–54).
+- Probes from the project root only (P60). `modByMonic_add_div (p q)` is hypothesis-free
+  (P62). `congrArg Subtype.val` under polynomial `ext` (P58/P62). `rw [h]` stales
+  pre-substitution `have`s (P59). `Irreducible.not_isUnit` (P59).
+  `IsGalois.card_aut_eq_finrank` is Nat.card-valued (P61). Coercion forms must match
+  syntactically; hand-rolled subtype equivs; plain-defeq structure fields (P57).
+  `show`→`change` (P56). `𝒪[K]` is a `Subring` (P55). `ℕ∞` casts explicit; `Nat.card` API;
+  narrow `variable` blocks; `push Not` (P50–54).
 - DVR/`ℕ∞` toolkit: P51 cofinality, P53 bridge, P54 span-brick + binomial tail, P57
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
-- D2 lives entirely inside proofs; P52–60 consumed only `IsIntegral`-level API.
+- D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 61
+## The queue after Pass 64
 
-Pass 62: the division + `b ∣ a`. Pass 63: the **Prop. 3 assembly**
-(`e'·i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`). Then IV §3 **Lemma 5**
-`(G/H)_{φ_{L/K'}(u)} = G_u H/H` → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
-(Prop. 14) → Hasse–Arf. Optional: `ψ` closed form / `φ` concavity. The **R1-floor** stays
-deferred. R1–R3 remain distant targets that must be earned, never axiomatized — the line
-between inputs and targets is drawn in `ROADMAP.md` and is the project's reason for
-existing.
+Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
+`(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
+Optional deepening: `ψ` closed form / `φ` concavity. The **R1-floor** stays
+ROADMAP-permitted but **deferred**. R1–R3 remain distant targets that must be earned, never
+axiomatized — the line between inputs and targets is drawn in `ROADMAP.md` and is the
+project's reason for existing.
