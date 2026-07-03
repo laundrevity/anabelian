@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 60, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 61, 2026-07-03)
 
 **State:** the **quotient arc is 11 bricks in** (P50–60), on the complete Herbrand `φ`/`ψ`
 analytic theory (P44–49). P50: skeleton. P51: `i_G`. P52: surjectivity. P53–54: concrete
@@ -11,14 +11,18 @@ at `𝒪_L`: `exists_polynomial_generator_rep` — every integer is
 `(g.map (extensionAlgebraMap K L)).eval x`), the commuting square
 `comapRingHom_comp_baseToComapRingHom` (`ι ∘ (𝒪_K → B) = extensionAlgebraMap K L`), and
 **`adjoin_generator_eq_top`** (`IntermediateField.adjoin K' {(x:L)} = ⊤` for any
-intermediate `K'`). Ledger is **`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations
-project-wide — keep it that way. **YOUR FIRST TASK is Pass 61 — the remainder-vanishing
-brick** (below). **Build caution:** `RamificationLiftDvd.lean` (P58) elaborates slowly
+intermediate `K'`). **P61: the remainder-vanishing brick**
+(`Anabelian/RamificationMinpolyBound.lean`): `eq_zero_of_map_comapRingHom_eval_eq_zero` — a
+polynomial over `B` of degree `< |D_{K'}(𝒪_L)| = [L:K']` whose `ι`-image kills `x` is ZERO
+(minpoly degree count; note `IsGalois.card_aut_eq_finrank` is Nat.card-valued). Ledger is
+**`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations project-wide — keep it that way.
+**YOUR FIRST TASK is Pass 62 — the division ⟹ `b ∣ a`** (see the endgame map below; all
+bricks named there are now proved through (1)). **Build caution:** `RamificationLiftDvd.lean` (P58) elaborates slowly
 (~15 min) — put new bricks in fresh files (P59/P60 did: ~3 s each).
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-60 entry), `ROADMAP.md`
-(status header says Pass 60), and the **tail of `NOTES.md`** (Passes 50–60: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-61 entry), `ROADMAP.md`
+(status header says Pass 61), and the **tail of `NOTES.md`** (Passes 50–61: the quotient
 arc). **Session start:** `git status` — the tree must be clean (`.claude/` and `claude.last`
 are `.gitignore`d); `scripts/preflight.sh` clause 0 *enforces* this.
 

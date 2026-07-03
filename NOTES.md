@@ -5033,3 +5033,32 @@ the subtype injection); (b) its `aeval` at `(x:L)` vanishes (value-level: `Polyn
 + card-of-⊤); (d) `minpoly.degree_le_of_ne_zero` contradicts (b)+(c) unless `r = 0`. Then
 **Pass 62: the division + `b ∣ a`**; **Pass 63: the Prop. 3 assembly**. R1–R3 remain the
 distant, must-be-earned targets.
+
+### Pass 61 (2026-07-03) — the remainder-vanishing brick
+
+**Mathematics; ledger delta 0 / 0.** A polynomial over `B` of degree `< [L:K']` whose
+`ι`-image kills `x` is zero — the minimal-polynomial degree count that will kill the
+remainder in direction (ii)'s division. `Anabelian/RamificationMinpolyBound.lean`,
+1 declaration, standard-axioms-only.
+
+## Method (exactly the HANDOFF route)
+
+(a) `r ≠ 0 ⟹ r.map B.subtype ≠ 0` (`Polynomial.map_injective`); (b) the `K'`-form kills
+`x`: apply `(𝒪_L).subtype` to `hr`, reassociate the eval₂ homs (`Polynomial.eval_map` +
+`hom_eval₂` upstairs, `aeval_def` + `eval₂_map` downstairs; the two composite homs
+`B → 𝒪_L → L` and `B → K' → L` are equal by `RingHom.ext fun b => rfl`); (c) the count:
+`adjoin.finrank` + P60's `adjoin_generator_eq_top` + `finrank_top'` +
+`IsGalois.card_aut_eq_finrank` (**Nat.card-valued** in current Mathlib — the one probe fix)
++ P55's `D = ⊤` + `Subgroup.card_top`; (d) `minpoly.degree_le_of_ne_zero` +
+`natDegree_map_eq_of_injective` + `omega`.
+
+## Build + headline
+
+`lake build` green (2.7 s, fresh file); preflight CLEAN. **HEADLINE: the
+remainder-vanishing brick — deg `< [L:K']` + kills `x` ⟹ zero — proved axiom-free; the last
+new mathematics before Prop. 3.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next: Pass 62 — the division ⟹ `b ∣ a`; Pass 63 — the assembly.

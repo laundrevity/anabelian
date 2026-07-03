@@ -2770,3 +2770,29 @@ Pass-29 proofs.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: direction (ii)'s remainder-vanishing (the minpoly
 degree count), then the division and `b ∣ a`, then the Prop. 3 assembly.
+
+### Pass 61 (2026-07-03) — the remainder-vanishing brick; count stays 0 / 0
+
+**No axiom added, none needed.** The last genuinely new mathematics before Prop. 3: a
+polynomial over `B = 𝒪_L ∩ K'` of degree `< |D_{K'}(𝒪_L)| = [L : K']` whose `ι`-image kills
+the generator `x` is zero. `Anabelian/RamificationMinpolyBound.lean`, 1 declaration,
+standard-axioms-only.
+
+```
+'Anabelian.eq_zero_of_map_comapRingHom_eval_eq_zero'        depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- Move the coefficients to `K'` (`Polynomial.map_injective` along `B.subtype` preserves
+  nonvanishing); the two evaluation routes `B → 𝒪_L → L` and `B → K' → L` agree
+  (`hom_eval₂`/`eval₂_map` + a `rfl`-level hom identity), so the `K'`-polynomial kills `x`.
+- The degree count: `deg (minpoly K' x) = finrank K' K'⟮x⟯` (`adjoin.finrank`) `= [L : K']`
+  (Pass 60's `adjoin_generator_eq_top` + `finrank_top'`) `= Nat.card Gal(L/K')`
+  (`IsGalois.card_aut_eq_finrank` — Nat.card-valued in current Mathlib) `= |D_{K'}(𝒪_L)|`
+  (Pass 55's `D = ⊤` + `Subgroup.card_top`).
+- `minpoly.degree_le_of_ne_zero` forbids the smaller-degree annihilator; `omega` closes.
+
+**Not the cardinal sin / rule-2.** A degree bound for a tower of given fields — strictly
+below R1. No new `structure`/`class`; no owed witness; D1 N/A; D2 untouched.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the division ⟹ `b ∣ a` (gluing), then the
+Prop. 3 assembly.
