@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 61 (2026-07-03)
+## Current state — Pass 62 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 63 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 64 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -76,7 +76,8 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `L = K'(x)` layer** — every integer of `L` is `g(x)` for `g` over `𝒪_K`, and the same
   generator generates `L` as a field over every intermediate `K'` (Pass 60); and the
   **remainder-vanishing brick** — a polynomial over `B` of degree `< [L:K']` whose image
-  kills `x` is zero (Pass 61).
+  kills `x` is zero (Pass 61); and **Prop. 3's direction (ii), proved** —
+  `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B` (Pass 62).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -95,8 +96,9 @@ lift-set identity making `∏_{s ↦ σ̄}` computable (Pass 56), and the `𝒪_
 identification with the coefficient telescoping and the concrete
 `i_{K'/K}(σ̄) = addVal(σ̄y − y)` (Pass 57), direction (i) itself — `a ∣ b` (Pass 58), the
 `addVal` bookkeeping (Pass 59), and the representation + `L = K'(x)` layer (Pass 60) are all
-built, and the remainder-vanishing degree count is proved (Pass 61); what remains of
-Prop. 3 is the monic division giving `b ∣ a` (pure gluing) and the final assembly.
+built, the remainder-vanishing degree count is proved (Pass 61), and direction (ii)
+`b ∣ a` is proved (Pass 62); what remains of Prop. 3 is only the final assembly —
+`Associated` + the `addVal` readings ⟹ `e'·i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`.
 
 ## Build
 

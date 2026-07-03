@@ -5062,3 +5062,40 @@ new mathematics before Prop. 3.**
 
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next: Pass 62 — the division ⟹ `b ∣ a`; Pass 63 — the assembly.
+
+### Pass 62 (2026-07-03) — Prop. 3 direction (ii): `b ∣ a`, proved
+
+**Mathematics; ledger delta 0 / 0.** `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B`
+— Serre's monic-division argument, assembled entirely from P55–P61 bricks.
+`Anabelian/RamificationDivision.lean`, 1 declaration, standard-axioms-only.
+
+## Method (the HANDOFF (2) route, exactly)
+
+Representation (P60) → commuting square (P60) → `G := g_B − C y` kills `x` after `ι` →
+division by P55's monic `F` (note: `Polynomial.modByMonic_add_div (p q)` is now
+hypothesis-free in Mathlib — the identity is trivially true for non-monic `q`) → the
+remainder kills `x` with degree `< natDegree F = |H|` (`degree_modByMonic_lt` needs the monic
+✓; `natDegree_lt_natDegree`; the `r = 0` case handled by `Fintype.card_pos`) → **P61 kills
+it** → exact identity `G = F·(G /ₘ F)` → `σ̄`-transport (`smul_sub`/`smul_mul'`/
+`Polynomial.smul_C`; `σ̄ • g_B = g_B` coefficient-wise by P57's hfix — with the
+`congrArg Subtype.val` wrap under polynomial `ext`, the P58 idiom) → map along `ι`, evaluate
+at `x` (P58's `map_comapRingHom_smul`, P55's `hF`, P56's `map_fullProdXSubSMul_eval`) →
+`−ι(a) = ∏·c` → `dvd_neg`. **Notably the statement is uniform in `y`** — no generator
+property of `y` is used, so the assembly can feed it P57's `y` directly.
+
+Probe: 2 mechanical rounds (`modByMonic_add_div` signature change; the `congrArg
+Subtype.val` wrap — both already-catalogued idioms).
+
+## Build + headline
+
+`lake build` green (3.7 s, fresh file); preflight CLEAN. **HEADLINE: Serre IV §1 Prop. 3,
+direction (ii) — the lift-set product divides `ι(σ̄y − y)`, for every `y ∈ B` — proved
+axiom-free. Both divisibilities of Prop. 3 now hold; only the assembly remains.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next: Pass 63 — the assembly: obtain `x` (P54) and `y` (P57) once; P58's `a ∣ b` + P62's
+`b ∣ a` ⟹ mutual divisibility ⟹ `addVal` equal (`addVal_le_iff_dvd` both ways); read LHS
+by P57(3) + P59's dilation, RHS by P59's fiber sum ⟹
+**`e'·i_{K'/K}(σ̄) = Σ_h i_{L/K}(s₀·dr h)`** — Prop. 3.

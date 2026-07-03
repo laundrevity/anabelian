@@ -61,3 +61,4 @@ import Anabelian.RamificationLiftDvd
 import Anabelian.RamificationAddVal
 import Anabelian.ExtensionGeneratorRep
 import Anabelian.RamificationMinpolyBound
+import Anabelian.RamificationDivision

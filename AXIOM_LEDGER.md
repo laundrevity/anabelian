@@ -2796,3 +2796,31 @@ below R1. No new `structure`/`class`; no owed witness; D1 N/A; D2 untouched.
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the division ⟹ `b ∣ a` (gluing), then the
 Prop. 3 assembly.
+
+### Pass 62 (2026-07-03) — Prop. 3 direction (ii): `b ∣ a`, PROVED; count stays 0 / 0
+
+**No axiom added, none needed.** The second divisibility of Serre IV §1 Prop. 3:
+`∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` in `𝒪_L`, for **every** `y ∈ B` and every lift `s₀`
+(the division argument is uniform in `y`). `Anabelian/RamificationDivision.lean`,
+1 declaration, standard-axioms-only.
+
+```
+'Anabelian.liftProd_dvd_comapRingHom_smul_sub'              depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+Serre's monic division, every step a named brick: `ι y = g(x)` with `g` over `𝒪_K` (P60
+representation); `g` moves to `B[X]` (P60 commuting square); `G = g_B − C y` kills `x` after
+`ι`; division by P55's monic `F` (`modByMonic_add_div` — hypothesis-free in current Mathlib)
+has remainder killing `x` of degree `< natDegree F = |H|` (P55 degree + `degree_modByMonic_lt`
++ `natDegree_lt_natDegree`), hence ZERO (P61); the exact identity `G = F·(G /ₘ F)` transports
+along `σ̄` (base coefficients `σ̄`-fixed — P57's `smul_baseToComapRingHom_range_eq`
+coefficient-wise; `C y ↦ C (σ̄y)`); mapping along `ι` and evaluating at `x`:
+LHS `= ι y − ι(σ̄y) = −ι(a)`, RHS `= (∏_h (x − (s₀·dr h)·x))·(…)` (P58's
+`map_comapRingHom_smul` + P56's `map_fullProdXSubSMul_eval`); `dvd_neg` finishes.
+
+**Not the cardinal sin / rule-2.** One direction of a comparison for a given tower —
+strictly below R1. The assembly is NOT claimed. No new `structure`/`class`; no owed witness;
+D1 N/A; D2 untouched.
+
+**Ledger delta: 0 / 0.** Axiom-free. Both Prop. 3 divisibilities now hold for the same `y`
+and the same product; only the assembly remains.
