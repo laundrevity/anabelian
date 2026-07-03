@@ -2490,3 +2490,59 @@ inside the Pass-29 proofs. R1–R3 untouched.
 **Ledger delta: 0 / 0** (and one long-standing named hypothesis of the `i_G` arc eliminated —
 the same species of progress as an axiom discharge, one level down). Next: Serre IV §1
 Prop. 3 — the sum formula — the last wall before Lemma 5.
+
+### Pass 55 (2026-07-03) — the subextension characteristic polynomial; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 55 built the substrate both divisibility directions of
+Serre IV §1 Prop. 3 run through: Serre's polynomial `f = ∏_{h ∈ Gal(L/K')} (X − h·x)` and its
+descent to `𝒪_L ∩ K'`. `Anabelian/SubextensionCharPoly.lean`, 11 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.fullProdXSubSMul'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullProdXSubSMul_monic'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullProdXSubSMul_natDegree'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullProdXSubSMul_eval'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullProdXSubSMul_smul'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullProdXSubSMul_coeff'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_comapRingHom_eq_of_forall_smul_eq'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_fullProdXSubSMul_lift'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionSubgroup_extensionIntegers_restrict_eq_top' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_fullProdXSubSMul_lift_extensionIntegers'  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.extensionIntegers_comap_algebraMap'              depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`fullProdXSubSMul G R x = ∏ g : G, (X − C (g·x))`** — the product over **all** of `G`
+  (with multiplicity). Mathlib's `prodXSubSMul` ranges over the orbit `G ⧸ stabilizer` — the
+  wrong primitive for Prop. 3, whose lift-set product `∏_{s ↦ σ̄}` counts multiplicities.
+  Four properties by the Mathlib file's own techniques: monic, `natDegree = |G|`, kills `x`,
+  and `G`-invariance (left-translation reindex, `Equiv.prod_comp (Equiv.mulLeft g)`), hence
+  `G`-fixed coefficients.
+- **`exists_comapRingHom_eq_of_forall_smul_eq`** — the fixed-points descent: a
+  `Gal(L/K')`-fixed element of `𝒪_L` lies in `K'` (`IsGalois.mem_range_algebraMap_iff_fixed`)
+  and hence in `A ∩ K'` along Pass 50's `comapRingHom`. The integral `L^H = K'`.
+- **`exists_fullProdXSubSMul_lift`** (headline) — under `D_{K'}(A) = ⊤`, a **monic** `F` over
+  `A ∩ K'` with `F.map (comapRingHom K' A) = fullProdXSubSMul` and equal degree
+  (`Polynomial.lifts_iff_coeff_lifts` + `lifts_and_degree_eq_and_monic`). Hypothesis-free at
+  `𝒪_L`: `decompositionSubgroup_extensionIntegers_restrict_eq_top` shows `D_{K'}(𝒪_L) = ⊤`
+  for ANY intermediate `K'` (Pass 52's Galois-stability transported along Pass 46's
+  `restrictScalars_smul_valuationSubring`), giving
+  `exists_fullProdXSubSMul_lift_extensionIntegers`.
+- **`extensionIntegers_comap_algebraMap`** — `𝒪_L ∩ K = 𝒪_K` (same base), from Pass 35's
+  `algebraMap_mem_extensionIntegers_iff` — bookkeeping the Prop.-3 `addVal` comparison will
+  need.
+
+**Mathlib API that did the real work:** the `prodXSubSMul` proof techniques
+(`Finset.smul_prod'`, `Polynomial.smul_X/C`, `coeff_smul`); `Equiv.prod_comp` +
+`Equiv.mulLeft`; `IsGalois.mem_range_algebraMap_iff_fixed` (fixed points);
+`Polynomial.lifts_iff_coeff_lifts` + `lifts_and_degree_eq_and_monic` (the monic lift);
+`monic_prod_of_monic`/`natDegree_prod_of_monic`/`eval_prod`/`prod_eq_zero`.
+
+**Not the cardinal sin / rule-2.** Substrate for a tower of given fields — strictly below R1;
+recovers nothing from an abstract group. No divisibility and no part of the sum formula is
+claimed. No new `structure`/`class` (`fullProdXSubSMul` is a `def` of a polynomial); no owed
+witness; D1 N/A; D2 stays inside the Pass-29 proofs.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3's two divisibilities — `a ∣ b`
+(coefficient-telescoping on `σ̄f − f`, evaluated at `x`) and `b ∣ a` (the monic division
+`g(X) − y = f·q` pushed along `σ̄`), then the `addVal` bookkeeping.

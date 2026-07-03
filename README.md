@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 54 (2026-07-03)
+## Current state — Pass 55 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 56 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 57 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -58,9 +58,12 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   Galois-stable (integral closure), so `D(𝒪_L) = ⊤` and `D(A) ⧸ H ≃* D(A ∩ K')`: the `(G/H)`
   of Herbrand's theorem, realized (Pass 52); the **concrete `i_G`** —
   `i_G(σ) = v_L(σx − x)` (`lowerIndex_eq_addVal`) with Lemma 1 in generator form (Pass 53);
-  and the **monogenicity discharge** — `𝒪_L = 𝒪_K[x]` (Serre III §6 Prop. 12, finite-residue
+  the **monogenicity discharge** — `𝒪_L = 𝒪_K[x]` (Serre III §6 Prop. 12, finite-residue
   case), making the concrete `i_G` **unconditional**: `∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`
-  (Pass 54).
+  (Pass 54); and the **subextension characteristic polynomial** —
+  `∏_{h ∈ Gal(L/K')} (X − h·x)` descends to a monic polynomial over `𝒪_L ∩ K'`
+  (`fullProdXSubSMul` + the fixed-points descent, hypothesis-free at `𝒪_L`), the substrate of
+  Prop. 3 (Pass 55).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -73,9 +76,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
 `φ`-transitivity (Prop. 15) and Herbrand's theorem `(G/H)^v = G^v H/H` (Prop. 14). The
 group-theoretic skeleton (Pass 50), the `i_G` function with its filtration characterization
 (Pass 51), surjectivity of the quotient restriction (Pass 52 — the lifts exist), the concrete
-`i_G(σ) = v_L(σx − x)` (Pass 53), and the monogenicity discharge making it unconditional
-(Pass 54) are all built; Prop. 3's lift-set arithmetic — two divisibilities comparing
-`σ̄y − y` with `∏ (sx − x)` over the lifts — is the entire remaining wall.
+`i_G(σ) = v_L(σx − x)` (Pass 53), the monogenicity discharge making it unconditional
+(Pass 54), and Serre's polynomial `∏_{h}(X − h·x)` with its descent to `𝒪_L ∩ K'` (Pass 55)
+are all built; what remains of Prop. 3 is its two divisibilities — `σ̄y − y ∣ ∏ (sx − x)` via
+coefficient-telescoping on `σ̄f − f`, and the converse via the monic division
+`g(X) − y = f·q` — plus the final `addVal` bookkeeping.
 
 ## Build
 

@@ -4562,3 +4562,86 @@ the P38–41 assembly + P43 canonicity provide exactly that); compare `a := σ̄
 arithmetic, `b ∣ a` from the product over the coset); then `addVal` both sides. Scope ONE
 divisibility direction per pass if needed; clean partial > half-discharge. R1–R3 remain the
 distant, must-be-earned targets.
+
+### Pass 55 (2026-07-03) — the subextension characteristic polynomial (Prop. 3's substrate)
+
+**Mathematics; ledger delta 0 / 0.** Built the polynomial both divisibility directions of
+Serre IV §1 Prop. 3 run through — `f = ∏_{h ∈ Gal(L/K')} (X − h·x)` with coefficients
+descending to `𝒪_L ∩ K'` — hypothesis-free at `𝒪_L`.
+`Anabelian/SubextensionCharPoly.lean`, 11 declarations, all standard-axioms-only.
+
+## Scope choice (Prop. 3's architecture, fixed here)
+
+Serre proves Prop. 3 by comparing `a := σ̄y − y` and `b := ∏_{s ↦ σ̄} (sx − x)` through
+`f(X) = ∏_{h ∈ H} (X − hx) ∈ 𝒪_{K'}[X]`: **(i)** `a ∣ b` since `σ̄f − f` has coefficients
+`σ̄c − c` divisible by `a` (P25 telescoping in `𝒪_{K'} = 𝒪_K[y]`) and `(σ̄f)(x) = ±b`;
+**(ii)** `b ∣ a` via the monic division `g(X) − y = f·q` (where `y = g(x)`, `g ∈ 𝒪_K[X]`,
+from P54's monogenicity over `𝒪_K`) transported along `σ̄` and evaluated at `x`. This pass
+builds `f` and its descent; the divisibilities are next.
+
+## What was proved + the method
+
+- **`fullProdXSubSMul G R x := ∏ g : G, (X − C (g • x))`** — the inventory found Mathlib's
+  `prodXSubSMul`, but it ranges over the **orbit** `G ⧸ stabilizer G x` — the wrong primitive
+  (Prop. 3's lift-set product counts multiplicities; for a generator the two coincide, but the
+  full product is what transports to `∏_{s ↦ σ̄}`). Defined the `Finset.univ` version with the
+  same four properties by the same techniques: `_monic` (`monic_prod_of_monic`),
+  `_natDegree = |G|` (`natDegree_prod_of_monic`), `_eval x = 0` (`prod_eq_zero` at `g = 1`),
+  and `_smul` — `G`-invariance by left-translation reindexing (`Finset.smul_prod'` +
+  `Equiv.prod_comp (Equiv.mulLeft g)`), hence `_coeff` (`G`-fixed coefficients via
+  `coeff_smul`).
+- **`exists_comapRingHom_eq_of_forall_smul_eq`** — the fixed-points descent: `a ∈ 𝒪_L` fixed
+  by every `σ : L ≃ₐ[K'] L` lies in `range (algebraMap K' L)`
+  (`IsGalois.mem_range_algebraMap_iff_fixed` — Mathlib had exactly the field-level statement)
+  and the preimage is integral (its image is `a ∈ A`), so it lifts along P50's
+  `comapRingHom K' A`.
+- **`exists_fullProdXSubSMul_lift`** (HEADLINE) — under `hD : D_{K'}(A) = ⊤`: every
+  coefficient is fixed by every field automorphism (convert via `hD`; the subgroup action is
+  the field action definitionally), descends by the above, and
+  `Polynomial.lifts_iff_coeff_lifts` + `lifts_and_degree_eq_and_monic` produce a **monic** `F`
+  over `A ∩ K'` with `F.map (comapRingHom K' A) = f` and equal degree.
+- **`decompositionSubgroup_extensionIntegers_restrict_eq_top`** — `D_{K'}(𝒪_L) = ⊤` for ANY
+  intermediate `K'`: `σ • 𝒪_L = (σ.restrictScalars K) • 𝒪_L` (P46's
+  `restrictScalars_smul_valuationSubring`) `= 𝒪_L` (P52's `smul_extensionIntegers`). Hence
+  the hypothesis-free instantiation `exists_fullProdXSubSMul_lift_extensionIntegers`.
+- **`extensionIntegers_comap_algebraMap`** — `𝒪_L ∩ K = (valuation K).valuationSubring`
+  (same base), 4 lines from P35's `algebraMap_mem_extensionIntegers_iff` (note: `𝒪[K]` the
+  notation is a `Subring`, so the `ValuationSubring`-level statement goes through
+  `Valuation.mem_valuationSubring_iff`/`mem_integer_iff`, both `Iff.rfl`).
+
+Probe: 2 rounds (unknown-namespace fix `IsGalois.mem_range_algebraMap_iff_fixed`, and the
+`𝒪[K]`-is-a-`Subring` type mismatch).
+
+## Mathlib API that did the real work
+
+`prodXSubSMul`'s own proof kit (`Finset.smul_prod'`, `Polynomial.smul_X/smul_C/coeff_smul`);
+`Equiv.prod_comp` + `Equiv.mulLeft`; `IsGalois.mem_range_algebraMap_iff_fixed`;
+`Polynomial.lifts_iff_coeff_lifts`, `Polynomial.lifts_and_degree_eq_and_monic`;
+`monic_prod_of_monic`, `natDegree_prod_of_monic`, `eval_prod`, `Finset.prod_eq_zero`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN.
+All 11 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE:
+Serre's polynomial `∏_{h ∈ Gal(L/K')} (X − h·x)` descends to a monic polynomial over
+`𝒪_L ∩ K'` of the same degree — hypothesis-free at `𝒪_L` (`D_{K'}(𝒪_L) = ⊤` for any
+intermediate field) — the substrate of IV §1 Prop. 3, axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 stays inside P29's proofs
+  (`IsIntegral`-level only). R1–R3 untouched.
+
+## Scope: the polynomial exists; the divisibilities are next (Pass 56+)
+
+**Pass 56 options** (Prop. 3's two directions, one per pass if needed):
+- **(i) `a ∣ b`**: for a lift `s` of `σ̄`, `(σ̄F − F)` (coefficients `σ̄c − c` in `𝒪_{K'}`,
+  each divisible by `a = σ̄y − y` via P25's telescoping applied in `𝒪_{K'} = 𝒪_K[y]` — P54's
+  monogenicity at `(K, K')`), evaluated at `x`: `(σ̄f)(x) − f(x) = (σ̄f)(x) = ± b`. Needs: the
+  transport of `F` along `σ̄` (map by the `D(B)`-action on `𝒪_L ∩ K'`) and the identity
+  `(map (σ̄) f).eval x = ∏_{s ↦ σ̄} (x − s•x)` — the lift-set reindexing (P50 exactness: the
+  fiber over `σ̄` is a coset of `range decompositionRestrict`).
+- **(ii) `b ∣ a`**: the monic division `g(X) − y = f·q` in `(𝒪_L ∩ K')[X]` (`Monic.divModByMonic`
+  machinery or `modByMonic` + degree argument), transported along `σ̄`, evaluated at `x`.
+R1–R3 remain the distant, must-be-earned targets.
