@@ -2,3 +2,4 @@
 .DS_Store
 *.tar.zst
 /.claude/
+claude.last

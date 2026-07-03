@@ -4158,3 +4158,90 @@ lifts). **Pass 50 options:** (a) begin that quotient theory (a multi-pass projec
 the honest next big step); or (b) the last clean deepening — the `φ`/`ψ` **closed-form equivalences**
 or **concavity** (the latter needs the piecewise argument). R1–R3 remain the distant, must-be-earned
 targets.
+
+### Pass 50 (2026-07-02) — the quotient-restriction skeleton (toward Serre Lemma 5)
+
+**Mathematics; ledger delta 0 / 0.** Opened the quotient-ramification theory — the wall between the
+completed `φ`/`ψ` analytic theory and `φ`-transitivity/Herbrand's theorem — with its
+group-theoretic skeleton, complete and axiom-free. `Anabelian/RamificationQuotient.lean`,
+11 declarations, all standard-axioms-only.
+
+## Scope choice (the HANDOFF's option (a), first brick)
+
+The analytic side of Herbrand is saturated (P44–49); everything left is gated on the quotient
+relationship `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Serre IV §3 Lemma 5), whose core is ramification
+*arithmetic* (`i_{K'/K}(σ̄)` vs the `i_{L/K}` of the lifts). Per the clean-partial-over-
+half-discharge rule, this pass built the skeleton that arithmetic will stand on — and nothing of
+the arithmetic itself.
+
+## What was proved + the method
+
+For a tower `K ⊆ K' ⊆ L` with `K'/K` **normal**, `A : ValuationSubring L`, and
+`A ∩ K' := A.comap (algebraMap K' L)` (= `𝒪_{K'}` when `A = 𝒪_L`, unambiguous by P43 canonicity):
+
+- `restrictNormalHom_smul_comap` — `σ̄ • (A ∩ K') = (σ • A) ∩ K'`: restriction intertwines the
+  pointwise actions (engine: `AlgEquiv.restrictNormal_commutes` applied to `σ⁻¹` through
+  `map_inv`).
+- **`decompositionQuotient : D(A) →* D(A ∩ K')`** — the quotient restriction on decomposition
+  groups along `Gal(L/K) ↠ Gal(K'/K)` (Mathlib's `AlgEquiv.restrictNormalHom`), the quotient
+  counterpart of P46's `decompositionRestrict`. Action compatibility
+  `algebraMap K' L (σ̄ • b) = σ (algebraMap K' L b)` is `restrictNormal_commutes` — *not* `rfl`,
+  which is exactly why the quotient half is harder than P46's subgroup half (there the action
+  agreement was definitional).
+- `decompositionQuotient_comp_decompositionRestrict = 1` — the composite
+  `D(A)|_{Gal(L/K')} → D(A) → D(A ∩ K')` is trivial (`AlgEquiv.commutes` + injectivity of
+  `algebraMap K' L`).
+- **`decompositionQuotient_ker` (HEADLINE)** — **exactness at the decomposition level**:
+  `ker (decompositionQuotient) = range (decompositionRestrict)`. Forward: a `σ` restricting to `1`
+  fixes `algebraMap K' L` pointwise (via `restrictNormal_commutes`), hence *is* a `K'`-algebra
+  automorphism (`AlgEquiv.ofRingEquiv` on `σ.toRingEquiv`) with the same underlying map, so it
+  stabilizes `A` and maps back to `σ` (`rfl` after `Subtype.ext`/`AlgEquiv.ext`). The
+  decomposition groups inherit the exactness of `1 → Gal(L/K') → Gal(L/K) → Gal(K'/K)`.
+- `comapRingHom : A ∩ K' →+* A` + `mem_maximalIdeal_of_comapRingHom` — the inclusion reflects the
+  maximal ideal (`mem_maximalIdeal`/`mem_nonunits_iff`: a unit maps to a unit by `IsUnit.map`).
+- **`decompositionQuotient_mem_ramificationGroup_zero`** (+ `ramificationGroup_zero_map_le`,
+  `inertiaSubgroup_map_le` via P23's `ramificationGroup_zero`) — **the quotient map preserves
+  inertia**: `σ ∈ G_0(L/K) ⟹ σ̄ ∈ G_0(K'/K)`. For `b ∈ A ∩ K'`, `σ̄b − b` maps to `σb − b ∈ 𝔪_A`
+  under `comapRingHom` (action compatibility), and the inclusion reflects `𝔪`. The first genuinely
+  ramification-flavored quotient fact — the `i = 0` base case of Lemma 5, renumbering-free because
+  `φ_{L/K'}(0) = 0`.
+
+Probe-verified with `lake env lean` before touching the project tree; the probe compiled with only
+three mechanical fixes (a `rw`→`calc` where `restrictNormalHom` vs `restrictNormal` blocked the
+syntactic match; explicit iff-chaining where a double `mem_pointwise_smul` rewrite misfired; and
+`comapRingHom` not binding the unused `K` variable).
+
+## Mathlib API that did the real work
+
+`AlgEquiv.restrictNormalHom` + `AlgEquiv.restrictNormal_commutes` (the entire quotient direction);
+`AlgEquiv.ofRingEquiv` (kernel converse); `ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem`;
+`mem_maximalIdeal` + `_root_.mem_nonunits_iff` + `IsUnit.map`. (Note the `_root_.` — the
+`ValuationSubring` open shadows `mem_nonunits_iff` with an unrelated valuation lemma.)
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN. All
+11 `#print axioms` standard-only; zero `axiom` declarations project-wide. Housekeeping: untracked
+`claude.last` (session-tooling scratch, found at session start per the clean-tree rule) added to
+`.gitignore`. **HEADLINE: the quotient-restriction skeleton — `decompositionQuotient`, exactness
+of `Gal(L/K') → Gal(L/K) → Gal(K'/K)` at the decomposition level, and inertia preservation
+`G_0 → G_0` — all axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** (`decompositionQuotient`/`comapRingHom`
+  are `def`s of a `MonoidHom`/`RingHom`) ⟹ no rule-2 obligation. `[Normal K K']` is a
+  *definitional prerequisite* (without normality `Gal(K'/K)` receives no restriction map and the
+  skeleton does not exist), not a removable theorem hypothesis — **no owed witness**. D1 N/A;
+  D2 N/A. R1–R3 untouched.
+
+## Scope: the skeleton, NOT the arithmetic (Pass 51+)
+
+Deliberately unbuilt (clean partial > half-discharge): **surjectivity** of `decompositionQuotient`
+(needs transitivity of the Galois action on the valuation subrings above a given one — real
+arithmetic content) and the **higher-`i` image**, which *is* Lemma 5
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H` with its `φ`-renumbering — the `i_{K'/K}` vs `i_{L/K}` arithmetic,
+the genuine multi-pass wall. **Pass 51 options:** (a) begin that arithmetic — e.g. the `i_{L/K}`
+function itself (`i(σ) = v_L(σπ − π)` / `inf_a v(σa − a)`) as a project object with its basic
+theory, the currency Lemma 5 is stated in; or (b) surjectivity of `decompositionQuotient` in the
+finite/local setting. R1–R3 remain the distant, must-be-earned targets.

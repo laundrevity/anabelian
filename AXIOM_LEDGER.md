@@ -2232,3 +2232,55 @@ Lemma 5), the multi-pass wall verified absent from Mathlib, not touched here.
 toward transitivity/Herbrand: the quotient relationship (the wall — would need a project-built
 quotient-ramification theory), or the remaining clean deepening (the `φ`/`ψ` closed forms,
 concavity via a from-scratch piecewise argument).
+
+### Pass 50 (2026-07-02) — the quotient-restriction skeleton; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 50 opened the quotient-ramification theory (toward Serre IV
+§3 Lemma 5 → `φ`-transitivity → Herbrand's theorem) with its group-theoretic skeleton, all proved:
+`Anabelian/RamificationQuotient.lean`, 11 declarations, all standard-axioms-only.
+
+```
+'Anabelian.restrictNormalHom_smul_comap'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_stabilizer_restrictNormalHom'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.algebraMap_decompositionQuotient_smul'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_comp_decompositionRestrict' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_ker'                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapRingHom'                                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_maximalIdeal_of_comapRingHom'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.decompositionQuotient_mem_ramificationGroup_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_zero_map_le'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.inertiaSubgroup_map_le'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`decompositionQuotient`** — the quotient restriction `D(A) →* D(A ∩ K')` along
+  `Gal(L/K) ↠ Gal(K'/K)` for a tower `K ⊆ K' ⊆ L` with `K'/K` normal (`A ∩ K'` =
+  `A.comap (algebraMap K' L)`; for `A = 𝒪_L` this is `𝒪_{K'}`, unambiguous by Pass 43 canonicity)
+  — the quotient counterpart of Pass 46's `decompositionRestrict`.
+- **`decompositionQuotient_ker`** — the headline: **exactness of
+  `Gal(L/K') → Gal(L/K) → Gal(K'/K)` at the decomposition level**,
+  `ker (decompositionQuotient) = range (decompositionRestrict)`.
+- **Inertia preservation** — `G_0(L/K)` maps into `G_0(K'/K)`
+  (`decompositionQuotient_mem_ramificationGroup_zero`, + `map ≤` and `inertiaSubgroup` forms):
+  the `i = 0`, renumbering-free base case of Lemma 5 (`φ_{L/K'}(0) = 0`).
+
+**Mathlib API that did the real work:** `AlgEquiv.restrictNormalHom` +
+`AlgEquiv.restrictNormal_commutes` (the whole quotient direction); `AlgEquiv.ofRingEquiv` (the
+kernel's converse: a `σ` fixing `K'` *is* a `K'`-automorphism);
+`ValuationSubring.mem_pointwise_smul_iff_inv_smul_mem`; `mem_maximalIdeal`/`mem_nonunits_iff` +
+`IsUnit.map` (the inclusion `A ∩ K' →+* A` reflects `𝔪`).
+
+**Not the cardinal sin / rule-2.** Group-theoretic bookkeeping for a tower of given fields —
+strictly below R1; recovers nothing from an abstract group. No new `structure`/`class`
+(`decompositionQuotient`/`comapRingHom` are `def`s of homs). `[Normal K K']` is a definitional
+prerequisite (without it `Gal(K'/K)` receives no restriction map), not a removable theorem
+hypothesis — no owed witness. D1 N/A; D2 N/A.
+
+**Honest scope: the skeleton, NOT the arithmetic.** Deliberately absent (unbuilt rather than
+half-built): surjectivity of `decompositionQuotient` (needs Galois transitivity on the valuation
+subrings above a given one) and the higher-`i` image — the latter is exactly Lemma 5
+`(G/H)_{φ_{L/K'}(u)} = G_u H/H` with its `φ`-renumbering, i.e. the `i_{K'/K}` vs `i_{L/K}`
+arithmetic, the multi-pass wall.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: the ramification arithmetic of the quotient
+(Serre Lemma 5), then `φ`-transitivity (Prop. 15) and Herbrand's theorem (Prop. 14).

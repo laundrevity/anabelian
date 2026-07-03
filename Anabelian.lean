@@ -49,3 +49,4 @@ import Anabelian.RamificationSubgroup
 import Anabelian.HerbrandSlope
 import Anabelian.HerbrandFormula
 import Anabelian.HerbrandPsiSlope
+import Anabelian.RamificationQuotient
