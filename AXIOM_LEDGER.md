@@ -2730,3 +2730,43 @@ proofs.
 
 **Ledger delta: 0 / 0.** Axiom-free. The sum formula now lacks only direction (ii)
 (`b ∣ a`) and the final assembly.
+
+### Pass 60 (2026-07-03) — polynomial representation + `L = K'(x)`; count stays 0 / 0
+
+**No axiom added, none needed.** The substrate of Prop. 3's direction (ii): membership in the
+generated subring IS polynomial representation, and the `𝒪_K`-ring generator of `𝒪_L`
+generates `L` as a field over every intermediate `K'`.
+`Anabelian/ExtensionGeneratorRep.lean`, 4 declarations, all standard-axioms-only.
+
+```
+'Anabelian.exists_polynomial_map_eval_eq'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapRingHom_comp_baseToComapRingHom'            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_polynomial_generator_rep'                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.adjoin_generator_eq_top'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`exists_polynomial_map_eval_eq`** (generic) — every element of
+  `Subring.closure (range f ∪ {x})` is `(P.map f).eval x` (`Subring.closure_induction`:
+  constants ↦ `C`, generator ↦ `X`, ring ops ↦ polynomial ops). At `𝒪_L`
+  (`exists_polynomial_generator_rep`): with Pass 54's generator, **every integer of `L` is
+  `(g.map (extensionAlgebraMap K L)).eval x`** for a `g` over `𝒪_K` — in particular the `ι y`
+  of the coming division argument.
+- **`comapRingHom_comp_baseToComapRingHom`** — the commuting square
+  `ι ∘ (𝒪_K → B) = extensionAlgebraMap K L` (values: the scalar tower).
+- **`adjoin_generator_eq_top`** — **`L = K'(x)`**: `IntermediateField.adjoin K' {x} = ⊤` for
+  any intermediate `K'`. Closure induction puts every integer in the adjoin (base elements
+  are `K`-scalars, hence `K'`-scalars via the tower); the valuation dichotomy
+  (`mem_or_inv_mem`) extends to all of `L`. The input to direction (ii)'s degree count
+  (`natDegree F = |H| = [L : K'] = deg (minpoly K' x)`).
+
+**Mathlib API that did the real work:** `Subring.closure_induction` (twice);
+`Polynomial.map_C/X/add/neg/mul` + `eval_*`; `IntermediateField.algebraMap_mem`/
+`subset_adjoin`/`inv_mem`; `IsScalarTower.algebraMap_apply`; `mem_or_inv_mem`.
+
+**Not the cardinal sin / rule-2.** Representation bookkeeping for a tower of given fields —
+strictly below R1; recovers nothing from an abstract group. Neither the division nor
+`b ∣ a` is claimed. No new `structure`/`class`; no owed witness; D1 N/A; D2 stays inside the
+Pass-29 proofs.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: direction (ii)'s remainder-vanishing (the minpoly
+degree count), then the division and `b ∣ a`, then the Prop. 3 assembly.

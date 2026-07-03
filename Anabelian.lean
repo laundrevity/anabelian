@@ -59,3 +59,4 @@ import Anabelian.RamificationLiftSet
 import Anabelian.ExtensionComapIntegers
 import Anabelian.RamificationLiftDvd
 import Anabelian.RamificationAddVal
+import Anabelian.ExtensionGeneratorRep

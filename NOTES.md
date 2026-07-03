@@ -4955,3 +4955,81 @@ sum `addVal(∏_{s ↦ σ̄}(x − s·x)) = Σ_{s ↦ σ̄} i_{L/K}(s)` — both
   `∏(x − s·x)` vs `∏(s·x − x)` sign — `(−1)^{|H|}`, a unit) ⟹ `addVal` equal ⟹ with P57(3),
   P59's dilation + fiber sum: **`e' · i_{K'/K}(σ̄) = Σ_{s ↦ σ̄} i_{L/K}(s)`** — Prop. 3.
 R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 60 (2026-07-03) — polynomial representation + `L = K'(x)` (direction (ii)'s substrate)
+
+**Mathematics; ledger delta 0 / 0.** Two closure inductions: membership in
+`𝒪_K[x]`-closure is polynomial representation, and the same generator generates `L` as a
+field over every intermediate `K'`. `Anabelian/ExtensionGeneratorRep.lean`, 4 declarations,
+all standard-axioms-only.
+
+## Scope choice (HANDOFF's Pass-60 task + one look-ahead brick)
+
+The planned brick was the representation lemma; `adjoin_generator_eq_top` was added because
+it needs no polynomial machinery at all (a second, direct closure induction — membership in
+the intermediate field — beats routing through `eval₂`/`aeval` plumbing) and it is exactly
+what direction (ii)'s remainder-vanishing will consume.
+
+## What was proved + the method
+
+- **`exists_polynomial_map_eval_eq`** (generic, any `f : R →+* S`):
+  `z ∈ Subring.closure (range f ∪ {x}) → ∃ P, (P.map f).eval x = z` —
+  `Subring.closure_induction` with `C r`/`X`/`0`/`1`/`P+Q`/`−P`/`P·Q`. At `𝒪_L`
+  (`exists_polynomial_generator_rep`): every integer is `(g.map (extensionAlgebraMap)).eval
+  x` — the element-by-element `𝒪_L = 𝒪_K[x]`.
+- **`comapRingHom_comp_baseToComapRingHom`** — `ι ∘ (𝒪_K → B) = extensionAlgebraMap K L`
+  (`Subtype.ext` + the scalar tower). Moves `g`'s coefficients between the `B`-route and the
+  direct route in the coming division.
+- **`adjoin_generator_eq_top`** — `IntermediateField.adjoin K' {(x:L)} = ⊤`: inner closure
+  induction shows every integer's value lies in the adjoin (base case: `coe_extensionAlgebraMap`
+  + `IsScalarTower.algebraMap_apply K K' L` + `algebraMap_mem`; generator: `subset_adjoin`;
+  ops: `add_mem`/`neg_mem`/`mul_mem` with `simpa` handling the subtype-value pushes); outer:
+  `mem_or_inv_mem` + `inv_mem` + `inv_inv` extends from `𝒪_L` to `L`.
+
+Probe: compiled clean once run correctly — one environment lesson (below), plus the usual
+`_root_.eq_top_iff` disambiguation and two `simpa`→`simp` lints.
+
+## House/environment notes
+
+- **Do not `cd` into the scratchpad to run probes**: `lake env lean` outside the project
+  root loses the project search path and (worse) `elan` may download a fresh toolchain from
+  the scratchpad's absence of a pinned `lean-toolchain`. Run `lake env lean <abs-path>` from
+  the project root — as all previous passes did (bit this pass once; a stray v4.31.0
+  toolchain was downloaded to elan's cache, harmless but wasteful).
+- P57's `ExtensionComapIntegers` does NOT import `RamificationQuotient` (its telescoping is
+  internal to `B`); anything using `comapRingHom` must import `RamificationQuotient`
+  explicitly.
+
+## Mathlib API that did the real work
+
+`Subring.closure_induction`; `Polynomial.map_C/map_X/map_add/map_neg/map_mul` + `eval_*`;
+`IntermediateField.algebraMap_mem`, `subset_adjoin`, `inv_mem`;
+`IsScalarTower.algebraMap_apply`; `ValuationSubring.mem_or_inv_mem`.
+
+## Build + headline
+
+Host `lake build` green (2.7 s, fresh file); imported in `Anabelian.lean`;
+`scripts/preflight.sh` CLEAN. All 4 `#print axioms` standard-only; zero `axiom` declarations
+project-wide. **HEADLINE: closure membership is polynomial representation (every integer of
+`L` is `g(x)` for `g` over `𝒪_K`), and `L = K'(x)` for every intermediate `K'` — direction
+(ii)'s substrate, axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 stays inside P29's proofs.
+  R1–R3 untouched.
+
+## Scope: direction (ii)'s core is next (Pass 61+)
+
+**Pass 61: the remainder-vanishing brick** — for `r : Polynomial ↥B` with
+`(r.map ι).eval x = 0` and `r.natDegree < Fintype.card (D_{K'}(𝒪_L))`: `r = 0`. Route:
+(a) move `r` to `K'[X]` along `B.subtype` (nonzero preserved — `Polynomial.map_injective` of
+the subtype injection); (b) its `aeval` at `(x:L)` vanishes (value-level: `Polynomial.eval_map`
+/ `hom_eval₂` chains — the coercion `𝒪_L → L` is a ring hom); (c) `minpoly K' x` has degree
+`= finrank K' K'⟮x⟯` (`IntermediateField.adjoin.finrank`, `x` integral) `= finrank K' L`
+(P60's `adjoin_generator_eq_top`) `= Fintype.card Gal(L/K')` (`IsGalois.card_aut_eq_finrank`)
+`= Fintype.card (D_{K'}(𝒪_L))` (P55's `decompositionSubgroup_extensionIntegers_restrict_eq_top`
++ card-of-⊤); (d) `minpoly.degree_le_of_ne_zero` contradicts (b)+(c) unless `r = 0`. Then
+**Pass 62: the division + `b ∣ a`**; **Pass 63: the Prop. 3 assembly**. R1–R3 remain the
+distant, must-be-earned targets.
