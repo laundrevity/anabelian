@@ -4799,3 +4799,84 @@ Then `(σ̄f)(x) − f(x) = (σ̄f)(x) = ±b` gives `a ∣ b` (with `a` viewed i
 `comapRingHom` — note `addVal_L (ι a)` vs `addVal_B a` is the `e'`-dilation, NOT needed for
 bare divisibility). After that: direction (ii) (monic division), then the bookkeeping.
 R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 58 (2026-07-03) — Prop. 3 direction (i): `a ∣ b`, proved
+
+**Mathematics; ledger delta 0 / 0.** The first of Serre IV §1 Prop. 3's two divisibilities:
+`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L`, abstract and hypothesis-free at `𝒪_L`.
+`Anabelian/RamificationLiftDvd.lean`, 5 declarations, all standard-axioms-only.
+
+## Scope (HANDOFF's Pass-58 task, exactly)
+
+The three pieces the handoff named, then the assembly:
+
+- **`comapRingHom_decompositionQuotient_smul`** — `ι(σ̄ • c) = s₀ • ι(c)`: literally
+  `Subtype.ext` of P50's `algebraMap_decompositionQuotient_smul` (the handoff's "P50 read
+  backwards" was right — one line). Polynomial level (`map_comapRingHom_smul`):
+  `(σ̄ • F).map ι = (F.map ι).map (toRingAut s₀)` by `Polynomial.ext` + `coeff_map`/
+  `coeff_smul` + the element lemma (note: `ext` on polynomials over `↥A` descends to
+  `L`-level coercions — wrap the element lemma in `congrArg Subtype.val`; bit this pass
+  once).
+- **`dvd_eval_of_dvd_coeff`** — `(∀ n, d ∣ P.coeff n) → d ∣ P.eval z`:
+  `eval_eq_sum_range` + `Finset.dvd_sum`, 3 lines, generic (verified absent from Mathlib in
+  this form).
+- **`comapRingHom_smul_sub_dvd_liftProd`** (abstract headline): `a = σ̄y − y` divides every
+  coefficient of `σ̄F − F` (P57's telescoping + `coeff_sub`/`coeff_smul`); `map_dvd` pushes
+  along `ι`; `dvd_eval_of_dvd_coeff` at `x`; and the evaluation computes —
+  `map_sub`/`eval_sub`, the polynomial equivariance, P55's `hF`, **P56's
+  `map_fullProdXSubSMul_eval`** and **P55's `fullProdXSubSMul_eval` (`f(x) = 0`)** — to
+  `∏_h (x − (s₀ · dr h)·x) − 0`. Exactly Serre's five-line argument, with every line a named
+  brick from P50–57.
+- **`exists_generator_dvd_liftProd`** (the `𝒪_L` form): `exists_generator_comap_spec` (P57)
+  provides `y` with the telescoping and the `i_{K'/K} = addVal` identification;
+  `exists_fullProdXSubSMul_lift_extensionIntegers` (P55) provides `F` per `x`; the abstract
+  headline assembles. One `y`, both conclusions, no hypotheses beyond the ambient
+  tower/Galois/finiteness instances.
+
+## Probe experience
+
+Compiled on the second try (the single fix: the `congrArg Subtype.val` wrap noted above).
+**Build note:** the project file elaborates slowly (~15 min; the `𝒪_L` instantiation's
+instance context is expensive) — clean within default heartbeats, but expect the cost when
+rebuilding; consider isolating further Prop.-3 instantiations in their own files so
+incremental builds stay cheap.
+
+## Mathlib API that did the real work
+
+`Polynomial.coeff_smul`/`coeff_sub`/`coeff_map`/`map_sub`/`eval_sub`/`eval_eq_sum_range`;
+`Finset.dvd_sum`, `Dvd.Dvd.mul_right`, `map_dvd`; P50's action-compatibility, P55's descent +
+`eval = 0`, P56's lift-set identity, P57's telescoping — all as black boxes (the pass adds
+~40 lines of glue to ~8 passes of substrate).
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN.
+All 5 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE:
+Serre IV §1 Prop. 3, direction (i) — `ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L`, proved
+axiom-free, hypothesis-free at `𝒪_L`, with the same `y` carrying the concrete
+`i_{K'/K}(σ̄) = addVal_B(σ̄y − y)`.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 stays inside P29's proofs.
+  R1–R3 untouched.
+
+## Scope: direction (ii) is next (Pass 59+)
+
+**Pass 59: `b ∣ a`** — Serre's converse. Ingredients: `y = g(x)` for `g` over `𝒪_K` (P54's
+generation of `𝒪_L` over `𝒪_K` at the same `x` — extract the polynomial from
+`Subring.closure`-membership, or work with `Algebra.adjoin`-style representation); the monic
+division `g(X) − C (ι y) = f·q + r` in `𝒪_L[X]`... — better per Serre: divide in `B[X]` by
+P55's monic `F`: `G := (g's image in B[X]) − C y = F·q + r` with `natDegree r < natDegree F`;
+evaluate the `ι`-image at `x`: `r`'s image kills `x`... the remainder-vanishing needs the
+`K'`-independence of `1, x, …, x^{d−1}` (`d = [L:K']` — from `L = K'(x)`, which follows from
+`𝒪_L = 𝒪_K[x] ⊆ K'[x]`); then apply `σ̄` to the division identity (coefficients in `B`),
+map along `ι`, evaluate at `x`: `g(x) − ι(σ̄y) = (σ̄f)(x)·(σ̄q-image)(x) = ±b·(…)`, and
+`g(x) = ι y`… wait — `g(x) = y`'s image: `ι y = g(x)` by choice of `g`. LHS
+`= ι y − ι (σ̄ y) = −ι(a)`. Hence `b ∣ ι(a)`. Scope tightly: the polynomial-representation
+brick (`∃ g over 𝒪_K-image, eval x g = ι y`) + the division + remainder-vanishing may
+each be their own pass; clean partial > half-discharge. After (ii): the `addVal` bookkeeping
+((iii): `addVal` of the fiber product = `Σ_h i_G(s₀·dr h)` via P53–54 + P56; the
+`e'`-dilation `addVal_L ∘ ι = e' · addVal_B`), then the Prop. 3 assembly. R1–R3 remain the
+distant, must-be-earned targets.

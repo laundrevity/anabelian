@@ -2643,3 +2643,48 @@ inside the Pass-29 proofs.
 **Ledger delta: 0 / 0.** Axiom-free. Next: finish direction (i) (telescoping × P55 descent ×
 P56 lift-set identity, evaluated at `x` ⟹ `a ∣ b`), then direction (ii), then the `addVal`
 bookkeeping.
+
+### Pass 58 (2026-07-03) — Prop. 3 direction (i): `a ∣ b`, PROVED; count stays 0 / 0
+
+**No axiom added, none needed.** The first of Serre IV §1 Prop. 3's two divisibilities is a
+theorem: `ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L` — abstract and hypothesis-free at
+`𝒪_L`. `Anabelian/RamificationLiftDvd.lean`, 5 declarations, all standard-axioms-only.
+
+```
+'Anabelian.dvd_eval_of_dvd_coeff'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapRingHom_decompositionQuotient_smul'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_comapRingHom_smul'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapRingHom_smul_sub_dvd_liftProd'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_generator_dvd_liftProd'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The equivariance** — `comapRingHom (σ̄ • c) = s₀ • comapRingHom c` for `σ̄ =
+  decompositionQuotient s₀` (`Subtype.ext` of Pass 50's
+  `algebraMap_decompositionQuotient_smul`), lifted to polynomials
+  (`map_comapRingHom_smul`: `(σ̄ • F).map ι = (F.map ι).map s₀`, coefficient-wise).
+- **`dvd_eval_of_dvd_coeff`** — dividing every coefficient divides every evaluation
+  (`eval_eq_sum_range` + `Finset.dvd_sum`); generic, reusable.
+- **`comapRingHom_smul_sub_dvd_liftProd`** (abstract headline) — with Pass 55's descent and
+  Pass 57's telescoping: every coefficient of `σ̄F − F` is divisible by `a = σ̄y − y`; push
+  along `ι`, evaluate at `x`; the value computes to `(σ̄f)(x) − f(x) = ∏_h (x − (s₀·dr h)·x)
+  − 0` by Pass 56's lift-set identity and Pass 55's `f(x) = 0`. Hence `ι(a) ∣ ∏`.
+- **`exists_generator_dvd_liftProd`** (the `𝒪_L` form) — one `y ∈ B = 𝒪_L ∩ K'` carrying
+  simultaneously the concrete `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)` (Pass 57) and the
+  divisibility for **every** `x ∈ 𝒪_L` and every lift `s₀`. Passes 55–57 assembled;
+  hypothesis-free.
+
+**Mathlib API that did the real work:** `Polynomial.coeff_smul`/`coeff_sub`/`coeff_map` +
+`map_sub`/`eval_sub`/`eval_eq_sum_range`; `Finset.dvd_sum` + `Dvd.Dvd.mul_right`; `map_dvd`;
+Passes 50/55/56/57 as black boxes.
+
+**Not the cardinal sin / rule-2.** One direction of a comparison of elements attached to a
+given tower — strictly below R1; recovers nothing from an abstract group. The converse
+`b ∣ a` and the `addVal` bookkeeping are NOT claimed. No new `structure`/`class`; no owed
+witness; D1 N/A; D2 stays inside the Pass-29 proofs.
+
+**Build note:** this file elaborates slowly (~15 min wall-clock; heavy instance search in the
+`𝒪_L` instantiation's context) — compiles clean within default heartbeats, but future passes
+touching it should expect the cost.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: direction (ii) (`b ∣ a`, the monic division), then
+the `addVal` bookkeeping (fiber sum + `e'`-dilation), then the Prop. 3 assembly.
