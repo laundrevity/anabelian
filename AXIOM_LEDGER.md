@@ -2389,3 +2389,52 @@ D2 stays inside Pass 29's proof (this file touches `extensionIntegers` only thro
 
 **Ledger delta: 0 / 0.** Axiom-free. Next: the concrete `i_G` via monogenicity, then Prop. 3,
 feeding Lemma 5 → `φ`-transitivity → Herbrand's theorem.
+
+### Pass 53 (2026-07-03) — the concrete `i_G(σ) = v_L(σx − x)`; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 53 supplied the concrete half of Serre IV §1 Lemma 1:
+under the monogenicity package (named binders, the Pass-25/27/28 discipline — nothing enters
+the kernel), Pass 51's generator-free `lowerIndex` **is** the valuation of the generator
+displacement. `Anabelian/RamificationIndexGenerator.lean`, 5 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.mem_maximalIdeal_pow_iff_le_addVal'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.forall_smul_sub_mem_iff_generator'               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_ramificationGroup_iff_smul_generator_sub_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_eq_addVal'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.lowerIndex_extensionIntegers_eq_addVal'          depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`mem_maximalIdeal_pow_iff_le_addVal`** — the DVR bridge `x ∈ 𝔪^n ↔ (n : ℕ∞) ≤ addVal R x`
+  (`𝔪^n = (ϖ^n)` + `addVal_le_iff_dvd` + `addVal (ϖ^n) = n`) — Mathlib has the ingredients but
+  not the statement.
+- **`forall_smul_sub_mem_iff_generator`** — the one-generator collapse
+  `(∀ a, σa − a ∈ 𝔪^n) ↔ σx − x ∈ 𝔪^n`: `⟸` is Pass 25's telescoping detection
+  (`smul_sub_dvd_of_mem_closure` / `mem_ramificationGroup_of_smul_uniformizer_sub_mem`), `⟹`
+  is `a := x`. Hence **Lemma 1 in generator form**
+  (`mem_ramificationGroup_iff_smul_generator_sub_mem`): `σ ∈ G_i ↔ σx − x ∈ 𝔪^(i+1)`.
+- **`lowerIndex_eq_addVal`** — the headline: on a DVR valuation subring, under the package,
+  `i_G(σ) = addVal (σ • x − x) = v_L(σx − x)` — the exact currency Serre IV §1 Prop. 3
+  computes with. At `𝒪_L` (`lowerIndex_extensionIntegers_eq_addVal`): `hfix` free (Pass 32),
+  DVR instance from Pass 35; **only `hgen` remains a named binder**.
+
+**The monogenicity hypothesis, honestly.** `hgen : Subring.closure (↑A₀ ∪ {x}) = ⊤` is carried
+as a **named hypothesis binder** — exactly as Passes 25/27/28 carried it — NOT an `axiom`
+(nothing in the kernel, `#print axioms` standard-only), NOT claimed discharged. Its in-project
+discharge (Serre III §6 Prop. 12: local fields with separable residue extension are monogenic)
+is named future work in `ROADMAP.md` L2. No load-bearing claim is made for `hgen`/`hfix`
+(sufficient conditions, necessity not asserted) — no owed witness.
+
+**Mathlib API that did the real work:** `IsDiscreteValuationRing.addVal` +
+`addVal_le_iff_dvd` + `Irreducible.addVal_pow` + `Irreducible.maximalIdeal_eq` +
+`Ideal.span_singleton_pow` (the bridge); Pass 25's closure-induction engine; Pass 51's
+`enat_eq_of_forall_natCast_lt_iff` + `mem_ramificationGroup_iff_lt_lowerIndex`;
+`ENat.add_one_le_iff` + `norm_cast`.
+
+**Not the cardinal sin / rule-2.** Structure of the Galois action of given fields — strictly
+below R1; recovers nothing from an abstract group. No new `structure`/`class`. D1 N/A; D2
+stays inside Pass 29's proofs. R1–R3 untouched.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: Prop. 3 (the sum formula — lifts exist by P52,
+currency concrete by P53), or first the `hgen` discharge (Serre III §6 Prop. 12).

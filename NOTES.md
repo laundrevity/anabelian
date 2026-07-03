@@ -4392,3 +4392,88 @@ check what the `ExtensionMonogenic*` arc (P29–37 descent) provides as the gene
 then prove the one-generator reduction and `lowerIndex = (𝔪-adic order of) σx − x`. After that:
 Prop. 3 itself, then Lemma 5 → `φ`-transitivity (Prop. 15) → Herbrand (Prop. 14). R1–R3 remain
 the distant, must-be-earned targets.
+
+### Pass 53 (2026-07-03) — the concrete `i_G`: `lowerIndex = v_L(σx − x)`
+
+**Mathematics; ledger delta 0 / 0.** The concrete half of Serre IV §1 Lemma 1: under the
+monogenicity package, Pass 51's generator-free `lowerIndex` is the `addVal` of the generator
+displacement. `Anabelian/RamificationIndexGenerator.lean`, 5 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF first task; the inventory paid off)
+
+The HANDOFF's first step was an inventory of the `ExtensionMonogenic*` arc, and it changed the
+shape of the pass: **the reduction engine already existed**. Pass 25 (`TameInjectivity.lean`)
+proved `smul_sub_dvd_of_mem_closure` — `σ` fixes `A₀` pointwise ⟹ `(σx − x) ∣ (σa − a)` for all
+`a ∈ closure (A₀ ∪ {x})`, by `Subring.closure_induction` with the telescoping multiplicative
+step — and the one-directional detection `mem_ramificationGroup_of_smul_uniformizer_sub_mem`.
+(Note: P25's `π` is *any* ring generator — no `hspan` in these two lemmas — so they apply
+verbatim to a non-uniformizer generator `x`.) What was missing: the iff, the `lowerIndex`
+identification, and the `addVal` form. That is this pass.
+
+## What was proved + the method
+
+- **`mem_maximalIdeal_pow_iff_le_addVal`** (DVR bridge, stated for any DVR domain):
+  `x ∈ 𝔪^n ↔ (n : ℕ∞) ≤ addVal R x`. Three rewrites: `Irreducible.maximalIdeal_eq` +
+  `Ideal.span_singleton_pow` + `Ideal.mem_span_singleton`, then `addVal_le_iff_dvd` +
+  `Irreducible.addVal_pow`. Mathlib has the ingredients, not the statement — a reusable brick.
+- **`forall_smul_sub_mem_iff_generator`**: `(∀ a, σa − a ∈ 𝔪^n) ↔ σx − x ∈ 𝔪^n` under
+  (`hgen`, `hfix`). `⟹` is instantiation at `a := x`; `⟸` splits on `n` (`n = 0`: `𝔪^0 = ⊤`;
+  `n = i+1`: P25's detection + `mem_ramificationGroup_iff`).
+- **`mem_ramificationGroup_iff_smul_generator_sub_mem`** (Lemma 1, generator form):
+  `σ ∈ G_i ↔ σx − x ∈ 𝔪^(i+1)`.
+- **`lowerIndex_eq_addVal`** (HEADLINE): `i_G(σ) = addVal (σ • x − x)` on a DVR valuation
+  subring under the package — by P51's `enat_eq_of_forall_natCast_lt_iff`: for each `n`,
+  `n < lowerIndex ↔ σ ∈ G_n ↔ σx − x ∈ 𝔪^(n+1) ↔ n+1 ≤ addVal ↔ n < addVal`
+  (`ENat.add_one_le_iff` + `norm_cast`). Exactly the currency Prop. 3 computes with.
+- **`lowerIndex_extensionIntegers_eq_addVal`**: at `𝒪_L`, `hfix` is free (P32's
+  `smul_extensionAlgebraMap_range_eq`), the DVR instance is P35's
+  (`isDiscreteValuationRing_extensionIntegers`, `[Algebra.IsSeparable K L]`); **only `hgen`
+  remains a named binder**.
+
+Probe-verified with `lake env lean`; one mechanical fix (P25's lemma takes `A` implicitly —
+call is `mem_ramificationGroup_of_smul_uniformizer_sub_mem K hgen hfix h`, no `A`).
+
+## The monogenicity hypothesis, honestly (the P25 discipline, restated)
+
+`hgen : Subring.closure (↑A₀ ∪ {x}) = ⊤` is a **named hypothesis binder** — NOT an `axiom`
+(kernel untouched; all `#print axioms` standard-only), NOT claimed discharged, NOT claimed
+necessary. Its discharge — Serre III §6 Prop. 12 (complete DVR, separable residue extension ⟹
+monogenic), instantiable here since `𝓀_L/𝓀_K` is an extension of finite fields — is named
+future work (ROADMAP L2). The P32–34 engine (`closure_subring_union_uniformizer_eq_top`)
+discharges a *different* generation statement (over `inertiaFixedIntegers`, two generators) and
+is not conflated with `hgen`.
+
+## Mathlib API that did the real work
+
+`IsDiscreteValuationRing.addVal` (`addVal_le_iff_dvd`, `Irreducible.addVal_pow`,
+`Irreducible.maximalIdeal_eq`); `Ideal.span_singleton_pow`/`mem_span_singleton`; P25's
+`Subring.closure_induction` engine (reused, not re-proved); P51's `ℕ∞` cofinality lemma;
+`ENat.add_one_le_iff`; `norm_cast`.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN.
+All 5 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE: the
+concrete `i_G` — `lowerIndex K A σ = v_L(σx − x)` (`addVal`) under the monogenicity package,
+with Lemma 1 in generator form `σ ∈ G_i ↔ σx − x ∈ 𝔪^(i+1)` — all axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 structure obligation.
+  `hgen`/`hfix` are sufficient-condition binders with **no necessity claim** ⟹ no owed witness
+  (the exact P25/27/28 precedent, restated in the file's Honesty section). D1 N/A; D2 stays
+  inside P29's proofs. R1–R3 untouched.
+
+## Scope: the currency is concrete; the sum is the wall (Pass 54+)
+
+Prop. 3's inputs are now: lifts exist (P52), `i_G` concrete (P53). **Pass 54 options:** (a)
+**Prop. 3 itself** — `i_{K'/K}(σ̄) = (1/e') Σ_{s ↦ σ̄} i_{L/K}(s)`; Serre's proof compares
+`σ̄y − y` (`y` generating `𝒪_{K'}`) with `∏_s (sx − x)` (`x` generating `𝒪_L` over `𝒪_{K'}`)
+via divisibility both ways — multi-step, may itself split into the two divisibilities; (b)
+**discharge `hgen`** (Serre III §6 Prop. 12) — finite residue fields are simple extensions
+(`𝓀_L^×` cyclic), lift a generator of `𝓀_L/𝓀_K` and correct by a uniformizer; the project has
+the residue-finiteness (P36 arc) and uniformizer packages; a self-contained pass that would
+convert P53's conditional statements into unconditional ones at `𝒪_L`. (b) first is the
+recommended order — it de-conditionalizes before the wall. R1–R3 remain the distant,
+must-be-earned targets.
