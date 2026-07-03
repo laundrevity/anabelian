@@ -2591,3 +2591,55 @@ no owed witness; D1 N/A; D2 untouched.
 **Ledger delta: 0 / 0.** Axiom-free. Next: the telescoping direction `a ∣ b` (P25's engine on
 `σ̄F − F` over `𝒪_L ∩ K'`, now reducible to bookkeeping via the P55 descent + this pass's
 transport), or the division direction `b ∣ a`.
+
+### Pass 57 (2026-07-03) — `𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping; count stays 0 / 0
+
+**No axiom added, none needed.** Pass 57 closed the transport gap flagged in Pass 56's handoff
+(the quotient theory speaks of `B = 𝒪_L ∩ K'`, the generator technology of `𝒪_{K'}`) and
+delivered the arithmetic half of Prop. 3's direction (i) plus the concrete left side of the
+sum formula. `Anabelian/ExtensionComapIntegers.lean`, 9 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.extensionIntegers_comap_eq'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapIntegersEquiv'                              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isDiscreteValuationRing_comap'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.baseToComapRingHom'                              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.coe_baseToComapRingHom'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.comapIntegersEquiv_comp_extensionAlgebraMap'     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_generator_comap'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.smul_baseToComapRingHom_range_eq'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.exists_generator_comap_spec'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`extensionIntegers_comap_eq`** — `(extensionIntegers K L).comap (algebraMap K' L) =
+  extensionIntegers K K'`: integrality of a `K'`-element over `𝒪_K` is the same tested in
+  `K'` or `L` (`isIntegral_algebraMap_iff` along the injective `K' ↪ L`) — the `comap`-level
+  form of Pass 43's base-independence, in 4 lines. With: the value-preserving iso
+  `comapIntegersEquiv` (`Subtype.ext rfl` fields), the **DVR instance on `B`**
+  (`RingEquivClass.isDiscreteValuationRing` transport of Pass 35), and the base map
+  `baseToComapRingHom : 𝒪_K →+* B` matched to Pass 29's `extensionAlgebraMap` along the iso.
+- **`exists_generator_comap`** — `B` is monogenic over `𝒪_K`: Pass 54's generator
+  transported (`RingHom.map_closure` + image-of-union bookkeeping + surjectivity of the iso).
+- **`exists_generator_comap_spec`** (headline) — one `y ∈ B` with **(1)** generation,
+  **(2)** the coefficient telescoping `(σ̄y − y) ∣ (σ̄c − c)` for every `σ̄ ∈ D(B)`, `c ∈ B`
+  (Pass 25's `smul_sub_dvd_of_mem_closure`, its `hgen`/`hfix` hypotheses now theorems — the
+  arithmetic half of Prop. 3's `a ∣ b`), and **(3)** `i_{K'/K}(σ̄) = addVal_B (σ̄y − y)` for
+  every `σ̄` (Pass 53's `lowerIndex_eq_addVal`, hypothesis-free at `B`) — the left side of
+  Prop. 3's sum formula in concrete form.
+
+**Mathlib API that did the real work:** `isIntegral_algebraMap_iff` (the identification);
+`IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`; `RingHom.map_closure` +
+`Set.image_union`/`image_singleton`/`range_comp` + `RingHom.coe_range` (the closure
+transport); `AlgEquiv.commutes` (the `hfix`); Pass 25's telescoping engine and Pass 53's
+`addVal` identification as black boxes.
+
+**Not the cardinal sin / rule-2.** Structure of a tower of given fields — strictly below R1;
+recovers nothing from an abstract group. Direction (i)'s *evaluation* half (applying the
+telescoping to Pass 55's coefficients at `x`) is NOT claimed — next brick. No new
+`structure`/`class` (an equiv and a hom, both `def`s); no owed witness; D1 N/A; D2 stays
+inside the Pass-29 proofs.
+
+**Ledger delta: 0 / 0.** Axiom-free. Next: finish direction (i) (telescoping × P55 descent ×
+P56 lift-set identity, evaluated at `x` ⟹ `a ∣ b`), then direction (ii), then the `addVal`
+bookkeeping.

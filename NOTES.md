@@ -4717,3 +4717,85 @@ axiom-free.**
 - **(ii) `b ∣ a`**: monic division `g(X) − ι y = F·q` over `B` (F monic by P55; remainder
   vanishes by the degree/root argument), transported along `σ̄`, evaluated at `x`.
 R1–R3 remain the distant, must-be-earned targets.
+
+### Pass 57 (2026-07-03) — `𝒪_L ∩ K' = 𝒪_{K'}`, and the coefficient telescoping at `B`
+
+**Mathematics; ledger delta 0 / 0.** The transport gap between the quotient theory (stated on
+`B = 𝒪_L ∩ K'`) and the generator technology (stated on `𝒪_{K'}`) is closed by a 4-line
+identification; on top of it, the arithmetic half of Prop. 3's direction (i) and the concrete
+left side of the sum formula. `Anabelian/ExtensionComapIntegers.lean`, 9 declarations, all
+standard-axioms-only.
+
+## Scope choice (HANDOFF option (A), extended to the telescoping)
+
+The planned brick was the `𝒪_{K'} ≅ B` transport; the inventory showed the identification is
+a *one-lemma* affair (`isIntegral_algebraMap_iff` — integrality doesn't care whether a
+`K'`-element is tested in `K'` or in `L`), so the pass carried through to what the transport
+unblocks: P54's generator on `B`, and with it P25's telescoping and P53's `addVal`
+identification, both of whose hypothesis packages become theorems at `B`.
+
+## What was proved + the method
+
+- **`extensionIntegers_comap_eq`**: `(𝒪_L).comap (algebraMap K' L) = 𝒪_{K'}` — SetLike.ext +
+  `mem_extensionIntegers_iff` twice + `isIntegral_algebraMap_iff ((algebraMap K' L).injective)`.
+  (P43 proved the `L`-level base-independence; this is the `K'`-level comap form the P50–56
+  files actually use. Note it needs no separability — pure integrality transfer.)
+- **`comapIntegersEquiv`**: hand-rolled value-preserving iso (all fields `Subtype.ext rfl`;
+  membership transported by `▸` on the identification) — deliberately NOT
+  `RingEquiv.subringCongr`, avoiding `toSubring` coercion friction. **DVR on `B`** by
+  `RingEquivClass.isDiscreteValuationRing` transport (house-idiom nested name, P35 source).
+- **`baseToComapRingHom`** + `coe_…` (`rfl`) + `comapIntegersEquiv_comp_extensionAlgebraMap`
+  (the iso matches the two base maps — `Subtype.ext` + `coe_extensionAlgebraMap`).
+- **`exists_generator_comap`**: P54 at `(K, K')` transported: `RingHom.map_closure` turns the
+  closure of the generating set into the closure of its image; `Set.image_union`/`_singleton`
+  + `Set.range_comp` + the base-map matching identify the image set; `map e ⊤ = ⊤` by
+  surjectivity.
+- **`exists_generator_comap_spec` (HEADLINE)**: one `y` with (1) `B = 𝒪_K[y]`; (2)
+  `(σ̄y − y) ∣ (σ̄c − c)` for all `σ̄ ∈ D(B)`, `c ∈ B` — P25's `smul_sub_dvd_of_mem_closure`
+  with `hfix` = `AlgEquiv.commutes` (decomposition elements fix `algebraMap K K'`-images,
+  `smul_baseToComapRingHom_range_eq`) and `hc` trivial from generation; (3)
+  `lowerIndex K B σ̄ = addVal_B (σ̄y − y)` — P53's `lowerIndex_eq_addVal` applied at `B`
+  (DVR instance from this pass). **(2) is the arithmetic half of Prop. 3's `a ∣ b`; (3) is
+  the sum formula's left side, concrete.**
+
+Probe: 3 mechanical rounds (structure-field `push_cast` replaced by plain defeq `map_mul`
+applications; `Subring.map_closure` is namespaced `RingHom.map_closure`; `⇑↑e` vs
+`⇑e.toRingHom` display forms must match syntactically for `rw` — state `have`s in the
+`toRingHom` form).
+
+## Mathlib API that did the real work
+
+`isIntegral_algebraMap_iff`; `IsDiscreteValuationRing.RingEquivClass.isDiscreteValuationRing`;
+`RingHom.map_closure`, `RingHom.coe_range`, `Set.image_union`/`image_singleton`/`range_comp`;
+`AlgEquiv.commutes`; P25's telescoping engine + P53's `lowerIndex_eq_addVal` + P54's
+`exists_generator_extensionIntegers` as black boxes.
+
+## Build + headline
+
+Host `lake build` green; new file imported in `Anabelian.lean`; `scripts/preflight.sh` CLEAN.
+All 9 `#print axioms` standard-only; zero `axiom` declarations project-wide. **HEADLINE:
+`𝒪_L ∩ K' = 𝒪_{K'}` (the comap-level canonicity), and at `B = 𝒪_L ∩ K'` a single generator
+`y` with the coefficient telescoping `(σ̄y − y) ∣ (σ̄c − c)` and the concrete
+`i_{K'/K}(σ̄) = addVal_B (σ̄y − y)` — Prop. 3's direction-(i) arithmetic and its left side,
+axiom-free.**
+
+## Ledger delta + rule-2
+
+- **0 / 0.** Axiom-free. **No new `structure`/`class`** ⟹ no rule-2 obligation; no
+  load-bearing-hypothesis claims ⟹ no owed witness. D1 N/A; D2 stays inside P29's proofs.
+  R1–R3 untouched.
+
+## Scope: direction (i)'s evaluation half is next (Pass 58+)
+
+**Pass 58: finish `a ∣ b`.** Assemble: P55's descent (`F` over `B` with `F.map (comapRingHom)
+= f`), P57's telescoping (`a ∣ σ̄c − c` for every coefficient `c` of `F`), and P56's lift-set
+identity (`(σ̄f)(x) = ∏_h (x − (s₀·dr h)·x)`). Shape: `σ̄F − F` has all coefficients divisible
+by `a` ⟹ `a ∣ (σ̄F − F).eval₂/(map) at anything integral` — in particular at `x` (through
+`comapRingHom : B →+* 𝒪_L`, which needs `σ̄`-equivariance of the map `B[X] → 𝒪_L[X]` against
+the two actions: the D(B)-action downstairs vs the lift `s₀`-action upstairs — the
+compatibility `comapRingHom (σ̄ • c) = s₀ • (comapRingHom c)` for `s₀ ↦ σ̄` is the one
+missing small lemma; it is P50's `algebraMap_decompositionQuotient_smul` read backwards).
+Then `(σ̄f)(x) − f(x) = (σ̄f)(x) = ±b` gives `a ∣ b` (with `a` viewed in `𝒪_L` via
+`comapRingHom` — note `addVal_L (ι a)` vs `addVal_B a` is the `e'`-dilation, NOT needed for
+bare divisibility). After that: direction (ii) (monic division), then the bookkeeping.
+R1–R3 remain the distant, must-be-earned targets.

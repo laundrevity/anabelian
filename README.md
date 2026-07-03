@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 56 (2026-07-03)
+## Current state — Pass 57 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 58 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 59 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -66,7 +66,9 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   Prop. 3 (Pass 55); and the **lift-set identity** — the fiber of `decompositionQuotient` is
   the coset `s₀·H` as an explicit bijection (`decompositionFiberEquiv`), and Serre's
   polynomial transported along a lift is the fiber product `∏_{h}(X − (s₀·dr h)·x)`
-  (Pass 56).
+  (Pass 56); and **`𝒪_L ∩ K' = 𝒪_{K'}`** with the Prop.-3 generator package at
+  `B = 𝒪_L ∩ K'` — one `y` with `B = 𝒪_K[y]`, the coefficient telescoping
+  `(σ̄y − y) ∣ (σ̄c − c)`, and the concrete `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)` (Pass 57).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -80,11 +82,13 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
 group-theoretic skeleton (Pass 50), the `i_G` function with its filtration characterization
 (Pass 51), surjectivity of the quotient restriction (Pass 52 — the lifts exist), the concrete
 `i_G(σ) = v_L(σx − x)` (Pass 53), the monogenicity discharge making it unconditional
-(Pass 54), Serre's polynomial `∏_{h}(X − h·x)` with its descent to `𝒪_L ∩ K'` (Pass 55), and
-the lift-set identity making `∏_{s ↦ σ̄}` computable (Pass 56) are all built; what remains of
-Prop. 3 is its two divisibilities — `σ̄y − y ∣ ∏ (sx − x)` via coefficient-telescoping on
-`σ̄F − F`, and the converse via the monic division `g(X) − y = f·q` — plus the final `addVal`
-bookkeeping.
+(Pass 54), Serre's polynomial `∏_{h}(X − h·x)` with its descent to `𝒪_L ∩ K'` (Pass 55), the
+lift-set identity making `∏_{s ↦ σ̄}` computable (Pass 56), and the `𝒪_L ∩ K' = 𝒪_{K'}`
+identification with the coefficient telescoping and the concrete
+`i_{K'/K}(σ̄) = addVal(σ̄y − y)` (Pass 57) are all built; what remains of Prop. 3 is the
+evaluation half of direction (i) (telescoping × descent × lift-set identity at `x`, giving
+`a ∣ b`), direction (ii) (the monic division `g(X) − y = f·q`), and the final `addVal`
+bookkeeping (the fiber sum and the `e'`-dilation).
 
 ## Build
 
