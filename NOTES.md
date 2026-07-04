@@ -5551,3 +5551,43 @@ Next (Pass 74+): Prop. 15 (`φ`-transitivity — recommended first brick: the
 index-multiplicativity `(G_0:G_u) = ((G/H)_0:(G/H)_{⌈φ(u)⌉})·(H_0:H_u)` from Lemma 5 + P46,
 pure group theory) and Prop. 14 (**Herbrand's theorem** — Lemma 5 read through P45's upper
 numbering, gated on the `ψ`-composition form of transitivity).
+
+### Pass 74 (2026-07-03) — the card multiplicativity (Prop. 15's arithmetic heart)
+
+**Mathematics; ledger delta 0 / 0.** `|G_u| = |(G/H)_{⌈φ_{L/K'}(u)⌉}| · |H_u|` for every
+`u : ℕ` — the counting half of `φ`-transitivity, and at `u = 0` the inertia-level
+`e_{L/K} = e_{K'/K} · e_{L/K'}`. `Anabelian/Quotient/CardMultiplicativity.lean`,
+3 declarations, standard-axioms-only; probe compiled FIRST TRY.
+
+## Method
+
+One generic count + three identifications. `card_subgroup_eq_card_map_mul` (`|S| =
+|S.map f| · |ker f ⊓ S|`): Lagrange on the restricted hom `f|_S` + first isomorphism
+(`QuotientGroup.quotientKerEquivRange`), with `MonoidHom.restrict_range`/`ker_restrict` and
+the `subgroupOf` card bookkeeping (`Subgroup.inf_subgroupOf_right` +
+`subgroupOfEquivOfLe inf_le_right`). Then `dq|_{G_u}`: the image is Lemma 5 (P73), the
+kernel is `ker dq = range dr` (P50) intersected down to `(H_u).map dr` (P46's
+`ramificationGroup_map_eq`), and `dr`'s injectivity (P46) reads off the card. The `u = 0`
+base needs only `⌈φ(0)⌉₊ = 0` (P44's `herbrandPhi_zero`).
+
+## Why this is the heart of Prop. 15
+
+P47: `φ_{L/K}'(u) = 1/(G_0 : G_u)` off breakpoints. The multiplicativity says exactly
+`1/(G_0:G_u) = 1/((G/H)_0:(G/H)_{⌈φ(u)⌉}) · 1/(H_0:H_u)` — the chain-rule slope of
+`φ_{K'/K} ∘ φ_{L/K'}`. What remains for Prop. 15 is the ANALYTIC GLUING: two continuous
+piecewise-linear functions, equal at `0`, with matching (right-)slopes, agree. The
+HANDOFF maps the candidate routes (right-derivative via `eq_of_has_deriv_right_eq`, or
+ℕ-induction on P48's explicit formula) and flags the hard step: the no-interior-jump
+alignment `(G/H)_{⌊φ(n)⌋+1} = (G/H)_{⌈φ(n+1)⌉}` — design on paper first.
+
+## Build + headline
+
+`lake build` green (2.5 s); preflight CLEAN. **HEADLINE: the index-multiplicativity
+`(G_0:G_u) = ((G/H)_0:(G/H)_{⌈φ(u)⌉})·(H_0:H_u)` — Serre's Prop. 15 counting — proved in
+card form, axiom-free; `e`-multiplicativity in towers falls out at `u = 0`.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 75): Prop. 15's analytic gluing — inventory P47–49's exact derivative statements,
+design the breakpoint-alignment lemma on paper, scope one brick.

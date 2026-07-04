@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 73 (2026-07-03)
+## Current state — Pass 74 (2026-07-03)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 74 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 75 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -91,9 +91,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   Mathlib's `Ideal.inertia 𝔪_L D` (by `pow_one`), with LiesOver/Module.Finite/torsion-free/
   separable-residue all in place (Pass 70); **`e' = |H₀|`, proved** —
   `(|H₀| : ℕ∞) = addVal(ι π_B)`, the classical `e = |inertia|` for `L/K'` (Pass 71); **THE NUMERICAL LEMMA 5, proved** — `i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1` for every
-  `σ̄ ≠ 1` (Pass 72); and **SERRE IV §3 LEMMA 5, proved** —
+  `σ̄ ≠ 1` (Pass 72); **SERRE IV §3 LEMMA 5, proved** —
   `(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`, Herbrand's
-  renumbering lemma `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Pass 73).
+  renumbering lemma `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Pass 73); and the **card
+  multiplicativity** — `|G_u| = |(G/H)_{⌈φ_{L/K'}(u)⌉}| · |H_u|`, Prop. 15's arithmetic
+  heart, with `e_{L/K} = e_{K'/K}·e_{L/K'}` at `u = 0` (Pass 74).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -118,10 +120,11 @@ objects are identified with the ideal-theoretic ones — Pass 68 did the `e'` ha
 (`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`), Pass 69 the `IsGaloisGroup` gateway, Pass 70
 the inertia matching plus every remaining instance, Pass 71 closed `e' = |H₀|`, Pass 72
 assembled the numerical Lemma 5, and **Pass 73 proved Lemma 5 itself**:
-`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. What remains on
-this arc: `φ`-transitivity (Prop. 15) and **Herbrand's theorem** `(G/H)^v = G^v H/H`
-(Prop. 14) — Lemma 5 read through the Pass 44–49 `φ`/`ψ` machinery and Pass 45's upper
-numbering.
+`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. Pass 74 added the card
+multiplicativity `|G_u| = |(G/H)_{⌈φ(u)⌉}|·|H_u|` — the counting half of Prop. 15. What
+remains on this arc: Prop. 15's analytic gluing (`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` as
+functions) and **Herbrand's theorem** `(G/H)^v = G^v H/H` (Prop. 14) — Lemma 5 read through
+the Pass 44–49 `φ`/`ψ` machinery and Pass 45's upper numbering.
 
 ## Build
 

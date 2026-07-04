@@ -34,6 +34,7 @@ import Anabelian.LocalField.ValuativeRel
 import Anabelian.LocalField.Valued
 import Anabelian.Quotient.AddVal
 import Anabelian.Quotient.Basic
+import Anabelian.Quotient.CardMultiplicativity
 import Anabelian.Quotient.CharPoly
 import Anabelian.Quotient.ComapIntegers
 import Anabelian.Quotient.Division

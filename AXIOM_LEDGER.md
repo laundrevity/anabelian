@@ -3147,3 +3147,35 @@ below R1. Prop. 15 / Prop. 14 NOT claimed. No new `structure`/`class`; no owed w
 D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 73 passes.
+
+### Pass 74 (2026-07-03) — the card multiplicativity (Prop. 15's arithmetic heart); count stays 0 / 0
+
+**No axiom added, none needed.**
+
+> for every `u : ℕ`: **`|G_u| = |(G/H)_{⌈φ_{L/K'}(u)⌉}| · |H_u|`**
+
+(`Anabelian/Quotient/CardMultiplicativity.lean`, `card_ramificationGroup_eq_mul`; with the
+generic count `card_subgroup_eq_card_map_mul : |S| = |S.map f|·|ker f ⊓ S|` and the `u = 0`
+base `|G_0| = |(G/H)_0|·|H_0|` — `e_{L/K} = e_{K'/K}·e_{L/K'}` at the inertia level).
+3 declarations, all standard-axioms-only; probe compiled first try.
+
+```
+'Anabelian.card_subgroup_eq_card_map_mul'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_ramificationGroup_eq_mul'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_ramificationGroup_zero_eq_mul'              depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- Generic count: Lagrange (`Subgroup.card_eq_card_quotient_mul_card_subgroup`) on the
+  restriction `f|_S`, first isomorphism (`QuotientGroup.quotientKerEquivRange`), and the
+  `subgroupOf` bookkeeping (`inf_subgroupOf_right`, `subgroupOfEquivOfLe`).
+- Applied to `dq|_{G_u}`: image = `B`-filtration at `⌈φ_{L/K'}(u)⌉` (**Lemma 5**, P73);
+  kernel = `range dr ⊓ G_u` (P50) `= (H_u).map dr` (P46), of card `|H_u|` (P46 injective).
+- Dividing `u` by `0` gives `(G_0:G_u) = ((G/H)_0:(G/H)_{⌈φ(u)⌉})·(H_0:H_u)` — the
+  chain-rule slope identity for `φ_{K'/K} ∘ φ_{L/K'}` in card form (P47's
+  `φ' = 1/(G_0:G_u)`).
+
+**Not the cardinal sin / rule-2.** Counting for a given tower — strictly below R1.
+Prop. 15 as an equality of functions is NOT claimed (analytic gluing remains). No new
+`structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 74 passes.
