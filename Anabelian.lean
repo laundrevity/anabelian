@@ -33,6 +33,7 @@ import Anabelian.LocalField.SpectralSeam
 import Anabelian.LocalField.ValuativeRel
 import Anabelian.LocalField.Valued
 import Anabelian.Quotient.AddVal
+import Anabelian.Quotient.Alignment
 import Anabelian.Quotient.Basic
 import Anabelian.Quotient.CardMultiplicativity
 import Anabelian.Quotient.CharPoly

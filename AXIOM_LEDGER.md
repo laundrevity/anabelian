@@ -3179,3 +3179,34 @@ Prop. 15 as an equality of functions is NOT claimed (analytic gluing remains). N
 `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 74 passes.
+
+### Pass 75 (2026-07-03) — the alignment lemma (the gluing's hard step); count stays 0 / 0
+
+**No axiom added, none needed.**
+
+> **the `B`-filtration is constant on integer indices `w ∈ (φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]`**
+
+(`Anabelian/Quotient/Alignment.lean`: `ramificationGroup_comap_eq_of_lt`, plus the real-`u`
+right-slope form `ramificationGroup_comap_floor_add_one_eq` — `(G/H)_{⌊φ(u)⌋+1} =
+(G/H)_{⌈φ(n+1)⌉}` for `u ∈ [n, n+1)`). 2 declarations, all standard-axioms-only.
+
+```
+'Anabelian.ramificationGroup_comap_eq_of_lt'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_comap_floor_add_one_eq'        depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- The flagged hard step of Prop. 15's analytic gluing ("no interior jump of the quotient
+  filtration"), closed with NO measure theory by **Pass 72's integrality**: for `σ̄ ≠ 1`,
+  `i_{K'/K}(σ̄) = a ∈ ℕ` and `a − 1 = φ_{L/K'}(j(σ̄) − 1)`. Membership in `(G/H)_w` with
+  `φ(n) < w` gives `φ(n) < w ≤ a − 1 = φ(j−1)` (both sides of the first inequality
+  integers!), so `j − 1 ≥ n+1` by `φ`'s strict monotonicity (P44), so
+  `a ≥ φ(n+1) + 1 > ⌈φ(n+1)⌉` (`Nat.ceil_lt_add_one`) — the membership persists to the
+  window's right end. The reverse inclusion is the filtration's antitonicity.
+- Consequence: the composite `φ_{K'/K} ∘ φ_{L/K'}` has CONSTANT right-slope on each
+  `[n, n+1)`, equal to `φ_{L/K}`'s by P74's multiplicativity — the gluing is now pure
+  calculus (right-derivatives + `eq_of_has_deriv_right_eq`).
+
+**Not the cardinal sin / rule-2.** A constancy window for a given tower — strictly below
+R1. Prop. 15 NOT claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 75 passes.

@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 74, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 75, 2026-07-03)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-74 entry), `ROADMAP.md`
-(status header says Pass 74), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-75 entry), `ROADMAP.md`
+(status header says Pass 75), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,48 +61,33 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 75: Prop. 15's analytic gluing (multi-pass; design first)
+## YOUR FIRST TASK — Pass 76: Prop. 15's right-derivative bricks
 
-**Target**: `φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` as functions on `[0, ∞)` (equivalently
-`ψ_{L/K} = ψ_{L/K'} ∘ ψ_{K'/K}` — pick the more provable). The counting is DONE (P74).
-**Candidate routes, inventory P44–49 exact statements FIRST**:
-- **(i) ℕ-points + piecewise-affine interpolation**: P48 gives the explicit piecewise
-  formula `φ(u) = (|G_1|+…+|G_n| + (u−n)|G_{n+1}|)/|G_0|` on `[n, n+1]` and the
-  ℕ-recursion. STRATEGY: prove `φ_{L/K}(n) = φ_{K'/K}(φ_{L/K'}(n))` for `n : ℕ` by
-  induction: step `φ_{L/K}(n+1) − φ_{L/K}(n) = |G_{n+1}|/|G_0|` (P48), and on the composed
-  side `φ_{K'/K}(φ_{L/K'}(n+1)) − φ_{K'/K}(φ_{L/K'}(n))` — CAREFUL: `φ_{L/K'}(n)` and
-  `φ_{L/K'}(n+1)` need not be integers, and `φ_{K'/K}` is affine only between integer
-  points; the increment crosses no integer breakpoint of `φ_{K'/K}` iff
-  `⌈φ_{L/K'}(n)⌉ = ⌈φ_{L/K'}(n+1)⌉`-ish... Serre's actual proof (IV §3, Prop. 15) uses the
-  DERIVATIVE almost everywhere: `(φ_{K'/K} ∘ φ_{L/K'})'(u) = φ_{K'/K}'(φ_{L/K'}(u)) ·
-  φ_{L/K'}'(u) = 1/((G/H)_0:(G/H)_{φ(u)}) · 1/(H_0:H_u) = 1/(G_0:G_u) = φ_{L/K}'(u)` off a
-  countable set, plus continuity + equal value at 0 ⟹ equal. Mathlib route for the glue:
-  `StrictMonoOn`/`Monotone` + countable exceptional set:
-  `Monotone.eq_of_deriv...`? or `eq_of_has_deriv_right_eq` (in
-  `Mathlib/Analysis/Calculus/MeanValue.lean` — takes RIGHT derivatives everywhere on an
-  interval + continuity, which MATCHES piecewise-linear: the right derivative exists
-  EVERYWHERE including breakpoints!). **Recommended: the right-derivative route** —
-  (a) `φ_{L/K}` has right derivative `1/(G_0:G_{⌊u⌋+1})`-style at every `u ≥ 0` (from P47's
-  two-sided derivative off breakpoints + a right-derivative computation at integers via
-  P48's formula — or directly from P48's affine formula on `[n, n+1)`), similarly for the
-  composition via the chain rule for right derivatives (compose with the MONOTONE
-  `φ_{L/K'}`), (b) match the right-derivative values via P74's multiplicativity — mind the
-  index: right-slope on `[u, u+ε)` is governed by `G_{⌊u⌋+1}`, so the P74 instance needed
-  is at `u+1`-flavored indices: `|G_{n+1}| = |(G/H)_{⌈φ(n+1)⌉}|·|H_{n+1}|` vs the
-  composition's right-slope at `n`: `φ_{K'/K}`'s right-slope at `φ_{L/K'}(n)` is
-  `1/((G/H)_0:(G/H)_{⌊φ_{L/K'}(n)⌋+1})` — need `⌊φ_{L/K'}(n)⌋+1 = ⌈φ_{L/K'}(n+1)⌉`?? NO —
-  need `(G/H)_{⌊φ(n)⌋+1} = (G/H)_{⌈φ(n+1)⌉}`: TRUE because the `B`-filtration is constant
-  on `(⌊φ(n)⌋, ⌈φ(n+1)⌉]`-ish by Lemma 5?? — VERIFY: Serre's Lemma-5 argument shows
-  `(G/H)_v` jumps only at `v = φ(integers)`; the needed equality is exactly "no jump of
-  `(G/H)` in `(φ(n), φ(n+1))` interior-integers", which follows from Lemma 5 + `φ`'s
-  intermediate values... THIS IS THE HARD STEP — design it on paper first.
-- **(ii) ψ-side first**: `ψ` slopes are INTEGERS (P49: `ψ'(v) = (G_0:G_{ψ(v)})`); the
-  composition `ψ_{L/K'} ∘ ψ_{K'/K}` may have cleaner breakpoint structure (both ψ's map
-  ℕ→ℕ! — P45's `herbrandPsi` on ℕ-points... check what P45/P48-49 give on ℕ).
-Scope Pass 75 to ONE brick: e.g. `φ_{L/K}(n) = φ_{K'/K}(φ_{L/K'}(n))` for `n : ℕ` by
-induction IF the increment-matching sub-lemma is provable from P74 + Lemma 5 (design the
-no-interior-jump lemma first!), OR the right-derivative inventory. Clean partial >
-half-discharge. Then Prop. 14 (Herbrand) via the `⌈ψ⌉`-compatibility corollary.
+The alignment (P75) killed the hard step. The remaining plan for
+`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` on `[0, ∞)` — the right-derivative route:
+1. **Right-derivative of `φ` everywhere** (one brick): `HasDerivWithinAt (herbrandPhi K A)
+   (|G_{⌊u⌋+1}|/|G_0|) (Ici u) u` for every `u ≥ 0` — from P48's affine formula on
+   `[n, n+1]` (`φ(x) = φ(n) + (x−n)·|G_{n+1}|/|G_0|` for `x ∈ [⌊u⌋, ⌊u⌋+1]`), via
+   `HasDerivWithinAt` of the affine function + `congr_of_eventuallyEq` on
+   `nhdsWithin u (Ici u)` (the set `[u, ⌊u⌋+1)` is such a neighborhood since `u < ⌊u⌋+1`).
+   INVENTORY P47/P48's exact statement names first (P48's `[n, n+1]` formula, P47's
+   `hasDerivAt` off breakpoints).
+2. **Chain rule for the composite** (same or next pass): `HasDerivWithinAt.comp` with
+   `MapsTo (herbrandPhi K' 𝒪_L) (Ici u) (Ici (herbrandPhi K' 𝒪_L u))` (monotone ✓):
+   composite right-derivative at `u ∈ [n, n+1)` is
+   `(|(G/H)_{⌊φ(u)⌋+1}|/|(G/H)_0|) · (|H_{⌊u⌋+1}|/|H_0|)`.
+3. **Slope matching**: P75's `ramificationGroup_comap_floor_add_one_eq` turns
+   `(G/H)_{⌊φ(u)⌋+1}` into `(G/H)_{⌈φ(⌊u⌋+1)⌉}`; then P74's `card_ramificationGroup_eq_mul`
+   at index `⌊u⌋+1` gives `|(G/H)_{⌈φ(⌊u⌋+1)⌉}|·|H_{⌊u⌋+1}| = |G_{⌊u⌋+1}|`, and the `0`-th
+   P74 instance divides — the two right-derivatives are EQUAL for all `u ≥ 0`.
+4. **The glue**: `eq_of_has_deriv_right_eq` (Mathlib, `Analysis/Calculus/MeanValue.lean`
+   — check exact signature: continuity on `[a, b]` + right-derivs equal on `[a, b)` +
+   equal at `a` ⟹ equal on `[a, b]`) applied on each `[0, T]`; continuity is P44's
+   `herbrandPhi_continuous` (+ `Continuous.comp`); equality at `0` is `φ(0) = 0` twice.
+   Mind: the derivative functions must be the SAME function of `u` for both sides — state
+   the common slope as `fun u => |G_{⌊u⌋+1}|/|G_0|`.
+Scope: brick 1 alone is a clean pass; 2+3 next; 4 closes Prop. 15. Then Prop. 14
+(Herbrand: `(G/H)^v = G^v H/H` — P73 + the `⌈ψ⌉`-compatibility corollary of Prop. 15).
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -129,7 +114,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 75
+## The queue after Pass 76
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

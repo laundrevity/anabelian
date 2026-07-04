@@ -5591,3 +5591,40 @@ card form, axiom-free; `e`-multiplicativity in towers falls out at `u = 0`.**
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 75): Prop. 15's analytic gluing — inventory P47–49's exact derivative statements,
 design the breakpoint-alignment lemma on paper, scope one brick.
+
+### Pass 75 (2026-07-03) — the alignment lemma (the quotient filtration jumps only at φ-images)
+
+**Mathematics; ledger delta 0 / 0.** The step flagged at Pass 74 as "design on paper
+first": the `B`-filtration is constant on integer indices in
+`(φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]` — hence the composite `φ_{K'/K} ∘ φ_{L/K'}` has constant
+right-slope on each `[n, n+1)`. `Anabelian/Quotient/Alignment.lean`, 2 declarations,
+standard-axioms-only.
+
+## The design (P72's integrality is the whole game)
+
+The worry was that this needed interval integrals or measure-zero arguments. It needs
+neither: the jump values of the quotient filtration are `i_{K'/K}(σ̄) = a ∈ ℕ` with
+`a − 1 = φ_{L/K'}(j(σ̄) − 1)` (P72 — note `φ(j−1)` is an INTEGER, being `a − 1`). If
+`σ̄ ∈ (G/H)_w` for an integer `w > φ(n)`: `w < a` (P51's Lemma 1 + P72's `ha`), so
+`w ≤ a − 1 = φ(j−1)`, so `φ(n) < φ(j−1)`, so `n < j−1` (P44 strict mono, contrapositive),
+so `φ(j−1) ≥ φ(n+1)`, so `a ≥ φ(n+1)+1 > ⌈φ(n+1)⌉` (`Nat.ceil_lt_add_one`) — membership
+persists to `⌈φ(n+1)⌉`. Antitonicity gives the reverse. The `m = 0` degenerate case is
+vacuous (`a = 0` contradicts `w < a`). The real-`u` corollary is floor/ceil bookkeeping
+(`Nat.lt_floor_add_one`, `Nat.le_ceil`, `Nat.floor_le`).
+
+Two probe rounds (one `linarith` needed its hypotheses un-rewritten — keep `φ`-argument
+forms syntactically stable; the `rw [hφ]; push_cast` detour created `↑k.succ − 1` vs `↑k`).
+
+## Build + headline
+
+`lake build` green (2.9 s); preflight CLEAN. **HEADLINE: the alignment lemma — the quotient
+filtration jumps only at `φ_{L/K'}`-images of integers — proved axiom-free with no measure
+theory; P72's integrality was the entire content. Prop. 15's remaining work is pure
+calculus.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 76): the right-derivative bricks — `HasDerivWithinAt φ (|G_{⌊u⌋+1}|/|G_0|)
+(Ici u) u` from P48's affine formula, the chain rule along the monotone inner `φ`, the
+P74+P75 slope match, and `eq_of_has_deriv_right_eq` — the four-step plan is in HANDOFF.
