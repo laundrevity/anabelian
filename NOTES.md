@@ -5845,3 +5845,41 @@ obligation beyond P23's; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 81): B2 — intermediate-field plumbing (`FiniteGaloisIntermediateField K K^sep`
 carriers; MATCH `Galois/Profinite.lean`'s conventions for the transition maps so B4
 composes with Mathlib's functor on the nose — see HANDOFF).
+
+### Pass 81 (2026-07-04) — B2 + B4's heart: the profinite tower plumbing
+
+**Mathematics; ledger delta 0 / 0.** The `≤`-pair plumbing for
+`FiniteGaloisIntermediateField`, in EXACTLY Mathlib's `finGaloisGroupMap` conventions, and
+— ahead of the B-ladder schedule — **Herbrand along the profinite transitions**.
+`Anabelian/Absolute/Tower.lean`, 5 declarations, standard-axioms-only.
+
+## Method
+
+- Read `Galois/Profinite.lean` first (per the P80 handoff): `finGaloisGroupMap` uses
+  `RingHom.toAlgebra (Subsemiring.inclusion le)` + `IsScalarTower.of_algebraMap_eq'` +
+  `AlgEquiv.restrictNormalHom` — the SAME `restrictNormalHom` as B1. `leAlgebra` copies
+  the convention verbatim (as an `abbrev` — the class-type-def linter's requirement), so
+  every later composition with `finGaloisGroupFunctor` is definitional.
+- `leAlgebra_finiteDimensional`: from `FiniteDimensional K ↥L₂` (the FGIF structure), NOT
+  the ambient (`K^sep` is infinite — the first probe error was exactly that wrong
+  hypothesis). `leAlgebra_isGalois`: `tower_top`. Separability of intermediate fields:
+  already an instance (probe-verified, no declaration).
+- **`map_fullUpperRamificationGroup_le`**: statement carries the pair package by anonymous
+  statement-level `letI/haveI` (house-legal); proof is `letI`/`haveI` the four pieces and
+  `exact` B1's transport at `(K, ↥L₁, ↥L₂)`. Notably GENERAL: any separable ambient `E`,
+  not just `K^sep`.
+
+## Build + headline
+
+`lake build` green (3.2 s); preflight CLEAN. **HEADLINE: Herbrand's theorem along the
+transition maps of Mathlib's profinite Galois system — `(G^v(L₂/K)).map (restrictNormalHom
+↥L₁) = G^v(L₁/K)` for any nested pair of finite Galois subextensions — proved axiom-free.
+B3's `⨅`-definition of `G^v(K^sep/K)` now has its compatible system.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class` (an `abbrev` of a Mathlib construction); no owed
+witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 82): B3 — `absoluteUpperRamificationGroup K v := ⨅_L (G^v(L/K)).comap
+(restrictNormalHom ↥L)` on `Gal(K^sep/K)`, `mem_iff`, and closedness; B5's candidate tool
+flagged: `nonempty_sections_of_finite_inverse_system` — see HANDOFF.

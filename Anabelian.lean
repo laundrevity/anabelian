@@ -1,4 +1,5 @@
 import Anabelian.Absolute.FullGroup
+import Anabelian.Absolute.Tower
 import Anabelian.Extension.InertiaCharpoly
 import Anabelian.Extension.InertiaFixedIntegers
 import Anabelian.Extension.InertiaResidueCover

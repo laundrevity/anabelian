@@ -3353,3 +3353,35 @@ below R1. B3's absolute `G^v` and B5's surjectivity NOT claimed. No owed witness
 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 80 passes.
+
+### Pass 81 (2026-07-04) — B2 + B4's heart: the profinite tower plumbing; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/Absolute/Tower.lean`: the `≤`-pair plumbing in
+EXACTLY Mathlib's `finGaloisGroupMap` conventions, and — ahead of the B-ladder schedule —
+**Herbrand's theorem along the profinite transitions**. 5 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.leAlgebra'                                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.leAlgebra_isScalarTower'                         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.leAlgebra_finiteDimensional'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.leAlgebra_isGalois'                              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_fullUpperRamificationGroup_le'               depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `leAlgebra` (an `abbrev` of `RingHom.toAlgebra ∘ Subsemiring.inclusion` — Mathlib's own
+  convention, for definitional alignment with `finGaloisGroupFunctor`) + tower
+  (`of_algebraMap_eq' rfl`), finite-dimensionality (from the FINITE level — the ambient is
+  infinite), `IsGalois` (`tower_top`). Intermediate-field separability: probe-verified
+  already a Mathlib instance.
+- **`map_fullUpperRamificationGroup_le`**: for `L₁ ≤ L₂` in
+  `FiniteGaloisIntermediateField K E`, any separable `E` over the local base,
+  `(G^v(L₂/K)).map (restrictNormalHom ↥L₁) = G^v(L₁/K)` — B1's transport fires at
+  `(K, ↥L₁, ↥L₂)` under the pair package. The compatible-system property for B3/B5.
+
+**Not the cardinal sin / rule-2.** Plumbing + one instantiation of a proved theorem —
+strictly below R1. B3's absolute `G^v` and B5's surjectivity NOT claimed. The `abbrev`
+re-packages an existing Mathlib construction — no new constraint content; no owed witness;
+D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 81 passes.
