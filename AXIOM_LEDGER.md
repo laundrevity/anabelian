@@ -3675,3 +3675,30 @@ claimed. The `σ^n = 1` hypothesis is used visibly in both complex-condition pro
 sharpness claimed, no witness owed. No new `structure`/`class`; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 91 passes.
+
+### Pass 92 (2026-07-04) — q(ℤ) = n: the fundamental computation; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/ClassField/TrivialAction.lean`, 8
+declarations, all standard-axioms-only.
+
+```
+'Anabelian.cyclicNorm_one_apply'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_herbrandH_norm_diff_eq_one'                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_herbrandH_diff_norm'                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.range_cyclicNorm_int'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicHerbrandQuotient_int'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Generic machinery**: `|Ĥ⁰| = [A : Aⁿ]` for the trivial action (the presentation
+  `A ↠ Ĥ⁰` through the full kernel + first isomorphism), and `Ĥ¹ = 0` on
+  `n`-torsion-free `A`.
+- **`cyclicHerbrandQuotient_int : q(ℤ) = n`** on `Multiplicative ℤ`: the range of the
+  `n`-th power map identified with `nℤ` (`Multiplicative.mem_toSubgroup` +
+  `Int.mem_zmultiples_iff`), then `AddSubgroup.index_toSubgroup` +
+  `Int.index_zmultiples`. The prototype for `q(Lˣ) = [L:K]`.
+
+**Not the cardinal sin / rule-2.** A cohomology computation strictly below the
+reciprocity wall; hypotheses visibly consumed; no witness owed. No new
+`structure`/`class`; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 92 passes.

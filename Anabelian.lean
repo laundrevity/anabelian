@@ -9,6 +9,7 @@ import Anabelian.ClassField.HerbrandQuotient
 import Anabelian.ClassField.MaximalAbelian
 import Anabelian.ClassField.Multiplicativity
 import Anabelian.ClassField.Snake
+import Anabelian.ClassField.TrivialAction
 import Anabelian.Extension.InertiaCharpoly
 import Anabelian.Extension.InertiaFixedIntegers
 import Anabelian.Extension.InertiaResidueCover

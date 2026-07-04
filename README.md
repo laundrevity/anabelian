@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 91 (2026-07-04)
+## Current state — Pass 92 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 90 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 91 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -172,8 +172,9 @@ by the `(f,g)`-swap) feed the alternating-card identity, giving **the multiplica
 theorem `q(M) = q(M')·q(M'')`** — with Pass 87's triviality, the Herbrand-quotient
 calculus is operational. Pass 91 instantiated it for Galois modules: the cyclic pair
 (norm `∏σⁱ`, twisted difference `σ/1`, complex conditions) and `q(σ, A)` with the
-`(diff, norm)` convention pinned. Next: `q(ℤ) = n`, then the `q(Lˣ) = [L:K]` track, or
-Hasse–Arf.
+`(diff, norm)` convention pinned. Pass 92 delivered the fundamental computation
+**`q(ℤ) = n`** (`Ĥ⁰ = ℤ/nℤ`, `Ĥ¹ = 0`, with the generic `|Ĥ⁰| = [A : Aⁿ]` presentation
+machinery). Next: the `q(Lˣ) = [L:K]` track, or Hasse–Arf.
 
 ## Build
 

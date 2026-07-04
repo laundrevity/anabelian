@@ -6276,3 +6276,38 @@ defined and armed with the P87/P90 calculus, axiom-free. `q(ℤ) = n` and the
 **0 / 0.** No new `structure`/`class`; hypotheses used visibly; no witness owed; D1/D2
 N/A. R1–R3 untouched. Next (Pass 92): `q(ℤ) = n` — the `Multiplicative ℤ` computation
 (card plumbing inventoried in HANDOFF). See HANDOFF.
+
+### Pass 92 (2026-07-04) — q(ℤ) = n (the fundamental computation)
+
+**Mathematics; ledger delta 0 / 0.** The first nontrivial Herbrand-quotient value:
+`cyclicHerbrandQuotient (1) n = n` on `Multiplicative ℤ`.
+`Anabelian/ClassField/TrivialAction.lean`, 8 declarations.
+
+## Method
+
+- Generic layer (any `CommGroup A`): the trivial action degenerates the pair
+  (`N = (·)ⁿ` by `prod_const`+`card_range`; `D = 1`), so `Ĥ⁰ = A/Aⁿ` — computed by the
+  presentation `diffKerProj : A ↠ Ĥ⁰` (inclusion into the FULL `ker D` + projection;
+  `ker θ = range N` by the eq_one_iff/mem_subgroupOf term-mode idiom) + first
+  isomorphism: `|Ĥ⁰| = (range N).index`. `Ĥ¹ = 0` from `n`-torsion-freeness
+  (Subsingleton transport through the kernel).
+- ℤ-instantiation: `range ((·)ⁿ) = toSubgroup (zmultiples n)` — the bridge lemmas
+  `Multiplicative.mem_toSubgroup` (a `rfl`!) and `Int.mem_zmultiples_iff` (DVD form —
+  cleaner than the `∃ k • n` shape); then `AddSubgroup.index_toSubgroup` +
+  `Int.index_zmultiples` + `natAbs_natCast` land `|Ĥ⁰| = n`. Torsion-freeness via
+  `toAdd` + `mul_eq_zero`.
+- Three probe rounds (Subtype.ext-elaboration in the surjectivity; the eq_one_iff mk/coe
+  pattern — solved term-mode per the P90 catalogue; an over-eager push_cast).
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: `q(ℤ) = n` — the computation
+every `q(Lˣ) = [L:K]` proof reduces to — done axiom-free, with the generic
+`|Ĥ⁰| = [A : Aⁿ]` machinery reusable for the unit-filtration track.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no witness owed; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 93): the `q(Lˣ)` track opens — the valuation SES as a pair-equivariant
+sequence (Galois-invariance of the valuation from the P43-era canonicity; trivial action
+downstairs = P92's case), so P90 fires: `q(Lˣ) = q(𝒪ˣ)·n`. See HANDOFF.
