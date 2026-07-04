@@ -3564,3 +3564,31 @@ wall; no CFT claimed. `herbrandH` is a plain quotient `def`; the pair hypotheses
 only in theorems that visibly use them; no sharpness claimed, no witness owed; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 87 passes.
+
+### Pass 88 (2026-07-04) — the exact-cycle count + herbrandH functoriality; count stays 0 / 0
+
+**No axiom added, none needed.** Two sub-bricks of `q`-multiplicativity
+(`Anabelian/ClassField/ExactCycle.lean`, 4 declarations, all standard-axioms-only —
+`kerRestrict` needs only `propext`).
+
+```
+'Anabelian.card_eq_card_ker_mul_card_range''                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_prod_eq_of_exact_cycle'                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.kerRestrict'                                     depends on axioms: [propext]
+'Anabelian.herbrandHMap'                                    depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The 6-cycle alternating-card lemma**: `|A₀||A₂||A₄| = |A₁||A₃||A₅|` for a periodic
+  exact sequence — six explicit groups (ZMod-6 indexing hits dependent-type transport),
+  NO finiteness hypotheses (the linter itself flagged them unused — `Nat.card = 0`
+  conventions carry the identity); each `|Aᵢ| = |im dᵢ₋₁|·|im dᵢ|` and the triple
+  products both collect all six ranges.
+- **`herbrandHMap`**: pair-intertwining homs induce maps on the Herbrand carriers
+  (`kerRestrict` + `QuotientGroup.map`) — the four functorial arrows of the coming
+  six-term cycle.
+
+**Not the cardinal sin / rule-2.** Infrastructure below the multiplicativity theorem,
+which is NOT claimed (connecting maps + exactness named as next work). No new
+`structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 88 passes.

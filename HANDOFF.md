@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 87, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 88, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-87 entry), `ROADMAP.md`
-(status header says Pass 87), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-88 entry), `ROADMAP.md`
+(status header says Pass 88), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,25 +61,30 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 88: `q`-multiplicativity in short exact sequences
+## YOUR FIRST TASK — Pass 89: the six-term cycle ⟹ `q`-multiplicativity
 
-**Target** (Serre VIII §4 Prop. 10 / Neukirch IV 7.3): for a SES of `CommGroup`s
-`1 → M' → M → M'' → 1` equivariant for the pair structure (i.e. `f/g` restrict to `M'`
-and descend to `M''`), `q(M) = q(M')·q(M'')` whenever two of the three are defined
-(all-finite-carriers hypothesis is the clean first version: assume the six `herbrandH`s
-finite). DESIGN OPTIONS:
-- **(a) The direct snake count** (Serre's own): build the six-term exact sequence
-  `Ĥ⁰(M') → Ĥ⁰(M) → Ĥ⁰(M'') → Ĥ¹(M') → Ĥ¹(M) → Ĥ¹(M'') → (loop)` BY HAND at the
-  `herbrandH` level (six connecting maps + exactness at six spots + the alternating-card
-  identity for exact cycles). Heavy but elementary; the alternating-product-over-an-exact-
-  cycle counting lemma (`|A₀||A₂||A₄| = |A₁||A₃||A₅|` for a 6-periodic exact sequence of
-  finite groups) is a good standalone sub-brick (pure group theory, reusable).
-- **(b) Via Mathlib's LES** in `Rep k G` — needs the `Rep`-bridge FIRST (concrete
-  `CommGroup`-with-pair → `Rep ℤ (ZMod n)`-ish object), then the six-term sequence from
-  `LongExactSequence` + the periodicity isos. More machinery, more reuse later.
-Recommended: (a)'s counting sub-brick first (the 6-cycle alternating-card lemma), then
-decide. ALSO queue: the `Rep`-bridge (needed eventually for Hilbert-90 packaging
-regardless). Clean partial > half-discharge. (Fallback arc: Hasse–Arf.)
+**Target**: for a pair-equivariant SES `1 → M' →ι M →π M'' → 1` of `CommGroup`s (ι
+injective, π surjective, `range ι = ker π`, and ι/π intertwining the pairs
+`(f', g') → (f, g) → (f'', g'')`), build the six-term exact cycle and conclude
+(with finiteness where needed) `q(M) = q(M') · q(M'')`. Pieces:
+1. **Four functorial arrows** — P88's `herbrandHMap` at ι and π, for both `(f,g)` and
+   `(g,f)` orders.
+2. **Two connecting (snake) maps** `δ : herbrandH f'' g'' →* herbrandH g' f'` (and the
+   `(g,f)`-swap): for `x'' ∈ ker f''`, choose a π-preimage `x` (π surjective —
+   `Function.surjInv` or choice via `Classical.choice`; well-definedness is the content),
+   then `f x ∈ ker π = range ι` pulls back to `y' ∈ M'`; check `y' ∈ ker g'`
+   (ι injective + intertwining); show class well-defined mod `im f'` (two choices of
+   lift differ by `ker π = im ι`…) and mod `im g''`-representative changes. Build as a
+   raw function first, then `MonoidHom` (multiplicativity of the choice-free DIFFERENCE),
+   or define on representatives via `QuotientGroup.lift`. THIS IS THE HARD BRICK — budget
+   the whole pass for the two δs if needed.
+3. **Six exactness proofs** (each `range = ker` at the herbrandH level) — mechanical but
+   long; can be a separate pass.
+4. **Assembly**: P88's `card_prod_eq_of_exact_cycle` + division bookkeeping (positivity
+   from finiteness of the six carriers) ⟹ `herbrandQuotient f g = herbrandQuotient f' g'
+   * herbrandQuotient f'' g''`.
+Scope honestly: (2) alone is a legitimate pass; (3)+(4) the next. Clean partial >
+half-discharge. (Fallback arc: Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -106,7 +111,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 88
+## The queue after Pass 89
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

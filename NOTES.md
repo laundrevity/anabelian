@@ -6129,3 +6129,37 @@ theorem, axiom-free; the `q`-calculus (SES multiplicativity) is next.**
 N/A. R1–R3 untouched. Next (Pass 88): `q`-multiplicativity — recommended first sub-brick:
 the 6-cycle alternating-card lemma (`|A₀||A₂||A₄| = |A₁||A₃||A₅|` for a periodic exact
 sequence of finite groups), pure group theory, reusable. See HANDOFF.
+
+### Pass 88 (2026-07-04) — the exact-cycle count + herbrandH functoriality
+
+**Mathematics; ledger delta 0 / 0.** The counting engine of the Herbrand quotient's
+SES-multiplicativity, plus the functorial arrows.
+`Anabelian/ClassField/ExactCycle.lean`, 4 declarations.
+
+## Method + lessons
+
+- **`card_prod_eq_of_exact_cycle`**: first attempt indexed by `ZMod 6` — DEPENDENT-TYPE
+  TRAP: `A (i−1+1)` and `A i` are only propositionally equal, so subgroup ascriptions
+  across the index don't typecheck; six explicit groups with six homs and six exactness
+  hypotheses is friction-free AND matches the eventual use site (the six-term Herbrand
+  cycle is six named groups anyway). Proof: `|Aᵢ| = |ker dᵢ|·|im dᵢ|` (cross-hom first-iso
+  count) + exactness (`ker dᵢ = im dᵢ₋₁`) ⟹ both triple products = ∏ all six `|im dᵢ|`;
+  `ring`. The `Finite` hypotheses turned out UNUSED (linter caught it): with
+  `Nat.card = 0` conventions the identity holds unconditionally — a stronger lemma than
+  planned.
+- **`herbrandHMap`**: `kerRestrict` (intertwining ⟹ kernels map to kernels) +
+  `QuotientGroup.map` with the `subgroupOf` comap condition (P74's `mem_subgroupOf`
+  idiom). `MonoidHom.mem_ker` is now argument-free (house catalogue).
+
+## Build + headline
+
+`lake build` green (2.6 s); preflight CLEAN. **HEADLINE: the alternating-card identity
+for periodic exact cycles — the arithmetic heart of `q(M) = q(M')·q(M'')` — proved with
+no finiteness at all; the six-term cycle's four functorial arrows exist. The two snake
+maps are the remaining hard brick.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 89): the connecting maps δ (the snake — budget the whole pass for the two δs
+if needed), then exactness + assembly. See HANDOFF.
