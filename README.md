@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 82 (2026-07-04)
+## Current state — Pass 83 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 82 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 83 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -39,7 +39,7 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`: taken as a `FOUNDATIONAL` boundary at Pass 5, reclassified to `DEBT` at
   Pass 11, and **discharged into a proved `theorem` at Pass 20** (perfect case; the imperfect
   equal-characteristic case is a tracked owed generality, not an axiom).
-- **L2 — Higher ramification (Serre, *Local Fields*, ch. IV), in progress.** The lower-numbering
+- **L2 — Higher ramification (Serre, *Local Fields*, ch. IV), DONE (Pass 83).** The stratum closed with the capstone: `G^v` on the absolute Galois group `Gal(K^sep/K)`, a closed subgroup projecting onto every finite level (the inverse limit the upper numbering exists for). Hasse–Arf (ch. V) is deferred to its own rung. The arc, in order: The lower-numbering
   filtration `G_i` and its theory (Passes 22–28: inertia, antitone, normality, the tame character
   `G_0/G_1 → 𝓀ˣ`, wild inertia `G_1` a `p`-group). The **descent** — `𝒪_L` as a valuation subring
   of a finite extension, the ramification theory concrete at `𝒪_L` — closed and harvested (Passes
@@ -109,11 +109,12 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   (Pass 79); **B1, the full-group form** — the filtrations on the full `L ≃ₐ[K] L`
   with **Herbrand's theorem along `restrictNormalHom`** (Pass 80); **B2 + B4's
   heart** — the `≤`-pair plumbing in Mathlib's `finGaloisGroupMap` conventions, and
-  **Herbrand along the profinite transitions** (Pass 81); and **B3 — the absolute `G^v`
-  defined**: `absoluteUpperRamificationGroup K E v = ⨅_L (G^v(L/K)).comap
-  (restrictNormalHom L)` on the Galois group of any `E/K` (at `E = K^sep`, the upper
-  numbering on the absolute Galois group), closed in the Krull topology, with the easy
-  half of the projection compatibility (Pass 82).
+  **Herbrand along the profinite transitions** (Pass 81); **B3 — the absolute `G^v`
+  defined**: `⨅`-form on any `E/K`, closed in the Krull topology (Pass 82); and **B5 —
+  PROJECTION SURJECTIVITY, the capstone**: `(G^v(E/K)).map (restrictNormalHom L) =
+  G^v(L/K)` — the absolute filtration is a genuine inverse limit of the finite levels,
+  by compactness on directed closed fibers with Herbrand's theorem supplying the
+  compatible system (Pass 83). **With this, L2 is DONE.**
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -148,9 +149,9 @@ preimage-intersection over the finite Galois subextensions, with the five-brick 
 recorded in `ROADMAP.md`; Passes 80–82 laid B1–B3: the full-group form, the profinite
 plumbing with Herbrand along the transitions, and now **the absolute `G^v` itself** —
 defined, closed in the Krull topology, compatible-from-above with every finite level.
-What remains of the capstone is B5 (projection surjectivity — the compactness theorem
-that makes the `⨅`-definition an inverse limit). L3 (local class field theory) remains
-NOT-STARTED and consumes this interface.
+Pass 83 closed B5 — and with it the L2 stratum. Next arcs: Hasse–Arf (Serre ch. V), or
+the L3 opening inventory (local class field theory), or an Absolute-stratum
+consolidation. L3 remains NOT-STARTED and consumes this interface.
 
 ## Build
 

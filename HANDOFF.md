@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 82, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 83, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-82 entry), `ROADMAP.md`
-(status header says Pass 82), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-83 entry), `ROADMAP.md`
+(status header says Pass 83), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,37 +61,29 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 83: brick B5 — projection surjectivity (the capstone theorem)
+## YOUR FIRST TASK — Pass 84: choose the next arc
 
-**Target**: for `E/K` with enough hypotheses (start from `[IsGalois K E]` +
-`[Algebra.IsSeparable K E]` — P81's compatibility needs separable; add what the proof
-demands) and every `L : FiniteGaloisIntermediateField K E`, `v : ℝ`:
-
-> `(absoluteUpperRamificationGroup K E v).map (restrictNormalHom L.toIntermediateField)
->    = fullUpperRamificationGroup K ↥L v`
-
-`≤` is done (P82). For `≥`: given `τ ∈ G^v(L/K)`, produce `σ ∈ G^v(E/K)` restricting to
-`τ`. **Route A (compactness, recommended)**: the fibers
-`F_M := {σ : Gal(E/K) | restrict_M σ ∈ G^v(M/K), restrict_L σ = τ}` for `M ≥ L` are
-closed (P82-closedness style) and NONEMPTY (P81's two-level surjectivity lifts `τ` up any
-finite tower `L ≤ M`), and the family `{F_M}` is directed (FGIF has finite sups —
-`L₁ ⊔ L₂` with `IsGalois` — CHECK the instance; directedness makes finite intersections
-nonempty via a common upper bound); `Gal(E/K)` is COMPACT (`InfiniteGalois` gives
-`CompactSpace Gal(E/k)` — Profinite.lean:331); compactness ⟹
-`⋂_{M ≥ L} F_M ≠ ∅` (`IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed`
-— check exact name), and any σ in the full intersection ∩ over ALL M (extend below L via
-M ⊔ L trick: for arbitrary M, σ ∈ F_{M ⊔ L} ⟹ restrict_M σ ∈ G^v(M/K) by P81's
-compatibility applied DOWNWARD M ≤ M ⊔ L — needs the downward closure: if
-restrict_{M⊔L} σ ∈ G^v(M⊔L/K) then restrict_M σ = (transition)(restrict_{M⊔L} σ) ∈
-G^v(M/K) by P81 map_… as ⊆) lies in `G^v(E/K)` and over `τ`. **Route B**:
-`nonempty_sections_of_finite_inverse_system` on the system `M ↦ G^v(M/K) ∩ fiber-of-τ` —
-cleaner if the categorical plumbing cooperates (the FGIF-indexed functor). Sub-bricks
-worth separating: (a) the restriction-composition coherence
-`restrict_M = transition ∘ restrict_{M⊔L}` (Mathlib:
-`IsScalarTower.AlgEquiv.restrictNormalHom_comp` — the SAME lemma `finGaloisGroupMap`'s
-`map_comp` uses; match conventions!); (b) FGIF sup + `IsGalois` instance; (c) the
-compactness core. Clean partial > half-discharge (e.g. (a)+(b) as Pass 83 if the core
-resists).
+**L2 is DONE** (P83). Candidates — inventory before choosing:
+- **(A) Absolute-stratum consolidation** (one pass, recommended first): an
+  `Absolute/Main.lean` mirror of `Herbrand/Main.lean` — the B1–B5 chain documented + one
+  audit block; plus cheap capstone dividends: `G^0(K^sep/K)` vs the inertia of the
+  absolute group (the P23/P45 `G^0 = G_0` at every finite level ⟹ the absolute `G^0` is
+  the closed inertia — check what the project has for absolute-level inertia from the L1
+  era, P20's `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`!); antitonicity of `v ↦ G^v(E/K)`; the
+  `v ≤ 0`-value.
+- **(B) Hasse–Arf** (Serre ch. V): for ABELIAN `L/K`, the jumps of the `G^v`-filtration
+  are INTEGERS. Multi-pass wall: needs the jump/breakpoint calculus (P44–49 + P72's
+  integrality machinery is relevant precedent!), the abelian hypothesis via the tame
+  character (P24–27) and wild `G_1` structure (P28). Serre's proof route: reduction to
+  cyclic + the norm computation (V §7 needs V §§1–6 valuation/norm formalism — inventory
+  what exists). Honest estimate: 5–10 passes.
+- **(C) The L3 opening inventory** (design pass): local CFT in Mathlib 2026 — grep
+  `LocalClassFieldTheory`, `LubinTate`, `Mathlib/NumberTheory/ClassField*`,
+  `GroupCohomology` (H², inflation-restriction exist?), the Brauer group; the honest
+  dependency map from the L2 interface (`G^v(K^ab/K)` via the P82 generality!) to the
+  ramification correspondence. The R1-relevant target: the norm-residue symbol's
+  filtration compatibility.
+Recommended: (A) then (C). Clean partial > half-discharge.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -118,7 +110,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 83
+## The queue after Pass 84
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

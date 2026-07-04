@@ -5922,3 +5922,52 @@ Next (Pass 83): B5 — projection surjectivity: Route A (compactness on directed
 fibers; `CompactSpace Gal(E/k)` from InfiniteGalois; FGIF sups for directedness; P81 both
 UP the tower for fiber-nonemptiness and DOWN for full-intersection membership) or Route B
 (`nonempty_sections_of_finite_inverse_system`) — see HANDOFF for the sub-brick split.
+
+### Pass 83 (2026-07-04) — B5: projection surjectivity (the capstone closes; L2 DONE)
+
+**Mathematics; ledger delta 0 / 0 — THE STRATUM MILESTONE.** The absolute upper
+ramification filtration `G^v(E/K)` projects onto `G^v(L/K)` at every finite level — the
+`⨅`-definition is a genuine inverse limit, and with it the **L2 stratum (Serre ch. IV) is
+DONE**, axiom-free end to end. `Anabelian/Absolute/Surjectivity.lean`, 3 declarations;
+the capstone theorem's probe compiled FIRST TRY.
+
+## The proof (Route A of the P82 handoff, exactly as designed)
+
+Fibers `F_M := restrict_M⁻¹(G^v(M/K)) ∩ restrict_L⁻¹{τ}`:
+- **Closed**: preimages of finite discrete levels (P82 idiom).
+- **Nonempty**: lift `τ` into `G^v((L ⊔ M)/K)` by P81's Herbrand-along-transitions
+  (up the tower `L ≤ L ⊔ M`), then to `Gal(E/K)` by `restrictNormalHom_surjective`; the
+  composition coherence `restrictNormalHom_comp_of_le` (Mathlib's
+  `restrictNormalHom_comp_apply` under the P81 pair package + the `rfl`-cheap `M ⊆ N ⊆ E`
+  tower) reads both constraints off the lift.
+- **Directed**: FGIF sups + the downward step `mem_fullUpper_of_le` (coherence + P81 as
+  `⊆`).
+- **Compact glue**: `CompactSpace Gal(E/K)` (InfiniteGalois) +
+  `IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed`; `Nonempty` index
+  from FGIF's `⊥`.
+Any point of the intersection is the lift. Herbrand's theorem enters exactly where Serre
+uses it: the compatible-system property of the finite levels.
+
+## L2, closed (a stratum retrospective)
+
+P22 (architecture) → P23–28 (finite-level theory) → P29–43 (descent + assembly +
+canonicity) → P44–49 (φ/ψ/upper numbering) → P50–78 (the quotient arc: Prop. 2 → Prop. 3
+→ Lemma 5 → Prop. 15 → HERBRAND + consolidation) → P79–83 (the capstone: design,
+full-group form, plumbing, the absolute G^v, surjectivity). Sixty-two passes, ZERO axioms.
+ROADMAP's L2 section header now reads DONE (Pass 83); Hasse–Arf is its own rung;
+norm-compatibility belongs to L3.
+
+## Build + headline
+
+`lake build` green, warning-free (one `omit` header for the coherence lemma's unused
+local-field variables — `omit` goes BEFORE the docstring); preflight CLEAN. **HEADLINE:
+the upper ramification filtration of the absolute Galois group of a nonarchimedean local
+field — closed in the Krull topology, the inverse limit of the finite levels — is
+constructed and verified in Lean 4, axiom-free. L2 is done.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 84): choose the arc — (A) Absolute consolidation (+ `G^0` vs the L1-era
+absolute inertia!), (B) Hasse–Arf (5–10 passes), (C) the L3 opening inventory. See
+HANDOFF.

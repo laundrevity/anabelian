@@ -3414,3 +3414,38 @@ formal properties — no new constraint content (P23 holds the filtration's witn
 strictly below R1. No owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 82 passes.
+
+### Pass 83 (2026-07-04) — B5: PROJECTION SURJECTIVITY — the capstone closes, L2 DONE; count stays 0 / 0
+
+**No axiom added, none needed — and the L2 stratum is complete.**
+
+> for Galois `E/K`, every finite Galois subextension `L`, every `v : ℝ`:
+> **`(absoluteUpperRamificationGroup K E v).map (restrictNormalHom L) = G^v(L/K)`**
+
+(`Anabelian/Absolute/Surjectivity.lean`, `map_absoluteUpperRamificationGroup_eq`; with
+`restrictNormalHom_comp_of_le` and `mem_fullUpper_of_le`). 3 declarations, all
+standard-axioms-only; the main proof compiled FIRST TRY.
+
+```
+'Anabelian.restrictNormalHom_comp_of_le'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_fullUpper_of_le'                             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_absoluteUpperRamificationGroup_eq'           depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- The absolute upper filtration projects ONTO every finite level — the `⨅`-definition
+  (P82) is a genuine inverse limit. Compactness on directed closed fibers: nonemptiness by
+  **Herbrand along the transitions** (P81; up the tower `L ≤ L ⊔ M`) +
+  `restrictNormalHom_surjective`; directedness by FGIF sups + the downward step;
+  `CompactSpace Gal(E/K)` + `IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_
+  isClosed`. Herbrand's theorem is used exactly where Serre uses it: it makes the finite
+  levels a compatible system.
+- **L2 is DONE** (ROADMAP section header updated): finite-level theory → descent/assembly
+  → Herbrand functions → the quotient arc through Herbrand's theorem → the capstone
+  `G^v(K^sep/K)` closed + inverse-limit. Hasse–Arf deferred to its own rung;
+  norm-compatibility to L3.
+
+**Not the cardinal sin / rule-2.** The capstone of chapter-IV theory for a given base —
+strictly below R1; nothing recovered from an abstract group. No new `structure`/`class`;
+no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 83 passes, L0–L2 all axiom-free.
