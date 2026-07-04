@@ -6,6 +6,7 @@ import Anabelian.Absolute.UpperNumbering
 import Anabelian.ClassField.ExactCycle
 import Anabelian.ClassField.HerbrandQuotient
 import Anabelian.ClassField.MaximalAbelian
+import Anabelian.ClassField.Snake
 import Anabelian.Extension.InertiaCharpoly
 import Anabelian.Extension.InertiaFixedIntegers
 import Anabelian.Extension.InertiaResidueCover

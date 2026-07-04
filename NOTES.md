@@ -6163,3 +6163,43 @@ maps are the remaining hard brick.**
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 89): the connecting maps δ (the snake — budget the whole pass for the two δs
 if needed), then exactness + assembly. See HANDOFF.
+
+### Pass 89 (2026-07-04) — the snake (the connecting homomorphism)
+
+**Mathematics; ledger delta 0 / 0.** The hard brick, landed in one pass:
+`snakeDelta : Ĥ⁰(M'') →* Ĥ¹(M')` for a pair-equivariant SES of commutative groups, with
+its characterizing property. `Anabelian/ClassField/Snake.lean`, 7 declarations.
+
+## The design (why this snake has no cocycle bookkeeping)
+
+1. **The pullback is a homomorphism.** On `T = π⁻¹(ker f'') ≤ M`, the assignment
+   `Y : x ↦ (unique y' with ι y' = f x)` is well-defined (exactness puts `f x` in
+   `range ι`) and MULTIPLICATIVE — `ι`-injectivity transfers `f(xy) = f(x)f(y)` across.
+   `snakeY : T →* ker g'` is a genuine hom; all choice happens inside `Exists.choose`
+   with the spec lemma `ι_snakePull` as the only interface.
+2. **One kernel condition.** Classically δ needs (a) lift-independence and (b)
+   `im g''`-invariance; both ARE the containment `ker Φ ≤ ker ψ` where `Φ : T → Ĥ⁰(M'')`
+   is project-and-quotient and `ψ = mk ∘ Y`. Proof: `π x = g'' w''` ⟹ pick a lift `w`,
+   then `x·(g w)⁻¹ ∈ ker π = range ι` gives `x = (g w)·ι z'`, and
+   `ι(Y x) = f(g w)·f(ι z') = ι(f' z')` (`f∘g = 1` on `M`), so `Y x ∈ im f'`.
+3. `δ := (QuotientGroup.lift ker Φ ψ hker) ∘ (quotientKerEquivOfSurjective Φ hΦ).symm`;
+   the computation rule `δ(Φ x) = ψ x` comes out by `MulEquiv.symm_apply_eq` + `rfl`.
+
+## House notes (catalogued)
+
+Coercions into quotient types must name the UNFOLDED `_ ⧸ _` type — a def-wrapper
+(`herbrandH`) blocks coe elaboration; `have h' : (unfolded type) = 1 := hx` defeq-casts
+cleanly. `group` does not use commutativity (`g w * x * (g w)⁻¹ = x` needs `mul_comm` +
+`mul_inv_cancel_left` by hand). For hypothesis-heavy defs, pass everything positionally.
+
+## Build + headline
+
+`lake build` green (2.0 s); preflight CLEAN. **HEADLINE: the connecting homomorphism of
+the Herbrand six-term cycle — built with zero cocycle bookkeeping via the
+pullback-is-a-hom observation, axiom-free. Exactness (six nodes) and the assembly are all
+that remain for `q(M) = q(M')·q(M'')`.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 90): the six exactness proofs + assembly. See HANDOFF.

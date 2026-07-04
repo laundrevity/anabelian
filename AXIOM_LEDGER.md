@@ -3592,3 +3592,31 @@ which is NOT claimed (connecting maps + exactness named as next work). No new
 `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 88 passes.
+
+### Pass 89 (2026-07-04) — the snake: the connecting homomorphism; count stays 0 / 0
+
+**No axiom added, none needed.** The hard brick of `q`-multiplicativity
+(`Anabelian/ClassField/Snake.lean`, 7 declarations, all standard-axioms-only).
+
+```
+'Anabelian.snakePull'                                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakeY'                                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakePhi'                                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakePsi'                                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakePhi_ker_le'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakeDelta'                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snakeDelta_apply'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`snakeDelta : Ĥ⁰(M'') →* Ĥ¹(M')`** for a pair-equivariant SES, with the computation
+  rule `δ(Φ x) = ψ x`. The design kills the classical cocycle bookkeeping: the pullback
+  `Y` is a genuine HOM on the lift domain `T = π⁻¹(ker f'')` (`ι`-injectivity forces
+  multiplicativity), and the two-step well-definedness merges into the single kernel
+  condition `ker Φ ≤ ker ψ`; `δ` is the first-isomorphism factorization. The
+  `(f,g)`-swap gives the periodic partner with no new code.
+
+**Not the cardinal sin / rule-2.** Homological infrastructure below the multiplicativity
+theorem (NOT yet claimed — exactness remains). No new `structure`/`class`; no owed
+witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 89 passes.

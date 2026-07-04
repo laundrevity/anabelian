@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 88, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 89, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-88 entry), `ROADMAP.md`
-(status header says Pass 88), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-89 entry), `ROADMAP.md`
+(status header says Pass 89), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,29 +61,19 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 89: the six-term cycle ⟹ `q`-multiplicativity
+## YOUR FIRST TASK — Pass 90: the six exactness proofs ⟹ `q`-multiplicativity
 
-**Target**: for a pair-equivariant SES `1 → M' →ι M →π M'' → 1` of `CommGroup`s (ι
-injective, π surjective, `range ι = ker π`, and ι/π intertwining the pairs
-`(f', g') → (f, g) → (f'', g'')`), build the six-term exact cycle and conclude
-(with finiteness where needed) `q(M) = q(M') · q(M'')`. Pieces:
-1. **Four functorial arrows** — P88's `herbrandHMap` at ι and π, for both `(f,g)` and
-   `(g,f)` orders.
-2. **Two connecting (snake) maps** `δ : herbrandH f'' g'' →* herbrandH g' f'` (and the
-   `(g,f)`-swap): for `x'' ∈ ker f''`, choose a π-preimage `x` (π surjective —
-   `Function.surjInv` or choice via `Classical.choice`; well-definedness is the content),
-   then `f x ∈ ker π = range ι` pulls back to `y' ∈ M'`; check `y' ∈ ker g'`
-   (ι injective + intertwining); show class well-defined mod `im f'` (two choices of
-   lift differ by `ker π = im ι`…) and mod `im g''`-representative changes. Build as a
-   raw function first, then `MonoidHom` (multiplicativity of the choice-free DIFFERENCE),
-   or define on representatives via `QuotientGroup.lift`. THIS IS THE HARD BRICK — budget
-   the whole pass for the two δs if needed.
-3. **Six exactness proofs** (each `range = ker` at the herbrandH level) — mechanical but
-   long; can be a separate pass.
-4. **Assembly**: P88's `card_prod_eq_of_exact_cycle` + division bookkeeping (positivity
-   from finiteness of the six carriers) ⟹ `herbrandQuotient f g = herbrandQuotient f' g'
-   * herbrandQuotient f'' g''`.
-Scope honestly: (2) alone is a legitimate pass; (3)+(4) the next. Clean partial >
+**Target**: the cycle `Ĥ⁰(M') →α Ĥ⁰(M) →β Ĥ⁰(M'') →δ Ĥ¹(M') →α' Ĥ¹(M) →β' Ĥ¹(M'') →δ'
+Ĥ⁰(M')` is exact at all six nodes; then P88's `card_prod_eq_of_exact_cycle` + division
+bookkeeping gives **`q(M) = q(M')·q(M'')`** (finiteness of the six carriers as
+hypotheses). The maps: α/β/α'/β' are P88's `herbrandHMap` at ι/π (both pair-orders);
+δ/δ' are P89's `snakeDelta` (and its `(f,g)`-swap). Tools: `snakeDelta_apply` (the
+computation rule), `QuotientGroup.induction_on` for surjecting onto quotient elements,
+`QuotientGroup.eq_one_iff`/`eq'` for coset equalities, the unfolded-quotient-type
+coercion trick (P89 house note). The six proofs are mechanical but EACH has a diagram
+chase; budget accordingly (2 passes acceptable: exactness at the three `Ĥ⁰`-side nodes
+first, or all six if they flow). Assembly afterward: six finiteness hypotheses, P88's
+lemma, positivity (`Nat.card_pos`), `field_simp`-division. Clean partial >
 half-discharge. (Fallback arc: Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
@@ -111,7 +101,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 89
+## The queue after Pass 90
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
