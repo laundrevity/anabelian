@@ -3272,3 +3272,26 @@ below R1. The L3 upgrades (upper numbering on `Gal(K̄/K)`, Hasse–Arf) NOT cla
 `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 77 passes, and the QUOTIENT ARC (P50–77) IS CLOSED.
+
+### Pass 78 (2026-07-04) — consolidation: the Herbrand package + canonical carrier; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/Herbrand/Main.lean` — the quotient arc's
+one-stop summary: all nine headline theorems (Prop. 2 → Prop. 3 → `e' = |H₀|` → numerical
+Lemma 5 → Lemma 5 → e-multiplicativity → Prop. 15 → Herbrand → canonical Herbrand) audited
+in a single `#print axioms` block, every one standard-axioms-only. One new theorem:
+
+```
+'Anabelian.map_upperRamificationGroup_eq_extensionIntegers' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`map_upperRamificationGroup_eq_extensionIntegers`** — Herbrand's theorem on the
+  canonical carrier: comparing images in the common ambient `Gal(K'/K) = (K' ≃ₐ[K] K')`
+  (via `.subtype`-maps, which avoids all dependent-type transport), the image of
+  `G^v(L/K)` equals `G^v(K'/K)` computed on `𝒪_{K'} = extensionIntegers K K'` itself.
+  Proof: P77 + `rw [extensionIntegers_comap_eq]` (P57's subring equality) — the
+  `B`-vs-`𝒪_{K'}` carrier wart dissolves in two lines.
+
+**Not the cardinal sin / rule-2.** Transport along a proved equality + re-audit — no new
+mathematics. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 78 passes.

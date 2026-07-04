@@ -24,6 +24,7 @@ import Anabelian.Galois.RationalsNonAbelian
 import Anabelian.Herbrand.Formula
 import Anabelian.Herbrand.Function
 import Anabelian.Herbrand.HerbrandTheorem
+import Anabelian.Herbrand.Main
 import Anabelian.Herbrand.PsiSlope
 import Anabelian.Herbrand.Slope
 import Anabelian.Herbrand.SumBridge

@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 77 (2026-07-04)
+## Current state — Pass 78 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 78 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 79 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -99,9 +99,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   lemma** — the quotient filtration is constant on integer indices in
   `(φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]` (Pass 75); **PROP. 15, proved: `φ`-transitivity** —
   `φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))` for every real `u`, by right-derivative gluing
-  (Pass 76); and **HERBRAND'S THEOREM, proved** — `(G^v).map (decompositionQuotient) =
+  (Pass 76); **HERBRAND'S THEOREM, proved** — `(G^v).map (decompositionQuotient) =
   (G/H)^v` for every real `v`: the upper numbering is compatible with quotients (Serre IV
-  §3 Prop. 14) (Pass 77).
+  §3 Prop. 14) (Pass 77); and the **consolidated Herbrand package** —
+  `Anabelian/Herbrand/Main.lean`, the arc's nine headline theorems audited in one block,
+  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -129,10 +131,13 @@ assembled the numerical Lemma 5, and **Pass 73 proved Lemma 5 itself**:
 `(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. Passes 74–76 took Prop. 15
 (`φ`-transitivity), and **Pass 77 closed the arc with HERBRAND'S THEOREM**:
 `(G^v).map (decompositionQuotient) = (G/H)^v` — the upper numbering is
-quotient-compatible. This is the property that lets ramification data glue across the
-infinite tower toward `Gal(K̄/K)` — the gateway to the L3 stratum (upper numbering on the
-absolute Galois group, Hasse–Arf, and onward toward local class field theory's
-ramification correspondence).
+quotient-compatible. Pass 78 consolidated the arc
+(`Anabelian/Herbrand/Main.lean`: the full chain Prop. 2 → Prop. 3 → `e' = |H₀|` →
+Lemma 5 → Prop. 15 → Herbrand audited in one `#print axioms` block, plus the
+canonical-carrier form on `𝒪_{K'}`). Next: the L3 gateway (upper numbering on the
+absolute Galois group via the inverse limit — exactly what Herbrand-compatibility makes
+well-defined), or Hasse–Arf, en route to local class field theory's ramification
+correspondence.
 
 ## Build
 

@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 77, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 78, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-77 entry), `ROADMAP.md`
-(status header says Pass 77), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-78 entry), `ROADMAP.md`
+(status header says Pass 78), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,29 +61,32 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 78: choose the next arc
+## YOUR FIRST TASK — Pass 79: the L3 gateway design pass (upper numbering on `Gal(K̄/K)`)
 
-The quotient arc (P50–77: Prop. 2 → Prop. 3 → Lemma 5 → Prop. 15 → **Herbrand's
-theorem**) is closed. Candidates, in rough dependency order — inventory before choosing:
-- **(A) The L3 gateway: upper numbering on `Gal(K̄/K)`** — Herbrand-compatibility is
-  exactly the well-definedness of `G^v` on the inverse limit. Sub-bricks: the tower-of-two
-  compatibility is P77; what's needed is the FUNCTORIAL form (for a K-embedding-indexed
-  system of finite Galois subextensions, the `G^v`s form a compatible system). Check what
-  Mathlib has for `Gal(K̄/K)` as a profinite limit of finite quotients
-  (`InfiniteGalois...`, `Field.absoluteGaloisGroup`, the fundamental theorem files) — the
-  design decision (which inverse-limit presentation to attach `G^v` to) deserves its own
-  pass.
-- **(B) Hasse–Arf** (jumps of `φ_{L/K}` at integers for ABELIAN `L/K`): hard classical
-  analysis-free number theory; multi-pass; needs the `G_u`-jump structure + abelian input.
-  Serre IV §3 + V. Far side: the ramification correspondence of local CFT.
-- **(C) Consolidation/generalization pass**: the P50–77 arc is stated for
-  `B = 𝒪_L ∩ K'` via `comap` — restate Herbrand cleanly in terms of
-  `extensionIntegers K K'` (P57's iso transports the filtration — check whether
-  `ramificationGroup K B ≃ ramificationGroup K (extensionIntegers K K')` needs work), and
-  export the arc's headline theorems into a single `Anabelian/Herbrand/Main.lean`-style
-  summary file with the full statement chain documented.
-Recommended: (C) first (one pass, makes the arc citable and the B-vs-𝒪_{K'} wart
-explicit), then the (A) design pass. Clean partial > half-discharge.
+**A DESIGN pass — inventory first, decide, write the plan into ROADMAP; code only what the
+design settles.** Herbrand-compatibility (P77/P78) is exactly the well-definedness of
+`G^v` on an inverse limit of finite quotients. Questions to settle:
+1. **Mathlib's absolute-Galois presentation**: grep `Field.absoluteGaloisGroup`,
+   `InfiniteGalois`, `ProfiniteGrp`, the fundamental theorem of infinite Galois theory
+   files — what is `Gal(K̄/K)` and how are finite quotients indexed
+   (`IntermediateField.FiniteGaloisIntermediateField`? the `.fixingSubgroup` lattice?)?
+2. **The carrier decision**: attach `G^v(K̄/K)` to WHAT? Options: (i) the inverse limit of
+   the finite-level `G^v`s along the P77 maps (needs the FUNCTORIAL form of P77 — two
+   arbitrary comparable finite Galois subextensions, not just the two-level tower); (ii) a
+   closed-subgroup definition via preimages (`G^v := ⋂_L preimage of G^v(L/K)`); (iii) a
+   `Subgroup (K̄ ≃ₐ[K] K̄)` defined directly. Serre does (i)-equivalent; (ii) is likely
+   the cheapest formal move.
+3. **What P77 must be upgraded to**: the current statement is for the tower
+   `K ⊆ K' ⊆ L` with `𝒪_L`-side and comap carrier; the functorial form needs naturality
+   in BOTH variables (`L ⊆ L'` extensions of `K'`) — inventory which project pieces are
+   generic in `(K', A)` already (most are!) and which fix `A = 𝒪_L`.
+4. **The local-field instance for K'**: intermediate fields of `K̄/K` are finite over `K`
+   hence local — is `IsNonarchimedeanLocalField` inherited by finite extensions in the
+   project (check the Extension/ strata — P36-ish)? Needed to iterate the tower.
+Deliverable: an honest dependency map in ROADMAP (which bricks exist, which are one-pass,
+which are walls) + the carrier decision recorded + at most ONE new brick coded. Clean
+partial > half-discharge. (Alternative if the inventory shows the gateway blocked:
+**Hasse–Arf** — Serre IV §3 + V, multi-pass, needs the jump structure + abelian input.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -110,7 +113,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 78
+## The queue after Pass 79
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

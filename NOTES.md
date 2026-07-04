@@ -5721,3 +5721,45 @@ PROVED in Lean 4, axiom-free, for every finite tower over a nonarchimedean local
 Next (Pass 78): choose the next arc — consolidation (recommended first), then the L3
 gateway design (upper numbering on `Gal(K̄/K)` via inverse limit), or Hasse–Arf. See
 HANDOFF.
+
+### Pass 78 (2026-07-04) — consolidation: the Herbrand package (`Herbrand/Main.lean`)
+
+**Consolidation; ledger delta 0 / 0.** The quotient arc (P50–77) made citable: one file,
+one audit block, one new corollary. `Anabelian/Herbrand/Main.lean`.
+
+## Contents
+
+- **The chain documented**: Prop. 2 (P46) → Prop. 3 (P63) → `e' = |H₀|` (P71) → numerical
+  Lemma 5 (P72) → Lemma 5 (P73) → card multiplicativity / e-multiplicativity (P74) →
+  Prop. 15 (P76) → Herbrand (P77), each with its named theorem, in the module docstring;
+  `#print axioms` for all nine in one block (all `[propext, Classical.choice,
+  Quot.sound]`).
+- **`map_upperRamificationGroup_eq_extensionIntegers`** (the one new theorem): Herbrand on
+  the canonical carrier. The arc's `B = (𝒪_L).comap (K' ↪ L)` and the canonical
+  `𝒪_{K'} = extensionIntegers K K'` are EQUAL subrings (P57), but their decomposition
+  subgroups are different TYPES — the clean statement compares `.subtype`-images in the
+  common ambient `Gal(K'/K)`, where `Subgroup.map`-composition makes both sides live in
+  `Subgroup (K' ≃ₐ[K] K')`. Proof: two rewrites (P77, then P57's equality — the rw motive
+  across the dependent occurrences is fine because the goal type is non-dependent).
+  Probe compiled FIRST TRY.
+
+## Design note (for future carrier disputes)
+
+When two propositionally-equal subobjects induce different subtype carriers, don't
+transport along `▸` in statements — push both sides into the common ambient via
+`.subtype`-maps and let `rw` on the subobject equality close it. Two lines, no `Eq.mpr`
+residue.
+
+## Build + headline
+
+`lake build` green (2.4 s); preflight CLEAN. **HEADLINE: the Herbrand package — Serre IV
+§1 + §3 for towers over a nonarchimedean local field, nine theorems from `H_u = H ∩ G_u`
+to `(G^v).map = (G/H)^v` — consolidated, canonical-carrier form included, one audit block,
+zero axioms.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 79): the L3 gateway DESIGN pass — upper numbering on `Gal(K̄/K)`: Mathlib
+absolute-Galois inventory, the carrier decision (inverse limit vs preimage-intersection),
+the functorial-P77 gap analysis, the local-field-inheritance check — see HANDOFF.
