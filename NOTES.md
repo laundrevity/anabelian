@@ -5628,3 +5628,54 @@ calculus.**
 Next (Pass 76): the right-derivative bricks — `HasDerivWithinAt φ (|G_{⌊u⌋+1}|/|G_0|)
 (Ici u) u` from P48's affine formula, the chain rule along the monotone inner `φ`, the
 P74+P75 slope match, and `eq_of_has_deriv_right_eq` — the four-step plan is in HANDOFF.
+
+### Pass 76 (2026-07-04) — PROP. 15: φ-transitivity, proved (the four-step plan, whole)
+
+**Mathematics; ledger delta 0 / 0 — a MILESTONE.** Serre IV §3 Prop. 15:
+`φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))` for every real `u`.
+`Anabelian/Herbrand/Transitivity.lean`, 3 declarations, standard-axioms-only.
+
+## The proof (right-derivative gluing)
+
+- `herbrandPhi_hasDerivWithinAt_Ici` (generic `(K, A)`): `φ` has right derivative
+  `|G_{⌊u⌋+1}|/|G_0|` at every `u ≥ 0` — INCLUDING integer breakpoints, where P47's
+  two-sided derivative fails. Build the affine model `c + (x−n)s` (`hasDerivAt_id`
+  arithmetic), transfer by `congr_of_eventuallyEq`: `Iio (n+1) ∈ 𝓝[Ici u] u` (via
+  `nhdsWithin_le_nhds`) + `self_mem_nhdsWithin` + `filter_upwards` puts the agreement set
+  `[u, n+1)` in the filter; agreement is P48's affine formula.
+- `slope_match`: the chain-rule product `(|(G/H)_{⌊φ(u)⌋+1}|/|(G/H)_0|)·(|H_{⌊u⌋+1}|/|H_0|)`
+  equals `|G_{⌊u⌋+1}|/|G_0|`: P75's `ramificationGroup_comap_floor_add_one_eq` aligns the
+  outer index to `⌈φ(⌊u⌋+1)⌉`, then P74 at `⌊u⌋+1` and at `0` + `field_simp` (which even
+  closed the ring identity itself).
+- `herbrandPhi_comp`: `u ≤ 0` by three `herbrandPhi_eq_id`s; `u > 0` by
+  `eq_of_has_deriv_right_eq` on `[0, u]` with the common slope function
+  `fun x => |G_{⌊x⌋+1}|/|G_0|`, continuity from P44 (`Continuous.comp` for the composite),
+  `φ(0) = 0` three times at `0`.
+
+## Probe experience
+
+Two rounds. House notes: beta-redexes `(fun x => …) x` block `rw` — `change` to the
+reduced form first (`show` trips the style linter); a `field_simp` can close goals `ring`
+was queued for (drop the dead tactic, not the pipeline).
+
+## The Prop. 15 arc in retrospect (P63–P76)
+
+Prop. 3 (P50–63) → profile/count/φ-bridge (P65–67) → `e' = |H₀|` (P68–71) → numerical
+Lemma 5 (P72) → set-level Lemma 5 (P73) → card multiplicativity (P74) → alignment (P75) →
+transitivity (P76). Fourteen passes, zero axioms, and the two flagged "walls" (index
+multiplicativity, breakpoint alignment) each fell to a design dividend (P23's
+`Ideal.inertia`; P72's integrality).
+
+## Build + headline
+
+`lake build` green, warning-free; preflight CLEAN. **HEADLINE: SERRE IV §3 PROP. 15 —
+`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` on all of ℝ — PROVED in Lean 4, axiom-free. The road to
+Herbrand's theorem (Prop. 14) is one pass wide: Lemma 5 + upper numbering + the
+ψ-composition corollary.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 77): HERBRAND'S THEOREM — `(G/H)^v = G^v H/H`: read
+`Herbrand/UpperNumbering.lean` first; bricks (a) `herbrandPsi_comp`, (b) the
+Lipschitz-1/ceil-collapse lemma, (c) assembly — see HANDOFF.

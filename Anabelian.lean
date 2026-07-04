@@ -26,6 +26,7 @@ import Anabelian.Herbrand.Function
 import Anabelian.Herbrand.PsiSlope
 import Anabelian.Herbrand.Slope
 import Anabelian.Herbrand.SumBridge
+import Anabelian.Herbrand.Transitivity
 import Anabelian.Herbrand.UpperNumbering
 import Anabelian.LocalField.Canonical
 import Anabelian.LocalField.Instance

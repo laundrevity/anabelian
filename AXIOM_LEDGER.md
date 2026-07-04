@@ -3210,3 +3210,32 @@ right-slope form `ramificationGroup_comap_floor_add_one_eq` — `(G/H)_{⌊φ(u)
 R1. Prop. 15 NOT claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 75 passes.
+
+### Pass 76 (2026-07-04) — PROP. 15: φ-TRANSITIVITY, PROVED; count stays 0 / 0
+
+**No axiom added, none needed — Serre IV §3 Proposition 15 is a theorem.**
+
+> for EVERY `u : ℝ`: **`φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))`**
+
+(`Anabelian/Herbrand/Transitivity.lean`, `herbrandPhi_comp`; with
+`herbrandPhi_hasDerivWithinAt_Ici` — the right derivative of `φ` is `|G_{⌊u⌋+1}|/|G_0|` at
+EVERY `u ≥ 0`, breakpoints included — and `slope_match`). 3 declarations, all
+standard-axioms-only.
+
+```
+'Anabelian.herbrandPhi_hasDerivWithinAt_Ici'                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.slope_match'                                     depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandPhi_comp'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- The four-step plan of the Pass-75 HANDOFF, executed whole: (1) right derivative from
+  P48's affine formula via `congr_of_eventuallyEq` on `𝓝[Ici u] u`; (2) chain rule
+  (`HasDerivWithinAt.comp`, `MapsTo` from monotonicity); (3) slope match — P75's alignment
+  turns the outer index `⌊φ(u)⌋+1` into `⌈φ(⌊u⌋+1)⌉`, P74's multiplicativity (at `⌊u⌋+1`
+  and `0`) collapses the product; (4) `eq_of_has_deriv_right_eq` + P44's continuity +
+  `φ(0) = 0`; `u ≤ 0` free by `φ = id`.
+
+**Not the cardinal sin / rule-2.** Transitivity for a given tower — strictly below R1.
+Prop. 14 (Herbrand) NOT claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 76 passes.

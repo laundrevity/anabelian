@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 75, 2026-07-03)
+# HANDOFF.md — session bootstrap (written after Pass 76, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-75 entry), `ROADMAP.md`
-(status header says Pass 75), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-76 entry), `ROADMAP.md`
+(status header says Pass 76), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,33 +61,36 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 76: Prop. 15's right-derivative bricks
+## YOUR FIRST TASK — Pass 77: HERBRAND'S THEOREM (Prop. 14)
 
-The alignment (P75) killed the hard step. The remaining plan for
-`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}` on `[0, ∞)` — the right-derivative route:
-1. **Right-derivative of `φ` everywhere** (one brick): `HasDerivWithinAt (herbrandPhi K A)
-   (|G_{⌊u⌋+1}|/|G_0|) (Ici u) u` for every `u ≥ 0` — from P48's affine formula on
-   `[n, n+1]` (`φ(x) = φ(n) + (x−n)·|G_{n+1}|/|G_0|` for `x ∈ [⌊u⌋, ⌊u⌋+1]`), via
-   `HasDerivWithinAt` of the affine function + `congr_of_eventuallyEq` on
-   `nhdsWithin u (Ici u)` (the set `[u, ⌊u⌋+1)` is such a neighborhood since `u < ⌊u⌋+1`).
-   INVENTORY P47/P48's exact statement names first (P48's `[n, n+1]` formula, P47's
-   `hasDerivAt` off breakpoints).
-2. **Chain rule for the composite** (same or next pass): `HasDerivWithinAt.comp` with
-   `MapsTo (herbrandPhi K' 𝒪_L) (Ici u) (Ici (herbrandPhi K' 𝒪_L u))` (monotone ✓):
-   composite right-derivative at `u ∈ [n, n+1)` is
-   `(|(G/H)_{⌊φ(u)⌋+1}|/|(G/H)_0|) · (|H_{⌊u⌋+1}|/|H_0|)`.
-3. **Slope matching**: P75's `ramificationGroup_comap_floor_add_one_eq` turns
-   `(G/H)_{⌊φ(u)⌋+1}` into `(G/H)_{⌈φ(⌊u⌋+1)⌉}`; then P74's `card_ramificationGroup_eq_mul`
-   at index `⌊u⌋+1` gives `|(G/H)_{⌈φ(⌊u⌋+1)⌉}|·|H_{⌊u⌋+1}| = |G_{⌊u⌋+1}|`, and the `0`-th
-   P74 instance divides — the two right-derivatives are EQUAL for all `u ≥ 0`.
-4. **The glue**: `eq_of_has_deriv_right_eq` (Mathlib, `Analysis/Calculus/MeanValue.lean`
-   — check exact signature: continuity on `[a, b]` + right-derivs equal on `[a, b)` +
-   equal at `a` ⟹ equal on `[a, b]`) applied on each `[0, T]`; continuity is P44's
-   `herbrandPhi_continuous` (+ `Continuous.comp`); equality at `0` is `φ(0) = 0` twice.
-   Mind: the derivative functions must be the SAME function of `u` for both sides — state
-   the common slope as `fun u => |G_{⌊u⌋+1}|/|G_0|`.
-Scope: brick 1 alone is a clean pass; 2+3 next; 4 closes Prop. 15. Then Prop. 14
-(Herbrand: `(G/H)^v = G^v H/H` — P73 + the `⌈ψ⌉`-compatibility corollary of Prop. 15).
+**Target**: `(G/H)^v = G^v H/H` — in project terms (P45's upper numbering
+`upperRamificationGroup K A v = ramificationGroup K A ⌈herbrandPsi K A v⌉₊`-style — READ
+`Anabelian/Herbrand/UpperNumbering.lean` FIRST for the exact def and conventions):
+
+> `(upperRamificationGroup K (𝒪_L) v).map (decompositionQuotient K K' (𝒪_L))
+>    = upperRamificationGroup K B v`
+
+**Route**: LHS `= (G_{⌈ψ_{L/K}(v)⌉}).map dq = B-filtration at ⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉`
+(P73 Lemma 5 at `u := ⌈ψ_{L/K}(v)⌉`). RHS `= B-filtration at ⌈ψ_{K'/K}(v)⌉`. So Herbrand
+reduces to the **index compatibility**
+
+> `⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉ = ⌈ψ_{K'/K}(v)⌉` for `v ≥ 0`  (*)
+
+Given Prop. 15 (P76) and `ψ = φ⁻¹` (P45/P49's inverse identities): `ψ_{L/K} =
+ψ_{L/K'} ∘ ψ_{K'/K}` (compose Prop. 15 with the inverses — may be worth proving as a named
+corollary `herbrandPsi_comp` first). Then (*) reads
+`⌈φ_{L/K'}(⌈ψ_{L/K'}(w)⌉)⌉ = ⌈w⌉` for `w := ψ_{K'/K}(v)` — an instance of the general
+**ceil-φ-ψ collapse** `⌈φ(⌈ψ(w)⌉)⌉ = ⌈w⌉` for a SINGLE extension: this needs
+`φ(⌈ψ(w)⌉) ∈ [w-something…]`… more precisely `w ≤ φ(⌈ψ(w)⌉) < ⌊w⌋+1`-ish: from
+`φ(ψ(w)) = w` (inverse identity), `φ` monotone, and the ALIGNMENT-flavored fact that `φ` of
+the ceil doesn't cross the next integer: `φ(⌈ψ(w)⌉) < ⌊w⌋ + 1` ⟸ slopes of `φ` are ≤ 1
+(`φ(⌈ψ(w)⌉) ≤ φ(ψ(w)) + (⌈ψ(w)⌉ − ψ(w))·slope ≤ w + 1·(…< 1)`) — need a `φ`-Lipschitz-1
+lemma (`herbrandPhi` has slopes `|G_{n+1}|/|G_0| ≤ 1` — antitone cards!). CHECK P45: the
+upper-numbering def may already have `⌈·⌉`-collapse lemmas of this shape (it defined
+`(G/H)^v` compatibly!). Bricks: (a) `herbrandPsi_comp` from P76 + inverse identities;
+(b) the Lipschitz-1 / ceil-collapse lemma (single extension, generic `(K, A)`);
+(c) assembly. Scope (a)+(b) or (b)+(c) per session budget; clean partial >
+half-discharge.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -114,7 +117,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 76
+## The queue after Pass 77
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
