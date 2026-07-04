@@ -6203,3 +6203,42 @@ that remain for `q(M) = q(M')·q(M'')`.**
 
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 90): the six exactness proofs + assembly. See HANDOFF.
+
+### Pass 90 (2026-07-04) — the multiplicativity theorem (the q-calculus is operational)
+
+**Mathematics; ledger delta 0 / 0.** The six-term Herbrand cycle is exact and
+`q(M) = q(M')·q(M'')` follows — with P87's triviality, both moves of the classical
+Herbrand-quotient calculus are now theorems.
+`Anabelian/ClassField/Multiplicativity.lean`, 8 declarations.
+
+## Method
+
+- **Three proofs, six exactness facts**: the cycle's nodes pair up under the `(f,g)`-swap;
+  `snake_exact_mid` (at `Ĥ⁰(M)`), `snake_exact_top` (at `Ĥ⁰(M'')`), `snake_exact_bot`
+  (at `Ĥ¹(M')`) instantiate at swapped pairs for the other three. Each chase runs on
+  P89's `snakeDelta_apply` + the lift trick (`mk x'' = Φ⟨x, hT⟩` for a chosen preimage).
+- **Assembly**: P88's `card_prod_eq_of_exact_cycle` at the six carriers; division
+  bookkeeping via `div_eq_div_iff` + a `ring_nf`-matched ℕ-identity. Only `Ĥ¹`-finiteness
+  (×3) is hypothesized: infinite `Ĥ⁰`s zero both sides.
+
+## House notes (the mk/coe friction, SOLVED as method)
+
+Prove rfl computation lemmas FIRST (`herbrandHMap_mk`, `snakePhi_mk`, `snakePsi_mk`) and
+never unfold defs mid-chase; term-mode `(QuotientGroup.eq_one_iff _).mp` beats `rw` on
+mixed mk/coe goals; the defeq-cast `have h' : g'' w'' = π x.1 := hw''` converts
+subtype-value equalities silently; quotient `1` is defeq `mk 1`, so `rfl` closes goals
+where `mk_one` gets stuck against def-wrappers. Three probe rounds total for six chases +
+assembly — the P89 catalogue paid for itself immediately.
+
+## Build + headline
+
+`lake build` green (2.9 s); preflight CLEAN. **HEADLINE: the Herbrand-quotient calculus —
+triviality on finite modules (P87) + multiplicativity in short exact sequences (P90) — is
+fully operational, axiom-free. The road to `q(Lˣ) = [L:K]` and the class-formation axioms
+is open.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 91): the Galois-module pair (norm, σ/1) for a finite cyclic action ⟹
+`q(G, A)` instantiated; then `q(ℤ) = |G|`, then the `q(Lˣ)` track. See HANDOFF.

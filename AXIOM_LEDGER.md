@@ -3620,3 +3620,30 @@ theorem (NOT yet claimed — exactness remains). No new `structure`/`class`; no 
 witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 89 passes.
+
+### Pass 90 (2026-07-04) — THE MULTIPLICATIVITY THEOREM; count stays 0 / 0
+
+**No axiom added, none needed.** The Herbrand-quotient calculus is operational.
+`Anabelian/ClassField/Multiplicativity.lean`, 8 declarations, all standard-axioms-only.
+
+```
+'Anabelian.herbrandHMap_mk'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snake_exact_mid'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snake_exact_top'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.snake_exact_bot'                                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandQuotient_mul'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The six-term cycle is exact** — THREE generic lemmas (at `Ĥ⁰(M)`, `Ĥ⁰(M'')`,
+  `Ĥ¹(M')`); the other three nodes are the same lemmas at the `(f,g)`-swap. Six facts,
+  three diagram chases.
+- **`herbrandQuotient_mul`**: `q(M) = q(M')·q(M'')` (Serre VIII §4 Prop. 10) — the cycle
+  fed into P88's alternating-card identity; only the three `Ĥ¹`-finiteness hypotheses
+  needed (infinite `Ĥ⁰`s collapse both sides to `0` together, by the `Nat.card`
+  conventions).
+
+**Not the cardinal sin / rule-2.** The cyclic layer's bookkeeping theorem — no class
+field theory claimed (L3.3 untouched). No new `structure`/`class`; no owed witness;
+D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 90 passes.

@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 89 (2026-07-04)
+## Current state — Pass 90 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 88 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 89 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -166,11 +166,11 @@ Herbrand quotient** (`Anabelian/ClassField/HerbrandQuotient.lean`, not previousl
 Mathlib): the abstract two-endomorphism form with the finite-module triviality theorem
 `q(M) = 1` — the bookkeeping device of the cyclic layer. Pass 88 added the counting engine
 for `q`-multiplicativity: the 6-cycle alternating-card lemma (finiteness-free) and
-`herbrandH` functoriality. Pass 89 built the snake: the
-connecting homomorphism `δ : Ĥ⁰(M'') →* Ĥ¹(M')` with its computation rule — the pullback
-turned out to be a genuine homomorphism on the lift domain, collapsing the classical
-cocycle bookkeeping into one kernel condition. Next: the six exactness proofs ⟹
-`q(M) = q(M')·q(M'')`, or Hasse–Arf.
+`herbrandH` functoriality. Pass 89 built the snake, and
+Pass 90 closed the six-term cycle: three generic exactness lemmas (the other three nodes
+by the `(f,g)`-swap) feed the alternating-card identity, giving **the multiplicativity
+theorem `q(M) = q(M')·q(M'')`** — with Pass 87's triviality, the Herbrand-quotient
+calculus is operational. Next: the concrete computations (`q(Lˣ)`, units), or Hasse–Arf.
 
 ## Build
 

@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 89, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 90, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-89 entry), `ROADMAP.md`
-(status header says Pass 89), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-90 entry), `ROADMAP.md`
+(status header says Pass 90), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,20 +61,29 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 90: the six exactness proofs ⟹ `q`-multiplicativity
+## YOUR FIRST TASK — Pass 91: the concrete `q`-computations begin
 
-**Target**: the cycle `Ĥ⁰(M') →α Ĥ⁰(M) →β Ĥ⁰(M'') →δ Ĥ¹(M') →α' Ĥ¹(M) →β' Ĥ¹(M'') →δ'
-Ĥ⁰(M')` is exact at all six nodes; then P88's `card_prod_eq_of_exact_cycle` + division
-bookkeeping gives **`q(M) = q(M')·q(M'')`** (finiteness of the six carriers as
-hypotheses). The maps: α/β/α'/β' are P88's `herbrandHMap` at ι/π (both pair-orders);
-δ/δ' are P89's `snakeDelta` (and its `(f,g)`-swap). Tools: `snakeDelta_apply` (the
-computation rule), `QuotientGroup.induction_on` for surjecting onto quotient elements,
-`QuotientGroup.eq_one_iff`/`eq'` for coset equalities, the unfolded-quotient-type
-coercion trick (P89 house note). The six proofs are mechanical but EACH has a diagram
-chase; budget accordingly (2 passes acceptable: exactness at the three `Ĥ⁰`-side nodes
-first, or all six if they flow). Assembly afterward: six finiteness hypotheses, P88's
-lemma, positivity (`Nat.card_pos`), `field_simp`-division. Clean partial >
-half-discharge. (Fallback arc: Hasse–Arf.)
+The calculus is operational (P87 triviality + P90 multiplicativity). The cyclic layer's
+concrete targets, in dependency order — inventory then ONE brick:
+1. **The pair for a cyclic action**: fix a finite cyclic `G = ⟨σ⟩` of order `n` acting on
+   a `CommGroup` `A` (via `MulDistribMulAction`? — check what the project/Mathlib gives
+   for `Gal` acting on `Lˣ`: `MulSemiringAction` on `L` restricts to units —
+   `Units.instMulDistribMulAction`?). Define the pair: `normMap : A →* A :=
+   ∏_{i<n} σⁱ•·` and `diffMap : A →* A := (σ•·)·(·)⁻¹` (CommGroup makes both homs);
+   verify `norm∘diff = diff∘norm = 1` (telescoping). THIS instantiates `herbrandQuotient`
+   for Galois modules: `q(G, A) := herbrandQuotient (normMap) (diffMap)`.
+2. **`q` of the trivial-action module `ℤ`** (multiplicative: a `Multiplicative ℤ`-carrier
+   or state for `zpowers`-free additive transport?): `q(G, ℤ_triv) = ... ` — classical
+   `q = |G|` after the right normalization (`Ĥ⁰ = ℤ/nℤ`, `Ĥ¹ = 0` for trivial action on
+   `ℤ`: norm = ·n, diff = 0 — careful with which pair-order convention). A clean small
+   brick.
+3. **`q(Lˣ) = [L:K]`-track**: the valuation SES `1 → 𝒪ˣ → Lˣ →v ℤ → 0` (project has the
+   valuation; the SES needs the surjectivity = uniformizer) + `herbrandQuotient_mul` +
+   `q(𝒪ˣ) = 1`-track (unit filtration: `U⁰/U¹ ≅ 𝓀ˣ`, `Uⁱ/Uⁱ⁺¹ ≅ 𝓀⁺` — P24–27's residue
+   characters ARE these isos; finite ⟹ q-trivial; the limit argument for the full `U⁰`
+   needs compactness/completeness — the REAL work of this track).
+Scope Pass 91: brick 1 (the Galois-module pair + `q(G,A)` + the complex conditions) —
+foundational and self-contained. Clean partial > half-discharge. (Fallback: Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -101,7 +110,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 90
+## The queue after Pass 91
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
