@@ -6012,3 +6012,45 @@ Serre-IV package, consolidated in one audited file, 0 axioms across 84 passes.**
 Next (Pass 85): the L3 opening inventory (design pass — local CFT in Mathlib: cohomology
 vs Lubin–Tate route decision; the ramification correspondence as the R1-relevant target;
 `G^v(K^ab/K)` already live via P82's generality). See HANDOFF.
+
+### Pass 85 (2026-07-04) — the L3 opening inventory (design pass)
+
+**Design; ledger delta 0 / 0; no code.** Local class field theory scoped: the Mathlib
+landscape surveyed, the route chosen, ROADMAP's L3 stub replaced by a five-stage ladder.
+
+## Findings (Mathlib pin, July 2026)
+
+Group cohomology is genuinely usable: `Homological/GroupCohomology/` has the standard
+resolution (`Basic`), explicit low-degree `H⁰/H¹/H²` with cocycle APIs (`LowDegree`), the
+long exact sequence, functoriality, Shapiro, **Hilbert 90** (multiplicative cocycle form +
+the cyclic norm-one corollary), and **`FiniteCyclic`** — the even/odd periodicity isos
+that ARE the Herbrand-quotient substrate. Group homology exists in parallel; continuous
+(profinite) cohomology is one file old. Brauer group: CSA `Defs` only. Formal groups:
+1-dim laws + `𝔾ₐ/𝔾ₘ` + base change, nothing more. No Tate cohomology, no
+inflation–restriction, no cup products, no `Br ≃ H²`, no class formations, no Lubin–Tate,
+no `K^ab`, no CFT. External Lean CFT developments exist but are not in this pin.
+
+## The route decision (recorded in ROADMAP, revisit at the L3.3 gate)
+
+**Neukirch-style abstract CFT.** Reasons: (i) its inputs are cyclic-level cohomology —
+Herbrand quotients and Hilbert 90 — which Mathlib largely HAS, versus Tate's theorem
+(needs `Ĥ` + cup products, both absent: a Mathlib-scale sub-project) or Lubin–Tate (needs
+formal-group arithmetic from a one-file base); (ii) the project's own strengths (P24–27
+residue characters, P38–43 completeness, P44–49+P72 Herbrand machinery) feed exactly the
+L3.1/L3.2 verification of the class-formation axioms; (iii) the fallback (porting the
+external LCFT development as an honestly-labeled `FOUNDATIONAL` boundary) stays available
+at the gate without poisoning the ladder below it.
+
+## The ladder (statuses live in ROADMAP)
+
+L3.0 `K^ab` interface → L3.1 cyclic layer → L3.2 unramified cohomology → **L3.3
+reciprocity (THE WALL)** → L3.4 the ramification correspondence `θ(U^n) = G^n(K^ab/K)` —
+the R1-relevant piece, and the reason L2's `G^v(K^ab/K)` interface (P82's generality) was
+built the way it was.
+
+## Ledger delta + rule-2
+
+**0 / 0.** No declarations; no stub; the wall named and gated, not crossed on paper.
+R1–R3 untouched. Next (Pass 86): L3.0 — the `K^ab` object (fixed field of the closed
+commutator subgroup via the infinite Galois correspondence), its `IsGalois`/abelian
+structure, and the `G^v(K^ab/K)` sanity instantiation. See HANDOFF.

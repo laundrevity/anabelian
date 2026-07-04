@@ -3478,3 +3478,30 @@ strictly below R1 (which of these filtrations is group-theoretically DETECTABLE 
 question, untouched). No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 84 passes.
+
+### Pass 85 (2026-07-04) — the L3 opening inventory (design pass); count stays 0 / 0
+
+**No axiom added, none needed — and no code: the dependency map is the deliverable**
+(CLAUDE.md rule 3, as at Passes 79/85). ROADMAP's L3 section rewritten from a three-line
+stub to a five-stage ladder with the July-2026 Mathlib inventory recorded:
+
+- **PRESENT**: group cohomology with explicit `H⁰/H¹/H²`, LES, functoriality, Shapiro,
+  **Hilbert 90**, **finite-cyclic periodicity** (the Herbrand-quotient substrate); group
+  homology; nascent continuous cohomology; CSA definitions; 1-dim formal group laws.
+- **ABSENT**: Tate cohomology, inflation–restriction, cup products, `Br ≃ H²`, the
+  invariant map, class formations, Lubin–Tate, norm groups, the existence theorem, any
+  `K^ab` object, local/global CFT proper. External Lean developments
+  (`mariainesdff/LocalClassFieldTheory`, the FLT project) not in this pin; porting = a
+  `FOUNDATIONAL`-vs-`DEBT` decision deferred to the L3.3 gate.
+- **The ladder**: L3.0 `K^ab` interface (unblocked; `G^v(K^ab/K)` already expressible via
+  P82) → L3.1 cyclic/Herbrand-quotient layer (unblocked; Mathlib's `FiniteCyclic` +
+  `Hilbert90` + the project's P24–27 residue characters) → L3.2 unramified cohomology
+  (medium; P38–43 completeness strengths) → **L3.3 RECIPROCITY (the wall; route decision:
+  Neukirch-style abstract CFT — inputs are exactly L3.1+L3.2, avoiding absent `Ĥ`/cup
+  machinery and from-zero formal groups; revisit at the gate)** → L3.4 the ramification
+  correspondence `θ(U^n) = G^n(K^ab/K)` (the R1-relevant piece).
+
+**No stub taken; nothing axiomatized.** The wall is named, gated, and routed — not
+crossed on paper.
+
+**Ledger delta: 0 / 0.** Axiom-free — 85 passes.

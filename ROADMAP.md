@@ -5,11 +5,11 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 84 (2026-07-04)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 85 (2026-07-04)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-> **Passes 44–84 built the Herbrand machinery and opened the quotient theory** (ledger stays
+> **Passes 44–85 built the Herbrand machinery and opened the quotient theory** (ledger stays
 > `0 / 0`), all **absent from Mathlib**,
 > all axiom-free, on the lower-numbering filtration (Serre IV §§1, 3): **Pass 44** — the **Herbrand
 > function** `φ(u) = ∫_0^u dt/(G_0 : G_t)` (`Anabelian/HerbrandFunction.lean`), strictly monotone,
@@ -621,7 +621,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **DONE (Pass 83)** — the full arc: finite-level theory (P22–28), descent + assembly (P29–43), Herbrand functions + upper numbering (P44–49), the quotient arc through HERBRAND'S THEOREM (P50–78), and the capstone `G^v(K^sep/K)` as a closed inverse limit of the finite levels (P79–83); Hasse–Arf (Serre ch. V) deferred to its own rung; norm-compatibility to L3. (History: architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** Pass 64; the **fiber index profile** Pass 65; the **double count** Pass 66; the **`φ`-bridge** Pass 67; **`e'` in ideal form** Pass 68; the **`IsGaloisGroup` package** Pass 69; the **remaining instances + the inertia matching** Pass 70; **`e' = |H₀|` PROVED** Pass 71; **THE NUMERICAL LEMMA 5 PROVED** Pass 72; **SERRE IV §3 LEMMA 5 PROVED** Pass 73; the **card multiplicativity** Pass 74; the **alignment lemma** Pass 75; **PROP. 15 PROVED** Pass 76; **HERBRAND'S THEOREM PROVED** Pass 77; consolidation + **canonical-carrier Herbrand** Pass 78; the **L2-capstone design** Pass 79; **B1: the full-group form** Pass 80; **B2 + B4's heart** Pass 81; **B3: the absolute `G^v` DEFINED** Pass 82; **B5: PROJECTION SURJECTIVITY — L2 DONE** Pass 83; the **Absolute consolidation + THE SEPARATION THEOREM** (`⨅_v G^v(E/K) = ⊥`; antitone; `v ≤ 0` constancy; one audit block) Pass 84; **next: L3 opening inventory / Hasse–Arf**)   ·   DEBT: medium-high   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **DONE (Pass 83)** — the full arc: finite-level theory (P22–28), descent + assembly (P29–43), Herbrand functions + upper numbering (P44–49), the quotient arc through HERBRAND'S THEOREM (P50–78), and the capstone `G^v(K^sep/K)` as a closed inverse limit of the finite levels (P79–83); Hasse–Arf (Serre ch. V) deferred to its own rung; norm-compatibility to L3. (History: architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** Pass 64; the **fiber index profile** Pass 65; the **double count** Pass 66; the **`φ`-bridge** Pass 67; **`e'` in ideal form** Pass 68; the **`IsGaloisGroup` package** Pass 69; the **remaining instances + the inertia matching** Pass 70; **`e' = |H₀|` PROVED** Pass 71; **THE NUMERICAL LEMMA 5 PROVED** Pass 72; **SERRE IV §3 LEMMA 5 PROVED** Pass 73; the **card multiplicativity** Pass 74; the **alignment lemma** Pass 75; **PROP. 15 PROVED** Pass 76; **HERBRAND'S THEOREM PROVED** Pass 77; consolidation + **canonical-carrier Herbrand** Pass 78; the **L2-capstone design** Pass 79; **B1: the full-group form** Pass 80; **B2 + B4's heart** Pass 81; **B3: the absolute `G^v` DEFINED** Pass 82; **B5: PROJECTION SURJECTIVITY — L2 DONE** Pass 83; the **Absolute consolidation + THE SEPARATION THEOREM** Pass 84; the **L3 opening inventory** (design: Mathlib cohomology real but Ĥ/cup/inf-res absent; route = Neukirch abstract CFT; staged ladder L3.0–L3.4 written) Pass 85; **next: L3.0 the `K^ab` interface / Hasse–Arf**)   ·   DEBT: medium-high   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration
@@ -805,15 +805,53 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
 - Discharge: `DEBT` to be discharged, or `FOUNDATIONAL` if scoped out. Classical (Serre, *Local
   Fields*) — formalizable but a real body of work. Citation: J.-P. Serre, *Local Fields*, ch. IV.
 
-### L3 — Local class field theory   ·   **NOT-STARTED**   ·   DEBT: high
+### L3 — Local class field theory   ·   **STAGED (inventory Pass 85)**   ·   DEBT: high at L3.3, low below
 
-**ABSENT** from Mathlib. The local reciprocity map `K^× → Gal^ab(K)`, the norm-residue isomorphism,
-and the local existence theorem. Notably this *already exists outside Mathlib* in
-`github.com/mariainesdff/LocalClassFieldTheory` (María Inés de Frutos-Fernández — the author of
-Mathlib's `AbsoluteGaloisGroup.lean`), referenced from `Mathlib/RingTheory/Valuation/Discrete/Basic.lean`.
-- Depends on: L1, L2, Galois cohomology (partial in Mathlib — to inventory).
-- Discharge: strong candidate for `FOUNDATIONAL` (import/port the external development) **or**
-  `DEBT`. Either is legitimate — it is below the targets. Citation: Serre, *Local Fields*, part 2.
+**The Pass-85 inventory** (Mathlib pin of July 2026). PRESENT: group cohomology
+(`RepresentationTheory/Homological/GroupCohomology/`) with explicit `H⁰/H¹/H²`
+(`LowDegree`), the long exact sequence, functoriality, Shapiro's lemma, **Hilbert 90**
+(`Hilbert90.lean`, multiplicative cocycle + cyclic norm-one forms), and **finite-cyclic
+periodicity** (`FiniteCyclic.lean`, `groupCohomologyIsoEven/Odd` — the Herbrand-quotient
+substrate); group HOMOLOGY in parallel; continuous (profinite) cohomology nascent
+(`Continuous/Basic.lean`); Brauer group = CSA definitions only (`BrauerGroup/Defs.lean`);
+formal groups = 1-dim laws, `𝔾ₐ/𝔾ₘ`, base change only (`FormalGroup/Basic.lean`).
+ABSENT: Tate cohomology `Ĥ`, inflation–restriction, cup products, `Br(L/K) ≃ H²`, the
+invariant map, class formations, Lubin–Tate series/torsion, norm groups, the existence
+theorem, any `K^ab` object, local or global CFT proper. External Lean developments exist
+(`mariainesdff/LocalClassFieldTheory`; the FLT project's CFT work) but nothing is in this
+pin beyond the pieces above — porting would be a `FOUNDATIONAL`-vs-`DEBT` decision taken
+only at the L3.3 gate, not before.
+
+**The staged ladder** (statuses to be maintained here):
+- **L3.0 — the `K^ab` interface**   ·   NOT-STARTED, unblocked, 1–3 passes. `K^ab` as the
+  fixed field of the closure of the commutator subgroup of `Gal(K^sep/K)` (the P84-era
+  infinite Galois correspondence machinery); `Gal(K^ab/K)` topologically abelian;
+  **`G^v(K^ab/K)` is ALREADY EXPRESSIBLE** (P82's `absoluteUpperRamificationGroup K E v`
+  at `E := K^ab` — the generality was designed for this).
+- **L3.1 — the cyclic/Herbrand-quotient layer**   ·   NOT-STARTED, unblocked, multi-pass.
+  Herbrand-quotient calculus on Mathlib's `FiniteCyclic` periodicity; Hilbert-90 forms;
+  the unit-filtration cohomology (`U⁰ ⊇ U¹ ⊇ …` pieces via the residue characters of
+  P24–27 — the project's own machinery feeds this directly).
+- **L3.2 — unramified cohomology + the invariant map's unramified part**   ·
+  NOT-STARTED, medium (completeness/limit arguments — the P38–43 strengths). The
+  valuation SES `1 → U → L^× → ℤ → 0`; `H^i(unr, U)` trivial; `H²(unr/K) ≃ (1/n)ℤ/ℤ`.
+- **L3.3 — RECIPROCITY (the wall)**   ·   NOT-STARTED, the L3 gate. **Route decision
+  (Pass 85): Neukirch-style abstract CFT** — the class-formation/Frobenius-lift
+  axiomatization whose inputs are exactly L3.1+L3.2 (cyclic-level cohomology, which
+  Mathlib largely has) rather than Tate's theorem (needs `Ĥ` + cup products — absent,
+  large) or Lubin–Tate (needs formal-group arithmetic from `Basic.lean`-zero — large,
+  though it may return for the existence theorem). Decision to be REVISITED at this gate
+  with the L3.1/L3.2 experience; porting the external LCFT development remains the
+  fallback (`FOUNDATIONAL` boundary, honestly labeled) if the wall exceeds the project's
+  horizon.
+- **L3.4 — the ramification correspondence** `θ(U^n) = G^n(K^ab/K)` (Serre XV §2)   ·
+  NOT-STARTED, after L3.3. **The R1-relevant piece**: what makes the unit filtration —
+  hence the valuation, hence eventually the field — visible in `Gal(K^ab/K)` with its
+  `G^v`-filtration (which L2 finished building). The project's Herbrand machinery
+  (P44–49, P72's integrality) feeds the conductor computations directly.
+- Depends on: L1 (done), L2 (done), the ladder above in order.
+- Citation: Serre, *Local Fields*, part 2 (chs. XI–XV); Neukirch, *Class Field Theory —
+  the Bonn lectures*; Milne, *CFT*.
 
 ### L4 — Global tools: Chebotarev, global reciprocity, Frobenius   ·   **NOT-STARTED**   ·   DEBT: high
 

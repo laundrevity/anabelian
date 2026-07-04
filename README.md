@@ -23,7 +23,7 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 84 (2026-07-04)
+## Current state — Pass 85 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
 Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 84 project files, ~8500 build jobs, warning-free).
@@ -150,10 +150,15 @@ preimage-intersection over the finite Galois subextensions, with the five-brick 
 recorded in `ROADMAP.md`; Passes 80–82 laid B1–B3: the full-group form, the profinite
 plumbing with Herbrand along the transitions, and now **the absolute `G^v` itself** —
 defined, closed in the Krull topology, compatible-from-above with every finite level.
-Pass 83 closed B5 — and with it the L2 stratum — and Pass 84 consolidated it: the
-filtration of `Gal(K^sep/K)` is defined, closed, an inverse limit, antitone, normalized,
-and **separating** (`⨅_v G^v = ⊥`). Next arcs: the L3 opening inventory (local class
-field theory), or Hasse–Arf. L3 remains NOT-STARTED and consumes this interface.
+Pass 83 closed B5 — and with it the L2 stratum — Pass 84 consolidated it (the filtration
+of `Gal(K^sep/K)`: defined, closed, an inverse limit, antitone, normalized, separating),
+and Pass 85 opened L3 with the design inventory: Mathlib's group cohomology is real
+(H⁰/H¹/H², LES, Shapiro, Hilbert 90, finite-cyclic periodicity) but Tate cohomology, cup
+products, Brauer-H², Lubin–Tate, and any `K^ab` object are absent; the route decision is
+**Neukirch-style abstract CFT**, and `ROADMAP.md`'s L3 section is now a five-stage ladder
+(L3.0 `K^ab` interface → L3.1 cyclic layer → L3.2 unramified cohomology → L3.3
+reciprocity, the wall → L3.4 the ramification correspondence, the R1-relevant piece).
+Next: L3.0, or Hasse–Arf.
 
 ## Build
 
