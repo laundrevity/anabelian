@@ -3,6 +3,7 @@ import Anabelian.Absolute.Main
 import Anabelian.Absolute.Surjectivity
 import Anabelian.Absolute.Tower
 import Anabelian.Absolute.UpperNumbering
+import Anabelian.ClassField.HerbrandQuotient
 import Anabelian.ClassField.MaximalAbelian
 import Anabelian.Extension.InertiaCharpoly
 import Anabelian.Extension.InertiaFixedIntegers

@@ -3535,3 +3535,32 @@ strictly below R1; the reciprocity map (L3.3) NOT claimed. No new `structure`/`c
 owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 86 passes.
+
+### Pass 87 (2026-07-04) — L3.1 opens: the Herbrand quotient; count stays 0 / 0
+
+**No axiom added, none needed.** The cyclic layer's bookkeeping device — verified NOT in
+Mathlib — built abstractly. `Anabelian/ClassField/HerbrandQuotient.lean`, 6 declarations,
+all standard-axioms-only.
+
+```
+'Anabelian.range_le_ker'                                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandH'                                       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandQuotient'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_ker_eq_card_herbrandH_mul'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.card_eq_card_ker_mul_card_range'                 depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandQuotient_eq_one_of_finite'               depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- The two-endomorphism form (Serre VIII §4): `herbrandH f g = ker f ⧸ im g` on a
+  `CommGroup` with `f∘g = g∘f = 1`; `herbrandQuotient : ℚ`; for a cyclic action
+  (`f = N`, `g = σ/1`) these are `Ĥ⁰ = H²` and `Ĥ¹ = H¹` — matching Mathlib's
+  `FiniteCyclic` periodicity isos (that bridge: a later brick).
+- **The triviality theorem**: finite `M` ⟹ `q(M) = 1` — `|ker f|·|im f| = |M| =
+  |ker g|·|im g|` by the P74 Lagrange/first-isomorphism idiom; the exact-sequence calculus
+  will use it to discard finite error terms.
+
+**Not the cardinal sin / rule-2.** Abstract bookkeeping strictly below the reciprocity
+wall; no CFT claimed. `herbrandH` is a plain quotient `def`; the pair hypotheses appear
+only in theorems that visibly use them; no sharpness claimed, no witness owed; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 87 passes.

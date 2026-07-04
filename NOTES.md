@@ -6094,3 +6094,38 @@ stipulated); no new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 unt
 Next (Pass 87): L3.1 — the cyclic/Herbrand-quotient layer: inventory Mathlib's
 `FiniteCyclic`/`Rep` framework, then ONE brick (the Herbrand quotient def + finite-module
 triviality, or the `Rep`-bridge for `Lˣ`). See HANDOFF.
+
+### Pass 87 (2026-07-04) — L3.1 opens: the Herbrand quotient
+
+**Mathematics; ledger delta 0 / 0.** The abstract two-endomorphism Herbrand quotient +
+the finite-module triviality theorem — the cyclic layer's central device, absent from
+Mathlib (verified). `Anabelian/ClassField/HerbrandQuotient.lean`, 6 declarations.
+
+## Design
+
+- **Two-endo form over `Rep`-category form**: `f g : M →* M` on a `CommGroup` with
+  `f∘g = g∘f = 1` (Serre's `q_{f,g}`), multiplicative carrier (the consumers are `Lˣ`,
+  `U^i`). No category theory; the bridge to Mathlib's
+  `Rep.FiniteCyclicGroup.groupCohomologyIsoEven/Odd` (where `herbrandH (N) (σ/1) = Ĥ⁰ =
+  H²`, swapped `= Ĥ¹ = H¹`) is deferred to the Hilbert-90-packaging brick.
+- `herbrandQuotient : ℚ` with the `Nat.card = 0` convention on infinite carriers —
+  harmless, theorems carry their own finiteness.
+- **Triviality** (`q = 1` for finite `M`): the P74 idiom re-run — Lagrange
+  (`card_eq_card_quotient_mul_card_subgroup`), first isomorphism
+  (`quotientKerEquivRange`), `subgroupOfEquivOfLe` for `|im g|-inside-|ker f|`; the
+  four-rewrite chain `← h1, ← h3, ← h2, ← h4` collapses both sides of the triple product
+  to `|M|`; `ring_nf`-then-`exact` matches ℕ-product orders; `Nat.eq_of_mul_eq_mul_right`
+  cancels.
+
+## Build + headline
+
+`lake build` green (2.9 s); preflight CLEAN. **HEADLINE: the Herbrand quotient — the
+device that runs the cyclic layer of class field theory — defined with its triviality
+theorem, axiom-free; the `q`-calculus (SES multiplicativity) is next.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** Plain defs + theorems; pair hypotheses used visibly; no witness owed; D1/D2
+N/A. R1–R3 untouched. Next (Pass 88): `q`-multiplicativity — recommended first sub-brick:
+the 6-cycle alternating-card lemma (`|A₀||A₂||A₄| = |A₁||A₃||A₅|` for a periodic exact
+sequence of finite groups), pure group theory, reusable. See HANDOFF.

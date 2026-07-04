@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 86, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 87, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-86 entry), `ROADMAP.md`
-(status header says Pass 86), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-87 entry), `ROADMAP.md`
+(status header says Pass 87), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,29 +61,25 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 87: L3.1 — the cyclic/Herbrand-quotient layer (design first)
+## YOUR FIRST TASK — Pass 88: `q`-multiplicativity in short exact sequences
 
-**Target (multi-pass layer; scope ONE brick after inventory)**: the Herbrand-quotient
-calculus that Neukirch-route CFT consumes. Inventory FIRST (a probe file of `#check`s):
-1. **Mathlib's `FiniteCyclic`**: `groupCohomologyIsoEven/Odd` — exact statements, the
-   `Rep k G` framework they live in (category `Rep ℤ G`? `ModuleCat`? what is the
-   coefficient set-up), and what "H⁰/H_0-periodicity" gives concretely for a finite
-   cyclic `G` acting on an abelian group `M` (`Rep ℤ G` from a `[MulSemiringAction]`? a
-   `DistribMulAction`? — the BRIDGE from the project's concrete modules (`Lˣ`, `U_L`,
-   `𝒪_L^+`) into `Rep` is likely the real first brick).
-2. **The Herbrand quotient**: `q(M) = |Ĥ⁰|/|Ĥ¹|`-style. Mathlib has NO Tate cohomology —
-   for CYCLIC groups define `q` directly from H⁰/H¹ (or the even/odd isos):
-   `herbrandQuotient (M) := Nat.card (H^0-ish) / Nat.card (H^1-ish)` as `ℚ`? Design the
-   carrier (ℚ-valued? a pair? only-when-finite?). Key lemmas downstream: multiplicativity
-   in short exact sequences (needs the LES — Mathlib HAS `LongExactSequence`), triviality
-   for finite modules, invariance under quasi-iso. THE classical trio (Neukirch I §7 /
-   Serre VIII §4).
-3. **Hilbert 90 forms**: what `Hilbert90.lean` states exactly
-   (`isMulCoboundary₁_of_isMulCocycle₁_of_aut_to_units`, `exists_div_of_norm_eq_one`) and
-   what remains to package `H¹(Gal(L/K), Lˣ) = 1` in the `Rep` framework.
-Scope Pass 87: the inventory + ONE brick (suggest: the Herbrand-quotient definition + its
-finite-module triviality, OR the `Rep`-bridge for `Lˣ`). Clean partial > half-discharge.
-(Fallback arc: Hasse–Arf.)
+**Target** (Serre VIII §4 Prop. 10 / Neukirch IV 7.3): for a SES of `CommGroup`s
+`1 → M' → M → M'' → 1` equivariant for the pair structure (i.e. `f/g` restrict to `M'`
+and descend to `M''`), `q(M) = q(M')·q(M'')` whenever two of the three are defined
+(all-finite-carriers hypothesis is the clean first version: assume the six `herbrandH`s
+finite). DESIGN OPTIONS:
+- **(a) The direct snake count** (Serre's own): build the six-term exact sequence
+  `Ĥ⁰(M') → Ĥ⁰(M) → Ĥ⁰(M'') → Ĥ¹(M') → Ĥ¹(M) → Ĥ¹(M'') → (loop)` BY HAND at the
+  `herbrandH` level (six connecting maps + exactness at six spots + the alternating-card
+  identity for exact cycles). Heavy but elementary; the alternating-product-over-an-exact-
+  cycle counting lemma (`|A₀||A₂||A₄| = |A₁||A₃||A₅|` for a 6-periodic exact sequence of
+  finite groups) is a good standalone sub-brick (pure group theory, reusable).
+- **(b) Via Mathlib's LES** in `Rep k G` — needs the `Rep`-bridge FIRST (concrete
+  `CommGroup`-with-pair → `Rep ℤ (ZMod n)`-ish object), then the six-term sequence from
+  `LongExactSequence` + the periodicity isos. More machinery, more reuse later.
+Recommended: (a)'s counting sub-brick first (the 6-cycle alternating-card lemma), then
+decide. ALSO queue: the `Rep`-bridge (needed eventually for Hilbert-90 packaging
+regardless). Clean partial > half-discharge. (Fallback arc: Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -110,7 +106,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 87
+## The queue after Pass 88
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

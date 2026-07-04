@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 86 (2026-07-04)
+## Current state — Pass 87 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 85 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 86 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -161,8 +161,11 @@ reciprocity, the wall → L3.4 the ramification correspondence, the R1-relevant 
 Pass 86 laid L3.0: **`K^ab` exists**
 (`Anabelian/ClassField/MaximalAbelian.lean`) — the fixed field of the closed commutator
 subgroup, Galois over `K`, with `Gal(K^ab/K)` the topological abelianization (abelian,
-proved), maximality as a theorem, and `G^v(K^ab/K)` live via the Pass-82 interface. Next:
-L3.1 (the cyclic/Herbrand-quotient layer), or Hasse–Arf.
+proved), maximality as a theorem, and `G^v(K^ab/K)` live via the Pass-82 interface. Pass 87 opened L3.1 with **the
+Herbrand quotient** (`Anabelian/ClassField/HerbrandQuotient.lean`, not previously in
+Mathlib): the abstract two-endomorphism form with the finite-module triviality theorem
+`q(M) = 1` — the bookkeeping device of the cyclic layer. Next: `q`-multiplicativity in
+short exact sequences, or Hasse–Arf.
 
 ## Build
 
