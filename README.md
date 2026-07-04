@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 76 (2026-07-04)
+## Current state — Pass 77 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 77 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 78 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -97,9 +97,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   multiplicativity** — `|G_u| = |(G/H)_{⌈φ_{L/K'}(u)⌉}| · |H_u|`, Prop. 15's arithmetic
   heart, with `e_{L/K} = e_{K'/K}·e_{L/K'}` at `u = 0` (Pass 74); the **alignment
   lemma** — the quotient filtration is constant on integer indices in
-  `(φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]` (Pass 75); and **PROP. 15, proved: `φ`-transitivity** —
+  `(φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]` (Pass 75); **PROP. 15, proved: `φ`-transitivity** —
   `φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))` for every real `u`, by right-derivative gluing
-  (Pass 76).
+  (Pass 76); and **HERBRAND'S THEOREM, proved** — `(G^v).map (decompositionQuotient) =
+  (G/H)^v` for every real `v`: the upper numbering is compatible with quotients (Serre IV
+  §3 Prop. 14) (Pass 77).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -124,11 +126,13 @@ objects are identified with the ideal-theoretic ones — Pass 68 did the `e'` ha
 (`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`), Pass 69 the `IsGaloisGroup` gateway, Pass 70
 the inertia matching plus every remaining instance, Pass 71 closed `e' = |H₀|`, Pass 72
 assembled the numerical Lemma 5, and **Pass 73 proved Lemma 5 itself**:
-`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. Passes 74–76 then took Prop. 15
-(`φ`-transitivity): the card multiplicativity (74), the alignment lemma (75), and the
-right-derivative gluing closing **`φ_{L/K} = φ_{K'/K} ∘ φ_{L/K'}`** on all of ℝ (76). What
-remains on this arc: **Herbrand's theorem** `(G/H)^v = G^v H/H` (Prop. 14) — Lemma 5 read
-through Pass 45's upper numbering, bridged by the `ψ`-composition corollary of Prop. 15.
+`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. Passes 74–76 took Prop. 15
+(`φ`-transitivity), and **Pass 77 closed the arc with HERBRAND'S THEOREM**:
+`(G^v).map (decompositionQuotient) = (G/H)^v` — the upper numbering is
+quotient-compatible. This is the property that lets ramification data glue across the
+infinite tower toward `Gal(K̄/K)` — the gateway to the L3 stratum (upper numbering on the
+absolute Galois group, Hasse–Arf, and onward toward local class field theory's
+ramification correspondence).
 
 ## Build
 

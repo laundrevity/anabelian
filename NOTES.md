@@ -5679,3 +5679,45 @@ Herbrand's theorem (Prop. 14) is one pass wide: Lemma 5 + upper numbering + the
 Next (Pass 77): HERBRAND'S THEOREM — `(G/H)^v = G^v H/H`: read
 `Herbrand/UpperNumbering.lean` first; bricks (a) `herbrandPsi_comp`, (b) the
 Lipschitz-1/ceil-collapse lemma, (c) assembly — see HANDOFF.
+
+### Pass 77 (2026-07-04) — HERBRAND'S THEOREM (the quotient arc closes)
+
+**Mathematics; ledger delta 0 / 0 — THE MILESTONE OF THE ARC.** Serre IV §3 Prop. 14:
+`(G^v).map (decompositionQuotient) = (G/H)^v` for every real `v` — **the upper numbering
+is compatible with quotients**, the theorem the entire P50–77 arc was aimed at, and the
+property that makes `G^v` glue across the infinite tower toward `Gal(K̄/K)`.
+`Anabelian/Herbrand/HerbrandTheorem.lean`, 3 declarations, standard-axioms-only.
+
+## The proof (three bricks, two probe rounds)
+
+- `herbrandPhi_herbrandPsi_eq`: `φ_{L/K'}(ψ_{L/K}(v)) = ψ_{K'/K}(v)` — P76 at `ψ_{L/K}(v)`
+  (whose LHS collapses by `herbrandPhi_psi`), then `congrArg ψ_{K'/K}` + `herbrandPsi_phi`.
+- `ramificationGroup_comap_ceil_collapse`: `(G/H)_{⌈φ(⌈x⌉)⌉} = (G/H)_{⌈φ(x)⌉}`. THE key
+  observation: this is FALSE as an integer identity (`⌈φ(⌈x⌉)⌉` can exceed `⌈φ(x)⌉`) but
+  TRUE as a group equality — for non-integral `x > 0`, both indices lie in the alignment
+  window `(φ(⌊x⌋), ⌈φ(⌊x⌋+1)⌉]` (lower end: `⌈φ(x)⌉ ≥ φ(x) > φ(⌊x⌋)` by strict
+  monotonicity; upper end: ceil-monotone), so P75 collapses both to `⌈φ(⌊x⌋+1)⌉`. The
+  HANDOFF's Lipschitz-1 sketch was never needed. `x ≤ 0` and `x ∈ ℕ` are trivial cases.
+- `map_upperRamificationGroup_eq`: `unfold upperRamificationGroup`, P73 at
+  `u = ⌈ψ_{L/K}(v)⌉`, `rw [← ψ-composition]`, `exact` the collapse.
+
+## The quotient arc, in full (P50–77)
+
+Prop. 2 restriction (P46) → quotient objects + Prop. 3 (P50–63) → profile/count/bridge
+(P65–67) → `e' = |H₀|` (P68–71) → numerical Lemma 5 (P72) → set Lemma 5 (P73) → card
+multiplicativity (P74) → alignment (P75) → Prop. 15 (P76) → **Herbrand (P77)**.
+Twenty-eight passes, ZERO axioms end to end, every wall felled by an earlier design
+dividend rather than a stub. This is the calibration standard for the next arc.
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: HERBRAND'S THEOREM — the
+compatibility of the upper ramification numbering with quotients, Serre IV §3 Prop. 14 —
+PROVED in Lean 4, axiom-free, for every finite tower over a nonarchimedean local field.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 78): choose the next arc — consolidation (recommended first), then the L3
+gateway design (upper numbering on `Gal(K̄/K)` via inverse limit), or Hasse–Arf. See
+HANDOFF.

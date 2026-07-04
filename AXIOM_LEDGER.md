@@ -3239,3 +3239,36 @@ standard-axioms-only.
 Prop. 14 (Herbrand) NOT claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 76 passes.
+
+### Pass 77 (2026-07-04) — HERBRAND'S THEOREM, PROVED; count stays 0 / 0
+
+**No axiom added, none needed — Serre IV §3 Proposition 14 is a theorem.**
+
+> for EVERY `v : ℝ`: **`(G^v).map (decompositionQuotient) = (G/H)^v`**
+> — the upper numbering is compatible with quotients.
+
+(`Anabelian/Herbrand/HerbrandTheorem.lean`, `map_upperRamificationGroup_eq`; with
+`herbrandPhi_herbrandPsi_eq` and `ramificationGroup_comap_ceil_collapse`.)
+3 declarations, all standard-axioms-only.
+
+```
+'Anabelian.herbrandPhi_herbrandPsi_eq'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ramificationGroup_comap_ceil_collapse'           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_upperRamificationGroup_eq'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **The ψ-composition** `φ_{L/K'}(ψ_{L/K}(v)) = ψ_{K'/K}(v)`: Prop. 15 (P76) at
+  `ψ_{L/K}(v)`, inverted through `ψ_{K'/K}` (P45's inverse identities).
+- **The ceil-collapse** `(G/H)_{⌈φ(⌈x⌉)⌉} = (G/H)_{⌈φ(x)⌉}`: NOT an integer identity (the
+  indices can differ) — a group equality: for non-integral `x` both indices land in P75's
+  alignment window `(φ(⌊x⌋), ⌈φ(⌊x⌋+1)⌉]` where the quotient filtration is constant. The
+  HANDOFF's anticipated Lipschitz-1 route was unnecessary — the alignment lemma was
+  already the right tool.
+- **The assembly**: unfold `G^v = G_{⌈ψ(v)⌉}` (P45), Lemma 5 at `u = ⌈ψ_{L/K}(v)⌉` (P73),
+  rewrite by the ψ-composition, close by the ceil-collapse.
+
+**Not the cardinal sin / rule-2.** Quotient-compatibility for a given tower — strictly
+below R1. The L3 upgrades (upper numbering on `Gal(K̄/K)`, Hasse–Arf) NOT claimed. No new
+`structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 77 passes, and the QUOTIENT ARC (P50–77) IS CLOSED.

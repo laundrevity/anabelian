@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 76, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 77, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-76 entry), `ROADMAP.md`
-(status header says Pass 76), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-77 entry), `ROADMAP.md`
+(status header says Pass 77), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,36 +61,29 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 77: HERBRAND'S THEOREM (Prop. 14)
+## YOUR FIRST TASK — Pass 78: choose the next arc
 
-**Target**: `(G/H)^v = G^v H/H` — in project terms (P45's upper numbering
-`upperRamificationGroup K A v = ramificationGroup K A ⌈herbrandPsi K A v⌉₊`-style — READ
-`Anabelian/Herbrand/UpperNumbering.lean` FIRST for the exact def and conventions):
-
-> `(upperRamificationGroup K (𝒪_L) v).map (decompositionQuotient K K' (𝒪_L))
->    = upperRamificationGroup K B v`
-
-**Route**: LHS `= (G_{⌈ψ_{L/K}(v)⌉}).map dq = B-filtration at ⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉`
-(P73 Lemma 5 at `u := ⌈ψ_{L/K}(v)⌉`). RHS `= B-filtration at ⌈ψ_{K'/K}(v)⌉`. So Herbrand
-reduces to the **index compatibility**
-
-> `⌈φ_{L/K'}(⌈ψ_{L/K}(v)⌉)⌉ = ⌈ψ_{K'/K}(v)⌉` for `v ≥ 0`  (*)
-
-Given Prop. 15 (P76) and `ψ = φ⁻¹` (P45/P49's inverse identities): `ψ_{L/K} =
-ψ_{L/K'} ∘ ψ_{K'/K}` (compose Prop. 15 with the inverses — may be worth proving as a named
-corollary `herbrandPsi_comp` first). Then (*) reads
-`⌈φ_{L/K'}(⌈ψ_{L/K'}(w)⌉)⌉ = ⌈w⌉` for `w := ψ_{K'/K}(v)` — an instance of the general
-**ceil-φ-ψ collapse** `⌈φ(⌈ψ(w)⌉)⌉ = ⌈w⌉` for a SINGLE extension: this needs
-`φ(⌈ψ(w)⌉) ∈ [w-something…]`… more precisely `w ≤ φ(⌈ψ(w)⌉) < ⌊w⌋+1`-ish: from
-`φ(ψ(w)) = w` (inverse identity), `φ` monotone, and the ALIGNMENT-flavored fact that `φ` of
-the ceil doesn't cross the next integer: `φ(⌈ψ(w)⌉) < ⌊w⌋ + 1` ⟸ slopes of `φ` are ≤ 1
-(`φ(⌈ψ(w)⌉) ≤ φ(ψ(w)) + (⌈ψ(w)⌉ − ψ(w))·slope ≤ w + 1·(…< 1)`) — need a `φ`-Lipschitz-1
-lemma (`herbrandPhi` has slopes `|G_{n+1}|/|G_0| ≤ 1` — antitone cards!). CHECK P45: the
-upper-numbering def may already have `⌈·⌉`-collapse lemmas of this shape (it defined
-`(G/H)^v` compatibly!). Bricks: (a) `herbrandPsi_comp` from P76 + inverse identities;
-(b) the Lipschitz-1 / ceil-collapse lemma (single extension, generic `(K, A)`);
-(c) assembly. Scope (a)+(b) or (b)+(c) per session budget; clean partial >
-half-discharge.
+The quotient arc (P50–77: Prop. 2 → Prop. 3 → Lemma 5 → Prop. 15 → **Herbrand's
+theorem**) is closed. Candidates, in rough dependency order — inventory before choosing:
+- **(A) The L3 gateway: upper numbering on `Gal(K̄/K)`** — Herbrand-compatibility is
+  exactly the well-definedness of `G^v` on the inverse limit. Sub-bricks: the tower-of-two
+  compatibility is P77; what's needed is the FUNCTORIAL form (for a K-embedding-indexed
+  system of finite Galois subextensions, the `G^v`s form a compatible system). Check what
+  Mathlib has for `Gal(K̄/K)` as a profinite limit of finite quotients
+  (`InfiniteGalois...`, `Field.absoluteGaloisGroup`, the fundamental theorem files) — the
+  design decision (which inverse-limit presentation to attach `G^v` to) deserves its own
+  pass.
+- **(B) Hasse–Arf** (jumps of `φ_{L/K}` at integers for ABELIAN `L/K`): hard classical
+  analysis-free number theory; multi-pass; needs the `G_u`-jump structure + abelian input.
+  Serre IV §3 + V. Far side: the ramification correspondence of local CFT.
+- **(C) Consolidation/generalization pass**: the P50–77 arc is stated for
+  `B = 𝒪_L ∩ K'` via `comap` — restate Herbrand cleanly in terms of
+  `extensionIntegers K K'` (P57's iso transports the filtration — check whether
+  `ramificationGroup K B ≃ ramificationGroup K (extensionIntegers K K')` needs work), and
+  export the arc's headline theorems into a single `Anabelian/Herbrand/Main.lean`-style
+  summary file with the full statement chain documented.
+Recommended: (C) first (one pass, makes the arc citable and the B-vs-𝒪_{K'} wart
+explicit), then the (A) design pass. Clean partial > half-discharge.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -117,7 +110,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 77
+## The queue after Pass 78
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
