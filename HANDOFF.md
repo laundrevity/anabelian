@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 90, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 91, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-90 entry), `ROADMAP.md`
-(status header says Pass 90), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-91 entry), `ROADMAP.md`
+(status header says Pass 91), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,29 +61,26 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 91: the concrete `q`-computations begin
+## YOUR FIRST TASK — Pass 92: `q(ℤ) = n` (the trivial-action computation)
 
-The calculus is operational (P87 triviality + P90 multiplicativity). The cyclic layer's
-concrete targets, in dependency order — inventory then ONE brick:
-1. **The pair for a cyclic action**: fix a finite cyclic `G = ⟨σ⟩` of order `n` acting on
-   a `CommGroup` `A` (via `MulDistribMulAction`? — check what the project/Mathlib gives
-   for `Gal` acting on `Lˣ`: `MulSemiringAction` on `L` restricts to units —
-   `Units.instMulDistribMulAction`?). Define the pair: `normMap : A →* A :=
-   ∏_{i<n} σⁱ•·` and `diffMap : A →* A := (σ•·)·(·)⁻¹` (CommGroup makes both homs);
-   verify `norm∘diff = diff∘norm = 1` (telescoping). THIS instantiates `herbrandQuotient`
-   for Galois modules: `q(G, A) := herbrandQuotient (normMap) (diffMap)`.
-2. **`q` of the trivial-action module `ℤ`** (multiplicative: a `Multiplicative ℤ`-carrier
-   or state for `zpowers`-free additive transport?): `q(G, ℤ_triv) = ... ` — classical
-   `q = |G|` after the right normalization (`Ĥ⁰ = ℤ/nℤ`, `Ĥ¹ = 0` for trivial action on
-   `ℤ`: norm = ·n, diff = 0 — careful with which pair-order convention). A clean small
-   brick.
-3. **`q(Lˣ) = [L:K]`-track**: the valuation SES `1 → 𝒪ˣ → Lˣ →v ℤ → 0` (project has the
-   valuation; the SES needs the surjectivity = uniformizer) + `herbrandQuotient_mul` +
-   `q(𝒪ˣ) = 1`-track (unit filtration: `U⁰/U¹ ≅ 𝓀ˣ`, `Uⁱ/Uⁱ⁺¹ ≅ 𝓀⁺` — P24–27's residue
-   characters ARE these isos; finite ⟹ q-trivial; the limit argument for the full `U⁰`
-   needs compactness/completeness — the REAL work of this track).
-Scope Pass 91: brick 1 (the Galois-module pair + `q(G,A)` + the complex conditions) —
-foundational and self-contained. Clean partial > half-discharge. (Fallback: Hasse–Arf.)
+**Target**: for the trivial action (`σ = 1`) of "order `n`" (`1^n = 1` trivially) on the
+infinite cyclic group — carrier `Multiplicative ℤ` — prove
+`cyclicHerbrandQuotient (1 : MulAut (Multiplicative ℤ)) n = n` for `n ≥ 1`. Unpack:
+`cyclicNorm 1 n = (·^n)` (`∏_{i<n} x = x^n` — `Finset.prod_const` + `card_range`);
+`cyclicDiff 1 = 1` (trivial hom). So `Ĥ⁰ = ker(1)/im(pow n) = ⊤/(powers of n)` — card
+`n` — and `Ĥ¹ = ker(pow n)/im(1) = ⊥/⊥` — card 1 (`Multiplicative ℤ` torsion-free:
+`x^n = 1 ⟹ x = 1` for `n ≠ 0` — `Int` `nsmul` injectivity). Card plumbing: `herbrandH`
+carriers are `ker ⧸ subgroupOf`; for the Ĥ⁰ side build an explicit equiv to
+`Multiplicative (ZMod n)`-ish or compute via `Subgroup.index`-machinery
+(`Nat.card (G ⧸ H) = H.index` ✓, and the index of `(pow n).range`-inside-⊤… mind the
+`subgroupOf ⊤` layer — `Subgroup.topEquiv`-transport first, or better: the ker of the
+trivial hom is ⊤ but as a SUBGROUP — the quotient is `⊤ ⧸ (range).subgroupOf ⊤`; use
+`Subgroup.subgroupOf` + an iso to `Multiplicative ℤ ⧸ range(pow n)`; then
+`Int.card_quotient_zmultiples`-flavored card = n — INVENTORY the exact Mathlib name:
+`Int.index_zmultiples`? `AddSubgroup.card_quotient_zmultiples`?). Scope: this one
+computation, done cleanly. After it: the `q(Lˣ)` track (the real prize — multi-pass:
+valuation SES, `q(𝒪ˣ) = 1` via unit filtration + P24–27 + compactness). (Fallback:
+Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -110,7 +107,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 91
+## The queue after Pass 92
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

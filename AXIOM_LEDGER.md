@@ -3647,3 +3647,31 @@ field theory claimed (L3.3 untouched). No new `structure`/`class`; no owed witne
 D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 90 passes.
+
+### Pass 91 (2026-07-04) — the cyclic pair: q(σ, A) for Galois modules; count stays 0 / 0
+
+**No axiom added, none needed.** The instantiation layer: the Herbrand-quotient calculus
+now speaks Galois modules. `Anabelian/ClassField/CyclicPair.lean`, 6 declarations, all
+standard-axioms-only (`cyclicDiff` needs only `propext, Quot.sound`).
+
+```
+'Anabelian.cyclicNorm'                                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicDiff'                                      depends on axioms: [propext, Quot.sound]
+'Anabelian.sigma_cyclicNorm'                                depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicDiff_cyclicNorm'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicNorm_cyclicDiff'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicHerbrandQuotient'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `cyclicNorm σ n` (`∏_{i<n} σⁱ` — the field norm on units when `σ` generates
+  `Gal(L/K)`), `cyclicDiff σ` (`σ(x)·x⁻¹`), the complex conditions (`D∘N = 1` via the
+  index-shift lemma `sigma_cyclicNorm`; `N∘D = 1` by telescoping), and
+  **`cyclicHerbrandQuotient σ n := herbrandQuotient (cyclicDiff σ) (cyclicNorm σ n)`** —
+  the `(diff, norm)` order pinned as THE convention (`Ĥ⁰ = A^σ/N(A)`). Sanity: `q = 1`
+  at the trivial order-1 action, computed.
+
+**Not the cardinal sin / rule-2.** Instantiation below the reciprocity wall; no CFT
+claimed. The `σ^n = 1` hypothesis is used visibly in both complex-condition proofs; no
+sharpness claimed, no witness owed. No new `structure`/`class`; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 91 passes.

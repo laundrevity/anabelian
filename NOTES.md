@@ -6242,3 +6242,37 @@ is open.**
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 91): the Galois-module pair (norm, σ/1) for a finite cyclic action ⟹
 `q(G, A)` instantiated; then `q(ℤ) = |G|`, then the `q(Lˣ)` track. See HANDOFF.
+
+### Pass 91 (2026-07-04) — the cyclic pair (q now speaks Galois modules)
+
+**Mathematics; ledger delta 0 / 0.** `cyclicNorm`/`cyclicDiff` with the complex
+conditions, and `cyclicHerbrandQuotient σ n` — the convention-pinning instantiation.
+`Anabelian/ClassField/CyclicPair.lean`, 6 declarations + a sanity example.
+
+## Method + convention
+
+- Both maps built directly as `MonoidHom` structures (no hom-monoid instances):
+  `cyclicNorm` multiplicative by `Finset.prod_mul_distrib`; `cyclicDiff` by the
+  `mul_comm/mul_assoc/mul_left_comm` simp set (`group` cannot use commutativity — house
+  catalogue).
+- The index-shift lemma (`σ(N x) = N x`): `map_prod` + `pow_succ'` (MIND THE ORDER:
+  `(σ * σ^i) x = σ(σⁱ x)` needs σ on the LEFT — `pow_succ` gives the wrong side) +
+  `prod_range_succ'`/`prod_range_succ` + `σ^n = σ^0` + `mul_right_cancel`. Telescoping
+  for `N∘D = 1` is the same shift at `σ x` (there `pow_succ` IS the right one).
+- **THE CONVENTION** (pinned once): `cyclicHerbrandQuotient σ n := herbrandQuotient
+  (cyclicDiff σ) (cyclicNorm σ n)` — diff FIRST, so `Ĥ⁰ = ker D/im N = A^σ/N(A)` and
+  `q = |Ĥ⁰|/|Ĥ¹|` matches Serre VIII §4. Every downstream computation reads this file's
+  header.
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: the Herbrand quotient of a
+cyclic Galois action — norm, twisted difference, complex conditions, `q(σ,A)` — is
+defined and armed with the P87/P90 calculus, axiom-free. `q(ℤ) = n` and the
+`q(Lˣ) = [L:K]` track are next.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; hypotheses used visibly; no witness owed; D1/D2
+N/A. R1–R3 untouched. Next (Pass 92): `q(ℤ) = n` — the `Multiplicative ℤ` computation
+(card plumbing inventoried in HANDOFF). See HANDOFF.
