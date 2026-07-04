@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 92 (2026-07-04)
+## Current state — Pass 93 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 91 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 92 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -174,7 +174,10 @@ calculus is operational. Pass 91 instantiated it for Galois modules: the cyclic 
 (norm `∏σⁱ`, twisted difference `σ/1`, complex conditions) and `q(σ, A)` with the
 `(diff, norm)` convention pinned. Pass 92 delivered the fundamental computation
 **`q(ℤ) = n`** (`Ĥ⁰ = ℤ/nℤ`, `Ĥ¹ = 0`, with the generic `|Ĥ⁰| = [A : Aⁿ]` presentation
-machinery). Next: the `q(Lˣ) = [L:K]` track, or Hasse–Arf.
+machinery). Pass 93 opened the `q(Lˣ)` track with the valuation exact sequence
+`1 → Rˣ → Kˣ → ℤ → 1` for any DVR fraction field — the units-valuation hom, its
+surjectivity, and its kernel, all abstract. Next: pair-equivariance + the P90 firing,
+then the `q(𝒪ˣ) = 1` wall; or Hasse–Arf.
 
 ## Build
 

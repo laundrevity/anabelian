@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 92, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 93, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-92 entry), `ROADMAP.md`
-(status header says Pass 92), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-93 entry), `ROADMAP.md`
+(status header says Pass 93), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,31 +61,34 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 93: the `q(Lˣ)` track opens — the valuation SES
+## YOUR FIRST TASK — Pass 94: pair-equivariance + the P90 firing
 
-**Target (first brick of the track)**: the pair-equivariant short exact sequence
-
-> `1 → 𝒪_Lˣ → Lˣ →v Multiplicative ℤ → 1`
-
-for a finite GALOIS `L/K` (cyclic comes later; the SES itself doesn't need cyclic), with
-the `Gal`-action data: (a) the Galois action on `Lˣ` (`MulAut Lˣ` from
-`L ≃ₐ[K] L` — `Units.map σ`-flavored; check `MulSemiringAction.toMulAut`/
-`Units.instMulDistribMulAction` for what's canonical), (b) the VALUATION IS
-GALOIS-INVARIANT — `v(σ x) = v(x)` — this is the project's own P43-era canonicity /
-P23-adjacent uniqueness-of-extension fact (INVENTORY: `addVal`-invariance under
-`decompositionSubgroup`? the filtration machinery used exactly this; find the named
-lemma or derive from `extensionValuativeRel` uniqueness), hence the action descends to
-the TRIVIAL action on the value group `Multiplicative ℤ`; (c) surjectivity of `v` on
-`Lˣ` (uniformizer — P54's monogenic/irreducible machinery has `exists_irreducible`);
-(d) exactness (`ker v = 𝒪ˣ` — unit-valuation-zero). DESIGN: the P89/P90 SES interface
-takes `(ι, π, pairs, intertwinings)` — package the data as: `M' := 𝒪_Lˣ`, `M := Lˣ`,
-`M'' := Multiplicative ℤ`, `π := ` the valuation-as-MonoidHom (`addVal`→`Multiplicative`
-transport), pairs from P91's `cyclicNorm/cyclicDiff` at a generator σ (statement for
-CYCLIC L/K: take `σ : MulAut Lˣ` induced + `hσ : σ^n = 1`); the M''-pair is the TRIVIAL
-action's (P92!). Deliverable: the SES data + intertwinings, so that P90's
-`herbrandQuotient_mul` FIRES: `q(Lˣ) = q(𝒪ˣ) · q(ℤ) = q(𝒪ˣ) · n`. Then the remaining
-wall of the track: `q(𝒪ˣ) = 1` (unit filtration + P24–27 + compactness — multi-pass).
-Clean partial > half-discharge. (Fallback: Hasse–Arf.)
+**Target**: for a DVR `R`, fraction field `K`, and a ring automorphism data `σ` acting —
+STAY ABSTRACT as long as possible: take `σK : MulAut Kˣ` induced by a field automorphism
+`f : K ≃+* K` (or `≃ₐ`) with `hR : ∀ r : R, f (algebraMap R K r) ∈ (algebraMap R K).range`
+(σ preserves R — for the tower this is `D = ⊤`, P52) — then:
+1. **The valuation is σ-invariant**: `dvrUnitsValuation (σK x) = dvrUnitsValuation x`.
+   Route: σ permutes `Rˣ`-cosets... cleanest DERIVATION: `v` is determined by its kernel
+   and surjectivity? NO — use: `v ∘ σK` is also a surjective hom `Kˣ →* Mult ℤ` with the
+   SAME kernel (σ preserves Rˣ), and any two surjective homs to `Multiplicative ℤ` with
+   equal kernels are equal UP TO SIGN (Aut(ℤ) = ±1) — the sign is fixed by a single
+   uniformizer value (`v(σ ϖ) < 0`-flavored: σϖ ∈ 𝔪, so negative like `v ϖ`). OR
+   directly: x = a/b, σ x = σa/σb with σa σb ∈ R (needs σ(R) = R both ways), and
+   `intValuation (σ a) = intValuation a` — σ preserves 𝔪-powers ⟹ preserves the
+   multiplicity count (σ : R ≃+* R restricted; `intValuation` via Associates count —
+   maybe easier: DVR-factorize a = u ϖ^m: σa = σu (σϖ)^m with σu unit, σϖ irreducible
+   ⟹ intVal σa = exp(−m) = intVal a ✓ using P93's en-route irreducible-valuation fact!
+   — CLEANEST, do this).
+2. **The pair-equivariant SES package**: `M' := Rˣ` with the restricted action (σ
+   preserves Rˣ), `M := Kˣ`, `M'' := Multiplicative ℤ` trivial action; intertwinings:
+   `ι` (= `Units.map (algebraMap)`) intertwines by definition of the restricted action;
+   `π` (= `dvrUnitsValuation`) intertwines = invariance (1). Pairs: P91's
+   `cyclicNorm σ• n`/`cyclicDiff σ•` on all three (M''-side: trivial action ⟹ P92's
+   forms).
+3. **Fire P90**: `herbrandQuotient_mul` + P92's `q(ℤ) = n` ⟹
+   **`q(Kˣ) = q(Rˣ) · n`** (with the Ĥ¹-finiteness hypotheses carried).
+Then the wall: `q(Rˣ) = 1` for the tower (unit filtration, P24–27, compactness) — design
+pass first when reached. Clean partial > half-discharge. (Fallback: Hasse–Arf.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -112,7 +115,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 93
+## The queue after Pass 94
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

@@ -6311,3 +6311,38 @@ every `q(Lˣ) = [L:K]` proof reduces to — done axiom-free, with the generic
 Next (Pass 93): the `q(Lˣ)` track opens — the valuation SES as a pair-equivariant
 sequence (Galois-invariance of the valuation from the P43-era canonicity; trivial action
 downstairs = P92's case), so P90 fires: `q(Lˣ) = q(𝒪ˣ)·n`. See HANDOFF.
+
+### Pass 93 (2026-07-04) — the valuation exact sequence (the q(Lˣ) track opens)
+
+**Mathematics; ledger delta 0 / 0.** `1 → Rˣ → Kˣ →v Multiplicative ℤ → 1` for any DVR
+fraction field — the units-valuation hom with surjectivity and kernel, fully abstract
+(nothing tower-specific). `Anabelian/ClassField/UnitsValuation.lean`, 5 declarations.
+
+## Method
+
+- **Design**: rather than build a ℤ-valuation by hand, bundle Mathlib's machinery: the
+  DVR's maximal ideal is a height-one prime (`dvrHeightOneSpectrum`), its adic
+  `Valuation K ℤᵐ⁰` restricts to units, and `WithZero.unitsWithZeroEquiv` reads off
+  `Multiplicative ℤ`. The `eq_iff` interface (via `coe_unitsWithZeroEquiv_eq_units_val`)
+  makes every later computation a `ℤᵐ⁰`-level rewrite.
+- **Kernel** (the real work): `x = alg a / alg b` (`IsFractionRing.div_surjective` —
+  orientation `… = z`!), DVR-factorize both; the multiplicative structure forces equal
+  `ϖ`-exponents once `intValuation ϖ = exp(−1)` is known for the GIVEN irreducible —
+  proved en route: `γ = ↑g` nonzero, `γ < 1` (`ϖ ∈ 𝔪`), and `γ^k = exp(−1)` against
+  Mathlib's `∃`-uniformizer give `k·toAdd g = −1` with `toAdd g < 0`, so `toAdd g = −1`
+  by the ℤ-divisor argument. Units assemble by `field_simp`.
+- House notes: `ℤᵐ⁰` is scoped notation — spell `WithZero (Multiplicative ℤ)`;
+  `WithZero.exp z` is `↑(ofAdd z)` by `rfl`; `Multiplicative ℤ`'s order is
+  definitionally ℤ's (a `g < 1` hypothesis IS `toAdd g < 0`).
+
+## Build + headline
+
+`lake build` green (3.7 s); preflight CLEAN. **HEADLINE: the valuation exact sequence of
+a DVR fraction field — hom, surjectivity, kernel — complete and abstract, axiom-free.
+Pair-equivariance and the P90 firing (`q(Kˣ) = q(Rˣ)·n`) are next.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 94): σ-invariance of the valuation (via the en-route irreducible-valuation
+fact — σϖ is again irreducible!), the equivariant package, the P90 firing. See HANDOFF.

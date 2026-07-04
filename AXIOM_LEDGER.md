@@ -3702,3 +3702,29 @@ reciprocity wall; hypotheses visibly consumed; no witness owed. No new
 `structure`/`class`; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 92 passes.
+
+### Pass 93 (2026-07-04) — the valuation exact sequence; count stays 0 / 0
+
+**No axiom added, none needed.** The `q(Lˣ)` track opens: the SES
+`1 → Rˣ → Kˣ → Multiplicative ℤ → 1` for ANY DVR fraction field.
+`Anabelian/ClassField/UnitsValuation.lean`, 5 declarations, all standard-axioms-only.
+
+```
+'Anabelian.dvrHeightOneSpectrum'                            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation'                               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation_eq_iff'                        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation_surjective'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation_ker'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `dvrUnitsValuation : Kˣ →* Multiplicative ℤ` — Mathlib's adic valuation at the DVR's
+  maximal ideal (as a height-one prime), restricted to units through
+  `WithZero.unitsWithZeroEquiv`; the `eq_iff` interface drops all computations to `ℤᵐ⁰`.
+- **Surjectivity** (uniformizer zpowers) and **kernel = `Rˣ`** (fraction + DVR
+  factorization; en route: `intValuation ϖ = exp(−1)` for EVERY irreducible, by the
+  `k·z = −1` integer-divisor argument).
+
+**Not the cardinal sin / rule-2.** Valuation plumbing below the reciprocity wall; no CFT
+claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 93 passes.
