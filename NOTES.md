@@ -5763,3 +5763,49 @@ zero axioms.**
 Next (Pass 79): the L3 gateway DESIGN pass — upper numbering on `Gal(K̄/K)`: Mathlib
 absolute-Galois inventory, the carrier decision (inverse limit vs preimage-intersection),
 the functorial-P77 gap analysis, the local-field-inheritance check — see HANDOFF.
+
+### Pass 79 (2026-07-04) — the L2-capstone design pass (G^v on Gal(K^sep/K))
+
+**Design; ledger delta 0 / 0; no code.** Triggered in part by a user governance challenge:
+"why does README say L2 is in progress if we're designing the L3 gateway?" — the answer
+became the pass. The extension of the upper numbering to the absolute group is CHAPTER-IV
+material (its raison d'être: Herbrand-compatibility is exactly what makes `G^v`
+well-defined on the profinite limit) — **L2's capstone rung**, not L3. The "L3 gateway"
+label named the consumer, not the stratum; retired across the governance files.
+
+## The design (recorded in ROADMAP's status header)
+
+1. **Carrier**: `Gal(K^sep/K)` on Mathlib's `separableClosure` (`separableClosure.isGalois`
+   gives the InfiniteGalois stack). NOT `Field.absoluteGaloisGroup`: it is defined on
+   `AlgebraicClosure K`, which in char `p` (the `𝔽_q((t))` local fields) is INSEPARABLE
+   over `K` — the wrong automorphism group. Char-0 users lose nothing.
+2. **Definition**: preimage-intersection `⨅_L proj_L⁻¹ (G^v(L/K))` over
+   `FiniteGaloisIntermediateField K K^sep`, rather than an inverse limit of subgroups —
+   cheapest formal move; the limit form is recovered by B5.
+3. **Soundness check that de-risks the ladder**: re-reading P77's variable context, the
+   entire finite-tower arc needs `IsNonarchimedeanLocalField` at the BASE only; towers
+   `(K, ↥L₁, ↥L₂)` of intermediate fields never re-base. The P38–41 assembly theorem
+   (a `theorem`, not an instance — `letI`-chain via `extensionValuativeRel`) is NOT on
+   this path.
+4. **The ladder**: B1 (full-group form: transport `G_u`/`G^v`/Herbrand from
+   `D(𝒪_L) = ⊤` to `L ≃ₐ[K] L`, restate along `AlgEquiv.restrictNormalHom` — P50's `dq`
+   is literally `restrictNormalHom` conjugated by subtype inclusions, and P78's
+   common-ambient `.map subtype` idiom is the definition template); B2 (instance plumbing
+   for `L₁ ≤ L₂` intermediate); B3 (the `⨅` definition + closedness via
+   `restrictNormalHom_continuous` + `isOpen_iff_finite`); B4 (functorial P77 = B1 at
+   `(K, ↥L₁, ↥L₂)` + `restrictNormalHom` composition coherence); B5 (projection
+   surjectivity `proj_L (G^v) = G^v(L/K)` — compactness/compatible-system, the theorem
+   that makes the definition right; 1–2 passes); B6+ (jumps, Hasse–Arf, abelian
+   filtration → L3). New folder `Anabelian/Absolute/` for the stratum.
+
+## Governance
+
+Stratum language reconciled across ROADMAP/README/HANDOFF (current-state text only;
+historical entries untouched, per the immutability rule). **HEADLINE: the map from
+Herbrand's theorem to `G^v(K^sep/K)` is five bricks, none a wall, with the one real
+theorem (B5) clearly identified — and it is all still L2.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No declarations added; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 80): brick B1 — the full-group form of the arc.

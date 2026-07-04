@@ -3295,3 +3295,32 @@ in a single `#print axioms` block, every one standard-axioms-only. One new theor
 mathematics. No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 78 passes.
+
+### Pass 79 (2026-07-04) — the L2-capstone design pass; count stays 0 / 0
+
+**No axiom added, none needed — and no code: the dependency map is the deliverable**
+(CLAUDE.md rule 3: "an honest dependency map showing what stands between current Mathlib
+and the next real theorem" is a valid pass product). Recorded in `ROADMAP.md`:
+
+- **Stratum correction**: extending `G^v` to the absolute group is Serre chapter-IV
+  material — **L2's capstone**, not L3. The Pass-77/78 "L3 gateway" label named the
+  consumer (L3's ramification correspondence), not the stratum, and is retired. L3 (local
+  CFT) remains NOT-STARTED.
+- **Carrier decision**: `Gal(K^sep/K)` via Mathlib's `separableClosure` +
+  `separableClosure.isGalois` — NOT `Field.absoluteGaloisGroup` (`AlgebraicClosure`-based;
+  in char `p` the algebraic closure is inseparable over `K` and the automorphism group is
+  the wrong object). Char-`p` honesty preserved.
+- **Definition decision**: preimage-intersection `G^v(K^sep/K) := ⨅_L proj_L⁻¹ (G^v(L/K))`
+  over `L : FiniteGaloisIntermediateField K K^sep` — no category machinery; equivalent to
+  the inverse-limit form once B5 (projection surjectivity) is proved. Mathlib stack
+  verified present: `finGaloisGroupFunctor`, `continuousMulEquivToLimit`,
+  `restrictNormalHom_continuous`, `isOpen_iff_finite`, the fundamental theorem.
+- **Soundness check**: the P50–78 arc requires the local-field structure ONLY at the base
+  `K` — towers of intermediate fields need no re-basing (`isNonarchimedeanLocalField_
+  extension` is off this path).
+- **The ladder**: B1 full-group form (transport along `D = ⊤`, P52/P55; P78's
+  common-ambient idiom) → B2 intermediate-field plumbing → B3 the `⨅` definition +
+  closedness → B4 functorial P77 → B5 projection surjectivity (the real theorem) → B6+
+  Hasse–Arf and the abelian filtration.
+
+**Ledger delta: 0 / 0.** Axiom-free — 79 passes.

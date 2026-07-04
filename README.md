@@ -23,7 +23,7 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 78 (2026-07-04)
+## Current state — Pass 79 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
 Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 79 project files, ~8500 build jobs, warning-free).
@@ -101,9 +101,13 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   `φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))` for every real `u`, by right-derivative gluing
   (Pass 76); **HERBRAND'S THEOREM, proved** — `(G^v).map (decompositionQuotient) =
   (G/H)^v` for every real `v`: the upper numbering is compatible with quotients (Serre IV
-  §3 Prop. 14) (Pass 77); and the **consolidated Herbrand package** —
+  §3 Prop. 14) (Pass 77); the **consolidated Herbrand package** —
   `Anabelian/Herbrand/Main.lean`, the arc's nine headline theorems audited in one block,
-  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78).
+  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78); and the **L2-capstone
+  design** — the extension of `G^v` to `Gal(K^sep/K)` (still chapter-IV/L2 material; the
+  earlier "L3 gateway" label named the consumer, not the stratum): carrier
+  `separableClosure` (not `AlgebraicClosure` — char-`p` honesty), preimage-intersection
+  definition, brick ladder B1–B5 mapped in `ROADMAP.md` (Pass 79).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -132,12 +136,12 @@ assembled the numerical Lemma 5, and **Pass 73 proved Lemma 5 itself**:
 (`φ`-transitivity), and **Pass 77 closed the arc with HERBRAND'S THEOREM**:
 `(G^v).map (decompositionQuotient) = (G/H)^v` — the upper numbering is
 quotient-compatible. Pass 78 consolidated the arc
-(`Anabelian/Herbrand/Main.lean`: the full chain Prop. 2 → Prop. 3 → `e' = |H₀|` →
-Lemma 5 → Prop. 15 → Herbrand audited in one `#print axioms` block, plus the
-canonical-carrier form on `𝒪_{K'}`). Next: the L3 gateway (upper numbering on the
-absolute Galois group via the inverse limit — exactly what Herbrand-compatibility makes
-well-defined), or Hasse–Arf, en route to local class field theory's ramification
-correspondence.
+(`Anabelian/Herbrand/Main.lean`) and Pass 79 designed **L2's capstone**: `G^v` on
+`Gal(K^sep/K)` — exactly what Herbrand-compatibility makes well-defined — by
+preimage-intersection over the finite Galois subextensions, with the five-brick ladder
+(full-group form → instance plumbing → definition → functorial compatibility → projection
+surjectivity) recorded in `ROADMAP.md`. L3 (local class field theory) remains NOT-STARTED
+and consumes this interface.
 
 ## Build
 
