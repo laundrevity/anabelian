@@ -5971,3 +5971,44 @@ constructed and verified in Lean 4, axiom-free. L2 is done.**
 Next (Pass 84): choose the arc — (A) Absolute consolidation (+ `G^0` vs the L1-era
 absolute inertia!), (B) Hasse–Arf (5–10 passes), (C) the L3 opening inventory. See
 HANDOFF.
+
+### Pass 84 (2026-07-04) — the Absolute consolidation + the separation theorem
+
+**Consolidation + mathematics; ledger delta 0 / 0.** `Anabelian/Absolute/Main.lean`: the
+B1–B5 chain documented, ONE audit block for the whole stratum (12 declarations), and four
+structural dividends topped by **the separation theorem**.
+
+## The separation theorem (the pass's real content)
+
+`iInf_absoluteUpperRamificationGroup_eq_bot : ⨅ v : ℝ, G^v(E/K) = ⊥` for Galois `E/K`:
+if `σ` lies in every `G^v`, then for every `x : E` the finite Galois subextension
+`L := FiniteGaloisIntermediateField.adjoin K {x}` receives a restriction of `σ` lying in
+every `G^v(L/K)`; P45's `upperRamificationGroup_eventually_bot` (fed by P29's
+`isNoetherianRing_extensionIntegers` + `Ideal.iInf_pow_eq_bot_of_isLocalRing`) makes that
+filtration eventually `⊥`, so the restriction is `1`, and `AlgEquiv.restrictNormal_commutes`
+reads `σ x = x` off it. `ext` closes. With P82's closedness and P83's inverse-limit
+property: the filtration of `Gal(K^sep/K)` is **defined, closed, an inverse limit,
+antitone, normalized, separating** — chapter IV complete, wall to wall.
+
+## Consolidation notes
+
+- Antitone/nonpos at both levels are one-liners over P45 (`Subgroup.map_mono`/
+  `comap_mono` + `iInf_mono`/`iInf_congr`; the `v ≤ 0` case is `herbrandPsi_eq_id` +
+  `Nat.ceil_eq_zero` + `Nat.ceil_zero` — the last rewrite is the usual `⌈(0:ℝ)⌉₊` guard).
+- The `G^0`-vs-L1-inertia identification (P20's reduction surjection) was scoped OUT: it
+  needs the finite-level `G_0 = ker(residue action)` bridge at the absolute level — a real
+  brick, deferred (noted here, not an owed witness: no claim made).
+- Two probe rounds (the `⌈0⌉₊` guard; `h2.symm`).
+
+## Build + headline
+
+`lake build` green; preflight CLEAN. **HEADLINE: the upper ramification filtration of
+`Gal(K^sep/K)` is a separating, closed, antitone inverse-limit filtration — the complete
+Serre-IV package, consolidated in one audited file, 0 axioms across 84 passes.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 85): the L3 opening inventory (design pass — local CFT in Mathlib: cohomology
+vs Lubin–Tate route decision; the ramification correspondence as the R1-relevant target;
+`G^v(K^ab/K)` already live via P82's generality). See HANDOFF.

@@ -3449,3 +3449,32 @@ strictly below R1; nothing recovered from an abstract group. No new `structure`/
 no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 83 passes, L0–L2 all axiom-free.
+
+### Pass 84 (2026-07-04) — the Absolute consolidation + THE SEPARATION THEOREM; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/Absolute/Main.lean`: the stratum's one-stop
+audit (12 declarations in one block, all standard-only), plus four structural dividends —
+the new ones:
+
+```
+'Anabelian.fullUpperRamificationGroup_antitone'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullUpperRamificationGroup_of_nonpos'            depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.absoluteUpperRamificationGroup_antitone'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.absoluteUpperRamificationGroup_of_nonpos'        depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.iInf_absoluteUpperRamificationGroup_eq_bot'      depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- Antitonicity (full-group + absolute; P45's mapped/comap'd) and the `v ≤ 0` constancy
+  (`ψ = id` + `⌈·⌉₊ = 0`).
+- **THE SEPARATION THEOREM** `⨅_v G^v(E/K) = ⊥`: a `σ ≠ 1` moves some `x`; the finite
+  Galois subextension `adjoin K {x}` (Mathlib's FGIF adjoin) sees it; there the filtration
+  is eventually `⊥` (P45's `upperRamificationGroup_eventually_bot` + P29's Noetherian
+  separation at `𝒪_L`); `restrictNormal_commutes` transfers triviality back to `σ` at
+  `x`. The absolute filtration is now: defined, closed, an inverse limit, antitone,
+  normalized at `v ≤ 0`, and SEPARATING — the complete chapter-IV package.
+
+**Not the cardinal sin / rule-2.** Consolidation + structural lemmas for a given base —
+strictly below R1 (which of these filtrations is group-theoretically DETECTABLE is the R1
+question, untouched). No new `structure`/`class`; no owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 84 passes.

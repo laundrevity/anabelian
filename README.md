@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 83 (2026-07-04)
+## Current state — Pass 84 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 83 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 84 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -111,10 +111,11 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   heart** — the `≤`-pair plumbing in Mathlib's `finGaloisGroupMap` conventions, and
   **Herbrand along the profinite transitions** (Pass 81); **B3 — the absolute `G^v`
   defined**: `⨅`-form on any `E/K`, closed in the Krull topology (Pass 82); and **B5 —
-  PROJECTION SURJECTIVITY, the capstone**: `(G^v(E/K)).map (restrictNormalHom L) =
-  G^v(L/K)` — the absolute filtration is a genuine inverse limit of the finite levels,
-  by compactness on directed closed fibers with Herbrand's theorem supplying the
-  compatible system (Pass 83). **With this, L2 is DONE.**
+  PROJECTION SURJECTIVITY, the capstone**: the absolute filtration is a genuine inverse
+  limit of the finite levels (Pass 83) — **with this, L2 is DONE**; and the **Absolute
+  consolidation** — `Anabelian/Absolute/Main.lean` (one audit block for the stratum) plus
+  antitonicity, `v ≤ 0` constancy, and **the separation theorem** `⨅_v G^v(E/K) = ⊥`
+  (Pass 84).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -149,9 +150,10 @@ preimage-intersection over the finite Galois subextensions, with the five-brick 
 recorded in `ROADMAP.md`; Passes 80–82 laid B1–B3: the full-group form, the profinite
 plumbing with Herbrand along the transitions, and now **the absolute `G^v` itself** —
 defined, closed in the Krull topology, compatible-from-above with every finite level.
-Pass 83 closed B5 — and with it the L2 stratum. Next arcs: Hasse–Arf (Serre ch. V), or
-the L3 opening inventory (local class field theory), or an Absolute-stratum
-consolidation. L3 remains NOT-STARTED and consumes this interface.
+Pass 83 closed B5 — and with it the L2 stratum — and Pass 84 consolidated it: the
+filtration of `Gal(K^sep/K)` is defined, closed, an inverse limit, antitone, normalized,
+and **separating** (`⨅_v G^v = ⊥`). Next arcs: the L3 opening inventory (local class
+field theory), or Hasse–Arf. L3 remains NOT-STARTED and consumes this interface.
 
 ## Build
 

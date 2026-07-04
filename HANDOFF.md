@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 83, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 84, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-83 entry), `ROADMAP.md`
-(status header says Pass 83), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-84 entry), `ROADMAP.md`
+(status header says Pass 84), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,29 +61,33 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 84: choose the next arc
+## YOUR FIRST TASK — Pass 85: the L3 opening inventory (design pass)
 
-**L2 is DONE** (P83). Candidates — inventory before choosing:
-- **(A) Absolute-stratum consolidation** (one pass, recommended first): an
-  `Absolute/Main.lean` mirror of `Herbrand/Main.lean` — the B1–B5 chain documented + one
-  audit block; plus cheap capstone dividends: `G^0(K^sep/K)` vs the inertia of the
-  absolute group (the P23/P45 `G^0 = G_0` at every finite level ⟹ the absolute `G^0` is
-  the closed inertia — check what the project has for absolute-level inertia from the L1
-  era, P20's `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`!); antitonicity of `v ↦ G^v(E/K)`; the
-  `v ≤ 0`-value.
-- **(B) Hasse–Arf** (Serre ch. V): for ABELIAN `L/K`, the jumps of the `G^v`-filtration
-  are INTEGERS. Multi-pass wall: needs the jump/breakpoint calculus (P44–49 + P72's
-  integrality machinery is relevant precedent!), the abelian hypothesis via the tame
-  character (P24–27) and wild `G_1` structure (P28). Serre's proof route: reduction to
-  cyclic + the norm computation (V §7 needs V §§1–6 valuation/norm formalism — inventory
-  what exists). Honest estimate: 5–10 passes.
-- **(C) The L3 opening inventory** (design pass): local CFT in Mathlib 2026 — grep
-  `LocalClassFieldTheory`, `LubinTate`, `Mathlib/NumberTheory/ClassField*`,
-  `GroupCohomology` (H², inflation-restriction exist?), the Brauer group; the honest
-  dependency map from the L2 interface (`G^v(K^ab/K)` via the P82 generality!) to the
-  ramification correspondence. The R1-relevant target: the norm-residue symbol's
-  filtration compatibility.
-Recommended: (A) then (C). Clean partial > half-discharge.
+**L2 is DONE and consolidated. This is a DESIGN pass** (like P79 — the dependency map is
+the deliverable; code at most one brick). Local class field theory in Mathlib 2026:
+1. **Grep the landscape**: `LocalClassFieldTheory` (the Comm-Alg/LCFT external project —
+   is any of it upstreamed?), `LubinTate`, `Mathlib/NumberTheory/ClassField*`,
+   `Mathlib/RepresentationTheory/GroupCohomology` (what exists: H¹/H², long exact
+   sequence, inflation-restriction?, Hilbert 90, cup products?), Brauer group
+   (`Mathlib/Algebra/BrauerGroup`?), `IsCyclotomicExtension`, formal groups
+   (`FormalGroup`?). ALSO the maximal abelian extension: `Field.abelianization`-flavored
+   objects? `Gal(K^ab/K)` presentation?
+2. **The target chain** (Serre chs. XI–XV / Milne CFT): the invariant map
+   `inv : Br(K) ≃ ℚ/ℤ` (needs H²(unramified) + the valuation computation), the
+   fundamental class, Tate's theorem ⟹ the reciprocity iso
+   `θ : K* → Gal(K^ab/K)^{profinite-completion-adjusted}`; then the R1-relevant piece:
+   **`θ` carries the unit filtration `U^n(K*)` to the ramification filtration
+   `G^n(K^ab/K)`** (the ramification correspondence — this is what makes `G^v` recoverable
+   from `K*`, the seed of anabelian reconstruction). Note the P82 generality: `G^v(K^ab/K)
+   := absoluteUpperRamificationGroup K K^ab v` ALREADY MAKES SENSE — the interface is
+   live.
+3. **The honest map**: which links exist in Mathlib, which are one-pass, which are
+   multi-year (cohomological machinery?). Alternative routes: Lubin–Tate (explicit,
+   avoids heavy cohomology — Serre's own preference for the local case; needs formal
+   groups) vs cohomological (needs H² machinery). Record the route decision with reasons.
+Deliverable: the L3 section of ROADMAP rewritten from NOT-STARTED to an honest staged
+ladder + the route decision + at most ONE brick. (Alternative: **Hasse–Arf**, 5–10 passes,
+if the L3 inventory shows both routes blocked on multi-year Mathlib gaps.)
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -110,7 +114,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 84
+## The queue after Pass 85
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
