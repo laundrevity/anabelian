@@ -5883,3 +5883,42 @@ witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 82): B3 — `absoluteUpperRamificationGroup K v := ⨅_L (G^v(L/K)).comap
 (restrictNormalHom ↥L)` on `Gal(K^sep/K)`, `mem_iff`, and closedness; B5's candidate tool
 flagged: `nonempty_sections_of_finite_inverse_system` — see HANDOFF.
+
+### Pass 82 (2026-07-04) — B3: the absolute `G^v` defined (the capstone's object exists)
+
+**Mathematics; ledger delta 0 / 0.** The upper ramification filtration on the Galois group
+of an arbitrary (possibly infinite) extension of a nonarchimedean local field — at
+`E = K^sep`, the absolute `G^v` whose group-theoretic recoverability is the entry point of
+the anabelian program. `Anabelian/Absolute/UpperNumbering.lean`, 4 declarations,
+standard-axioms-only.
+
+## Method
+
+- The def needs LESS context than planned: no separability, no `[IsGalois K E]` — just
+  the local base and `[Algebra K E]` (the `⨅` ranges over FGIF, each level supplying its
+  own instances). The hypotheses will enter at B5 where the mathematics does.
+- `mem_iff`: one `simp` (`mem_iInf` + `mem_comap`). Closedness: `coe_iInf` + `coe_comap`
+  under the intersection (the one probe fix), then `isClosed_discrete.preimage
+  (InfiniteGalois.restrictNormalHom_continuous …)` per factor + `isClosed_iInter` — the
+  target levels are finite hence discrete (`KrullTopology` instance). Easy half of B5:
+  `map_le_iff_le_comap.mpr (iInf_le _ L)` — one line.
+- Convention note: the comap is along `AlgEquiv.restrictNormalHom (F := K) (K₁ := E)
+  L.toIntermediateField` — the exact form of `InfiniteGalois.restrictNormalHom_continuous`
+  and `finGaloisGroupMap`, so B5 composes with Mathlib's machinery without adapters.
+
+## Build + headline
+
+`lake build` green (2.7 s); preflight CLEAN. **HEADLINE: `G^v` on the absolute Galois
+group of a nonarchimedean local field — Serre IV's punchline object — is DEFINED,
+axiom-free: closed in the Krull topology, compatible-from-above with every finite level.
+One theorem (B5: projection surjectivity) stands between the definition and its
+inverse-limit meaning.**
+
+## Ledger delta + rule-2
+
+**0 / 0.** A `def` + formal properties; no new `structure`/`class`; no owed witness;
+D1/D2 N/A. R1–R3 untouched.
+Next (Pass 83): B5 — projection surjectivity: Route A (compactness on directed closed
+fibers; `CompactSpace Gal(E/k)` from InfiniteGalois; FGIF sups for directedness; P81 both
+UP the tower for fiber-nonemptiness and DOWN for full-intersection membership) or Route B
+(`nonempty_sections_of_finite_inverse_system`) — see HANDOFF for the sub-brick split.

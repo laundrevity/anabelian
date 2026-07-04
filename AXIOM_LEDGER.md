@@ -3385,3 +3385,32 @@ re-packages an existing Mathlib construction — no new constraint content; no o
 D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 81 passes.
+
+### Pass 82 (2026-07-04) — B3: the absolute `G^v` defined; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/Absolute/UpperNumbering.lean`: the upper
+numbering on the (possibly infinite) Galois group, its membership, its closedness, and the
+easy half of the projection compatibility. 4 declarations, all standard-axioms-only.
+
+```
+'Anabelian.absoluteUpperRamificationGroup'                  depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_absoluteUpperRamificationGroup_iff'          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isClosed_absoluteUpperRamificationGroup'         depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_absoluteUpperRamificationGroup_le'           depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **`absoluteUpperRamificationGroup K E v := ⨅_L (G^v(L/K)).comap (restrictNormalHom L)`**
+  over `L : FiniteGaloisIntermediateField K E` — the Pass-79 carrier decision realized; at
+  `E = K^sep` this is the upper numbering on the absolute Galois group. Stated for ANY
+  `E/K` (no def-level separability/Galois hypotheses) — also covers `K^ab` downstream.
+- Closedness in the Krull topology: `coe_iInf`/`coe_comap` + preimages of finite discrete
+  levels under `InfiniteGalois.restrictNormalHom_continuous`.
+- `map_absoluteUpperRamificationGroup_le`: the projection lands inside each finite level
+  (`map_le_iff_le_comap` + `iInf_le`). The REVERSE inclusion (B5, projection surjectivity)
+  is the capstone's remaining theorem and is NOT claimed.
+
+**Not the cardinal sin / rule-2.** A `def` (an `iInf` of comaps of proved objects) + three
+formal properties — no new constraint content (P23 holds the filtration's witnesses);
+strictly below R1. No owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 82 passes.
