@@ -5809,3 +5809,39 @@ theorem (B5) clearly identified — and it is all still L2.**
 
 **0 / 0.** No declarations added; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 80): brick B1 — the full-group form of the arc.
+
+### Pass 80 (2026-07-04) — B1: the full-group form (the capstone ladder opens)
+
+**Mathematics; ledger delta 0 / 0.** The finite arc translated to the language the
+profinite stack speaks: filtrations on the full `L ≃ₐ[K] L`, transitions along
+`AlgEquiv.restrictNormalHom`. New folder `Anabelian/Absolute/` (the capstone stratum's
+home); `FullGroup.lean`, 5 declarations, standard-axioms-only.
+
+## Method
+
+- `fullRamificationGroup K L u` / `fullUpperRamificationGroup K L v` :=
+  `.map D.subtype` of the decomposition-level objects — P78's common-ambient idiom
+  promoted to THE definition (decision recorded at P79; `D = ⊤` under normality by P52).
+- `subtype_comp_decompositionQuotient`: the square `subtype ∘ dq = restrictNormalHom ∘
+  subtype` is `MonoidHom.ext fun _ => rfl` — P50's def was literally built from
+  `restrictNormalHom`; this is the receipt.
+- The transports: `map_fullRamificationGroup_eq` (Lemma 5) and
+  `map_fullUpperRamificationGroup_eq` (**Herbrand**) — each a single `rw` chain:
+  `Subgroup.map_map`, `← square`, `← map_map`, finite-arc theorem (P73/P77), P57's
+  `extensionIntegers_comap_eq`. Three probe rounds, all instance-context plumbing
+  (`extensionIntegers` needs the full local-field context at `K`; unused-variable lint).
+
+## Build + headline
+
+`lake build` green (2.6 s); preflight CLEAN. **HEADLINE: Herbrand's theorem in full-group
+form — `(G^v(L/K)).map (restrictNormalHom K') = G^v(K'/K)` — the transition maps of the
+profinite Galois system carry the upper filtration to the upper filtration exactly. The
+absolute `G^v` is now a definition away (B3) plus one real theorem (B5).**
+
+## Ledger delta + rule-2
+
+**0 / 0.** Definitions are images under a fixed hom — no new constraint content, no rule-2
+obligation beyond P23's; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 81): B2 — intermediate-field plumbing (`FiniteGaloisIntermediateField K K^sep`
+carriers; MATCH `Galois/Profinite.lean`'s conventions for the transition maps so B4
+composes with Mathlib's functor on the nose — see HANDOFF).

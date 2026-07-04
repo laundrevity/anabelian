@@ -3324,3 +3324,32 @@ and the next real theorem" is a valid pass product). Recorded in `ROADMAP.md`:
   Hasse–Arf and the abelian filtration.
 
 **Ledger delta: 0 / 0.** Axiom-free — 79 passes.
+
+### Pass 80 (2026-07-04) — B1: the full-group form; count stays 0 / 0
+
+**No axiom added, none needed.** The L2-capstone ladder's first brick
+(`Anabelian/Absolute/FullGroup.lean`): the ramification filtrations on the FULL Galois
+group, and the finite arc's headline theorems restated along `AlgEquiv.restrictNormalHom`
+— the interface the profinite stack consumes. 5 declarations, all standard-axioms-only.
+
+```
+'Anabelian.fullRamificationGroup'                           depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fullUpperRamificationGroup'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.subtype_comp_decompositionQuotient'              depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_fullRamificationGroup_eq'                    depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.map_fullUpperRamificationGroup_eq'               depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- Definitions by `.map (D.subtype)` — P78's common-ambient idiom promoted; `D = ⊤` under
+  normality (P52), nothing lost. The square `dq = restrictNormalHom`-conjugated is `rfl`
+  (P50 built it that way). The transports (Lemma 5 + **HERBRAND, full-group**:
+  `(G^v(L/K)).map (restrictNormalHom K') = G^v(K'/K)`) are each five rewrites:
+  `Subgroup.map_map`, the square, `map_map` back, the finite-arc theorem (P73/P77), P57's
+  carrier equality.
+
+**Not the cardinal sin / rule-2.** Images of proved filtrations under a fixed inclusion —
+no new constraint content (the filtration's rule-2 witnesses live at Pass 23); strictly
+below R1. B3's absolute `G^v` and B5's surjectivity NOT claimed. No owed witness; D1/D2
+N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 80 passes.

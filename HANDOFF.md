@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 79, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 80, 2026-07-04)
 
 **State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
 (P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
@@ -25,8 +25,8 @@ index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer 
 files ~3 s — put new bricks in fresh files.
 
 You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-79 entry), `ROADMAP.md`
-(status header says Pass 79), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
+`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-80 entry), `ROADMAP.md`
+(status header says Pass 80), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
 arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
 `git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
 `scripts/preflight.sh` clause 0 *enforces* this.
@@ -61,28 +61,31 @@ numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic
   (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
   `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
 
-## YOUR FIRST TASK — Pass 80: brick B1 — the full-group form of the arc
+## YOUR FIRST TASK — Pass 81: brick B2 — intermediate-field plumbing
 
-**Target**: transport the finite-tower package from decomposition subgroups to FULL Galois
-groups — the interface the profinite stack consumes. The arc's objects live on
-`(𝒪_L).decompositionSubgroup K ≤ (L ≃ₐ[K] L)`, which is `⊤` by P52/P55
-(`decompositionSubgroup_extensionIntegers_restrict_eq_top`). Bricks inside the brick:
-1. `G_u`/`G^v` as subgroups of the FULL `L ≃ₐ[K] L`: define by `.map (D.subtype)` (the
-   common-ambient idiom of P78!) or by `.comap` along `Subgroup.topEquiv`-composed-with-
-   the-inclusion — pick ONE and make it THE definition (suggest: `.map D.subtype`, since
-   P78 already proved the canonical-carrier Herbrand in exactly that shape).
-2. `decompositionQuotient` vs `AlgEquiv.restrictNormalHom K'`: P50's `dq` IS
-   `restrictNormalHom` conjugated by the subtype inclusions (its `toFun` is literally
-   `restrictNormalHom K' σ.1` — check `Quotient/Basic.lean:113`); state the square.
-3. P77/P78 restated: `(fullUpperRamificationGroup K L v).map' (restrictNormalHom K') =
-   fullUpperRamificationGroup K K' v` where `map'` is along the full-group hom — should
-   be P78's canonical-carrier theorem + the square from 2, mostly rewriting.
-Watch: `restrictNormalHom K'` has type `(L ≃ₐ[K] L) →* (K' ≃ₐ[K] K')` requiring
-`[Normal K K']` ✓. Keep the definitions in a new `Anabelian/Absolute/` folder (the
-capstone stratum's home). After B1: B2 (intermediate-field plumbing), B3 (the `⨅`
-definition + closedness via `restrictNormalHom_continuous` + `isOpen_iff_finite`), B4
-(functorial P77), B5 (projection surjectivity — the real theorem). Clean partial >
-half-discharge.
+**Target**: make the B1 theorems fire for pairs `L₁ ≤ L₂` in
+`FiniteGaloisIntermediateField K (separableClosure K ?)` — wait, FIRST settle the ambient:
+Mathlib's `separableClosure F E` is the separable closure of `F` INSIDE `E`; for the
+absolute object take `E := AlgebraicClosure K` and `K^sep := separableClosure K
+(AlgebraicClosure K)` (`separableClosure.isGalois` needs `[Normal F E]` ✓ algebraic
+closure is normal). Bricks:
+1. For `L₁ L₂ : FiniteGaloisIntermediateField K K^sep` with `h : L₁ ≤ L₂`: the instance
+   package on the CARRIERS `↥L₁`, `↥L₂` that B1's Transport section needs at
+   `(K, K' := ↥L₁, L := ↥L₂)`: `[Algebra ↥L₁ ↥L₂]` + `[IsScalarTower K ↥L₁ ↥L₂]`
+   (Mathlib: `IntermediateField.inclusion h`-induced — check what
+   `FiniteGaloisIntermediateField` / the Profinite.lean file uses for its
+   `finGaloisGroupMap`: `AlgEquiv.restrictNormalHom` precomposed how? READ
+   `Galois/Profinite.lean:73` first and MATCH ITS CONVENTIONS so B4 composes with the
+   Mathlib functor on the nose), `[FiniteDimensional K ↥L₂]` ✓, `[Normal K ↥L₁]` ✓ (by
+   def), `[Algebra.IsSeparable K ↥L₂]` (from separableClosure), `[IsGalois ↥L₁ ↥L₂]`
+   (L₂/K Galois ⟹ L₂/L₁ Galois — `IsGalois.tower_top_of_isGalois`-ish).
+2. Sanity `example`s: B1's `map_fullUpperRamificationGroup_eq` typechecks at
+   `(K, ↥L₁, ↥L₂)` with these instances.
+Deliverable: the instance/plumbing file (`Anabelian/Absolute/Tower.lean`) + the sanity
+examples. Then B3: `absoluteUpperRamificationGroup K v : Subgroup (K^sep ≃ₐ[K] K^sep) :=
+⨅ (L : FiniteGaloisIntermediateField K K^sep), ((restrictNormalHom-to-L) ⁻¹
+(fullUpperRamificationGroup K ↥L v))`-style (mind: `Subgroup.comap`), + closedness via
+`restrictNormalHom_continuous` + finite level. Clean partial > half-discharge.
 
 **Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
 root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
@@ -109,7 +112,7 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 80
+## The queue after Pass 81
 
 Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
 `(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).

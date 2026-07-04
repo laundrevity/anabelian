@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 79 (2026-07-04)
+## Current state — Pass 80 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 79 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 80 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -103,11 +103,12 @@ The project has earned, axiom-free, the following strata (detail in `NOTES.md` /
   (G/H)^v` for every real `v`: the upper numbering is compatible with quotients (Serre IV
   §3 Prop. 14) (Pass 77); the **consolidated Herbrand package** —
   `Anabelian/Herbrand/Main.lean`, the arc's nine headline theorems audited in one block,
-  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78); and the **L2-capstone
-  design** — the extension of `G^v` to `Gal(K^sep/K)` (still chapter-IV/L2 material; the
-  earlier "L3 gateway" label named the consumer, not the stratum): carrier
-  `separableClosure` (not `AlgebraicClosure` — char-`p` honesty), preimage-intersection
-  definition, brick ladder B1–B5 mapped in `ROADMAP.md` (Pass 79).
+  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78); the **L2-capstone
+  design** — the extension of `G^v` to `Gal(K^sep/K)` (still chapter-IV/L2 material):
+  carrier `separableClosure`, preimage-intersection definition, brick ladder B1–B5
+  (Pass 79); and **B1, the full-group form** — the filtrations on the full `L ≃ₐ[K] L`
+  with **Herbrand's theorem along `restrictNormalHom`**:
+  `(G^v(L/K)).map (restrictNormalHom K') = G^v(K'/K)` (Pass 80).
 - **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
   field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
   (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
@@ -139,9 +140,10 @@ quotient-compatible. Pass 78 consolidated the arc
 (`Anabelian/Herbrand/Main.lean`) and Pass 79 designed **L2's capstone**: `G^v` on
 `Gal(K^sep/K)` — exactly what Herbrand-compatibility makes well-defined — by
 preimage-intersection over the finite Galois subextensions, with the five-brick ladder
-(full-group form → instance plumbing → definition → functorial compatibility → projection
-surjectivity) recorded in `ROADMAP.md`. L3 (local class field theory) remains NOT-STARTED
-and consumes this interface.
+recorded in `ROADMAP.md`; Pass 80 laid B1 (the full-group form — the profinite transition
+maps carry `G^v` to `G^v` exactly). Next: B2–B3 (intermediate-field plumbing, then the
+`⨅` definition of `G^v(K^sep/K)`). L3 (local class field theory) remains NOT-STARTED and
+consumes this interface.
 
 ## Build
 
