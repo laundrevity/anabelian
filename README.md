@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 85 (2026-07-04)
+## Current state — Pass 86 (2026-07-04)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 84 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 85 project files, ~8500 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -158,7 +158,11 @@ products, Brauer-H², Lubin–Tate, and any `K^ab` object are absent; the route 
 **Neukirch-style abstract CFT**, and `ROADMAP.md`'s L3 section is now a five-stage ladder
 (L3.0 `K^ab` interface → L3.1 cyclic layer → L3.2 unramified cohomology → L3.3
 reciprocity, the wall → L3.4 the ramification correspondence, the R1-relevant piece).
-Next: L3.0, or Hasse–Arf.
+Pass 86 laid L3.0: **`K^ab` exists**
+(`Anabelian/ClassField/MaximalAbelian.lean`) — the fixed field of the closed commutator
+subgroup, Galois over `K`, with `Gal(K^ab/K)` the topological abelianization (abelian,
+proved), maximality as a theorem, and `G^v(K^ab/K)` live via the Pass-82 interface. Next:
+L3.1 (the cyclic/Herbrand-quotient layer), or Hasse–Arf.
 
 ## Build
 

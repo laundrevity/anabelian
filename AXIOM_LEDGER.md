@@ -3505,3 +3505,33 @@ stub to a five-stage ladder with the July-2026 Mathlib inventory recorded:
 crossed on paper.
 
 **Ledger delta: 0 / 0.** Axiom-free — 85 passes.
+
+### Pass 86 (2026-07-04) — L3.0: `K^ab` exists; count stays 0 / 0
+
+**No axiom added, none needed.** The L3 ladder's first rung — the stage of local class
+field theory — `Anabelian/ClassField/MaximalAbelian.lean` (the stratum's first file).
+7 declarations, all standard-axioms-only.
+
+```
+'Anabelian.commutatorClosure'                               depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalAbelianSubextension'                      depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.fixingSubgroup_maximalAbelianSubextension'       depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.isGalois_maximalAbelianSubextension'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalAbelianGalEquiv'                          depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.maximalAbelianSubextension_mul_comm'             depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.le_maximalAbelianSubextension'                   depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `maximalAbelianSubextension K E` := the fixed field of the closed commutator subgroup
+  (fundamental theorem of infinite Galois theory; at `E = K^sep`: `K^ab`). `IsGalois`
+  (via `normal_iff_isGalois` + the correspondence's `fixingSubgroup_fixedField`);
+  `Gal(K^ab/K)` = the topological abelianization (`normalAutEquivQuotient`), ABELIAN
+  (commutators die in the quotient); **maximality PROVED** (`le_maximalAbelianSubextension`
+  — the claiming name carries its justification theorem, per rule-2 discipline);
+  `G^v(K^ab/K)` fires as-is (P82's generality, by design).
+
+**Not the cardinal sin / rule-2.** Definitional rung with its own maximality witness —
+strictly below R1; the reciprocity map (L3.3) NOT claimed. No new `structure`/`class`; no
+owed witness; D1/D2 N/A.
+
+**Ledger delta: 0 / 0.** Axiom-free — 86 passes.

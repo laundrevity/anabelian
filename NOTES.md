@@ -6054,3 +6054,43 @@ built the way it was.
 R1–R3 untouched. Next (Pass 86): L3.0 — the `K^ab` object (fixed field of the closed
 commutator subgroup via the infinite Galois correspondence), its `IsGalois`/abelian
 structure, and the `G^v(K^ab/K)` sanity instantiation. See HANDOFF.
+
+### Pass 86 (2026-07-04) — L3.0: K^ab (the stage of local class field theory)
+
+**Mathematics; ledger delta 0 / 0.** The maximal abelian extension as an object, with its
+structure theory — the L3 ladder's first rung, and the L3 stratum's first file
+(`Anabelian/ClassField/MaximalAbelian.lean`, 7 declarations, standard-axioms-only).
+
+## Method
+
+- `commutatorClosure := (commutator Gal(E/K)).topologicalClosure` (normal: closure of
+  normal; closed: closure). `maximalAbelianSubextension := fixedField commutatorClosure`.
+- `IsGalois K K^ab`: `normal_iff_isGalois` needs the fixing subgroup normal;
+  `fixingSubgroup_fixedField` (the ClosedSubgroup form) collapses it to the closure ✓.
+- `maximalAbelianGalEquiv : Gal(E/K) ⧸ closure ≃* Gal(K^ab/K)`: Mathlib's
+  `normalAutEquivQuotient`. Commutativity: quotient kills commutators
+  (`QuotientGroup.eq` + `group`-normalization to a commutator element + membership).
+- **Maximality** (`le_maximalAbelianSubextension`): for abelian normal `L`, every
+  `restrictNormalHom L ⁅g₁,g₂⁆ = 1` (`map_commutatorElement` +
+  `commutatorElement_eq_one_iff_mul_comm`), so `commutator ≤ ker = fixingSubgroup`
+  (`restrictNormalHom_ker`), so the CLOSURE lands there (`topologicalClosure_minimal` +
+  `InfiniteGalois.fixingSubgroup_isClosed`), and `IntermediateField.le_iff_le` flips.
+- House notes: the element bracket `⁅g,h⁆` is a SCOPED instance — `open scoped
+  commutatorElement`; `InfiniteGalois.fixingSubgroup_isClosed` is hypothesis-free while
+  the `IntermediateField.`-namespaced one wants `FiniteDimensional`; `commutator G` needs
+  a `change ⁅⊤,⊤⁆ ≤ _` before `Subgroup.commutator_le` fires.
+
+## Build + headline
+
+`lake build` green (3.1 s); preflight CLEAN. **HEADLINE: `K^ab` exists — Galois over `K`,
+its group THE topological abelianization (proved abelian), its maximality a theorem, and
+`G^v(K^ab/K)` already live through the L2 interface. Both sides of the ramification
+correspondence (L3.4) now exist as objects; the map between them is the wall (L3.3).**
+
+## Ledger delta + rule-2
+
+**0 / 0.** The claiming name carries its justification theorem (maximality proved, not
+stipulated); no new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
+Next (Pass 87): L3.1 — the cyclic/Herbrand-quotient layer: inventory Mathlib's
+`FiniteCyclic`/`Rep` framework, then ONE brick (the Herbrand quotient def + finite-module
+triviality, or the `Rep`-bridge for `Lˣ`). See HANDOFF.
