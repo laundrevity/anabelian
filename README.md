@@ -56,6 +56,9 @@ a design pass for `q(Rˣ) = 1` for local-field units, including the unit filtrat
 an account of the carried finiteness hypotheses. The class-formation and reciprocity
 stages remain ahead; Hasse–Arf is separately deferred.
 
+The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
+verbatim in NOTES through Pass 93; the Pass-94 summary above states the current frontier.
+
 ## Build
 
 ```sh

@@ -25,6 +25,9 @@ progress. L3.2–L3.4, L4, and R1–R3 remain ahead.
 > Local reciprocity and the reconstruction targets remain unproved. Hasse–Arf is
 > separately deferred. The historical pass record is in `NOTES.md` and `AXIOM_LEDGER.md`.
 
+The earlier [Passes 44–93 summary](NOTES.md#pass-93-roadmap-detail) is preserved
+verbatim in NOTES; the Pass-94 header above states the current frontier.
+
 A structural note on the ladder, because it governs the whole project:
 
 > Rungs L1–L4 are **foundational inputs**: classical theory that is hard to formalize but *not the
