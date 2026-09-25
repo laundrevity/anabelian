@@ -1,98 +1,48 @@
-# HANDOFF.md — session bootstrap (written after Pass 93, 2026-07-04)
+# HANDOFF.md — session bootstrap (written after Pass 94, 2026-09-25)
 
-**State: SERRE IV §1 PROP. 3 IS PROVED, AXIOM-FREE.** The fourteen-pass quotient arc
-(P50–63) is complete on top of the Herbrand `φ`/`ψ` analytic theory (P44–49):
+**State:** L2 is complete (Pass 83), consolidated with separation in Pass 84. L3 is
+in progress: `K^ab` (Pass 86), the Herbrand-quotient calculus (Passes 87–90), the cyclic
+pair and `q(ℤ) = n` (Passes 91–92), and the equivariant DVR valuation sequence with
+**`q(Kˣ) = q(Rˣ) · n` under explicit hypotheses** (Passes 93–94).
+Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 93 project files; no open owed witnesses.
+**The next task is Pass 95: design the local-field unit quotient proof `q(Rˣ) = 1`.**
 
-> `lowerIndex_decompositionQuotient_mul_eq_sum`
-> (`Anabelian/Quotient/SumFormula.lean`):
-> **`i_{K'/K}(σ̄) · e' = Σ_{h ∈ H} i_{L/K}(s₀ · dr h)`**
-> for every `σ̄ = decompositionQuotient s₀` and every irreducible `π` of `B = 𝒪_L ∩ K'`
-> (`e' = addVal_{𝒪_L}(ι π)`); tower `K ⊆ K' ⊆ L` over a nonarchimedean local field,
-> `K'/K` normal, `L/K'` Galois. Generator-free (P51's intrinsic `lowerIndex`), uniform in
-> `σ̄` (`ℕ∞`: both sides `⊤` at `σ̄ = 1`). `#print axioms`: standard-only.
+Read `CLAUDE.md`, the active table and Pass-94 entry in `AXIOM_LEDGER.md`, the Pass-94
+status header and L3 ladder in `ROADMAP.md`, and the Pass-94 entry in `NOTES.md`.
+Start with `git status`; work on your own parley branch. `scripts/preflight.sh`
+enforces the pre-commit checks. Historical pass records are in NOTES and the ledger.
 
-**Pass 64 was the long-deferred flat→folders refactor**: `Anabelian/` is now nine content
-folders (`Galois`, `FiniteField`, `Reduction`, `Ramification`, `Herbrand`, `Extension`,
-`LocalField`, `Quotient`, `ForMathlib`) — `scripts/refactor.sh` (table extended to all 64
-files) executed as git-tracked renames; module paths changed, **declaration names unchanged**;
-`scripts/preflight.sh` and `scripts/chain_check.py` now recurse into folders. **Pass 65 opened the Lemma-5 arc**: `Anabelian/Quotient/IndexProfile.lean` — the **fiber
-index profile** `i_{L/K}(s₁·h) = min(i_H(h), j)` for a coset/fiber maximizer `s₁`
-(`lowerIndex_mul_decompositionRestrict_eq_min`, `Normal`-free; `exists_coset/_fiber_...`;
-`sum_lowerIndex_fiber_eq_sum_min` — the `Σ min` form that feeds P63). Ledger is
-**`0 FOUNDATIONAL / 0 DEBT`**, zero `axiom` declarations project-wide, through all 65 passes
-— keep it that way. **YOUR FIRST TASK is Pass 66 — the `Σ min`-vs-`φ` counting** (below).
-**Build caution:** `Quotient/LiftDvd.lean` (P58) elaborates slowly (~15 min); all other
-files ~3 s — put new bricks in fresh files.
+## What Pass 94 supplies
 
-You are picking up the `anabelian` project mid-stride. Read in this order before any work:
-`CLAUDE.md` (the constitution), `AXIOM_LEDGER.md` (state + tail Pass-93 entry), `ROADMAP.md`
-(status header says Pass 93), and the **tail of `NOTES.md`** (Passes 50–63: the quotient
-arc, ending in the Prop. 3 milestone entry with the arc retrospective). **Session start:**
-`git status` — the tree must be clean (`.claude/` and `claude.last` are `.gitignore`d);
-`scripts/preflight.sh` clause 0 *enforces* this.
+- `ClassField/UnitsValuation.lean`: `intValuation_irreducible`, now the shared
+  multiplicity proof used by Pass 93's kernel calculation.
+- `ClassField/CyclicPair.lean`: `map_mulAut_pow`, `map_cyclicDiff`, and
+  `map_cyclicNorm`, with no periodicity hypothesis.
+- `ClassField/TrivialAction.lean`: `multiplicative_int_pow_eq_one` and
+  `finite_herbrandH_norm_diff_int` (finiteness from cardinality one).
+- `ClassField/UnitsValuationEquivariance.lean`: `intValuation_ringEquiv`, injectivity
+  and equivariance of the units inclusion, `dvrUnitsValuation_equivariant`, the
+  cyclic norm/difference valuation formulas, and `cyclicHerbrandQuotient_units`.
 
-## Where the mathematics stands
+The headline takes a DVR `R`, its fraction field `K`, `s : R ≃+* R`, `t : K ≃+* K`,
+and `hst : ∀ r, t (algebraMap R K r) = algebraMap R K (s r)`. With induced unit actions
+`σR`, `σK`, it carries `n ≠ 0`, `σK ^ n = 1`, and `Finite (herbrandH N D)` on each of
+`Rˣ` and `Kˣ`. The value-group action is trivial and its `Ĥ¹` finiteness is derived.
+No separate periodicity hypothesis on `Rˣ` is supplied. No necessity or sharpness
+claim is made for these carried hypotheses.
 
-**Complete, axiom-free strata:** L1 finite/local Galois theory (P1–21); the L2 lower
-filtration + tame/wild theory (P22–28); the descent (`𝒪_L`, `ker θ₀ = G₁`) (P29–37); the
-assembly (`IsNonarchimedeanLocalField L`) (P38–41); canonicity (P43); the Herbrand `φ`/`ψ`
-analytic theory (P44–49: monotone, continuous, both slopes, `φ`'s closed form, upper
-numbering `G^v = G_{⌈ψ(v)⌉}`, `H_u = H ∩ G_u`); **the quotient arithmetic through Prop. 3**
-(P50–63).
+## Next task — Pass 95 design
 
-**The Prop.-3 toolkit (P50–63), by file** — everything Lemma 5 will draw on:
-- `Quotient/Basic` (P50): `decompositionQuotient`, exactness, `comapRingHom` +
-  `𝔪`-reflection. `Ramification/LowerIndex` (P51): `lowerIndex : ℕ∞`, Lemma-1 forms
-  (`mem_ramificationGroup_iff_lt_lowerIndex`, `_add_one_le_`), calculus, `i_H = i_G` (`rfl`),
-  `ℕ∞` cofinality helpers. `Quotient/Surjective` (P52): `D(𝒪_L) = ⊤`,
-  `decompositionQuotientEquiv`. `Ramification/LowerIndexGenerator` (P53): the `addVal` bridge
-  `mem_maximalIdeal_pow_iff_le_addVal`, `lowerIndex_eq_addVal`.
-  `Extension/MonogenicDischarge` (P54): `exists_generator_extensionIntegers` (monogenicity),
-  `maximalIdeal_eq_span_of_mem_of_notMem_sq`, the binomial tail. `Quotient/CharPoly`
-  (P55): `fullProdXSubSMul` (whole-`G` product) + monic descent `F`, `D_{K'}(𝒪_L) = ⊤`.
-  `Quotient/LiftSet` (P56): `decompositionFiberEquiv` (fiber = coset `s₀·H`, explicit),
-  `map_fullProdXSubSMul(_eval)`. `Quotient/ComapIntegers` (P57):
-  `extensionIntegers_comap_eq` (`𝒪_L ∩ K' = 𝒪_{K'}`), DVR-on-`B`, `baseToComapRingHom`,
-  `exists_generator_comap_spec` (generator + telescoping + `i_{K'/K} = addVal_B(σ̄y−y)`).
-  `Quotient/LiftDvd` (P58): direction (i) + `map_comapRingHom_smul` +
-  `dvd_eval_of_dvd_coeff`. `Quotient/AddVal` (P59): `addVal_neg/_prod`, the
-  `e'`-dilation `addVal_comapRingHom`, the fiber sum `addVal_liftProd`.
-  `Quotient/GeneratorRep` (P60): polynomial representation, `adjoin_generator_eq_top`
-  (`L = K'(x)`). `Quotient/MinpolyBound` (P61): the remainder-vanishing degree count.
-  `Quotient/Division` (P62): direction (ii). `Quotient/SumFormula` (P63): **Prop. 3**.
+Inventory the route to `q(Rˣ) = 1` for the valuation ring of a cyclic local-field
+extension. Identify concrete lemmas for the unit filtration, its action and finite
+quotients, and the passage needed for the full unit group. Reuse the P24–27
+ramification/unit calculations where they actually apply. Account explicitly for
+the two carried `Ĥ¹` finiteness hypotheses and the identification of the cyclic norm
+with the field norm; do not silently replace the abstract DVR by a local field.
 
-## YOUR FIRST TASK — Pass 94: pair-equivariance + the P90 firing
-
-**Target**: for a DVR `R`, fraction field `K`, and a ring automorphism data `σ` acting —
-STAY ABSTRACT as long as possible: take `σK : MulAut Kˣ` induced by a field automorphism
-`f : K ≃+* K` (or `≃ₐ`) with `hR : ∀ r : R, f (algebraMap R K r) ∈ (algebraMap R K).range`
-(σ preserves R — for the tower this is `D = ⊤`, P52) — then:
-1. **The valuation is σ-invariant**: `dvrUnitsValuation (σK x) = dvrUnitsValuation x`.
-   Route: σ permutes `Rˣ`-cosets... cleanest DERIVATION: `v` is determined by its kernel
-   and surjectivity? NO — use: `v ∘ σK` is also a surjective hom `Kˣ →* Mult ℤ` with the
-   SAME kernel (σ preserves Rˣ), and any two surjective homs to `Multiplicative ℤ` with
-   equal kernels are equal UP TO SIGN (Aut(ℤ) = ±1) — the sign is fixed by a single
-   uniformizer value (`v(σ ϖ) < 0`-flavored: σϖ ∈ 𝔪, so negative like `v ϖ`). OR
-   directly: x = a/b, σ x = σa/σb with σa σb ∈ R (needs σ(R) = R both ways), and
-   `intValuation (σ a) = intValuation a` — σ preserves 𝔪-powers ⟹ preserves the
-   multiplicity count (σ : R ≃+* R restricted; `intValuation` via Associates count —
-   maybe easier: DVR-factorize a = u ϖ^m: σa = σu (σϖ)^m with σu unit, σϖ irreducible
-   ⟹ intVal σa = exp(−m) = intVal a ✓ using P93's en-route irreducible-valuation fact!
-   — CLEANEST, do this).
-2. **The pair-equivariant SES package**: `M' := Rˣ` with the restricted action (σ
-   preserves Rˣ), `M := Kˣ`, `M'' := Multiplicative ℤ` trivial action; intertwinings:
-   `ι` (= `Units.map (algebraMap)`) intertwines by definition of the restricted action;
-   `π` (= `dvrUnitsValuation`) intertwines = invariance (1). Pairs: P91's
-   `cyclicNorm σ• n`/`cyclicDiff σ•` on all three (M''-side: trivial action ⟹ P92's
-   forms).
-3. **Fire P90**: `herbrandQuotient_mul` + P92's `q(ℤ) = n` ⟹
-   **`q(Kˣ) = q(Rˣ) · n`** (with the Ĥ¹-finiteness hypotheses carried).
-Then the wall: `q(Rˣ) = 1` for the tower (unit filtration, P24–27, compactness) — design
-pass first when reached. Clean partial > half-discharge. (Fallback: Hasse–Arf.)
-
-**Method (the P43–63 rhythm):** inventory first; `lake env lean` probes **from the project
-root**; every Mathlib name source-grepped; fresh file; scope tightly; one rung; clean
-partial > half-discharge.
+The output of that design pass should be concrete lemma statements and a dependency
+map. This pass proves no unit quotient formula beyond the conditional reduction,
+no Hilbert-90 bridge, and no reciprocity theorem. R1–R3 remain untouched.
 
 ## Environment (verify, then trust)
 
@@ -115,11 +65,8 @@ partial > half-discharge.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## The queue after Pass 94
+## Queue after the unit-group design
 
-Lemma 5's bricks → **Lemma 5** → **`φ`-transitivity** (Prop. 15) + **Herbrand's theorem**
-`(G/H)^v = G^v H/H` (Prop. 14) → Hasse–Arf, the limit `G^v ≤ Gal(K̄/K)` (Serre IV §3).
-Optional deepening: `ψ` closed form / `φ` concavity. The **R1-floor** stays
-ROADMAP-permitted but **deferred**. R1–R3 remain distant targets that must be earned, never
-axiomatized — the line between inputs and targets is drawn in `ROADMAP.md` and is the
-project's reason for existing.
+The remaining L3.1 bridges (concrete Galois norm, `Rep`, Hilbert 90), L3.2 unramified
+cohomology, and L3.3 reciprocity precede L3.4's ramification correspondence.
+Hasse–Arf remains a separate deferred rung. See ROADMAP for the dependency ladder.

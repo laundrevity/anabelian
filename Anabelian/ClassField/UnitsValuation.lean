@@ -21,13 +21,12 @@ tower), the three pieces of the short exact sequence
   `dvrUnitsValuation_eq_iff`;
 * **`dvrUnitsValuation_surjective`** — powers of a uniformizer hit everything;
 * **`dvrUnitsValuation_ker`** — the kernel is exactly the image of `Rˣ`: the
-  fraction-and-factor argument, with the standalone fact that every irreducible has
-  `intValuation = exp(−1)` proved en route (the `k·z = −1` integer-divisor argument).
+  fraction-and-factor argument, using `intValuation_irreducible` (extracted and
+  shortened via ideal multiplicity in Pass 94).
 
-This is the `(ι, π, exactness)` data of the sequence. The next bricks make it
-PAIR-EQUIVARIANT for a cyclic Galois action (the valuation is Galois-invariant — the
-action downstairs is trivial, which is exactly Pass 92's computed case) and fire Pass
-90's multiplicativity: `q(Lˣ) = q(𝒪ˣ) · q(ℤ) = q(𝒪ˣ) · n`.
+This is the `(ι, π, exactness)` data of the sequence. Pass 94's
+`UnitsValuationEquivariance` makes it pair-equivariant and applies multiplicativity
+to obtain the conditional identity `q(Kˣ) = q(Rˣ) · n`.
 
 ## Honesty
 
@@ -54,6 +53,14 @@ noncomputable def dvrHeightOneSpectrum : HeightOneSpectrum R where
   asIdeal := maximalIdeal R
   isPrime := Ideal.IsMaximal.isPrime inferInstance
   ne_bot := IsDiscreteValuationRing.not_a_field'
+
+/-- Every irreducible of a DVR has integral valuation `exp (−1)`. -/
+theorem intValuation_irreducible {ϖ : R} (hϖ : Irreducible ϖ) :
+    (dvrHeightOneSpectrum R).intValuation ϖ = WithZero.exp (-1 : ℤ) := by
+  rw [(dvrHeightOneSpectrum R).intValuation_eq_exp_neg_multiplicity hϖ.ne_zero]
+  change WithZero.exp (-(multiplicity (maximalIdeal R) (Ideal.span {ϖ}) : ℤ)) = _
+  rw [hϖ.maximalIdeal_eq, multiplicity_self]
+  rfl
 
 /-- **THE UNIT VALUATION** `v : Kˣ →* Multiplicative ℤ` of a DVR's fraction field —
 Mathlib's `ℤᵐ⁰`-adic valuation restricted to units and read through
@@ -103,8 +110,8 @@ theorem dvrUnitsValuation_surjective :
 
 /-- **The kernel is exactly `Rˣ`** (as a subgroup of `Kˣ` via `Units.map`): a
 valuation-one element `a/b` has `|a| = |b|`, DVR-factorization forces equal
-`ϖ`-exponents, and the unit parts assemble. En route: the `intValuation` of ANY
-irreducible is `exp(−1)` (the `k·z = −1` divisor argument in `ℤ`). -/
+`ϖ`-exponents, and the unit parts assemble. The irreducible valuation is supplied by
+`intValuation_irreducible`. -/
 theorem dvrUnitsValuation_ker :
     (dvrUnitsValuation R K).ker = (Units.map (algebraMap R K : R →* K)).range := by
   ext x
@@ -130,54 +137,7 @@ theorem dvrUnitsValuation_ker :
       rw [(dvrHeightOneSpectrum R).intValuation_eq_one_iff_mem_primeCompl]
       intro hmem
       exact (mem_nonunits_iff.mp ((mem_maximalIdeal _).mp hmem)) w.isUnit
-    -- the irreducible has valuation exp(−1)
-    have hγ0 : (dvrHeightOneSpectrum R).intValuation ϖ ≠ 0 :=
-      (dvrHeightOneSpectrum R).intValuation_ne_zero ϖ hϖ.ne_zero
-    obtain ⟨g, hg⟩ := WithZero.ne_zero_iff_exists.mp hγ0
-    have hγlt : (dvrHeightOneSpectrum R).intValuation ϖ < 1 := by
-      rw [(dvrHeightOneSpectrum R).intValuation_lt_one_iff_mem]
-      change ϖ ∈ maximalIdeal R
-      rw [hϖ.maximalIdeal_eq]
-      exact Ideal.mem_span_singleton_self ϖ
-    have hzneg : Multiplicative.toAdd g < 0 := by
-      rw [← hg, ← WithZero.coe_one, WithZero.coe_lt_coe] at hγlt
-      exact hγlt
-    obtain ⟨π₀, hπ₀⟩ := (dvrHeightOneSpectrum R).intValuation_exists_uniformizer
-    have hπ₀0 : π₀ ≠ 0 := by
-      intro h0
-      rw [h0, map_zero] at hπ₀
-      exact WithZero.exp_ne_zero hπ₀.symm
-    obtain ⟨k, c, hc⟩ := IsDiscreteValuationRing.eq_unit_mul_pow_irreducible hπ₀0 hϖ
-    have hvc : (dvrHeightOneSpectrum R).intValuation (c : R) = 1 := by
-      rw [(dvrHeightOneSpectrum R).intValuation_eq_one_iff_mem_primeCompl]
-      intro hmem
-      exact (mem_nonunits_iff.mp ((mem_maximalIdeal _).mp hmem)) c.isUnit
-    have h5 : ((dvrHeightOneSpectrum R).intValuation ϖ) ^ k = WithZero.exp (-1 : ℤ) := by
-      rw [← hπ₀, hc, map_mul, map_pow, hvc, one_mul]
-    have h8 : (k : ℤ) * Multiplicative.toAdd g = -1 := by
-      have h6 : ((g ^ k : Multiplicative ℤ) : WithZero (Multiplicative ℤ))
-          = ((Multiplicative.ofAdd (-1 : ℤ) : Multiplicative ℤ)
-            : WithZero (Multiplicative ℤ)) := by
-        rw [WithZero.coe_pow, hg, h5]
-        rfl
-      have h7 : g ^ k = Multiplicative.ofAdd (-1 : ℤ) := by exact_mod_cast h6
-      have h9 := congrArg Multiplicative.toAdd h7
-      simpa [mul_comm] using h9
-    have hz : Multiplicative.toAdd g = -1 := by
-      have hdvd : Multiplicative.toAdd g ∣ (-1 : ℤ) :=
-        ⟨k, by rw [← h8]; ring⟩
-      rcases Int.isUnit_iff.mp (isUnit_of_dvd_unit hdvd (IsUnit.neg isUnit_one)) with
-        h10 | h10
-      · omega
-      · exact h10
-    have hγ : (dvrHeightOneSpectrum R).intValuation ϖ = WithZero.exp (-1 : ℤ) := by
-      rw [← hg]
-      have h11 : g = Multiplicative.ofAdd (-1 : ℤ) := by
-        apply Multiplicative.toAdd.injective
-        rw [hz]
-        rfl
-      rw [h11]
-      rfl
+    have hγ := intValuation_irreducible R hϖ
     -- m = n from equal valuations
     have hva : (dvrHeightOneSpectrum R).intValuation a = WithZero.exp (-(m : ℤ)) := by
       rw [hu, map_mul, map_pow, hvu, one_mul, hγ, ← WithZero.exp_nsmul]
@@ -233,6 +193,7 @@ theorem dvrUnitsValuation_ker :
 
 -- Reproducible axiom audit (re-runs on every `lake build`). Standard-axioms-only.
 #print axioms dvrHeightOneSpectrum
+#print axioms intValuation_irreducible
 #print axioms dvrUnitsValuation
 #print axioms dvrUnitsValuation_eq_iff
 #print axioms dvrUnitsValuation_surjective

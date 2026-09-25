@@ -24,6 +24,10 @@ This is the computation the valuation exact sequence `1 → 𝒪ˣ → Lˣ → �
 `q(Lˣ) = [L:K]` out of (with `q(𝒪ˣ) = 1`, the unit-filtration track) — the input to the
 class-formation axioms of the Neukirch route.
 
+Pass 94 extracts `multiplicative_int_pow_eq_one` and derives
+`finite_herbrandH_norm_diff_int` from the cardinality-one result, so multiplicativity
+can use the value-group finiteness without a supplied instance.
+
 ## Honesty
 
 A concrete cohomology computation — **no reach toward R1–R3**, no class field theory
@@ -155,6 +159,33 @@ theorem range_cyclicNorm_int (n : ℕ) :
         = n • k := by simp
     rw [h2, hk, nsmul_eq_mul]
 
+/-- The infinite cyclic group has no nontrivial `n`-torsion when `n ≠ 0`. -/
+theorem multiplicative_int_pow_eq_one (n : ℕ) (hn : n ≠ 0) :
+    ∀ x : Multiplicative ℤ, x ^ n = 1 → x = 1 := by
+  intro x hx
+  have h2 : (n : ℤ) * Multiplicative.toAdd x = 0 := by
+    have h3 : Multiplicative.toAdd (x ^ n) = n • Multiplicative.toAdd x := by simp
+    rw [hx] at h3
+    have h4 : Multiplicative.toAdd (1 : Multiplicative ℤ) = 0 := rfl
+    rw [h4] at h3
+    rw [nsmul_eq_mul] at h3
+    linarith [h3]
+  have h5 : Multiplicative.toAdd x = 0 := by
+    rcases mul_eq_zero.mp h2 with h6 | h6
+    · exfalso
+      exact hn (by exact_mod_cast h6)
+    · exact h6
+  apply Multiplicative.toAdd.injective
+  exact h5
+
+/-- `Ĥ¹` of the trivial cyclic action on `ℤ` is finite, derived from its card being one. -/
+theorem finite_herbrandH_norm_diff_int (n : ℕ) (hn : n ≠ 0) :
+    Finite (herbrandH (cyclicNorm (1 : MulAut (Multiplicative ℤ)) n)
+      (cyclicDiff (1 : MulAut (Multiplicative ℤ)))) := by
+  apply Nat.finite_of_card_ne_zero
+  rw [card_herbrandH_norm_diff_eq_one n (multiplicative_int_pow_eq_one n hn)]
+  exact one_ne_zero
+
 /-- **`q(ℤ) = n`** (Serre VIII §4; the fundamental computation): the Herbrand quotient of
 the trivial action of a cyclic group of order `n` on the infinite cyclic module is `n` —
 `Ĥ⁰ = ℤ/nℤ` (card `n` via `Int.index_zmultiples`), `Ĥ¹ = 0` (torsion-freeness). The
@@ -168,23 +199,8 @@ theorem cyclicHerbrandQuotient_int (n : ℕ) (hn : n ≠ 0) :
       (cyclicNorm (1 : MulAut (Multiplicative ℤ)) n)) = n := by
     rw [card_herbrandH_diff_norm, range_cyclicNorm_int, AddSubgroup.index_toSubgroup,
         Int.index_zmultiples, Int.natAbs_natCast]
-  have htf : ∀ x : Multiplicative ℤ, x ^ n = 1 → x = 1 := by
-    intro x hx
-    have h2 : (n : ℤ) * Multiplicative.toAdd x = 0 := by
-      have h3 : Multiplicative.toAdd (x ^ n) = n • Multiplicative.toAdd x := by simp
-      rw [hx] at h3
-      have h4 : Multiplicative.toAdd (1 : Multiplicative ℤ) = 0 := rfl
-      rw [h4] at h3
-      rw [nsmul_eq_mul] at h3
-      linarith [h3]
-    have h5 : Multiplicative.toAdd x = 0 := by
-      rcases mul_eq_zero.mp h2 with h6 | h6
-      · exfalso
-        exact hn (by exact_mod_cast h6)
-      · exact h6
-    apply Multiplicative.toAdd.injective
-    exact h5
-  have h1 := card_herbrandH_norm_diff_eq_one (A := Multiplicative ℤ) n htf
+  have h1 := card_herbrandH_norm_diff_eq_one (A := Multiplicative ℤ) n
+    (multiplicative_int_pow_eq_one n hn)
   rw [h0, h1]
   norm_num
 
@@ -196,6 +212,8 @@ end IntComputation
 #print axioms card_herbrandH_norm_diff_eq_one
 #print axioms card_herbrandH_diff_norm
 #print axioms range_cyclicNorm_int
+#print axioms multiplicative_int_pow_eq_one
+#print axioms finite_herbrandH_norm_diff_int
 #print axioms cyclicHerbrandQuotient_int
 
 end Anabelian

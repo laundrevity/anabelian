@@ -6346,3 +6346,76 @@ Pair-equivariance and the P90 firing (`q(Kˣ) = q(Rˣ)·n`) are next.**
 **0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A. R1–R3 untouched.
 Next (Pass 94): σ-invariance of the valuation (via the en-route irreducible-valuation
 fact — σϖ is again irreducible!), the equivariant package, the P90 firing. See HANDOFF.
+
+
+### Pass 94 (2026-09-25) — valuation equivariance and q(Kˣ) = q(Rˣ) · n
+
+**Mathematics; ledger delta 0 / 0.** The DVR valuation sequence is now equivariant
+under compatible ring automorphisms, and `cyclicHerbrandQuotient_units` proves the
+conditional identity `q(Kˣ) = q(Rˣ) · n`. Thirteen new theorems across four files;
+`UnitsValuationEquivariance.lean` is the new module, imported by `Anabelian.lean`.
+The project now has 93 source files under `Anabelian/`.
+
+## Statements and proof route
+
+For a DVR `R`, its fraction field `K`, ring automorphisms `s`, `t`, and
+`hst : ∀ r, t (algebraMap R K r) = algebraMap R K (s r)`, write
+`σR := Units.mapEquiv s.toMulEquiv`, `σK := Units.mapEquiv t.toMulEquiv`,
+`ι := Units.map (algebraMap R K)`, and `v := dvrUnitsValuation R K`.
+
+- **Integral valuation:** `intValuation_irreducible` gives
+  `Irreducible ϖ → (dvrHeightOneSpectrum R).intValuation ϖ = WithZero.exp (-1 : ℤ)`.
+  Mathlib's `intValuation_eq_exp_neg_multiplicity`, `Irreducible.maximalIdeal_eq`,
+  and `multiplicity_self` replace Pass 93's inline integer-divisor argument, and
+  its kernel proof now uses the shared lemma. `intValuation_ringEquiv` factors a
+  nonzero element as `u * ϖ^m`; `s` preserves units and irreducibles. Zero is separate.
+- **Equivariant sequence:** `dvrUnitsInclusion_injective` uses
+  `Units.map_injective (IsFractionRing.injective R K)`;
+  `dvrUnitsInclusion_equivariant` is `hst` at the unit carrier. These two statements
+  omit the unused DVR assumptions. `dvrUnitsValuation_equivariant` writes `x = a/b`
+  using `IsFractionRing.div_surjective`, applies `hst`, and rewrites both integral
+  valuations. Together with P93's kernel and surjectivity, this gives the SES with
+  trivial value-group action.
+- **Cyclic naturality:** `map_mulAut_pow`, `map_cyclicDiff`, and `map_cyclicNorm`
+  hold for any equivariant hom of commutative groups, without periodicity. The
+  proofs use induction with `pow_succ'`/`MulAut.mul_apply`, preservation of products
+  and inverses, and `map_prod`. Specialization gives
+  `dvrUnitsValuation_cyclicDiff : v (cyclicDiff σK x) = 1` and
+  `dvrUnitsValuation_cyclicNorm : v (cyclicNorm σK n x) = (v x)^n`.
+- **Assembly:** extract P92's integer torsion proof as
+  `multiplicative_int_pow_eq_one`. `finite_herbrandH_norm_diff_int` applies
+  `Nat.finite_of_card_ne_zero` to `card_herbrandH_norm_diff_eq_one`. Then
+  `herbrandQuotient_mul` consumes the four naturality intertwinings and both
+  complex conditions on `Kˣ`; `cyclicHerbrandQuotient_int` finishes the calculation.
+  No separate periodicity hypothesis on `Rˣ` is supplied.
+
+## Carried hypotheses and scope
+
+The headline explicitly carries `hn : n ≠ 0`, `hσ : σK ^ n = 1`,
+`[Finite (herbrandH (cyclicNorm σR n) (cyclicDiff σR))]`, and the corresponding
+instance on `Kˣ`. The first supplies the integer computation and value-group
+finiteness; the second supplies the middle complex conditions; the two instances
+feed P90. **No necessity or sharpness claim is made for these hypotheses.** No
+failure-when-dropped witness is claimed or newly owed. The existing cyclic-pair
+source commentary also now uses this carried-hypothesis language.
+
+This pass does not prove `q(Rˣ) = 1`, discharge the supplied unit-group finiteness,
+or identify the abstract cyclic norm with a concrete field norm. Next is a design
+pass for the local-field unit quotient, with those dependencies kept explicit.
+No class field theory or reconstruction result is claimed; R1–R3 remain untouched.
+
+## Verification and governance
+
+`lake build`: **8569 jobs, success, zero warnings/errors**.
+`scripts/preflight.sh`: **CLEAN**, including the 93-file import-chain check.
+All thirteen new theorem audits are standard-only; the modified P92 integer-quotient
+and P93 kernel proofs also retain standard-only audits. The exact new-theorem output
+is recorded in the Pass-94 ledger entry and reproduced by the source audit blocks.
+Project source scan: zero `axiom` declarations and zero `sorry`/`admit` proof holes.
+
+README, HANDOFF (including the intro and queue), and ROADMAP now agree on Pass 94,
+93 project files, L3.1 in progress, and the next unit-group design task. Their stale
+current-state passages were replaced by concise current summaries. Historical NOTES
+and ledger entries are unchanged; CLAUDE's constitution has no stale pass/count claim.
+
+**Ledger delta: 0 / 0.** No new `structure`/`class`; no owed witness; D1/D2 N/A.

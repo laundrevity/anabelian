@@ -28,12 +28,15 @@ With Pass 87 (triviality) and Pass 90 (multiplicativity) this arms the cyclic la
 standard computations: next are `q(ℤ) = n` (trivial action) and the `q(Lˣ) = [L:K]` track
 through the valuation exact sequence and the unit filtration.
 
+Pass 94 adds `map_mulAut_pow`, `map_cyclicDiff`, and `map_cyclicNorm`: an equivariant
+hom intertwines the cyclic pair, with no periodicity hypothesis.
+
 ## Honesty
 
 The instantiation layer for Galois modules — **no reach toward R1–R3**, no class field
-theory claimed. Rule-2 note: the `σ ^ n = 1` hypothesis is load-bearing in the two
-complex-condition theorems and is USED in both proofs (the index-shift cycle closure);
-no sharpness claim is made, so no witness is owed. No new `structure`/`class`; D1 N/A;
+theory claimed. The `σ ^ n = 1` hypothesis is carried in the two complex-condition
+theorems and used for index-shift cycle closure; no necessity or sharpness claim is
+made, so no witness is owed. No new `structure`/`class`; D1 N/A;
 D2 untouched.
 
 ## Axiom status
@@ -69,6 +72,28 @@ theorem cyclicNorm_apply (σ : MulAut A) (n : ℕ) (x : A) :
 
 theorem cyclicDiff_apply (σ : MulAut A) (x : A) :
     cyclicDiff σ x = σ x * x⁻¹ := rfl
+
+/-- An equivariant hom intertwines every power of the automorphisms; no periodicity
+is needed. -/
+theorem map_mulAut_pow {B : Type*} [CommGroup B] (φ : A →* B)
+    (σ : MulAut A) (τ : MulAut B) (h : ∀ x, φ (σ x) = τ (φ x))
+    (i : ℕ) (x : A) : φ ((σ ^ i) x) = (τ ^ i) (φ x) := by
+  induction i with
+  | zero => rfl
+  | succ i hi =>
+    simpa only [pow_succ', MulAut.mul_apply] using (h ((σ ^ i) x)).trans (congrArg τ hi)
+
+/-- Cyclic differences are natural under equivariant homs, without periodicity. -/
+theorem map_cyclicDiff {B : Type*} [CommGroup B] (φ : A →* B)
+    (σ : MulAut A) (τ : MulAut B) (h : ∀ x, φ (σ x) = τ (φ x)) (x : A) :
+    φ (cyclicDiff σ x) = cyclicDiff τ (φ x) := by
+  simp only [cyclicDiff_apply, map_mul, map_inv, h]
+
+/-- Cyclic norms are natural under equivariant homs, without periodicity. -/
+theorem map_cyclicNorm {B : Type*} [CommGroup B] (φ : A →* B)
+    (σ : MulAut A) (τ : MulAut B) (h : ∀ x, φ (σ x) = τ (φ x))
+    (n : ℕ) (x : A) : φ (cyclicNorm σ n x) = cyclicNorm τ n (φ x) := by
+  simp only [cyclicNorm_apply, map_prod, map_mulAut_pow φ σ τ h]
 
 /-- `σ` fixes every norm: `σ(N x) = N x` — the index shift `i ↦ i+1` permutes the factors
 (`σ^n = 1` closes the cycle). -/
@@ -166,6 +191,9 @@ example : cyclicHerbrandQuotient (1 : MulAut A) 1 = 1 := by
 -- Reproducible axiom audit (re-runs on every `lake build`). Standard-axioms-only.
 #print axioms cyclicNorm
 #print axioms cyclicDiff
+#print axioms map_mulAut_pow
+#print axioms map_cyclicDiff
+#print axioms map_cyclicNorm
 #print axioms sigma_cyclicNorm
 #print axioms cyclicDiff_cyclicNorm
 #print axioms cyclicNorm_cyclicDiff

@@ -3728,3 +3728,50 @@ reciprocity wall; hypotheses visibly consumed; no witness owed. No new
 claimed. No new `structure`/`class`; no owed witness; D1/D2 N/A.
 
 **Ledger delta: 0 / 0.** Axiom-free — 93 passes.
+
+
+### Pass 94 (2026-09-25) — valuation equivariance and conditional q(Kˣ) = q(Rˣ) · n; count stays 0 / 0
+
+**No axiom added, none needed.** Thirteen new theorems across
+`ClassField/CyclicPair.lean`, `ClassField/TrivialAction.lean`,
+`ClassField/UnitsValuation.lean`, and the new `ClassField/UnitsValuationEquivariance.lean`.
+All new declarations have reproducible source audits:
+
+```text
+'Anabelian.map_mulAut_pow' depends on axioms: [propext, Quot.sound]
+'Anabelian.map_cyclicDiff' depends on axioms: [propext, Quot.sound]
+'Anabelian.map_cyclicNorm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.multiplicative_int_pow_eq_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_herbrandH_norm_diff_int' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.intValuation_irreducible' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.intValuation_ringEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsInclusion_injective' depends on axioms: [propext, Quot.sound]
+'Anabelian.dvrUnitsInclusion_equivariant' depends on axioms: [propext, Quot.sound]
+'Anabelian.dvrUnitsValuation_equivariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation_cyclicDiff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.dvrUnitsValuation_cyclicNorm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicHerbrandQuotient_units' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Integral valuation:** extract `intValuation_irreducible` via ideal multiplicity,
+  reuse it in P93's kernel proof, and prove invariance under DVR ring automorphisms.
+- **Equivariant SES:** injective units inclusion, compatibility under `s` and `t`,
+  and invariant fraction-field valuation. P93 supplies exactness and surjectivity.
+- **Cyclic naturality:** the generic power, difference, and norm intertwinings have
+  no periodicity hypothesis; specialized valuation formulas follow.
+- **Conditional identity:** `cyclicHerbrandQuotient_units` applies P90 multiplicativity
+  and P92's integer computation. Value-group `Ĥ¹` finiteness is derived from its
+  cardinality being one. The theorem carries `n ≠ 0`, periodicity on `Kˣ`, and the
+  explicit `Ĥ¹` finiteness instances on `Rˣ` and `Kˣ`.
+
+**Rule-2 and boundary.** These are carried hypotheses; no necessity or sharpness
+claim is made. No new `structure`/`class`, no new owed witness, D1/D2 N/A. This is
+strictly below reciprocity: `q(Rˣ) = 1` for local-field units and the supplied
+finiteness hypotheses remain dependencies; R1–R3 are untouched.
+
+**Verification:** `lake build` successful (8569 jobs, no warnings/errors), preflight
+CLEAN (93 files), all build audits standard-only. Zero project `axiom` declarations
+and zero `sorry`/`admit` proof holes. P92's refactored integer computation and P93's
+refactored kernel theorem also retain standard-only audits.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.

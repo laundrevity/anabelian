@@ -23,161 +23,38 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 93 (2026-07-04)
+## Current state — Pass 94 (2026-09-25)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 92 project files, ~8500 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 93 project files, 8569 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
 
-The project has earned, axiom-free, the following strata (detail in `NOTES.md` / `ROADMAP.md`):
+The current strata are:
 
-- **L1 — Galois theory of local & finite fields (Passes 1–21).** `Gal(𝔽_q̄/𝔽_q) ≅ Ẑ` as a
-  topological group (the first L1 "whole of depth", Pass 10); `Gal(ℚ̄/ℚ)` non-abelian (Pass 3); and
-  — the project's **first `DEBT`-discharged-into-theorem** — the residue-reduction surjection
-  `Gal(K̄/K) ↠ Gal(𝓀̄/𝓀)`: taken as a `FOUNDATIONAL` boundary at Pass 5, reclassified to `DEBT` at
-  Pass 11, and **discharged into a proved `theorem` at Pass 20** (perfect case; the imperfect
-  equal-characteristic case is a tracked owed generality, not an axiom).
-- **L2 — Higher ramification (Serre, *Local Fields*, ch. IV), DONE (Pass 83).** The stratum closed with the capstone: `G^v` on the absolute Galois group `Gal(K^sep/K)`, a closed subgroup projecting onto every finite level (the inverse limit the upper numbering exists for). Hasse–Arf (ch. V) is deferred to its own rung. The arc, in order: The lower-numbering
-  filtration `G_i` and its theory (Passes 22–28: inertia, antitone, normality, the tame character
-  `G_0/G_1 → 𝓀ˣ`, wild inertia `G_1` a `p`-group). The **descent** — `𝒪_L` as a valuation subring
-  of a finite extension, the ramification theory concrete at `𝒪_L` — closed and harvested (Passes
-  29–37). The **finite-extension local-field assembly** `IsNonarchimedeanLocalField L` complete
-  (Passes 38–41). The **canonicity** of `extensionValuativeRel` across towers (Pass 43). The
-  **Herbrand ascent**: the function `φ` (Pass 44), its inverse `ψ` and the **upper numbering** `G^v`
-  (Pass 45), the lower-numbering **subgroup compatibility** `H_u = H ∩ G_u` (Pass 46), the
-  **slope** `φ'(u) = 1/(G_0 : G_u)` (Pass 47), the **explicit piecewise-linear formula**
-  `φ(u) = (|G_1|+…+|G_n|+(u−n)|G_{n+1}|)/|G_0|` (Pass 48), the **`ψ` slope**
-  `ψ'(v) = (G_0 : G_{ψ(v)})` (Pass 49), and the **quotient-restriction skeleton** toward Serre's
-  Lemma 5 — `decompositionQuotient : D(A) →* D(A ∩ K')`, exactness of
-  `Gal(L/K') → Gal(L/K) → Gal(K'/K)` at the decomposition level, inertia preservation
-  `G_0(L/K) → G_0(K'/K)` (Pass 50); **Serre's `i_G` function** `lowerIndex : D(A) → ℕ∞`
-  (generator-free), with Lemma 1 `σ ∈ G_i ↔ i < i_G(σ)`, its calculus, and `i_H = i_G` on
-  subextensions by `rfl` (Pass 51); **surjectivity of the quotient restriction** — `𝒪_L` is
-  Galois-stable (integral closure), so `D(𝒪_L) = ⊤` and `D(A) ⧸ H ≃* D(A ∩ K')`: the `(G/H)`
-  of Herbrand's theorem, realized (Pass 52); the **concrete `i_G`** —
-  `i_G(σ) = v_L(σx − x)` (`lowerIndex_eq_addVal`) with Lemma 1 in generator form (Pass 53);
-  the **monogenicity discharge** — `𝒪_L = 𝒪_K[x]` (Serre III §6 Prop. 12, finite-residue
-  case), making the concrete `i_G` **unconditional**: `∃ x, ∀ σ, i_G(σ) = v_L(σx − x)`
-  (Pass 54); and the **subextension characteristic polynomial** —
-  `∏_{h ∈ Gal(L/K')} (X − h·x)` descends to a monic polynomial over `𝒪_L ∩ K'`
-  (`fullProdXSubSMul` + the fixed-points descent, hypothesis-free at `𝒪_L`), the substrate of
-  Prop. 3 (Pass 55); and the **lift-set identity** — the fiber of `decompositionQuotient` is
-  the coset `s₀·H` as an explicit bijection (`decompositionFiberEquiv`), and Serre's
-  polynomial transported along a lift is the fiber product `∏_{h}(X − (s₀·dr h)·x)`
-  (Pass 56); and **`𝒪_L ∩ K' = 𝒪_{K'}`** with the Prop.-3 generator package at
-  `B = 𝒪_L ∩ K'` — one `y` with `B = 𝒪_K[y]`, the coefficient telescoping
-  `(σ̄y − y) ∣ (σ̄c − c)`, and the concrete `i_{K'/K}(σ̄) = addVal_B(σ̄y − y)` (Pass 57); and
-  **Prop. 3's direction (i), proved** — `ι(σ̄y − y) ∣ ∏_{s ↦ σ̄} (x − s·x)` in `𝒪_L`,
-  hypothesis-free (Pass 58); the **`addVal` bookkeeping** — the `e'`-dilation
-  `addVal_A(ι c) = addVal_B(c)·e'` and the fiber sum
-  `addVal(∏_{s ↦ σ̄}(x − s·x)) = Σ i_{L/K}(s)` (Pass 59); and the **representation +
-  `L = K'(x)` layer** — every integer of `L` is `g(x)` for `g` over `𝒪_K`, and the same
-  generator generates `L` as a field over every intermediate `K'` (Pass 60); and the
-  **remainder-vanishing brick** — a polynomial over `B` of degree `< [L:K']` whose image
-  kills `x` is zero (Pass 61); **Prop. 3's direction (ii), proved** —
-  `∏_{s ↦ σ̄} (x − s·x) ∣ ι(σ̄y − y)` for every `y ∈ B` (Pass 62); **SERRE IV §1
-  PROP. 3, PROVED** — the sum formula `i_{K'/K}(σ̄) · e' = Σ_{s ↦ σ̄} i_{L/K}(s)`,
-  generator-free, axiom-free (Pass 63); the **fiber index profile** toward Lemma 5 —
-  `i(s₁·h) = min(i_H(h), j)` for a fiber maximizer `s₁`, with the `Σ min` sum form
-  (Pass 65); the **double count** — `Σ_σ min(i(σ), m) = Σ_{k<m} |G_k|` via level sets
-  and Pass 51's Lemma 1 (Pass 66); the **`φ`-bridge** —
-  `Σ_{k≤n} |G_k| = |G_0|·(φ(n)+1)` with the cast forms (Pass 67); **`e'` in ideal
-  form** — `Ideal.ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)` on the new `comapAlgebra`
-  scaffold (Pass 68); the **`IsGaloisGroup` package** — `D_{K'}(𝒪_L)` is a Galois group
-  for `B ⊆ 𝒪_L` (faithful, commuting, invariant — Pass 55's descent in instance form)
-  (Pass 69); the **inertia matching + instance package** — the project's `G₀` IS
-  Mathlib's `Ideal.inertia 𝔪_L D` (by `pow_one`), with LiesOver/Module.Finite/torsion-free/
-  separable-residue all in place (Pass 70); **`e' = |H₀|`, proved** —
-  `(|H₀| : ℕ∞) = addVal(ι π_B)`, the classical `e = |inertia|` for `L/K'` (Pass 71); **THE NUMERICAL LEMMA 5, proved** — `i_{K'/K}(σ̄) = φ_{L/K'}(j(σ̄) − 1) + 1` for every
-  `σ̄ ≠ 1` (Pass 72); **SERRE IV §3 LEMMA 5, proved** —
-  `(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`, Herbrand's
-  renumbering lemma `(G/H)_{φ_{L/K'}(u)} = G_u H/H` (Pass 73); the **card
-  multiplicativity** — `|G_u| = |(G/H)_{⌈φ_{L/K'}(u)⌉}| · |H_u|`, Prop. 15's arithmetic
-  heart, with `e_{L/K} = e_{K'/K}·e_{L/K'}` at `u = 0` (Pass 74); the **alignment
-  lemma** — the quotient filtration is constant on integer indices in
-  `(φ_{L/K'}(n), ⌈φ_{L/K'}(n+1)⌉]` (Pass 75); **PROP. 15, proved: `φ`-transitivity** —
-  `φ_{L/K}(u) = φ_{K'/K}(φ_{L/K'}(u))` for every real `u`, by right-derivative gluing
-  (Pass 76); **HERBRAND'S THEOREM, proved** — `(G^v).map (decompositionQuotient) =
-  (G/H)^v` for every real `v`: the upper numbering is compatible with quotients (Serre IV
-  §3 Prop. 14) (Pass 77); the **consolidated Herbrand package** —
-  `Anabelian/Herbrand/Main.lean`, the arc's nine headline theorems audited in one block,
-  plus Herbrand on the canonical carrier `𝒪_{K'}` (Pass 78); the **L2-capstone
-  design** — the extension of `G^v` to `Gal(K^sep/K)` (still chapter-IV/L2 material):
-  carrier `separableClosure`, preimage-intersection definition, brick ladder B1–B5
-  (Pass 79); **B1, the full-group form** — the filtrations on the full `L ≃ₐ[K] L`
-  with **Herbrand's theorem along `restrictNormalHom`** (Pass 80); **B2 + B4's
-  heart** — the `≤`-pair plumbing in Mathlib's `finGaloisGroupMap` conventions, and
-  **Herbrand along the profinite transitions** (Pass 81); **B3 — the absolute `G^v`
-  defined**: `⨅`-form on any `E/K`, closed in the Krull topology (Pass 82); and **B5 —
-  PROJECTION SURJECTIVITY, the capstone**: the absolute filtration is a genuine inverse
-  limit of the finite levels (Pass 83) — **with this, L2 is DONE**; and the **Absolute
-  consolidation** — `Anabelian/Absolute/Main.lean` (one audit block for the stratum) plus
-  antitonicity, `v ≤ 0` constancy, and **the separation theorem** `⨅_v G^v(E/K) = ⊥`
-  (Pass 84).
-- **L3–L4 and the targets R1–R3 — `NOT-STARTED`, explicitly multi-year and far.** L3 (local class
-  field theory), L4 (global tools), then the reconstruction targets: R1 (local reconstruction), R2
-  (Neukirch–Uchida), R3 (mono-anabelian recovery). Every file touches the project's subject
-  (absolute Galois groups) while recovering nothing from an abstract group; the targets remain
-  untouched and must be *earned*, never axiomatized.
+- **L1 — finite and local Galois theory.** Finite-field absolute Galois groups and the
+  residue-reduction surjection are proved (the latter for perfect base fields; the
+  imperfect case remains tracked).
+- **L2 — higher ramification, DONE (Pass 83), consolidated in Pass 84.** The finite-level
+  theory, Herbrand's theorem, and the absolute upper filtration as a closed inverse
+  limit are proved. The filtration is antitone, normalized, and separating.
+- **L3 — local class field theory, IN-PROGRESS.** The maximal abelian subextension
+  interface is complete (Pass 86). The cyclic layer has the Herbrand quotient, finite
+  triviality, short-exact-sequence multiplicativity, the cyclic norm/difference pair,
+  and `q(ℤ) = n` (Passes 87–92). Pass 93 supplies the valuation exact sequence
+  `1 → Rˣ → Kˣ → Multiplicative ℤ → 1` for a DVR and its fraction field. Pass 94
+  proves equivariance and the conditional identity `q(Kˣ) = q(Rˣ) · n`.
+- **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
+  mono-anabelian reconstruction remain distant targets. No reconstruction or local
+  reciprocity theorem is claimed.
 
-*(Pass 64 restructured the source tree: `Anabelian/` is now nine content folders —
-`Galois`, `FiniteField`, `Reduction`, `Ramification`, `Herbrand`, `Extension`, `LocalField`,
-`Quotient`, `ForMathlib` — with module paths updated and declaration names unchanged.)*
-
-**Current frontier:** with **Serre IV §1 Prop. 3 proved** (Pass 63 — the fourteen-pass
-quotient arc P50–63, all axiom-free), the next target is **Serre IV §3 Lemma 5**
-`(G/H)_{φ_{L/K'}(u)} = G_u H/H` — converting the `i`-sum identity into the `φ`-renumbering
-statement — and through it **`φ`-transitivity** (Prop. 15) and **Herbrand's theorem**
-`(G/H)^v = G^v H/H` (Prop. 14), the upper numbering's defining quotient-compatibility. The
-`φ`/`ψ` analytic theory (Passes 44–49) and the full quotient arithmetic (Passes 50–63) are
-in place, and the fiber index profile (Pass 65) + the double count (Pass 66) convert the
-sum formula into `e'·i_{K'/K}(σ̄) = Σ_{k<j} |H_k|`, and the `φ`-bridge (Pass 67) reads the
-right side as `|H_0|·(φ_{L/K'}(j−1)+1)`; for `e' = |H_0|`, Mathlib's
-`Ideal.card_inertia_eq_ramificationIdxIn` (`|inertia| = e`) applies once the project's
-objects are identified with the ideal-theoretic ones — Pass 68 did the `e'` half
-(`ramificationIdx 𝔪_B 𝔪_L = addVal(ι π_B)`), Pass 69 the `IsGaloisGroup` gateway, Pass 70
-the inertia matching plus every remaining instance, Pass 71 closed `e' = |H₀|`, Pass 72
-assembled the numerical Lemma 5, and **Pass 73 proved Lemma 5 itself**:
-`(G_u).map (decompositionQuotient) = ramificationGroup K B ⌈φ_{L/K'}(u)⌉₊`. Passes 74–76 took Prop. 15
-(`φ`-transitivity), and **Pass 77 closed the arc with HERBRAND'S THEOREM**:
-`(G^v).map (decompositionQuotient) = (G/H)^v` — the upper numbering is
-quotient-compatible. Pass 78 consolidated the arc
-(`Anabelian/Herbrand/Main.lean`) and Pass 79 designed **L2's capstone**: `G^v` on
-`Gal(K^sep/K)` — exactly what Herbrand-compatibility makes well-defined — by
-preimage-intersection over the finite Galois subextensions, with the five-brick ladder
-recorded in `ROADMAP.md`; Passes 80–82 laid B1–B3: the full-group form, the profinite
-plumbing with Herbrand along the transitions, and now **the absolute `G^v` itself** —
-defined, closed in the Krull topology, compatible-from-above with every finite level.
-Pass 83 closed B5 — and with it the L2 stratum — Pass 84 consolidated it (the filtration
-of `Gal(K^sep/K)`: defined, closed, an inverse limit, antitone, normalized, separating),
-and Pass 85 opened L3 with the design inventory: Mathlib's group cohomology is real
-(H⁰/H¹/H², LES, Shapiro, Hilbert 90, finite-cyclic periodicity) but Tate cohomology, cup
-products, Brauer-H², Lubin–Tate, and any `K^ab` object are absent; the route decision is
-**Neukirch-style abstract CFT**, and `ROADMAP.md`'s L3 section is now a five-stage ladder
-(L3.0 `K^ab` interface → L3.1 cyclic layer → L3.2 unramified cohomology → L3.3
-reciprocity, the wall → L3.4 the ramification correspondence, the R1-relevant piece).
-Pass 86 laid L3.0: **`K^ab` exists**
-(`Anabelian/ClassField/MaximalAbelian.lean`) — the fixed field of the closed commutator
-subgroup, Galois over `K`, with `Gal(K^ab/K)` the topological abelianization (abelian,
-proved), maximality as a theorem, and `G^v(K^ab/K)` live via the Pass-82 interface. Pass 87 opened L3.1 with **the
-Herbrand quotient** (`Anabelian/ClassField/HerbrandQuotient.lean`, not previously in
-Mathlib): the abstract two-endomorphism form with the finite-module triviality theorem
-`q(M) = 1` — the bookkeeping device of the cyclic layer. Pass 88 added the counting engine
-for `q`-multiplicativity: the 6-cycle alternating-card lemma (finiteness-free) and
-`herbrandH` functoriality. Pass 89 built the snake, and
-Pass 90 closed the six-term cycle: three generic exactness lemmas (the other three nodes
-by the `(f,g)`-swap) feed the alternating-card identity, giving **the multiplicativity
-theorem `q(M) = q(M')·q(M'')`** — with Pass 87's triviality, the Herbrand-quotient
-calculus is operational. Pass 91 instantiated it for Galois modules: the cyclic pair
-(norm `∏σⁱ`, twisted difference `σ/1`, complex conditions) and `q(σ, A)` with the
-`(diff, norm)` convention pinned. Pass 92 delivered the fundamental computation
-**`q(ℤ) = n`** (`Ĥ⁰ = ℤ/nℤ`, `Ĥ¹ = 0`, with the generic `|Ĥ⁰| = [A : Aⁿ]` presentation
-machinery). Pass 93 opened the `q(Lˣ)` track with the valuation exact sequence
-`1 → Rˣ → Kˣ → ℤ → 1` for any DVR fraction field — the units-valuation hom, its
-surjectivity, and its kernel, all abstract. Next: pair-equivariance + the P90 firing,
-then the `q(𝒪ˣ) = 1` wall; or Hasse–Arf.
+**Current frontier:** `cyclicHerbrandQuotient_units` proves `q(Kˣ) = q(Rˣ) · n`
+for compatible ring automorphisms, carrying `n ≠ 0`, periodicity on `Kˣ`, and explicit
+`Ĥ¹` finiteness on `Rˣ` and `Kˣ`. Value-group finiteness is derived. The next pass is
+a design pass for `q(Rˣ) = 1` for local-field units, including the unit filtration and
+an account of the carried finiteness hypotheses. The class-formation and reciprocity
+stages remain ahead; Hasse–Arf is separately deferred.
 
 ## Build
 
