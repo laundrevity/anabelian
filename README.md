@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 96 (2026-09-26)
+## Current state — Pass 97 (2026-09-26)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 97 project files, 8573 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 98 project files, 8574 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -49,6 +49,9 @@ The current strata are:
   Pass 96 proves the design's field-free layer: stable/quotient/layer actions with the
   naturality of the cyclic pair, the acyclicity of the regular module `C[G]`, and
   filtration lifting (`ker f = im g` from separated, complete, layer-exact filtrations).
+  Pass 97 proves the abstract DVR unit filtration, finite quotients for finite residue
+  fields, the depth-one residue equivalence, and the exact coefficient map with its
+  twisted action at positive depth.
 - **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
   mono-anabelian reconstruction remain distant targets. No reconstruction or local
   reciprocity theorem is claimed.
@@ -63,13 +66,16 @@ both finiteness discharges, and the field-norm comparison. Pass 96 proved the
 design's generic layer (`cyclic_exact_of_complete_filtration`, `regular_cyclic_exact`,
 `herbrandH_subsingleton_of_exact`, the `restrictAut`/`quotientAut`/`layerAut` actions):
 given a `σ`-stable, separated, complete filtration of a subgroup `V₀ ≤ 𝒪_Lˣ` with regular
-layers, both `Ĥ(V₀)` vanish. The arithmetic inputs — the normal-basis lattice, its unit
-subgroups, adic completeness, finite index — remain unproved (Passes 97–101 of the
-design). **Next: P97, the abstract DVR unit filtration `U^m` and its finite quotients.**
+layers, both `Ĥ(V₀)` vanish. Pass 97 supplies the abstract `U^m` API and proves finite
+index for any subgroup containing `U^m` when the residue field is finite. It also
+identifies the residue quotient and the positive-depth coefficients, retaining their
+twisted action. The local action, adic-completeness transport, normal-basis lattice,
+its unit subgroups, and regular layers remain for Passes 98–101.
+**Next: P98, local action and period, adic-completeness transport, and field-norm comparison.**
 Class formation and reciprocity remain ahead; Hasse–Arf is separately deferred.
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-96 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-97 summary above states the current frontier.
 
 ## Build
 

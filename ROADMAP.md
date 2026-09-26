@@ -5,15 +5,15 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 96 (2026-09-26)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 97 (2026-09-26)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 97 project files.** L1's proved scope is unchanged;
+**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 98 project files.** L1's proved scope is unchanged;
 L2 is complete and consolidated (Passes 83–84); L3.0 is done (Pass 86); L3.1 is in
 progress. L3.2–L3.4, L4, and R1–R3 remain ahead.
 
-> **Current frontier — Pass 95:** P94's `cyclicHerbrandQuotient_units` proves the conditional
+> **Current frontier — Pass 97:** P94's `cyclicHerbrandQuotient_units` proves the conditional
 > identity **`q(Kˣ) = q(Rˣ) · n`** for a DVR and its fraction field with compatible ring
 > automorphisms. The valuation sequence is equivariant, the generic cyclic norm and
 > difference are natural, and value-group `Ĥ¹` finiteness is derived from cardinality
@@ -24,7 +24,7 @@ progress. L3.2–L3.4, L4, and R1–R3 remain ahead.
 > one from an acyclic subgroup with finite quotient. The [Pass-95 design](NOTES.md#pass-95)
 > gives complete statements for the normal-basis lattice, regular unit layers,
 > `IsAdicComplete` transport, both finiteness discharges, and the field-norm bridge.
-> The arithmetic targets remain unproved; Mathlib already supplies the field normal basis.
+> The local-field arithmetic targets remain unproved; Mathlib supplies the field normal basis.
 >
 > **P96 proved the design's field-free layer** (`ClassField/StableAction`,
 > `FiltrationLifting`, `RegularModule`): the restricted/quotient/layer actions of a
@@ -35,15 +35,20 @@ progress. L3.2–L3.4, L4, and R1–R3 remain ahead.
 > cyclic corollary `cyclic_exact_of_complete_filtration`; and
 > `herbrandH_subsingleton_of_exact`. All standard-only; no local-field content.
 >
-> **Next — Pass 97:** the abstract DVR unit filtration `U^m = 1 + 𝔪^m` — membership,
-> antitone, separated, stable, finite quotients from a finite residue field, the depth-one
-> residue equivalence and the depth-`m` coefficient map with its twisted action (NOTES
-> Pass 95 §4). Then P98–P102 per the recorded order. Local reciprocity and the
+> **P97 proved the abstract DVR unit filtration** (`ClassField/UnitFiltration`): membership,
+> depth zero, antitone, separated, and stable in the map-equality form; both finite-index
+> results under finite residue; the depth-one residue equivalence; and the positive-depth
+> coefficient hom with its specification, surjectivity, next-depth kernel, and twisted action.
+> All eighteen declarations audit standard-only. No local-field or completeness assumption.
+>
+> **Next — Pass 98:** the local integer action, degree and period, adic-completeness
+> transport, and both field-norm comparison forms (NOTES Pass 95 §§5–6). Then P99–P102
+> construct the small normal lattice and assemble the unit formula. Local reciprocity and the
 > reconstruction targets remain unproved. Hasse–Arf is separately deferred. The historical
 > pass record is in `NOTES.md` and `AXIOM_LEDGER.md`.
 
 The earlier [Passes 44–93 summary](NOTES.md#pass-93-roadmap-detail) is preserved
-verbatim in NOTES; the Pass-96 header above states the current frontier.
+verbatim in NOTES; the Pass-97 header above states the current frontier.
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -478,7 +483,7 @@ we owe before sustained work in a sub-area):**
   search-cost matter, not a logical axiom (`#print axioms` stays standard-only). Fixed-once, contained;
   re-watch only if a future pass needs the spectral structure on `K` outside a localized proof scope.
 
-### L2 — Higher ramification groups (lower & upper numbering)   ·   **DONE (Pass 83)** — the full arc: finite-level theory (P22–28), descent + assembly (P29–43), Herbrand functions + upper numbering (P44–49), the quotient arc through HERBRAND'S THEOREM (P50–78), and the capstone `G^v(K^sep/K)` as a closed inverse limit of the finite levels (P79–83); Hasse–Arf (Serre ch. V) deferred to its own rung; norm-compatibility to L3. (History: architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** Pass 64; the **fiber index profile** Pass 65; the **double count** Pass 66; the **`φ`-bridge** Pass 67; **`e'` in ideal form** Pass 68; the **`IsGaloisGroup` package** Pass 69; the **remaining instances + the inertia matching** Pass 70; **`e' = |H₀|` PROVED** Pass 71; **THE NUMERICAL LEMMA 5 PROVED** Pass 72; **SERRE IV §3 LEMMA 5 PROVED** Pass 73; the **card multiplicativity** Pass 74; the **alignment lemma** Pass 75; **PROP. 15 PROVED** Pass 76; **HERBRAND'S THEOREM PROVED** Pass 77; consolidation + **canonical-carrier Herbrand** Pass 78; the **L2-capstone design** Pass 79; **B1: the full-group form** Pass 80; **B2 + B4's heart** Pass 81; **B3: the absolute `G^v` DEFINED** Pass 82; **B5: PROJECTION SURJECTIVITY — L2 DONE** Pass 83; the **Absolute consolidation + THE SEPARATION THEOREM** Pass 84; the **L3 opening inventory** Pass 85; **L3.0 DONE: `K^ab` exists** Pass 86; **L3.1 opens: the HERBRAND QUOTIENT** Pass 87; the **6-cycle alternating-card lemma + `herbrandH` functoriality** Pass 88; **THE SNAKE** Pass 89; **THE MULTIPLICATIVITY THEOREM** Pass 90; the **cyclic pair** Pass 91; **`q(ℤ) = n`** Pass 92; the **valuation exact sequence** (`Kˣ →* Multiplicative ℤ` for any DVR fraction field: surjective, kernel = `Rˣ`) Pass 93; **valuation equivariance + conditional `q(Kˣ) = q(Rˣ) · n`** Pass 94; **finite-acyclic-kernel reduction + normal-lattice unit proof design** Pass 95; the **generic layer — stable actions, regular-module acyclicity, filtration lifting** Pass 96; **next: P97 the abstract unit filtration; Hasse–Arf deferred**)   ·   DEBT: medium-high   ·   DEBT: medium-high
+### L2 — Higher ramification groups (lower & upper numbering)   ·   **DONE (Pass 83)** — the full arc: finite-level theory (P22–28), descent + assembly (P29–43), Herbrand functions + upper numbering (P44–49), the quotient arc through HERBRAND'S THEOREM (P50–78), and the capstone `G^v(K^sep/K)` as a closed inverse limit of the finite levels (P79–83); Hasse–Arf (Serre ch. V) deferred to its own rung; norm-compatibility to L3. (History: architecture fixed Pass 22; lower numbering + basic theory Pass 23; tame character Pass 24; tame injectivity Pass 25; come-apart exhibit Pass 26; additive characters Pass 27; wild inertia `G₁` `p`-group + tame `p'` Pass 28 — finite-level arc complete modulo monogenicity; the **descent** `𝒪_L` + ramification concrete at `𝒪_L` Passes 29–37; the **assembly** `IsNonarchimedeanLocalField L` Passes 38–41; **canonicity** Pass 43; the **Herbrand ascent** — `φ` Pass 44, `ψ` + upper numbering `G^v` Pass 45, subgroup compatibility `H_u = H ∩ G_u` Pass 46, slope `φ'(u) = 1/(G_0:G_u)` Pass 47, explicit piecewise-linear formula Pass 48, `ψ` slope `ψ'(v) = (G_0:G_{ψ(v)})` Pass 49; the **quotient-restriction skeleton** (`decompositionQuotient`, decomposition-level exactness, inertia preservation) Pass 50; **Serre's `i_G`** (`lowerIndex`, Lemma 1 + calculus + `i_H = i_G` by `rfl`) Pass 51; **surjectivity of the quotient restriction** (`𝒪_L` Galois-stable ⟹ `D(𝒪_L) = ⊤` ⟹ `D(A) ⧸ H ≃* D(A ∩ K')`) Pass 52; the **concrete `i_G(σ) = v_L(σx − x)`** (`lowerIndex_eq_addVal`, monogenicity package as named binders) Pass 53; the **monogenicity discharge** (`𝒪_L = 𝒪_K[x]`, Serre III §6 Prop. 12 finite-residue case ⟹ the concrete `i_G` unconditional) Pass 54; the **subextension characteristic polynomial** (`fullProdXSubSMul` + fixed-points descent — Prop. 3's substrate) Pass 55; the **lift-set identity** (`decompositionFiberEquiv` — the fiber is a coset, explicitly; `f.map s₀ = the fiber product`) Pass 56; **`𝒪_L ∩ K' = 𝒪_{K'}` + the coefficient telescoping + `i_{K'/K}(σ̄) = addVal(σ̄y − y)`** Pass 57; **Prop. 3 direction (i) `a ∣ b` PROVED** (`ι(σ̄y − y) ∣ ∏_{s ↦ σ̄}(x − s·x)`, hypothesis-free at `𝒪_L`) Pass 58; the **`addVal` bookkeeping** (the `e'`-dilation + the fiber sum `addVal(∏) = Σ i_G`) Pass 59; the **representation + `L = K'(x)` layer** Pass 60; the **remainder-vanishing brick** Pass 61; **direction (ii) `b ∣ a` PROVED** Pass 62; **SERRE IV §1 PROP. 3 PROVED** (`i_{K'/K}(σ̄)·e' = Σ_{s ↦ σ̄} i_{L/K}(s)`, the sum formula — the quotient-arithmetic wall is down) Pass 63; the **flat→folders refactor** Pass 64; the **fiber index profile** Pass 65; the **double count** Pass 66; the **`φ`-bridge** Pass 67; **`e'` in ideal form** Pass 68; the **`IsGaloisGroup` package** Pass 69; the **remaining instances + the inertia matching** Pass 70; **`e' = |H₀|` PROVED** Pass 71; **THE NUMERICAL LEMMA 5 PROVED** Pass 72; **SERRE IV §3 LEMMA 5 PROVED** Pass 73; the **card multiplicativity** Pass 74; the **alignment lemma** Pass 75; **PROP. 15 PROVED** Pass 76; **HERBRAND'S THEOREM PROVED** Pass 77; consolidation + **canonical-carrier Herbrand** Pass 78; the **L2-capstone design** Pass 79; **B1: the full-group form** Pass 80; **B2 + B4's heart** Pass 81; **B3: the absolute `G^v` DEFINED** Pass 82; **B5: PROJECTION SURJECTIVITY — L2 DONE** Pass 83; the **Absolute consolidation + THE SEPARATION THEOREM** Pass 84; the **L3 opening inventory** Pass 85; **L3.0 DONE: `K^ab` exists** Pass 86; **L3.1 opens: the HERBRAND QUOTIENT** Pass 87; the **6-cycle alternating-card lemma + `herbrandH` functoriality** Pass 88; **THE SNAKE** Pass 89; **THE MULTIPLICATIVITY THEOREM** Pass 90; the **cyclic pair** Pass 91; **`q(ℤ) = n`** Pass 92; the **valuation exact sequence** (`Kˣ →* Multiplicative ℤ` for any DVR fraction field: surjective, kernel = `Rˣ`) Pass 93; **valuation equivariance + conditional `q(Kˣ) = q(Rˣ) · n`** Pass 94; **finite-acyclic-kernel reduction + normal-lattice unit proof design** Pass 95; the **generic layer — stable actions, regular-module acyclicity, filtration lifting** Pass 96; the **abstract DVR unit filtration, finite quotients, and exact coefficient map** Pass 97; **next: P98 local action, adic transport, and field norm; Hasse–Arf deferred**)   ·   DEBT: medium-high   ·   DEBT: medium-high
 
 **ABSENT** from Mathlib (re-confirmed Passes 11, 22, **44**: `RamificationGroup.lean` is still the
 entire ramification API and is definition-only — decomposition/inertia subgroups; no filtration
@@ -700,7 +705,9 @@ only at the L3.3 gate, not before.
   DONE also: the design's generic layer — stable/quotient/layer actions with cyclic-pair
   naturality, `regular_cyclic_exact`, `ker_eq_range_of_filtration` and its cyclic
   corollary, `herbrandH_subsingleton_of_exact` (Pass 96).
-  REMAINING: P97 the abstract unit filtration and finite quotients, P98 the local action /
+  DONE also: the abstract DVR unit filtration, its finite quotients under finite residue,
+  residue equivalence, and exact coefficient map with twisted action (Pass 97).
+  REMAINING: P98 the local action /
   period / adic transport / field norm, P99 the small normal lattice, P100 its unit
   subgroups and complete filtration, P101 regular layers and acyclicity, P102
   `q(𝒪ˣ) = 1` with both finiteness discharges and `q(Lˣ) = [L:K]`; then the `Rep`

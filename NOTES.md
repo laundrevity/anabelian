@@ -7623,3 +7623,207 @@ supplied for `V₀ ≤ 𝒪_Lˣ` with regular layers, then `cyclic_exact_of_comp
 + `regular_cyclic_exact` + `herbrandH_subsingleton_of_exact` give the two `Subsingleton`
 instances that `finite_acyclic_kernel_reduction` consumes. No Hilbert 90, no reciprocity;
 R1–R3 untouched.
+
+
+<a id="pass-97"></a>
+
+### Pass 97 (2026-09-26) — the abstract DVR unit filtration and its coefficient maps
+
+**Ledger delta: 0 / 0; active count: 0 FOUNDATIONAL / 0 DEBT.**
+`Anabelian/ClassField/UnitFiltration.lean` implements the P97 row of the Pass-95
+catalogue and is imported by `Anabelian.lean`. The project has **98** source files
+under `Anabelian/`. All **18** new declarations have complete proofs or definitions
+and source axiom audits: the **13** catalogue declarations, **four** coefficient
+helpers, and the residue equivalence's representative formula. No catalogue
+hypothesis or conclusion changed. `unitsResidueEquiv` and `unitCoeff` are marked
+`noncomputable`, as is the chosen exact coefficient `unitCoeffLift`.
+
+The context is exactly an abstract DVR. Finite residue is assumed only in
+`finite_unitQuotient` and `finite_units_quotient_of_le`. No local-field or
+completeness assumption is introduced, and no exactness of the cyclic norm and
+difference on the natural graded pieces is asserted.
+
+#### Complete statement catalogue
+
+All signatures below are in namespace `Anabelian`, with this shared context:
+
+```lean
+open IsLocalRing
+variable (R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]
+```
+
+The filtration and quotient API (full proofs are in the source):
+
+```lean
+def unitFiltration (m : ℕ) : Subgroup Rˣ :=
+  (Units.map (Ideal.Quotient.mk (maximalIdeal R ^ m)).toMonoidHom).ker
+
+theorem mem_unitFiltration (m : ℕ) (u : Rˣ) :
+    u ∈ unitFiltration R m ↔ (u : R) - 1 ∈ maximalIdeal R ^ m
+
+theorem unitFiltration_zero : unitFiltration R 0 = ⊤
+
+theorem unitFiltration_antitone : Antitone (unitFiltration R)
+
+theorem unitFiltration_separated : (⨅ m, unitFiltration R m) = ⊥
+
+theorem unitFiltration_stable (s : R ≃+* R) (m : ℕ) :
+    (unitFiltration R m).map (Units.mapEquiv s.toMulEquiv).toMonoidHom =
+      unitFiltration R m
+
+theorem finite_unitQuotient [Finite (ResidueField R)] (m : ℕ) :
+    Finite (Rˣ ⧸ unitFiltration R m)
+
+theorem finite_units_quotient_of_le [Finite (ResidueField R)]
+    (S : Subgroup Rˣ) (m : ℕ) (hS : unitFiltration R m ≤ S) :
+    Finite (Rˣ ⧸ S)
+
+noncomputable def unitsResidueEquiv :
+    (Rˣ ⧸ unitFiltration R 1) ≃* (ResidueField R)ˣ
+
+theorem unitsResidueEquiv_mk (u : Rˣ) :
+    unitsResidueEquiv R (QuotientGroup.mk' (unitFiltration R 1) u) =
+      Units.map (residue R).toMonoidHom u
+```
+
+The exact coefficient in the ring is factored into four named helpers. These
+also cover depth zero; `unitCoeff` and its lemmas carry the positive-depth assumption.
+
+```lean
+theorem unitFiltration_exists_coeff (π : R) (hπ : Irreducible π)
+    (m : ℕ) (u : unitFiltration R m) :
+    ∃ a : R, (u.val : R) = 1 + π ^ m * a
+
+noncomputable def unitCoeffLift (π : R) (hπ : Irreducible π)
+    (m : ℕ) (u : unitFiltration R m) : R :=
+  (unitFiltration_exists_coeff R π hπ m u).choose
+
+theorem unitCoeffLift_spec (π : R) (hπ : Irreducible π)
+    (m : ℕ) (u : unitFiltration R m) :
+    (u.val : R) = 1 + π ^ m * unitCoeffLift R π hπ m u
+
+theorem unitCoeffLift_eq (π : R) (hπ : Irreducible π) (m : ℕ)
+    (u : unitFiltration R m) (a : R) (ha : (u.val : R) = 1 + π ^ m * a) :
+    unitCoeffLift R π hπ m u = a
+```
+
+The positive-depth homomorphism, its exactness, and its action formula:
+
+```lean
+noncomputable def unitCoeff (π : R) (hπ : Irreducible π) (m : ℕ) (hm : 0 < m) :
+    unitFiltration R m →* Multiplicative (ResidueField R)
+
+theorem unitCoeff_spec (π : R) (hπ : Irreducible π) (m : ℕ) (hm : 0 < m)
+    (u : unitFiltration R m) (a : R)
+    (ha : (u.val : R) = 1 + π ^ m * a) :
+    unitCoeff R π hπ m hm u = Multiplicative.ofAdd (residue R a)
+
+theorem unitCoeff_exact (π : R) (hπ : Irreducible π) (m : ℕ) (hm : 0 < m) :
+    Function.Surjective (unitCoeff R π hπ m hm) ∧
+    (unitCoeff R π hπ m hm).ker =
+      (unitFiltration R (m + 1)).subgroupOf (unitFiltration R m)
+
+theorem unitCoeff_action (π : R) (hπ : Irreducible π) (m : ℕ) (hm : 0 < m)
+    (s : R ≃+* R) (c : Rˣ) (hc : s π = π * c)
+    (u : unitFiltration R m) (a : R)
+    (ha : (u.val : R) = 1 + π ^ m * a) :
+    unitCoeff R π hπ m hm
+        (restrictAut (Units.mapEquiv s.toMulEquiv) (unitFiltration R m)
+          (unitFiltration_stable R s m) u) =
+      Multiplicative.ofAdd (residue R (s a) * residue R (c : R) ^ m)
+```
+
+#### Proof routes and checked Mathlib API
+
+- **Filtration.** The kernel of reduction on units gives subgroup closure directly,
+  including at depth zero where the quotient ring is the zero ring.
+  `Units.ext_iff` and `Ideal.Quotient.eq` identify membership with `u - 1 ∈ 𝔪^m`.
+  `Ideal.pow_le_pow_right` gives antitonicity. If a unit lies at every depth,
+  `Ideal.iInf_pow_eq_bot_of_isLocalRing` puts `u - 1` in the zero ideal, so `u = 1`.
+  The DVR provides the Noetherian local-ring instances; no topology enters.
+- **Stability.** `IsLocalRing.map_ringEquiv_maximalIdeal` and `Ideal.map_pow` show
+  that a ring automorphism maps each ideal power onto itself. Transport `u - 1`
+  using `map_sub`, then use the inverse automorphism for the reverse subgroup
+  inclusion. This yields the exact map-equality input of P96's `restrictAut` and
+  `quotientAut`, with no period or chosen uniformizer in the stability statement.
+- **Finite quotients.** Install named proof-local instances for
+  `Finite (R ⧸ maximalIdeal R)` and `Finite (R ⧸ maximalIdeal R ^ m)`; the second is
+  `Ideal.finite_quotient_pow (IsNoetherian.noetherian (maximalIdeal R)) m`.
+  `QuotientGroup.quotientKerEquivRange` injects the unit quotient into the finite
+  range of the reduction hom. If `U^m ≤ S`, the identity induces a surjection
+  `Rˣ/U^m → Rˣ/S`; `Finite.of_surjective` gives the second finite-index result.
+- **Depth one.** `IsLocalRing.surjective_units_map_of_local_ringHom`, applied to
+  `residue R`, lifts every residue-field unit. After identifying `U¹` with that
+  unit map's kernel, compose `QuotientGroup.quotientMulEquivOfEq` with
+  `QuotientGroup.quotientKerEquivOfSurjective`. `unitsResidueEquiv_mk` checks that
+  this equivalence sends each representative to its reduction.
+- **Exact coefficients.** `Irreducible.maximalIdeal_eq`,
+  `Ideal.span_singleton_pow`, and `Ideal.mem_span_singleton` turn membership into
+  divisibility by `π^m`. Choose the coefficient, then cancel the nonzero `π^m`
+  (`pow_ne_zero`, `mul_left_cancel₀`) to prove its specification and uniqueness.
+  For multiplication, expand
+  `(1 + π^m*a)(1 + π^m*b) = 1 + π^m*(a+b+π^m*(a*b))`.
+  The last coefficient term vanishes in the residue field for `m > 0`, giving
+  a hom into `Multiplicative (ResidueField R)`.
+- **Surjectivity and kernel.** Lift a residue coefficient to `a : R` using
+  `residue_surjective`. The element `1 + π^m*a` has residue one, so
+  `residue_ne_zero_iff_isUnit` makes it a unit at depth `m`. Its coefficient is the
+  desired residue. For the kernel, `residue a = 0` means `π ∣ a`, while depth
+  `m+1` means `π^(m+1) ∣ π^m*a`. `mul_dvd_mul_iff_left (pow_ne_zero m hπ.ne_zero)`
+  identifies those conditions. No counting or finite-residue hypothesis is used.
+- **Twisted action.** P96's restricted action has underlying carrier `s u`.
+  Map the representative identity through `s`, rewrite `s π = π*c`, and expand
+  powers. The new coefficient is `s a * c^m`; `unitCoeff_spec`, `map_mul`, and
+  `map_pow` give the displayed residue formula. Both the residue action and the
+  uniformizer factor remain visible.
+
+The named Mathlib declarations above were source-checked and used in the successful
+Lean check. Their modules are `RingTheory/Filtration`,
+`RingTheory/DiscreteValuationRing/Basic`, `RingTheory/Ideal/Operations`,
+`RingTheory/Ideal/Quotient/Index`, `RingTheory/LocalRing/RingHom/Basic`,
+`RingTheory/LocalRing/ResidueField/Basic`, and `GroupTheory/QuotientGroup/{Defs,Basic}`.
+The single project import, `ClassField.StableAction`, supplies P96 and already
+transitively imports these Mathlib modules; no new broad Mathlib import was added.
+No missing theorem or axiom is needed for this pass.
+
+#### House notes
+
+- Rewriting `𝔪^1` directly inside the quotient's unit kernel can fail because
+  the synthesized `Ideal.IsTwoSided` proof depends on that ideal. Prove equality
+  of the subgroups through `mem_unitFiltration` first, then transport the quotient
+  with `quotientMulEquivOfEq`.
+- For the equivalence's representative formula, simplify `unitsResidueEquiv`,
+  `MulEquiv.trans_apply`, `QuotientGroup.mk'_apply`, and
+  `QuotientGroup.quotientMulEquivOfEq_mk`, then close by `rfl`. This avoids a
+  costly definitional-equality search through an under-specified equivalence.
+- `Ideal.mem_iInf` has the ideal family implicit; `Submodule.mem_iInf` takes its
+  family explicitly. The chosen proof uses the former.
+- `QuotientGroup.map_surjective_of_surjective` asks for surjectivity of the
+  input hom followed by the target quotient projection. For the identity hom,
+  `QuotientGroup.mk_surjective` supplies exactly that hypothesis.
+- The type-tag lemma is the root-level `ofAdd_eq_one`.
+
+#### Verification, scope, and next dependency
+
+`lake env lean Anabelian/ClassField/UnitFiltration.lean` passed with no warnings
+or errors. Every one of the **18** new audit lines is
+`[propext, Classical.choice, Quot.sound]`. `lake build` succeeded with **8574** jobs,
+zero warnings/errors, and **489** standard-only build audits.
+`scripts/preflight.sh` is **CLEAN**, including the **98-file** import-chain check;
+`git diff --check` passes. The project has no axiom declarations or proof holes.
+The proof probes remain under ignored `.lake/`; no stub is committed.
+
+No new `structure`/`class`; all hypotheses are carried without necessity or
+sharpness claims. No owed witness; D1/D2 N/A. The ledger remains 0/0. Historical
+NOTES and ledger bytes are preserved as prefixes; README, ROADMAP and HANDOFF
+reflect P97, 98 files, and P98 next. HANDOFF retains the approximately 15-minute
+`Quotient/LiftDvd.lean` rebuild note. The constitution and R1–R3 are unchanged.
+
+Under finite residue, the natural filtration now supplies finite index for any
+subgroup containing some `U^m`. Producing the small normal lattice, its unit subgroup
+and its regular layers remains work; this pass does not prove `q(Rˣ) = 1` or discharge the two
+P94 `Ĥ¹` finiteness inputs. **P98** is the local integer action and compatibility,
+nonzero degree and period, transport of `IsAdicComplete`, and both field-norm
+comparison forms. P99 constructs the lattice; P100 its complete unit filtration;
+P101 its regular layers and acyclicity; P102 applies the P95 reduction and P94
+valuation formula. No Hilbert 90, reciprocity, or reconstruction theorem is claimed.

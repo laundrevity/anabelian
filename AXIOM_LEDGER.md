@@ -3876,3 +3876,63 @@ project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and ledger 
 untouched; README/ROADMAP/HANDOFF move to Pass 96 with P97 next.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+
+### Pass 97 (2026-09-26) — the abstract DVR unit filtration; count stays 0 / 0
+
+**No axiom added, none needed.** `Anabelian/ClassField/UnitFiltration.lean`, imported
+by `Anabelian.lean`, proves the P97 row of the Pass-95 design in the abstract context
+`(R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]`.
+All **18** declarations are source-audited: **13** catalogue declarations, **four**
+exact-coefficient helpers, and the residue equivalence's representative formula.
+No catalogue statement changed. Full statement/proof-route record: [NOTES](NOTES.md#pass-97).
+
+```text
+'Anabelian.unitFiltration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.mem_unitFiltration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitFiltration_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitFiltration_antitone' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitFiltration_separated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitFiltration_stable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_unitQuotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.finite_units_quotient_of_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitsResidueEquiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitsResidueEquiv_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitFiltration_exists_coeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeffLift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeffLift_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeffLift_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeff_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeff_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.unitCoeff_action' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- `unitFiltration`: membership, depth zero, antitonicity, Krull separation, and
+  stability under every ring automorphism in the map-equality form used by P96.
+- `finite_unitQuotient` and `finite_units_quotient_of_le`: finite residue field
+  gives finite quotients by `U^m` and by any subgroup containing `U^m`.
+- `unitsResidueEquiv`, with `unitsResidueEquiv_mk`: reduction induces
+  `Rˣ/U¹ ≃* (ResidueField R)ˣ`.
+- `unitFiltration_exists_coeff`, `unitCoeffLift`, `unitCoeffLift_spec`,
+  `unitCoeffLift_eq`: existence and uniqueness of the exact coefficient in
+  `u = 1 + π^m*a`, via principal ideal powers and cancellation of nonzero `π^m`.
+- `unitCoeff`, `unitCoeff_spec`, `unitCoeff_exact`, `unitCoeff_action`: the
+  positive-depth residue coefficient is a surjective hom with kernel `U^(m+1)`;
+  under `s π = π*c`, it transforms by `residue(s a) * residue(c)^m`.
+
+**Rule-2 and boundary.** No new `structure`/`class`; every hypothesis is carried,
+none claimed necessary or sharp; no owed witness, D1/D2 N/A. Finite residue occurs
+only in the two finiteness theorems. No local-field or completeness assumption,
+no claim that the cyclic pair is exact on the natural graded pieces, no Hilbert 90
+or reciprocity. The normal lattice, its complete unit filtration and regular
+layers, `q(Rˣ) = 1`, and both P94 finiteness discharges remain future work.
+
+**Verification:** direct Lean check and `lake build` pass with zero warnings/errors
+(**8574** jobs, **489** standard-only audits). `scripts/preflight.sh` CLEAN
+(**98** project files); `git diff --check` clean; zero project axiom declarations
+or proof holes. NOTES and ledger are append-only; README/ROADMAP/HANDOFF reflect
+Pass 97 with P98 next (local action/period, adic transport, field norm). HANDOFF's
+approximately 15-minute `Quotient/LiftDvd.lean` note is preserved; R1–R3 untouched.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
