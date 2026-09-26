@@ -5,6 +5,7 @@ import Anabelian.Absolute.Tower
 import Anabelian.Absolute.UpperNumbering
 import Anabelian.ClassField.CyclicPair
 import Anabelian.ClassField.ExactCycle
+import Anabelian.ClassField.FiniteAcyclic
 import Anabelian.ClassField.HerbrandQuotient
 import Anabelian.ClassField.MaximalAbelian
 import Anabelian.ClassField.Multiplicativity

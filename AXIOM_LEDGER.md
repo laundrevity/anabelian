@@ -3775,3 +3775,47 @@ and zero `sorry`/`admit` proof holes. P92's refactored integer computation and P
 refactored kernel theorem also retain standard-only audits.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 95 (2026-09-26) — conditional reduction and local unit proof design; count stays 0 / 0
+
+**No axiom added, none needed.** One new proved theorem,
+`Anabelian.finite_acyclic_kernel_reduction`, in
+`Anabelian/ClassField/FiniteAcyclic.lean`, imported by `Anabelian.lean`.
+
+```text
+'Anabelian.finite_acyclic_kernel_reduction' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+For a pair-equivariant SES `1 → M' → M → M'' → 1`, with `M''` finite and both
+cohomology groups of `M'` subsingletons, the theorem derives finiteness of both
+middle cohomology groups and `herbrandQuotient f g = 1`. It supplies neither a
+local-field subgroup nor its acyclicity. `snake_exact_mid` and its swap first give
+injections into finite quotient cohomology. Only then does the proof apply
+`herbrandQuotient_mul`, using cardinality one on the kernel side and
+`herbrandQuotient_eq_one_of_finite` on the quotient side. There is no circular
+middle-finiteness assumption.
+
+**Design deliverable:** one self-contained [NOTES entry](NOTES.md#pass-95) writes
+out the full merged statement catalogue, P24–27 applicability, the dependency map,
+and a P96–P102 order. The route uses Mathlib's existing `IsGalois.normalBasis`, a
+small integral normal lattice, regular unit layers, general two-map filtration
+lifting, and transport of `IsAdicComplete` to `extensionIntegers`. It keeps the
+abstract DVR API distinct from the local-field setting and accounts explicitly
+for both P94 `Ĥ¹` finiteness inputs and the field-norm comparison. These arithmetic
+targets are unproved dependencies, not assumptions in the library or ledger
+axioms. The only new proof is the conditional reduction above.
+
+**Rule-2 and boundary:** all hypotheses are carried; no necessity or sharpness
+claim. No new `structure`/`class`, no owed witness, D1/D2 N/A. No Hilbert 90,
+reciprocity, or R1–R3 work. The active axioms table is unchanged at 0/0.
+
+**Verification:** full build successful (8570 jobs, zero warnings/errors);
+`scripts/preflight.sh` CLEAN (94 files); all 452 build audit outputs standard-only.
+The NOTES catalogue was re-extracted and elaborated: 45 declarations, zero errors,
+36 expected placeholder warnings confined to ignored scratch. The separate
+47-command API/instance probe passed without warnings. No proof holes or axiom
+declarations in project Lean sources. Historical NOTES and ledger entries are
+preserved; README/ROADMAP/HANDOFF move to Pass 95, with P96 next and HANDOFF's
+approximately 15-minute `Quotient/LiftDvd.lean` rebuild note restored.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.

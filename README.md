@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 94 (2026-09-25)
+## Current state — Pass 95 (2026-09-26)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 93 project files, 8569 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 94 project files, 8570 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -44,20 +44,25 @@ The current strata are:
   triviality, short-exact-sequence multiplicativity, the cyclic norm/difference pair,
   and `q(ℤ) = n` (Passes 87–92). Pass 93 supplies the valuation exact sequence
   `1 → Rˣ → Kˣ → Multiplicative ℤ → 1` for a DVR and its fraction field. Pass 94
-  proves equivariance and the conditional identity `q(Kˣ) = q(Rˣ) · n`.
+  proves equivariance and the conditional identity `q(Kˣ) = q(Rˣ) · n`. Pass 95
+  proves the finite-acyclic-kernel reduction and records the local unit proof design.
 - **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
   mono-anabelian reconstruction remain distant targets. No reconstruction or local
   reciprocity theorem is claimed.
 
 **Current frontier:** `cyclicHerbrandQuotient_units` proves `q(Kˣ) = q(Rˣ) · n`
 for compatible ring automorphisms, carrying `n ≠ 0`, periodicity on `Kˣ`, and explicit
-`Ĥ¹` finiteness on `Rˣ` and `Kˣ`. Value-group finiteness is derived. The next pass is
-a design pass for `q(Rˣ) = 1` for local-field units, including the unit filtration and
-an account of the carried finiteness hypotheses. The class-formation and reciprocity
-stages remain ahead; Hasse–Arf is separately deferred.
+`Ĥ¹` finiteness on `Rˣ` and `Kˣ`. Value-group finiteness is derived. Pass 95's
+`finite_acyclic_kernel_reduction` derives finite middle cohomology and quotient one
+from an acyclic subgroup with finite quotient. The [unit proof design](NOTES.md#pass-95)
+specifies the normal-basis lattice, regular unit layers, adic-completeness transport,
+both finiteness discharges, and the field-norm comparison. These arithmetic targets
+remain unproved. **Next: P96's generic actions, regular cyclic exactness, and
+two-map filtration lifting.** Class formation and reciprocity remain ahead;
+Hasse–Arf is separately deferred.
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-94 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-95 summary above states the current frontier.
 
 ## Build
 
