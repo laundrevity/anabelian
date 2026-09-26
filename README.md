@@ -23,10 +23,10 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 95 (2026-09-26)
+## Current state — Pass 96 (2026-09-26)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 94 project files, 8570 build jobs, warning-free).
+Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 97 project files, 8573 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -46,6 +46,9 @@ The current strata are:
   `1 → Rˣ → Kˣ → Multiplicative ℤ → 1` for a DVR and its fraction field. Pass 94
   proves equivariance and the conditional identity `q(Kˣ) = q(Rˣ) · n`. Pass 95
   proves the finite-acyclic-kernel reduction and records the local unit proof design.
+  Pass 96 proves the design's field-free layer: stable/quotient/layer actions with the
+  naturality of the cyclic pair, the acyclicity of the regular module `C[G]`, and
+  filtration lifting (`ker f = im g` from separated, complete, layer-exact filtrations).
 - **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
   mono-anabelian reconstruction remain distant targets. No reconstruction or local
   reciprocity theorem is claimed.
@@ -56,13 +59,17 @@ for compatible ring automorphisms, carrying `n ≠ 0`, periodicity on `Kˣ`, and
 `finite_acyclic_kernel_reduction` derives finite middle cohomology and quotient one
 from an acyclic subgroup with finite quotient. The [unit proof design](NOTES.md#pass-95)
 specifies the normal-basis lattice, regular unit layers, adic-completeness transport,
-both finiteness discharges, and the field-norm comparison. These arithmetic targets
-remain unproved. **Next: P96's generic actions, regular cyclic exactness, and
-two-map filtration lifting.** Class formation and reciprocity remain ahead;
-Hasse–Arf is separately deferred.
+both finiteness discharges, and the field-norm comparison. Pass 96 proved the
+design's generic layer (`cyclic_exact_of_complete_filtration`, `regular_cyclic_exact`,
+`herbrandH_subsingleton_of_exact`, the `restrictAut`/`quotientAut`/`layerAut` actions):
+given a `σ`-stable, separated, complete filtration of a subgroup `V₀ ≤ 𝒪_Lˣ` with regular
+layers, both `Ĥ(V₀)` vanish. The arithmetic inputs — the normal-basis lattice, its unit
+subgroups, adic completeness, finite index — remain unproved (Passes 97–101 of the
+design). **Next: P97, the abstract DVR unit filtration `U^m` and its finite quotients.**
+Class formation and reciprocity remain ahead; Hasse–Arf is separately deferred.
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-95 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-96 summary above states the current frontier.
 
 ## Build
 

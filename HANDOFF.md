@@ -1,17 +1,19 @@
-# HANDOFF.md — session bootstrap (written after Pass 95, 2026-09-26)
+# HANDOFF.md — session bootstrap (written after Pass 96, 2026-09-26)
 
 **State:** L2 is complete (Pass 83), consolidated with separation in Pass 84. L3 is
 in progress: `K^ab` (Pass 86), the Herbrand-quotient calculus (Passes 87–90), the cyclic
 pair and `q(ℤ) = n` (Passes 91–92), and the equivariant DVR valuation sequence with
 **`q(Kˣ) = q(Rˣ) · n` under explicit hypotheses** (Passes 93–94). Pass 95 proves
-the finite-acyclic-kernel reduction and records the complete local unit proof design.
-Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 94 project files; no open owed witnesses.
-**The next task is Pass 96: generic actions, regular cyclic exactness, and two-map
-filtration lifting.** The local-field formula `q(Rˣ) = 1` remains unproved.
+the finite-acyclic-kernel reduction and records the complete local unit proof design;
+Pass 96 proves that design's field-free layer (stable actions, the regular module,
+filtration lifting). Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 97 project files; no open
+owed witnesses. **The next task is Pass 97: the abstract DVR unit filtration `U^m` and
+its finite quotients.** The local-field formula `q(Rˣ) = 1` remains unproved.
 
-Read `CLAUDE.md`, the active table and Pass-95 entry in `AXIOM_LEDGER.md`, the Pass-95
-status header and L3 ladder in `ROADMAP.md`, and the [Pass-95 entry](NOTES.md#pass-95)
-in `NOTES.md` (complete signatures, dependency map, and P96–P102 order).
+Read `CLAUDE.md`, the active table and Pass-96 entry in `AXIOM_LEDGER.md`, the Pass-96
+status header and L3 ladder in `ROADMAP.md`, the [Pass-95 entry](NOTES.md#pass-95)
+in `NOTES.md` (complete signatures, dependency map, and P96–P102 order), and the
+[Pass-96 entry](NOTES.md#pass-96) (what of it is now proved, and the deviations).
 Start with `git status`; work on your own parley branch. `scripts/preflight.sh`
 enforces the pre-commit checks. Historical pass records are in NOTES and the ledger.
 
@@ -50,24 +52,53 @@ P24–27 supply action/coefficient calculations, not a unit filtration or its li
 step. No field-normal-basis theorem is missing. All arithmetic statements in
 NOTES remain future targets; the reduction is the only new proved theorem.
 
-## Next task — Pass 96 implementation
+## What Pass 96 supplies
 
-Implement the field-free part of NOTES Pass 95, sections 3 and the P96 row:
+- `ClassField/StableAction.lean`: `apply_mem_iff_of_map_eq`, `cyclicNorm_mem_of_map_eq`,
+  `cyclicDiff_mem_of_map_eq`; `restrictAut` (`restrictAut_coe` is `rfl`), `quotientAut`
+  (`quotientAut_mk`), `Layer`, `layerAut` (`layerAut_mk`); the cyclic-pair naturality
+  along inclusion/projection/layer projection (`cyclicNorm_restrictAut_coe`,
+  `cyclicNorm_quotientAut_mk`, `cyclicNorm_layerAut_mk` and the `cyclicDiff` versions);
+  `herbrandH_subsingleton_of_exact`.
+- `ClassField/FiltrationLifting.lean`: `ker_eq_range_of_filtration` (successive
+  approximation), `layer_of_surjective`, `cyclic_exact_of_complete_filtration` (no
+  `Antitone` hypothesis — the catalogue's is the weaker instance).
+- `ClassField/RegularModule.lean`: `regularShift` (= `MulEquiv.arrowCongr (Equiv.mulLeft g)
+  (MulEquiv.refl C)`, application `rfl`), `regularShift_pow_apply`, `prod_range_card_pow`,
+  `cyclicNorm_regularShift_apply` (the norm is the constant `∏_{k ∈ G} f k`),
+  `regular_cyclic_exact`.
 
-- `restrictAut`, `quotientAut`, `layerAut`, and their carrier/projection formulas;
-  use P94 naturality for the norm and difference intertwinings.
-- `regularShift` via `MulEquiv.arrowCongr`, its application formula, and
-  `regular_cyclic_exact` for a finite group with a specified generator.
-- `layer_of_surjective`, `ker_eq_range_of_filtration` for an arbitrary pair
-  `(f,g)`, its cyclic corollary, and `herbrandH_subsingleton_of_exact`.
+How they chain in P101–P102: for `V₀ ≤ 𝒪_Lˣ` with `F i := (V i).subgroupOf V₀` and the
+restricted action, `lattice_unit_layer_regular` + `regular_cyclic_exact` give the layer
+input of `cyclic_exact_of_complete_filtration` (transport the range/kernel equalities along
+the layer `MulEquiv`); its output through `herbrandH_subsingleton_of_exact` is the pair of
+`Subsingleton` instances for `finite_acyclic_kernel_reduction` on `1 → V₀ → 𝒪_Lˣ → 𝒪_Lˣ/V₀ → 1`,
+whose four intertwinings are the `restrictAut_coe`/`quotientAut_mk` naturality lemmas.
 
-The lifting proof makes successive corrections, uses the stated completeness
-property for the partial products, and uses separation to eliminate the error.
-Apply the general lemma in both orders for cyclic exactness. Its layer input is
-exactness, not merely finite-layer quotient value one. The complete statement
-catalogue can be re-probed from NOTES using the recipe there; keep placeholders
-in ignored scratch files only. No local-field arithmetic, Hilbert 90, reciprocity,
-or R1–R3 work is in P96. Standard axioms only; ledger remains 0/0.
+## Next task — Pass 97: the abstract unit filtration
+
+Implement NOTES Pass 95 §4 (the P97 row), in the abstract DVR context
+`(R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]` — no local field:
+
+- `unitFiltration R m := (Units.map (Ideal.Quotient.mk (maximalIdeal R ^ m)).toMonoidHom).ker`
+  with `mem_unitFiltration`, `unitFiltration_zero`, `unitFiltration_antitone`,
+  `unitFiltration_separated` (Krull: `Ideal.iInf_pow_eq_bot_of_isLocalRing`),
+  `unitFiltration_stable` (any `s : R ≃+* R`, in the `map`-equality form that
+  `restrictAut`/`quotientAut` consume).
+- `finite_unitQuotient [Finite (ResidueField R)] m` and `finite_units_quotient_of_le`
+  (`Ideal.finite_quotient_pow` + the unit map into the finite quotient ring; the
+  residue-field instance must be supplied as `Finite (R ⧸ maximalIdeal R)` by a named
+  `haveI`, as in P95's probe).
+- `unitsResidueEquiv : (Rˣ ⧸ unitFiltration R 1) ≃* (ResidueField R)ˣ`
+  (`IsLocalRing.surjective_units_map_of_local_ringHom`), and the depth-`m` coefficient map
+  `unitCoeff π hπ m hm : unitFiltration R m →* Multiplicative (ResidueField R)` with
+  `unitCoeff_spec`, `unitCoeff_exact` (surjective, kernel `U^(m+1)`), and
+  `unitCoeff_action` (the twisted formula `residue (s a) * residue c ^ m`).
+
+Exact signatures are in NOTES Pass 95 §4; the `unitCoeff` lemmas are the only ones with
+real content (well-definedness of the coefficient uses that `π ^ m` is a nonzerodivisor).
+No local-field arithmetic, no Hilbert 90, no reciprocity, no R1–R3 work. Standard axioms
+only; ledger remains 0/0. Fresh file(s); `lake env lean` probes from the project root.
 
 ## Environment (verify, then trust)
 
@@ -92,13 +123,13 @@ or R1–R3 work is in P96. Standard axioms only; ledger remains 0/0.
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## Queue after P96
+## Queue after P97
 
-P97: abstract unit filtration and finite quotients. P98: local action, period,
-adic transport, and field norm. P99: the small normal lattice. P100: its unit
-subgroups and complete filtration. P101: regular layers and acyclicity. P102:
-unit quotient one, both finiteness discharges, and the P94 field quotient formula.
-The detailed dependencies and scope are in NOTES Pass 95; boundaries may split.
+P98: local action, period, adic transport, and field norm. P99: the small normal
+lattice. P100: its unit subgroups and complete filtration. P101: regular layers and
+acyclicity. P102: unit quotient one, both finiteness discharges, and the P94 field
+quotient formula. The detailed dependencies and scope are in NOTES Pass 95; boundaries
+may split.
 
 The remaining L3.1 bridges (`Rep`, Hilbert 90), L3.2 unramified
 cohomology, and L3.3 reciprocity precede L3.4's ramification correspondence.

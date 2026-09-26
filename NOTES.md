@@ -7421,3 +7421,205 @@ Pass 95, 94 files, and 0/0. HANDOFF restores the operational note that
 `Quotient/LiftDvd.lean` can take approximately 15 minutes to elaborate on rebuild.
 Earlier NOTES and ledger content, including the verbatim Pass-93 archives and
 their pointers, is preserved. The constitutional file needs no status edit.
+
+
+<a id="pass-96"></a>
+
+### Pass 96 (2026-09-26) — the generic layer: stable actions, the regular module, and filtration lifting
+
+**Ledger delta: 0 / 0; active count: 0 FOUNDATIONAL / 0 DEBT.** Three new files under
+`Anabelian/ClassField/`, all pure group theory (no field, no valuation), implementing the
+field-free part of the Pass-95 design (NOTES Pass 95 §3 and the P96 row). The project has
+97 source files under `Anabelian/`. Everything proved; no `sorry`, no `axiom`; every audit
+standard-only. No new `structure`/`class`; every hypothesis is carried, none is claimed
+load-bearing; no owed witness; D1/D2 N/A. R1–R3 untouched.
+
+#### What was proved
+
+**`ClassField/StableAction.lean`** — for a commutative group `M`, `σ : MulAut M`, and a
+`σ`-stable subgroup `S` (`h : S.map σ.toMonoidHom = S`):
+
+```lean
+theorem apply_mem_iff_of_map_eq (σ) (S) (h) (x : M) : σ x ∈ S ↔ x ∈ S
+theorem pow_apply_mem_of_map_eq (σ) (S) (h) (j : ℕ) (hx : x ∈ S) : (σ ^ j) x ∈ S
+theorem cyclicNorm_mem_of_map_eq (σ) (S) (h) (n) (hx : x ∈ S) : cyclicNorm σ n x ∈ S
+theorem cyclicDiff_mem_of_map_eq (σ) (S) (h) (hx : x ∈ S) : cyclicDiff σ x ∈ S
+def restrictAut (σ) (S) (h) : MulAut S := (σ.subgroupMap S).trans (MulEquiv.subgroupCongr h)
+theorem restrictAut_coe (σ) (S) (h) (x : S) : (restrictAut σ S h x : M) = σ x        -- rfl
+def quotientAut (σ) (S) (h) : MulAut (M ⧸ S) := QuotientGroup.congr S S σ h
+theorem quotientAut_mk (σ) (S) (h) (x : M) :
+    quotientAut σ S h (QuotientGroup.mk' S x) = QuotientGroup.mk' S (σ x)
+abbrev Layer (F : ℕ → Subgroup M) (i : ℕ) := (F i) ⧸ ((F (i + 1)).subgroupOf (F i))
+theorem subgroupOf_map_restrictAut (σ) (F) (hF : ∀ i, (F i).map σ.toMonoidHom = F i) (i) :
+    ((F (i+1)).subgroupOf (F i)).map (restrictAut σ (F i) (hF i)).toMonoidHom
+      = (F (i+1)).subgroupOf (F i)
+def layerAut (σ) (F) (hF) (i) : MulAut (Layer F i)     -- quotientAut of restrictAut
+theorem layerAut_mk (σ) (F) (hF) (i) (x : F i) :
+    layerAut σ F hF i (QuotientGroup.mk' _ x) = QuotientGroup.mk' _ (restrictAut σ (F i) (hF i) x)
+-- naturality of the cyclic pair (Pass 94's map_cyclicNorm/map_cyclicDiff at the three maps)
+theorem cyclicNorm_restrictAut_coe : ((cyclicNorm (restrictAut σ S h) n x : S) : M) = cyclicNorm σ n x
+theorem cyclicDiff_restrictAut_coe : ((cyclicDiff (restrictAut σ S h) x : S) : M) = cyclicDiff σ x
+theorem cyclicNorm_quotientAut_mk :
+    cyclicNorm (quotientAut σ S h) n (mk' S x) = mk' S (cyclicNorm σ n x)
+theorem cyclicDiff_quotientAut_mk : cyclicDiff (quotientAut σ S h) (mk' S x) = mk' S (cyclicDiff σ x)
+theorem cyclicNorm_layerAut_mk :
+    cyclicNorm (layerAut σ F hF i) n (mk' _ x) = mk' _ (cyclicNorm (restrictAut σ (F i) (hF i)) n x)
+theorem cyclicDiff_layerAut_mk :
+    cyclicDiff (layerAut σ F hF i) (mk' _ x) = mk' _ (cyclicDiff (restrictAut σ (F i) (hF i)) x)
+theorem herbrandH_subsingleton_of_exact (f g : M →* M) (h : g.range = f.ker) :
+    Subsingleton (herbrandH f g)
+```
+
+**`ClassField/FiltrationLifting.lean`** — the dévissage brick:
+
+```lean
+theorem ker_eq_range_of_filtration (f g : M →* M) (hfg : ∀ x, f (g x) = 1)
+    (F : ℕ → Subgroup M) (hF0 : F 0 = ⊤)
+    (hstab : ∀ i, ∀ x ∈ F i, g x ∈ F i)
+    (hlayer : ∀ i, ∀ x ∈ F i, f x ∈ F (i + 1) → ∃ y ∈ F i, x * (g y)⁻¹ ∈ F (i + 1))
+    (hsep : ∀ x, (∀ i, x ∈ F i) → x = 1)
+    (hcomplete : ∀ z : ℕ → M, (∀ i, z (i + 1) * (z i)⁻¹ ∈ F i) →
+      ∃ y, ∀ i, y * (z i)⁻¹ ∈ F i) :
+    f.ker = g.range
+theorem layer_of_surjective {W} [CommGroup W] (f g : M →* M) (S T : Subgroup M)
+    (hfS : ∀ x ∈ S, f x ∈ S) (hgS : ∀ x ∈ S, g x ∈ S)
+    (θ : S →* W) (hθ : Function.Surjective θ) (hker : ∀ x : S, θ x = 1 ↔ (x : M) ∈ T)
+    (fW gW : W →* W)
+    (hfθ : ∀ x : S, θ ⟨f x, hfS x x.property⟩ = fW (θ x))
+    (hgθ : ∀ x : S, θ ⟨g x, hgS x x.property⟩ = gW (θ x))
+    (hW : fW.ker ≤ gW.range) :
+    ∀ x ∈ S, f x ∈ T → ∃ y ∈ S, x * (g y)⁻¹ ∈ T
+theorem cyclic_exact_of_complete_filtration (σ : MulAut M) (n : ℕ) (hσ : σ ^ n = 1)
+    (F : ℕ → Subgroup M) (hF : ∀ i, (F i).map σ.toMonoidHom = F i)
+    (hzero : F 0 = ⊤) (hsep : (⨅ i, F i) = ⊥)
+    (hcomplete : ∀ u : ℕ → M, (∀ i, u (i + 1) * (u i)⁻¹ ∈ F i) → ∃ x : M, ∀ i, x * (u i)⁻¹ ∈ F i)
+    (hlayer : ∀ i,
+      (cyclicNorm (layerAut σ F hF i) n).range = (cyclicDiff (layerAut σ F hF i)).ker ∧
+      (cyclicDiff (layerAut σ F hF i)).range = (cyclicNorm (layerAut σ F hF i) n).ker) :
+    (cyclicNorm σ n).range = (cyclicDiff σ).ker ∧ (cyclicDiff σ).range = (cyclicNorm σ n).ker
+```
+
+**`ClassField/RegularModule.lean`** — the acyclic layer module:
+
+```lean
+def regularShift (g : G) : MulAut (G → C) := MulEquiv.arrowCongr (Equiv.mulLeft g) (MulEquiv.refl C)
+theorem regularShift_apply (g) (f : G → C) (h : G) : regularShift g f h = f (g⁻¹ * h)   -- rfl
+theorem regularShift_pow_apply (g) (j : ℕ) (f) (h) : (regularShift g ^ j) f h = f ((g ^ j)⁻¹ * h)
+theorem prod_range_card_pow [Fintype G] (g) (hgen : Subgroup.zpowers g = ⊤) (φ : G → C) :
+    ∏ j ∈ Finset.range (Nat.card G), φ (g ^ j) = ∏ k, φ k
+theorem cyclicNorm_regularShift_apply [Fintype G] (g) (hgen) (f : G → C) (h : G) :
+    cyclicNorm (regularShift g) (Nat.card G) f h = ∏ k, f k
+theorem regular_cyclic_exact [Finite G] (g : G) (hgen : Subgroup.zpowers g = ⊤) :
+    (cyclicNorm (regularShift (C := C) g) (Nat.card G)).range = (cyclicDiff (regularShift g)).ker ∧
+    (cyclicDiff (regularShift (C := C) g)).range = (cyclicNorm (regularShift g) (Nat.card G)).ker
+```
+
+#### Deviations from the Pass-95 catalogue (all strengthenings)
+
+- `cyclic_exact_of_complete_filtration` carries **no** `Antitone F` hypothesis: the proof
+  never uses it (`Layer` is stated with `subgroupOf`, and the lifting only needs
+  `F 0 = ⊤`, stability, layer exactness, separation, completeness). The catalogue's
+  statement is the instance with the unused hypothesis.
+- `prod_range_card_pow` and `cyclicNorm_regularShift_apply` take `[Fintype G]` (they
+  mention `∏ k, φ k`); `regular_cyclic_exact` keeps the catalogue's `[Finite G]` and
+  installs `Fintype.ofFinite` inside its proof.
+- The four intertwining lemmas `cyclicNorm_restrictAut_coe`/`cyclicDiff_restrictAut_coe`/
+  `cyclicNorm_quotientAut_mk`/`cyclicDiff_quotientAut_mk` (plus the `layerAut` versions)
+  are added as named statements; the catalogue left them implicit ("P94 naturality").
+  They are exactly the four hypotheses of `herbrandQuotient_mul` /
+  `finite_acyclic_kernel_reduction` for the sequence `1 → V₀ → Rˣ → Rˣ/V₀ → 1` in P102.
+- The two helper membership lemmas `cyclicNorm_mem_of_map_eq`/`cyclicDiff_mem_of_map_eq`
+  (and `apply_mem_iff_of_map_eq`, `pow_apply_mem_of_map_eq`, `subgroupOf_map_restrictAut`)
+  are new bricks needed to state and prove `layerAut` and the stability hypothesis of the
+  lifting lemma.
+
+#### Proof routes and the Mathlib API that did the work
+
+- **`ker_eq_range_of_filtration`** (successive approximation, ~50 lines): `⊇` is P87's
+  `range_le_ker`. For `⊆`, given `x ∈ ker f`: package the layer correction as a total
+  function `corr : ℕ → M → M` via a `dite` on `x ∈ F i ∧ f x = 1` with `Classical.choose`
+  (so the recursion below is on plain `M`, not on a dependent type); define the approximants
+  `xs 0 = x`, `xs (i+1) = xs i · (g (corr i (xs i)))⁻¹` and the partial products
+  `zs 0 = 1`, `zs (i+1) = corr i (xs i) · zs i` by `Nat.rec`, exposed only through their
+  two equations (an `obtain ⟨xs, hxs0, hxss⟩ : ∃ xs, …` — no `let`-unfolding friction).
+  Invariants by induction: `xs i ∈ F i ∧ f (xs i) = 1` (using `f (g _) = 1`) and
+  `xs i = x · (g (zs i))⁻¹` (`map_mul`, `mul_inv_rev`, `mul_assoc`). The `zs` are coherent
+  (`zs (i+1) · (zs i)⁻¹ = corr i (xs i) ∈ F i`, `mul_inv_cancel_right`), so `hcomplete`
+  gives `y` with `y · (zs i)⁻¹ ∈ F i`; then `x · (g y)⁻¹ = xs i · (g (y · (zs i)⁻¹))⁻¹ ∈ F i`
+  for every `i` (`inv_mul_cancel_left`; `g`-stability of `F i`), and `hsep` finishes with
+  `mul_inv_eq_one`.
+- **`layer_of_surjective`**: `θ ⟨f x, _⟩ = 1` by `hker`, so `θ x ∈ ker fW ≤ im gW`; lift
+  the preimage through `hθ` to `y : S`; then `θ (x · ⟨g y, _⟩⁻¹) = 1` (`map_mul`, `map_inv`,
+  `hgθ`, `mul_inv_cancel`) and `hker` reads it as `x · (g y)⁻¹ ∈ T` — the subgroup
+  coercions are definitional, so `(hker _).mp` closes the goal directly.
+- **`cyclic_exact_of_complete_filtration`**: the general lemma twice, with
+  `(f, g) = (cyclicDiff σ, cyclicNorm σ n)` and swapped; `hfg` are P91's
+  `cyclicDiff_cyclicNorm`/`cyclicNorm_cyclicDiff` (this is where `σ ^ n = 1` enters);
+  `hstab` from the membership lemmas; `hlayer` from `layer_of_surjective` at
+  `θ := QuotientGroup.mk' ((F (i+1)).subgroupOf (F i))` (`QuotientGroup.mk'_surjective`,
+  `QuotientGroup.eq_one_iff` + `Subgroup.mem_subgroupOf` for the kernel, the
+  `layerAut_mk`-naturality lemmas for equivariance, `(hlayer i).1.symm.le` /
+  `(hlayer i).2.symm.le` for `ker fW ≤ im gW`); `hsep` from `Subgroup.mem_iInf` +
+  `Subgroup.mem_bot`.
+- **`restrictAut`/`quotientAut`/`layerAut`**: Mathlib's `MulEquiv.subgroupMap`,
+  `MulEquiv.subgroupCongr` (both coercions `rfl`: `coe_subgroupMap_apply`,
+  `subgroupCongr_apply`), `QuotientGroup.congr` with `QuotientGroup.congr_mk'`. The
+  stability of `(F (i+1)).subgroupOf (F i)` under `restrictAut` is a two-line `ext`
+  through `Subgroup.mem_map`/`mem_subgroupOf` and `apply_mem_iff_of_map_eq`
+  (`MulEquiv.injective` for the forward direction; the inverse image
+  `(restrictAut …).symm y` for the backward one).
+- **`herbrandH_subsingleton_of_exact`**: two `QuotientGroup.induction_on`,
+  `QuotientGroup.eq`, `Subgroup.mem_subgroupOf`, then rewrite `g.range = f.ker` and use
+  the subtype property of `a⁻¹ * b`.
+- **`regular_cyclic_exact`** (~90 lines, the only computation): `regularShift` is
+  `MulEquiv.arrowCongr (Equiv.mulLeft g) (MulEquiv.refl C)` — its application and power
+  formulas are `rfl` and a `pow_succ'`/`MulAut.mul_apply`/`mul_inv_rev` induction. The norm
+  is the constant function `∏_{k ∈ G} f k` (`cyclicNorm_apply`, `Finset.prod_apply`, and
+  the enumeration `j ↦ g ^ j` of `G` by exponents `< |G|`: `Finset.prod_nbij` with
+  `pow_injOn_Iio_orderOf` for injectivity — after `orderOf g = Nat.card G` from
+  `orderOf_eq_card_of_zpowers_eq_top` — and `IsOfFinOrder.mem_powers_iff_mem_zpowers` +
+  `Submonoid.mem_powers_iff` + `pow_mod_orderOf` for surjectivity; then
+  `Fintype.prod_equiv ((Equiv.inv G).trans (Equiv.mulRight h))`). Four inclusions:
+  norms are constant hence fixed (`mul_inv_cancel`); a fixed `f` is constant (`f (g ^ i) =
+  f 1` by induction from `f (g⁻¹ h) = f h`, then `f k = f (g ^ idx k)`), and a constant `c`
+  is the norm of `Pi.mulSingle 1 c` (`Finset.prod_pi_mulSingle'`); differences have trivial
+  norm (`Finset.prod_mul_distrib`, `prod_inv_distrib`, reindex by `Equiv.mulLeft g⁻¹`); and
+  a function of trivial norm is the difference of `y k := ∏_{j ∈ Ico (idx k + 1) |G|} f (g ^ j)`
+  where `idx : G → ℕ` (from `choose` on the enumeration) is the unique exponent `< |G|` —
+  the telescoping step is `Finset.prod_eq_prod_Ico_succ_bot`, and the wrap-around at
+  `idx h = 0` (`h = 1`, `g⁻¹ = g ^ (|G| − 1)` from `pow_card_eq_one'`) uses
+  `∏_{k} f k = 1` read as `f 1 · ∏_{Ico 1 |G|} f (g ^ j) = 1` (`Finset.range_eq_Ico`).
+  No division by `|G|` anywhere.
+
+#### House notes (this pass)
+
+- `rw [lemma]` vs `rw [← lemma]` for the naturality equations: the goal produced by
+  `layer_of_surjective` is `mk' ⟨f x, _⟩ = fW (mk' x)`; rewrite the **right** side forward
+  with `cyclicDiff_layerAut_mk`, then `exact congrArg _ (Subtype.ext …)`. For `cyclicDiff`
+  the two sides are already definitionally equal after the rewrite (`congr 1` closes the goal
+  and a following `exact` errors with "no goals"); `congrArg _ (Subtype.ext _)` is uniform
+  across the `Diff`/`Norm` cases.
+- Recursively defined sequences inside a proof: `obtain ⟨xs, h0, hsucc⟩ : ∃ xs : ℕ → M,
+  xs 0 = x ∧ ∀ i, xs (i+1) = … := ⟨fun i => Nat.rec x (fun j xj => …) i, rfl, fun _ => rfl⟩`
+  gives clean equations and avoids `let` zeta-unfolding issues.
+- `Finset.prod_nbij` (not `prod_bij`) is the right tool when the reindexing is a plain
+  function with `Set.InjOn`/`Set.SurjOn` on the coerced finsets (`Finset.coe_range`).
+- `Finset.prod_apply` evaluates a `Finset` product of functions pointwise; with
+  `simp only [regularShift_pow_apply]` afterwards the norm becomes an honest product.
+
+#### Verification and governance
+
+`lake build`: success, zero warnings/errors (job count in the ledger entry).
+`scripts/preflight.sh`: CLEAN, including the 97-file import-chain check. All audits
+standard-only; the new ones (StableAction: 11 lines, FiltrationLifting: 3, RegularModule: 5)
+are reproduced in the source audit blocks. README, ROADMAP, HANDOFF, and the ledger move to
+Pass 96 (97 files, 0/0, next = P97 the abstract `unitFiltration` API). Historical NOTES and
+ledger entries untouched.
+
+**Honest scope.** Nothing here touches a field, a valuation, or a local field; the
+arithmetic inputs of the Pass-95 design (the lattice, its unit subgroups, adic completeness,
+finite index, the normal basis) are Passes 97–101. What is now true: *if* those inputs are
+supplied for `V₀ ≤ 𝒪_Lˣ` with regular layers, then `cyclic_exact_of_complete_filtration`
++ `regular_cyclic_exact` + `herbrandH_subsingleton_of_exact` give the two `Subsingleton`
+instances that `finite_acyclic_kernel_reduction` consumes. No Hilbert 90, no reciprocity;
+R1–R3 untouched.

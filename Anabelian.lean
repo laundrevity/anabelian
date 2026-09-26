@@ -5,11 +5,14 @@ import Anabelian.Absolute.Tower
 import Anabelian.Absolute.UpperNumbering
 import Anabelian.ClassField.CyclicPair
 import Anabelian.ClassField.ExactCycle
+import Anabelian.ClassField.FiltrationLifting
 import Anabelian.ClassField.FiniteAcyclic
 import Anabelian.ClassField.HerbrandQuotient
 import Anabelian.ClassField.MaximalAbelian
 import Anabelian.ClassField.Multiplicativity
+import Anabelian.ClassField.RegularModule
 import Anabelian.ClassField.Snake
+import Anabelian.ClassField.StableAction
 import Anabelian.ClassField.TrivialAction
 import Anabelian.ClassField.UnitsValuation
 import Anabelian.ClassField.UnitsValuationEquivariance

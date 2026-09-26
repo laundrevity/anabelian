@@ -3819,3 +3819,60 @@ preserved; README/ROADMAP/HANDOFF move to Pass 95, with P96 next and HANDOFF's
 approximately 15-minute `Quotient/LiftDvd.lean` rebuild note restored.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 96 (2026-09-26) — the generic layer (stable actions, regular module, filtration lifting); count stays 0 / 0
+
+**No axiom added, none needed.** Three new files, all pure group theory, all proved:
+`Anabelian/ClassField/StableAction.lean`, `Anabelian/ClassField/FiltrationLifting.lean`,
+`Anabelian/ClassField/RegularModule.lean`, imported by `Anabelian.lean`. Reproducible
+source audits (standard-only, all nineteen):
+
+```text
+'Anabelian.restrictAut' depends on axioms: [propext, Quot.sound]
+'Anabelian.quotientAut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.layerAut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.layerAut_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicNorm_restrictAut_coe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicDiff_restrictAut_coe' depends on axioms: [propext, Quot.sound]
+'Anabelian.cyclicNorm_quotientAut_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicDiff_quotientAut_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicNorm_layerAut_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicDiff_layerAut_mk' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.herbrandH_subsingleton_of_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.ker_eq_range_of_filtration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.layer_of_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclic_exact_of_complete_filtration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.regularShift' depends on axioms: [propext, Quot.sound]
+'Anabelian.regularShift_pow_apply' depends on axioms: [propext, Quot.sound]
+'Anabelian.prod_range_card_pow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.cyclicNorm_regularShift_apply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Anabelian.regular_cyclic_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+```
+
+- **Stable actions:** `restrictAut`/`quotientAut`/`layerAut` with carrier and projection
+  formulas, and the naturality of the cyclic pair along inclusion, projection and the
+  layer projection (Pass 94's `map_cyclicNorm`/`map_cyclicDiff`).
+- **Filtration lifting:** `ker_eq_range_of_filtration` (successive approximation along a
+  separated, complete, `g`-stable filtration with the layer correction property),
+  `layer_of_surjective`, and the cyclic corollary `cyclic_exact_of_complete_filtration`
+  (both range/kernel equalities on `M` from those on every layer, `σ ^ n = 1`, separation,
+  completeness). The corollary carries no `Antitone` hypothesis — one fewer than the
+  Pass-95 catalogue; the proof never needs it.
+- **Regular module:** `regular_cyclic_exact` — `Ĥ⁰ = Ĥ¹ = 0` for `C[G]` (`G` finite, cyclic
+  with a specified generator, `C` any commutative group), via the norm-is-constant formula
+  and the partial products along the cycle; no division by `|G|`.
+- **Bridge:** `herbrandH_subsingleton_of_exact` turns a range/kernel equality into the
+  `Subsingleton` instance that Pass 95's `finite_acyclic_kernel_reduction` consumes.
+
+**Rule-2 and boundary.** No new `structure`/`class` (`Layer` is an `abbrev`, the
+automorphisms are `def`s); all hypotheses carried, none claimed load-bearing; no owed
+witness; D1/D2 N/A. Nothing here is a local-field statement: the lattice, its unit
+subgroups, adic completeness and finite index (Passes 97–101 of the design) remain
+unproved dependencies, not assumptions.
+
+**Verification:** `lake build` successful (8573 jobs, zero warnings/errors);
+`scripts/preflight.sh` CLEAN (97 files); all build audit outputs standard-only; zero
+project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and ledger entries
+untouched; README/ROADMAP/HANDOFF move to Pass 96 with P97 next.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
