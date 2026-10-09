@@ -7873,3 +7873,230 @@ headlines and all identification lemmas are instance-free on `L`. Recovers nothi
 abstract group; R1–R3 untouched. **Hasse–Arf is imported, not earned** — the pass's own
 mathematics is `𝒪_L ∩ K = 𝒪_K`, the `HasExtension` discharge, and the identification of two
 independently-built Herbrand theories, which is real but small.
+
+### Pass 99 (2026-10-08) — the unit filtration, the upper-group transport, and the statement ledger (`L34`)
+
+**Ledger delta: 0 / 0; active count: 0 FOUNDATIONAL / 0 DEBT.** Three new files
+(`Anabelian/ClassField/UnitFiltration.lean`, `Anabelian/ClassField/UpperBridge.lean`,
+`Anabelian/Statements/L34.lean`; **101 project files**), plus `scripts/preflight.sh` clauses 3b/5.
+Branch `master`, on top of Pass 98 (`61e2596`). `lake build` 10545 jobs, zero warnings;
+`scripts/preflight.sh` CLEAN; every `#print axioms` (project and the four imported theorems now
+consumed) standard-only. No `sorry`, no `axiom`, no `native_decide`, no heartbeat change, no
+`respectTransparency` override; all pre-existing statements unchanged.
+
+#### The decision (taken this pass, recorded in HANDOFF/ROADMAP)
+
+The in-project unit-quotient route to reciprocity — Pass-95 design rows P97–P102 (abstract
+`U^m`, local action, normal lattice, regular layers, `q(𝒪ˣ) = 1`, `q(Lˣ) = [L:K]`) — is
+**retired**. Reciprocity is imported (Pass 98); re-deriving it in-project would duplicate
+upstream and is not on the path to R1. The one row kept is the unit filtration itself (P97),
+because L3.4's correspondence `θ(Uⁿ) = Gⁿ` needs `Uⁿ` as its source side. Passes 87–96 remain
+proved and in the tree (the Herbrand-quotient calculus is generic and may serve later); they are
+no longer a program. L3.1's status becomes "closed by import; in-project program retired".
+
+#### Deliverable 1 — `ClassField/UnitFiltration.lean`: `Uᵐ ≤ Kˣ`
+
+For `K` a nonarchimedean local field. The ring-level `integerUnitFiltration K m : Subgroup 𝒪[K]ˣ`
+is `ker (𝒪[K]ˣ →* (𝒪[K] ⧸ 𝓂[K]^m)ˣ)` — all units at `m = 0`, `1 + 𝓂^m` for `m ≥ 1`, no
+case split; `unitFiltration K m : Subgroup Kˣ` is its image under the injective
+`integerUnitsHom : 𝒪[K]ˣ →* Kˣ`, with `integerUnitsEquiv K m : integerUnitFiltration K m ≃*
+unitFiltration K m` (`Subgroup.equivMapOfInjective`) carrying every computation across.
+Statements (verbatim; `variable (K) [Field K] [ValuativeRel K]`, local-field instance only where
+the DVR structure is used):
+
+```lean
+theorem mem_unitFiltration_iff {m : ℕ} {u : Kˣ} :
+    u ∈ unitFiltration K m ↔
+      ∃ w : (↥𝒪[K])ˣ, (w : ↥𝒪[K]) - 1 ∈ 𝓂[K] ^ m ∧ ((w : ↥𝒪[K]) : K) = u
+theorem unitFiltration_antitone : Antitone (unitFiltration K)
+theorem mem_unitFiltration_zero_iff {u : Kˣ} :
+    u ∈ unitFiltration K 0 ↔ valuation K (u : K) = 1
+theorem unitFiltration_zero_eq_unitGroup :
+    unitFiltration K 0 = (valuation K).valuationSubring.unitGroup
+noncomputable def unitsQuotEquivResidueUnits :
+    unitFiltration K 0 ⧸ (unitFiltration K 1).subgroupOf (unitFiltration K 0) ≃* (𝓀[K])ˣ
+-- with (π : ↥𝒪[K]) (hπ : 𝓂[K] = Ideal.span {π}), [IsNonarchimedeanLocalField K]:
+theorem ker_unitLayerHom {m : ℕ} (hm : 1 ≤ m) :
+    (unitLayerHom π hπ hm).ker = (unitFiltration K (m + 1)).subgroupOf (unitFiltration K m)
+noncomputable def unitLayerQuotEquiv {m : ℕ} (hm : 1 ≤ m) :
+    unitFiltration K m ⧸ (unitFiltration K (m + 1)).subgroupOf (unitFiltration K m) ≃*
+      Multiplicative 𝓀[K]
+theorem unitLayerQuotHom_injective {m : ℕ} (hm : 1 ≤ m) :
+    Function.Injective (unitLayerQuotHom π hπ hm)
+noncomputable def unitLayerQuotAddHom {m : ℕ} (hm : 1 ≤ m) :
+    Additive (unitFiltration K m ⧸ (unitFiltration K (m + 1)).subgroupOf (unitFiltration K m)) →+
+      𝓀[K]
+theorem unitLayerQuotAddHom_injective {m : ℕ} (hm : 1 ≤ m) :
+    Function.Injective (unitLayerQuotAddHom π hπ hm)
+```
+
+The content: `U⁰/U¹ ≃ 𝓀ˣ` is reduction of units (`IsLocalRing.surjective_units_map_of_local_ringHom`
+for surjectivity; kernel `U¹` by `Ideal.Quotient.mk_eq_mk_iff_sub_mem`). For `m ≥ 1`, the
+depth-`m` coefficient `unitCoeff π hπ w` is the unique `a` with `w − 1 = π^m a`
+(`Ideal.span_singleton_pow` + `Ideal.mem_span_singleton`; uniqueness by `mul_left_cancel₀`, `π ≠ 0`
+from `IsDiscreteValuationRing.not_a_field`); `w ↦ residue (unitCoeff w)` is a homomorphism because
+`a_{w₁w₂} = a₁ + a₂ + π^m a₁ a₂` and `π^m a₁a₂ ∈ 𝓂` for `m ≥ 1` (`residue_pow_mul_eq_zero`,
+the same `1 ≤ m` that Pass 27's `residue_one_add_pow_mul` needs); its kernel is `Uᵐ⁺¹`
+(`ker_integerUnitLayerHom`: `π ∣ a ↔ π^{m+1} ∣ π^m a`), and it is surjective
+(`1 + π^m a` is a unit by `IsLocalRing.isUnit_of_mem_nonunits_one_sub_self`). So the layer map is
+in fact an isomorphism `Uᵐ/Uᵐ⁺¹ ≃ 𝓀⁺`, delivered as the asked-for injective hom and as the
+additive embedding. Kernels transport along `integerUnitsEquiv` by one generic lemma
+(`ker_comp_integerUnitsEquiv_symm`, via `Subgroup.mem_map_iff_mem`). The coefficient map depends on
+`π` (rescaling by `residue c ^ m` under `π ↦ πc`), as the Pass-25/27 characters do.
+
+This is the **multiplicative side of the Pass-24/27 characters**: `θ_0 : G_0/G_1 ↪ 𝓀ˣ` and
+`θ_i : G_i/G_{i+1} ↪ 𝓀⁺` on the Galois side; `U⁰/U¹ ≃ 𝓀ˣ` and `Uᵐ/Uᵐ⁺¹ ≃ 𝓀⁺` on the field side.
+`L34` is the statement that reciprocity matches them level by level.
+
+#### Deliverable 2 — `ClassField/UpperBridge.lean`: the Pass-98 remainder, closed
+
+**Verdict: the upper groups agree on `(-1, ∞)`, as a proved equality; they differ on
+`(-∞, -1]` exactly by the `G_{-1} = ⊤` convention; the jump notions coincide on `(-1, ∞)`; upper-jump
+integrality holds for the project's `G^v(𝒪_L)` with no instance on `L`.** Statements (verbatim;
+`(K) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K] (L) [Field L]
+[Algebra K L] [FiniteDimensional K L] [IsAbelianGalois K L]`):
+
+```lean
+-- any (K, A) with [Finite (A.decompositionSubgroup K)]:
+theorem upperRamificationGroup_of_nonpos {v : ℝ} (hv : v ≤ 0) :
+    upperRamificationGroup K A v = ramificationGroup K A 0
+theorem upperRamificationGroup_eq_iSup_of_neg {t : ℝ} (ht : t < 0) :
+    upperRamificationGroup K A t = ⨆ s : {s : ℝ // t < s}, upperRamificationGroup K A s
+-- the transport (each statement installs L's rung-1 structure by letI/haveI):
+theorem inverseHerbrandFunction_eq (t : ℝ) :
+    letI := extensionValuativeRel K L
+    letI := ValuativeRel.topologicalSpace L
+    haveI := isNonarchimedeanLocalField_extension K L
+    haveI := hasExtension_extensionValuativeRel K L
+    ClassFieldTheory.inverseHerbrandFunction K L t =
+      herbrandPsi K (ValuativeRel.valuation L).valuationSubring t
+theorem upperRamificationGroup_eq_of_neg_one_lt {t : ℝ} (ht : -1 < t) :
+    letI := … ; haveI := …
+    ClassFieldTheory.upperRamificationGroup K L t =
+      upperRamificationGroup K (ValuativeRel.valuation L).valuationSubring t
+theorem upperRamificationGroup_eq_top_of_le_neg_one {t : ℝ} (ht : t ≤ -1) :
+    letI := … ; haveI := …
+    ClassFieldTheory.upperRamificationGroup K L t = ⊤
+theorem upperRamificationGroup_extensionIntegers_eq_of_neg_one_lt {t : ℝ} (ht : -1 < t) :
+    letI := … ; haveI := …
+    (ClassFieldTheory.upperRamificationGroup K L t).map
+        ((ValuativeRel.valuation L).valuationSubring.decompositionSubgroup K).subtype =
+      (upperRamificationGroup K (extensionIntegers K L) t).map
+        ((extensionIntegers K L).decompositionSubgroup K).subtype
+theorem isUpperRamificationJump_iff {t : ℝ} (ht : -1 < t) :
+    letI := … ; haveI := …
+    ClassFieldTheory.IsUpperRamificationJump K L t ↔
+      upperRamificationGroup K (ValuativeRel.valuation L).valuationSubring t ≠
+        ⨆ s : {s : ℝ // t < s},
+          upperRamificationGroup K (ValuativeRel.valuation L).valuationSubring s
+-- universe Type (upstream's isUpperRamificationJump_int is stated at Type), no instance on L:
+theorem upperRamificationGroup_extensionIntegers_jump_int {t : ℝ}
+    (ht : upperRamificationGroup K (extensionIntegers K L) t ≠
+      ⨆ s : {s : ℝ // t < s}, upperRamificationGroup K (extensionIntegers K L) s) :
+    ∃ z : ℤ, t = (z : ℝ)
+```
+
+How the transport works: their `upperRamificationGroup K L t` unfolds to
+`realLowerRamificationGroup K A (inverseHerbrandFunction K L t)` at
+`A = (valuation L).valuationSubring`; under the `letI` package `A = extensionIntegers K L`
+(`valuationSubring_extensionValuativeRel_eq`, `hA`), so `rw [hA]` moves everything to `𝒪_L`
+where the project's `Finite (D(𝒪_L))` instance lives, `inverseHerbrandFunction_eq` identifies
+`ψ` (Pass 98's `herbrandPsi_eq_invFun_herbrandFunction`), and Pass 98's
+`realLowerRamificationGroup_eq` finishes for `-1 < ψ(t)`, which follows from `-1 < t` by
+`herbrandPsi_eq_id` at `-1` and `herbrandPsi_strictMono`. The equality at the project's `𝒪_L`
+is stated after pushing both sides along `Subgroup.subtype` into `Subgroup (L ≃ₐ[K] L)` — this
+is the honest form of "transport along `hA`" (the two decomposition-subgroup types are
+propositionally, not definitionally, equal); the proof is one `rw [hA]`. Note the statement-level
+`haveI :=` idiom works: a `Prop`-class instance proved under `letI` is picked up by instance
+resolution in the rest of the statement.
+
+The jump comparison. Upstream's `IsUpperRamificationJump K L t := G^t ≠ ⨆_{s>t} G^s`; the project
+never defined an upper-jump predicate (its lower jump is `G_n ≠ G_{n+1}`), so the comparison is
+made against the identical right-limit condition on the project's `G^v`. On `(-1, ∞)` the two are
+the same proposition (`isUpperRamificationJump_iff`). On `(-∞, -1]` theirs is `⊤` and can jump at
+`-1` (iff `G_0 ≠ ⊤`, i.e. `L/K` not totally ramified — "including the possible endpoint `-1`" in
+their docstring), whereas the project's filtration is `G_0` on all of `(-∞, 0]` and never jumps
+at `t < 0` (`upperRamificationGroup_eq_iSup_of_neg`, witness `s = t/2`). Hence the integrality
+theorem in project vocabulary needs no `t > -1` hypothesis. No convention mismatch blocks a clean
+equality where jumps live; the exact relation on `(-∞, -1]` is recorded as the two `_eq_top` /
+`_of_nonpos` lemmas rather than forced.
+
+#### Deliverable 3 — the statement ledger, and `Statements/L34.lean`
+
+**The mechanism.** `Anabelian/Statements/` holds `Prop`-valued `def`s — statements of target
+theorems, audited for *correctness of statement* before any proof is attempted, each with a
+docstring recording its sources, every convention choice, and why it is the right statement.
+`scripts/preflight.sh` clause 3b checks each file is imported from the root, declares a
+`def … : Prop`, and contains no `axiom`; clause 5 elaborates each standalone (`lake env lean`),
+failing on any error or `sorry`. The reason the mechanism exists: a statement can elaborate,
+compile and pass every axiom audit while being the wrong theorem — the Bogomolov–Pop
+formalization in `openai/math` states the reconstruction result as **uniqueness only**, omitting the
+existence half that carries the anabelian content. `#print axioms` cannot see that; a statement
+ledger reviewed as a statement can. This is the project's answer to the question "what guards the
+*statement* the way the ledger guards the *axioms*".
+
+**`L34`** (verbatim):
+
+```lean
+def L34 : Prop :=
+  ∀ (K : Type) [Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
+    (artin : (E : FiniteAbelianLocalExtension K) → Kˣ →ₜ* (E.1 ≃ₐ[K] E.1)),
+    IsNormalizedArtinFamily K artin →
+    ∀ (E : FiniteAbelianLocalExtension K) (n : ℕ),
+      (unitFiltration K n).map (artin E).toMonoidHom =
+        (upperRamificationGroup K (extensionIntegers K E.1) (n : ℝ)).map
+          ((extensionIntegers K E.1).decompositionSubgroup K).subtype
+```
+
+where `IsNormalizedArtinFamily K artin` is upstream's
+`finiteAbelianLocalReciprocity_family_arithmeticFrobenius` conclusion as a predicate: (i) each
+`artin E` surjective with kernel `E.normSubgroup`; (ii) coherent under `E ≤ F`; (iii) on unramified
+`E`, the **inverse** of a uniformizer maps to the unique automorphism inducing the arithmetic
+`q`-Frobenius on residues. Two certifying theorems accompany it: `exists_isNormalizedArtinFamily`
+(upstream's existence) and `isNormalizedArtinFamily_unique` (upstream's
+`finiteAbelianLocalReciprocity_family_ext`, with the one-directional Frobenius clause extracted from
+the `↔` by `.mpr rfl`). So "for every normalized family" is "for the canonical Artin family", with
+no hidden choice.
+
+Convention choices, all in the docstring: finite level only (the profinite reciprocity upstream is
+`Nonempty`, not the canonical map, and is not used; the `K^ab` form is the inverse limit over `E`,
+to be ledgered later); the Frobenius orientation is upstream's geometric one (`π ↦ Frob⁻¹`) vs
+Serre's arithmetic one — the two Artin maps differ by inversion on `Kˣ`, so `θ(Uⁿ)` is the same
+subgroup and **the statement is convention-independent**; `Gⁿ` is the project's
+`upperRamificationGroup K 𝒪_E (n : ℝ)` (`G^v = G_{⌈ψ v⌉₊}`), pushed along `Subgroup.subtype` to
+compare with the image of `Uⁿ` in `Gal(E/K)` (`D(𝒪_E) = ⊤`, Pass 52, so nothing is lost); the
+project's `G_{-1} = G_0` truncation is invisible at `n ≥ 0`; the index is `n : ℕ` as in Serre, the
+real-indexed form following from Hasse–Arf; universe `Type` because upstream's family theorems are.
+Why this is the R1-relevant statement: it is what makes `Uⁿ` — hence `v_K`, hence (with the Pass-24/27
+characters) `𝓀` and eventually `K` — visible inside `Gal(K^ab/K)` through the `G^v` filtration that
+L2 built; `Gⁿ` is Galois-theoretic data, `Uⁿ` is field-theoretic data, and `L34` is the dictionary.
+
+#### Mathlib / upstream API that did the work
+
+`Subgroup.equivMapOfInjective` + `Subgroup.coe_equivMapOfInjective_apply`, `Subgroup.mem_map_iff_mem`,
+`Units.map_injective`, `Subring.subtype_injective`, `Ideal.Quotient.mk_eq_mk_iff_sub_mem`,
+`Ideal.span_singleton_pow`, `Ideal.mem_span_singleton`, `Ideal.pow_le_pow_right`,
+`IsLocalRing.surjective_units_map_of_local_ringHom`, `IsLocalRing.residue_eq_zero_iff`,
+`IsLocalRing.residue_surjective`, `IsLocalRing.isUnit_of_mem_nonunits_one_sub_self`,
+`IsDiscreteValuationRing.not_a_field`, `Ideal.span_singleton_eq_bot`,
+`QuotientGroup.liftEquiv`, `Valuation.Integers.isUnit_iff_valuation_eq_one`,
+`Valuation.mem_unitGroup_iff`, `Nat.ceil_eq_zero`, `iSup_congr`, `le_iSup_of_le`; upstream
+`ClassFieldTheory.{upperRamificationGroup, upperRamificationGroupAfter, IsUpperRamificationJump,
+inverseHerbrandFunction, realLowerRamificationGroup_eq_top_of_le_neg_one, isUpperRamificationJump_int,
+finiteAbelianLocalReciprocity_family_arithmeticFrobenius, finiteAbelianLocalReciprocity_family_ext,
+FiniteAbelianLocalExtension}` (all read from `.lake/packages/ClassFieldTheory/Lean4/ClassFieldTheory/`).
+House idiom learned: `le_or_lt` is gone in this Mathlib (`le_or_gt`); a `RingHom` coerced to a
+`MonoidHom` inside `Units.map` is best handled by `change … Ideal.Quotient.mk … = 1 ↔ _`.
+
+#### Rule-2 / scope
+
+No new `structure`/`class` (`IsNormalizedArtinFamily` is a `Prop`-valued `def` mirroring an
+upstream conclusion, with existence and uniqueness proved). No load-bearing-hypothesis necessity
+claim: the `1 ≤ m` of the layer map is not claimed necessary here (at `m = 0` the layer is the
+multiplicative `U⁰/U¹ ≃ 𝓀ˣ`, a different object, not a failure of the same map); the abelian
+hypothesis is upstream's. No owed witness. D2 respected: `L`-instances occur only under
+statement-level `letI`/`haveI`, and the headline jump theorem and `L34` carry none. Recovers nothing
+from an abstract group; R1–R3 untouched. **Not closed:** `L34` is a statement, not a theorem — the
+proof (Serre XV §2, via the conductor / Lubin–Tate or via Hasse–Arf and the norm-index computations
+`(Uⁿ : Uⁿ ∩ N Lˣ)`) is the L3.4 program ahead; the `K^ab`-level form is not yet ledgered; the
+real-indexed form is not stated.

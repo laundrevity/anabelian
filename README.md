@@ -22,12 +22,17 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
   table is the authoritative ledger count.
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
+- **`Anabelian/Statements/`** — the **statement ledger** (since Pass 99): `Prop`-valued `def`s
+  stating target theorems, audited as *statements* (sources, every convention choice) before any
+  proof is attempted, and checked by the preflight gate. Guards against the failure the axiom
+  ledger cannot see — a compiling, standard-only statement of the wrong theorem.
 
-## Current state — Pass 98 (2026-10-08)
+## Current state — Pass 99 (2026-10-08)
 
-**Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
+**Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide; statement ledger:
+1 entry (`L34`).** Clean cached build on
 Mathlib commit `0653561` (Lean `v4.35.0-rc2`; bumped from `v4.30.0` in Pass 97)
-(`scripts/preflight.sh` CLEAN: 98 project files, 10542 build jobs, warning-free). Since Pass 98 the
+(`scripts/preflight.sh` CLEAN: 101 project files, 10545 build jobs, warning-free). Since Pass 98 the
 project depends on the external Lean library `n-yamaguchi-0729/ClassFieldTheory @ 7713795`
 (local/global class field theory, Hasse–Arf; every imported headline standard-only) — listed in
 `AXIOM_LEDGER.md`'s "External dependencies" section as an honest boundary: **imported, not earned**.
@@ -59,31 +64,32 @@ The current strata are:
   project's `𝒪_L`, `ramificationGroup`, `herbrandPhi` with no instance on `L` (the
   `HasExtension` compatibility is discharged from Pass 43), and the two Herbrand theories are
   identified (groups definitionally equal, `φ` equal as real functions, `ψ` equal). L3.1–L3.3
-  are thereby **imported**; L3.4 (the ramification correspondence) is open and unblocked.
+  are thereby **imported**. **Pass 99** retires the in-project unit-quotient route to
+  reciprocity, builds the **unit filtration** `Uⁿ ≤ Kˣ` with `U⁰/U¹ ≃ 𝓀ˣ` and
+  `Uⁿ/Uⁿ⁺¹ ≃ 𝓀⁺` (`n ≥ 1`), transports the upper groups (equal to upstream's for `t > -1`;
+  upper jumps of the project's `G^v(𝒪_L)` are integers), and opens the statement ledger with
+  **`L34`**: `θ(Uⁿ) = Gⁿ(E/K)` at finite level. **L3.4 is IN-PROGRESS**: stated, not proved.
 - **L4 — global reciprocity imported (Pass 98), Chebotarev absent.** R1–R3 — NOT-STARTED:
   local, Neukirch–Uchida, and mono-anabelian reconstruction remain distant targets. No
   reconstruction theorem is claimed; the reciprocity theorems used are external and
   existential (`profiniteLocalReciprocity` is `Nonempty`, not the canonical map).
 
-**Current frontier:** `cyclicHerbrandQuotient_units` proves `q(Kˣ) = q(Rˣ) · n`
-for compatible ring automorphisms, carrying `n ≠ 0`, periodicity on `Kˣ`, and explicit
-`Ĥ¹` finiteness on `Rˣ` and `Kˣ`. Value-group finiteness is derived. Pass 95's
-`finite_acyclic_kernel_reduction` derives finite middle cohomology and quotient one
-from an acyclic subgroup with finite quotient. The [unit proof design](NOTES.md#pass-95)
-specifies the normal-basis lattice, regular unit layers, adic-completeness transport,
-both finiteness discharges, and the field-norm comparison. Pass 96 proved the
-design's generic layer (`cyclic_exact_of_complete_filtration`, `regular_cyclic_exact`,
-`herbrandH_subsingleton_of_exact`, the `restrictAut`/`quotientAut`/`layerAut` actions):
-given a `σ`-stable, separated, complete filtration of a subgroup `V₀ ≤ 𝒪_Lˣ` with regular
-layers, both `Ĥ(V₀)` vanish. The arithmetic inputs — the normal-basis lattice, its unit
-subgroups, adic completeness, finite index — remain unproved (rows P97–P101 of the
-Pass-95 design) — and, since Pass 98, no longer on the critical path to reciprocity, which
-is imported. **Next: Pass 99 — transport the upper-numbering identification and upper-jump
-integrality to the project's `G^v`, and decide (HANDOFF) whether the in-project unit-quotient
-program continues or L3.4 takes over.** Hasse–Arf is imported and identified (Pass 98).
+**Current frontier:** L3.4, the ramification correspondence. Its source side is built —
+`unitFiltration K n : Subgroup Kˣ` with `unitsQuotEquivResidueUnits : U⁰/U¹ ≃* 𝓀ˣ` and
+`unitLayerQuotEquiv : Uⁿ/Uⁿ⁺¹ ≃* 𝓀⁺` for `n ≥ 1` (the multiplicative side of the Pass-24/27
+characters). Its target side is the project's `G^v(𝒪_E)`, now proved equal to upstream's
+upper groups for `t > -1` and carrying upper-jump integrality with no instance on `L`
+(`upperRamificationGroup_extensionIntegers_jump_int`). The statement itself is ledgered as
+`L34 : Prop` in `Anabelian/Statements/L34.lean` — finite level, against the Frobenius-normalized
+Artin family, which upstream proves to exist and be unique — with every convention choice
+recorded. The in-project unit-quotient program (Pass-95 rows P98–P102) is retired; its proved
+generic layer (Passes 87–96) stays in the tree. **Next: Pass 100 — open the `L34` proof program:
+inventory upstream's norm-index and conductor results, fix the route, prove the `n = 0` case
+`θ(U⁰) = G_0`, and ledger the `K^ab`-level statement.** Hasse–Arf is imported and identified
+(Pass 98).
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-98 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-99 summary above states the current frontier.
 
 ## Build
 
@@ -94,4 +100,4 @@ lake build
 
 `lake build` re-runs the `#print axioms` audit of the headline results on every build;
 `scripts/preflight.sh` is the full pre-commit gate (clean tree, line length, import-chain
-completeness, named-binder check, and a warning-free build).
+completeness, named-binder check, the statement-ledger checks, and a warning-free build).

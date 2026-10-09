@@ -38,11 +38,41 @@ if [ -n "$named" ]; then echo "== NAMED STATEMENT BINDERS (anonymize: 'letI : T 
 # 3. Import-chain completeness (the Pass-37/39 failure class).
 python3 scripts/chain_check.py || fail=1
 
+# 3b. Statement ledger (added Pass 99): every file in Anabelian/Statements/ must (a) be reachable
+#     from the root Anabelian.lean, (b) declare at least one `def … : Prop`, (c) contain no `axiom`,
+#     and (d) elaborate on its own with `lake env lean`, with no error and no `sorry` (clause 5
+#     below). The statements are audited *before* proofs are attempted — the statement is the
+#     thing that can be silently wrong.
+for f in Anabelian/Statements/*.lean; do
+  [ -e "$f" ] || continue
+  mod=$(echo "${f%.lean}" | tr '/' '.')
+  if ! grep -q "^import ${mod}\$" Anabelian.lean; then
+    echo "== STATEMENTS: $f not imported from Anabelian.lean =="; fail=1
+  fi
+  if ! grep -qE '^def [A-Za-z0-9_]+ : Prop :=' "$f"; then
+    echo "== STATEMENTS: $f declares no 'def … : Prop' =="; fail=1
+  fi
+  if grep -qE '^\s*axiom\b' "$f"; then
+    echo "== STATEMENTS: $f contains an axiom =="; fail=1
+  fi
+done
+
 # 4. Full build; ANY warning or error fails the gate.
 out=$(lake build 2>&1)
 bad=$(echo "$out" | grep -E '^(⚠|✖)|warning:|error:' || true)
 if [ -n "$bad" ]; then echo "== BUILD WARNINGS/ERRORS =="; echo "$bad"; fail=1; fi
 echo "$out" | tail -1
+
+# 5. Statement ledger elaboration (clause 3b(d)): each statements file must elaborate standalone.
+for f in Anabelian/Statements/*.lean; do
+  [ -e "$f" ] || continue
+  sout=$(lake env lean "$f" 2>&1)
+  if echo "$sout" | grep -qE 'error|sorry'; then
+    echo "== STATEMENTS: $f does not elaborate cleanly =="; echo "$sout" | head -20; fail=1
+  else
+    echo "statements: $f elaborates ($(echo "$sout" | grep -c 'depends on axioms') axiom audits)"
+  fi
+done
 
 if [ "$fail" -eq 0 ]; then echo "preflight: CLEAN — committable"; else echo "preflight: FAILED — do not commit"; fi
 exit $fail

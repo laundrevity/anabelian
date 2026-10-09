@@ -15,8 +15,10 @@ import Anabelian.ClassField.RegularModule
 import Anabelian.ClassField.Snake
 import Anabelian.ClassField.StableAction
 import Anabelian.ClassField.TrivialAction
+import Anabelian.ClassField.UnitFiltration
 import Anabelian.ClassField.UnitsValuation
 import Anabelian.ClassField.UnitsValuationEquivariance
+import Anabelian.ClassField.UpperBridge
 import Anabelian.Extension.InertiaCharpoly
 import Anabelian.Extension.InertiaFixedIntegers
 import Anabelian.Extension.InertiaResidueCover
@@ -96,3 +98,4 @@ import Anabelian.Reduction.ResidueIso
 import Anabelian.Reduction.Route
 import Anabelian.Reduction.SpectralValuation
 import Anabelian.Reduction.UnramifiedQuotient
+import Anabelian.Statements.L34

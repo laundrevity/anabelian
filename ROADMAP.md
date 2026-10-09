@@ -5,15 +5,26 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 98 (2026-10-08)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 99 (2026-10-08)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 98 project files; one external dependency
-(`ClassFieldTheory @ 7713795`, ledger "External dependencies").** L1's proved scope is
-unchanged; L2 is complete and consolidated (Passes 83–84); L3.0 is done (Pass 86); L3.1's
-in-project program is in progress; **L3.1–L3.3 and Hasse–Arf are IMPORTED (Pass 98)**;
-L3.4, Chebotarev (L4), and R1–R3 remain ahead.
+**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 101 project files; one external dependency
+(`ClassFieldTheory @ 7713795`, ledger "External dependencies"); statement ledger: 1 entry
+(`L34`).** L1's proved scope is unchanged; L2 is complete and consolidated (Passes 83–84); L3.0
+is done (Pass 86); **L3.1–L3.3 and Hasse–Arf are IMPORTED (Pass 98)** and the in-project L3.1
+unit-quotient program is **RETIRED (Pass 99)**; **L3.4 is IN-PROGRESS (Pass 99: `Uⁿ` built,
+statement `L34` ledgered)**; Chebotarev (L4) and R1–R3 remain ahead.
+
+**The statement ledger (governance mechanism, added Pass 99).** `Anabelian/Statements/` holds
+`Prop`-valued `def`s — the statements of target theorems, audited as *statements* (sources, every
+convention choice, why it is the right theorem) **before** proofs are attempted, and checked by
+`scripts/preflight.sh` (imported from the root; `def … : Prop`; no `axiom`; elaborates standalone
+with no error or `sorry`). It guards against the failure the axiom ledger cannot see: a statement
+that compiles and is standard-only but is the wrong theorem. Cautionary exhibit: the Bogomolov–Pop
+formalization in `openai/math`, stated as uniqueness only, omitting the existence half that carries
+the anabelian content. Each rung's target theorem should be ledgered here before it is attempted;
+R1–R3 in particular will be.
 
 > **Current frontier — Pass 95:** P94's `cyclicHerbrandQuotient_units` proves the conditional
 > identity **`q(Kˣ) = q(Rˣ) · n`** for a DVR and its fraction field with compatible ring
@@ -53,16 +64,32 @@ L3.4, Chebotarev (L4), and R1–R3 remain ahead.
 > external boundary, listed in the ledger with its existential caveats
 > (`profiniteLocalReciprocity` is `Nonempty`, not the canonical map).
 >
-> **Next — Pass 99:** (i) transport the upper-group identification across
-> `valuationSubring_extensionValuativeRel_eq` and state upper-jump integrality
-> (`isUpperRamificationJump_int`) against the project's `G^v`; (ii) the **decision** recorded in
-> `HANDOFF.md`: whether the in-project L3.1 unit-quotient program (Pass-95 rows P97–P102) continues
-> as a discharge of the imported boundary or is retired in favour of L3.4 (the ramification
-> correspondence, now unblocked and not supplied upstream). The reconstruction targets remain
-> unproved. The historical pass record is in `NOTES.md` and `AXIOM_LEDGER.md`.
+> **P99 (2026-10-08) — the unit filtration, the upper-group transport, the statement ledger.**
+> *Decision:* the in-project unit-quotient route to reciprocity (Pass-95 rows P97–P102) is
+> **retired**; only the unit filtration is kept, because L3.4 needs it.
+> `ClassField/UnitFiltration.lean`: `unitFiltration K m : Subgroup Kˣ` (`U⁰ = 𝒪ˣ`,
+> `Uᵐ = 1 + 𝓂^m`), antitone, `U⁰ = unitGroup`, **`U⁰/U¹ ≃* 𝓀ˣ`**, and for `m ≥ 1` the layer
+> isomorphism **`Uᵐ/Uᵐ⁺¹ ≃* 𝓀⁺`** (as the asked-for injective hom and as an additive embedding) —
+> the multiplicative side of the Pass-24/27 characters. `ClassField/UpperBridge.lean` closes the
+> Pass-98 remainder: **their `G^t` = the project's `G^t` for `-1 < t`** (at the common valuation
+> subring, and at `𝒪_L` after `Subgroup.subtype`), `= ⊤` vs `= G_0` on `t ≤ -1`, their jump
+> predicate ↔ the project's right-limit jump on `(-1, ∞)`, and **upper-jump integrality for the
+> project's `G^v(𝒪_L)` with no instance on `L`** (`upperRamificationGroup_extensionIntegers_jump_int`).
+> `Statements/L34.lean`: the **statement ledger** opens with `L34 : Prop` — the ramification
+> correspondence `θ(Uⁿ) = Gⁿ(E/K)` at finite level against the Frobenius-normalized Artin family
+> (`IsNormalizedArtinFamily`, proved to exist and be unique from upstream). A statement, not a
+> theorem ([NOTES Pass 99](NOTES.md#pass-99)).
+>
+> **Next — Pass 100:** open the L3.4 proof program for `L34`: inventory what upstream supplies
+> toward `θ(Uⁿ) = Gⁿ` (norm-index results `FiniteAbelianLocalReciprocityIndex`, the unramified
+> normalization, the conductor results `IsAbelianConductor.*`), fix the proof route (Serre XV §2 via
+> the norm-index computation `(Uⁿ : Uⁿ ∩ N Lˣ)` and Hasse–Arf, vs. Lubin–Tate), and prove the
+> **`n = 0` case** `θ(U⁰) = G⁰ = G_0` (the inertia group) as the first rung. Also ledger the
+> `K^ab`-level statement. The reconstruction targets remain unproved. The historical pass record
+> is in `NOTES.md` and `AXIOM_LEDGER.md`.
 
 The earlier [Passes 44–93 summary](NOTES.md#pass-93-roadmap-detail) is preserved
-verbatim in NOTES; the Pass-98 header above states the current frontier.
+verbatim in NOTES; the Pass-99 header above states the current frontier.
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -682,7 +709,7 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
 - Discharge: `DEBT` to be discharged, or `FOUNDATIONAL` if scoped out. Classical (Serre, *Local
   Fields*) — formalizable but a real body of work. Citation: J.-P. Serre, *Local Fields*, ch. IV.
 
-### L3 — Local class field theory   ·   **DEPENDENCY (ClassFieldTheory @ 7713795, Pass 98) — L3.1–L3.3 and Hasse–Arf imported; L3.4 and Chebotarev still open**   ·   DEBT: 0 ledgered (external boundary — ledger "External dependencies")
+### L3 — Local class field theory   ·   **DEPENDENCY (ClassFieldTheory @ 7713795, Pass 98) — L3.1–L3.3 and Hasse–Arf imported; L3.4 IN-PROGRESS (Pass 99: `Uⁿ` built, `L34` ledgered); Chebotarev still open**   ·   DEBT: 0 ledgered (external boundary — ledger "External dependencies")
 
 **The Pass-85 inventory** (Mathlib pin of July 2026). PRESENT: group cohomology
 (`RepresentationTheory/Homological/GroupCohomology/`) with explicit `H⁰/H¹/H²`
@@ -704,9 +731,10 @@ only at the L3.3 gate, not before.
   (fixed field of the closed commutator subgroup), `IsGalois`, the topological
   abelianization equivalence, commutativity, MAXIMALITY as a theorem, and the
   `G^v(K^ab/K)` instantiation — all in `Anabelian/ClassField/MaximalAbelian.lean`.
-- **L3.1 — the cyclic/Herbrand-quotient layer**   ·   **IN-PROGRESS (opened Pass 87); its
-  reciprocity payoff IMPORTED (Pass 98)** — the in-project program below is no longer on the
-  critical path (HANDOFF decision note).
+- **L3.1 — the cyclic/Herbrand-quotient layer**   ·   **CLOSED BY IMPORT (Pass 98); in-project
+  program RETIRED (Pass 99 decision)** — rows P98–P102 below will not be pursued; the proved
+  Passes 87–96 layer stays in the tree as generic machinery. Only row P97 (the unit filtration)
+  was carried out, as `ClassField/UnitFiltration.lean` (Pass 99), because L3.4 needs it.
   Multi-pass. DONE: the abstract Herbrand quotient (`herbrandH`, `herbrandQuotient`) +
   the finite-triviality theorem (Pass 87). DONE also: the 6-cycle
   alternating-card lemma + `herbrandH` functoriality (Pass 88). DONE also: the snake
@@ -722,11 +750,11 @@ only at the L3.3 gate, not before.
   DONE also: the design's generic layer — stable/quotient/layer actions with cyclic-pair
   naturality, `regular_cyclic_exact`, `ker_eq_range_of_filtration` and its cyclic
   corollary, `herbrandH_subsingleton_of_exact` (Pass 96).
-  REMAINING: P97 the abstract unit filtration and finite quotients, P98 the local action /
-  period / adic transport / field norm, P99 the small normal lattice, P100 its unit
-  subgroups and complete filtration, P101 regular layers and acyclicity, P102
-  `q(𝒪ˣ) = 1` with both finiteness discharges and `q(Lˣ) = [L:K]`; then the `Rep`
-  bridge and Hilbert-90 packaging.
+  DONE (Pass 99, re-homed to L3.4): P97 the unit filtration `Uᵐ ≤ Kˣ` with `U⁰/U¹ ≃ 𝓀ˣ`
+  and `Uᵐ/Uᵐ⁺¹ ≃ 𝓀⁺`. RETIRED (Pass 99): P98 the local action / period / adic transport /
+  field norm, P99 the small normal lattice, P100 its unit subgroups and complete filtration,
+  P101 regular layers and acyclicity, P102 `q(𝒪ˣ) = 1` and `q(Lˣ) = [L:K]`, the `Rep`
+  bridge and Hilbert-90 packaging — all now supplied by the imported reciprocity.
 - **L3.2 — unramified cohomology + the invariant map's unramified part**   ·
   SUBSUMED by the imported local reciprocity (Pass 98); no project-level statement.
   Previously NOT-STARTED, medium (completeness/limit arguments — the P38–43 strengths). The
@@ -746,7 +774,12 @@ only at the L3.3 gate, not before.
   fallback (`FOUNDATIONAL` boundary, honestly labeled) if the wall exceeds the project's
   horizon.
 - **L3.4 — the ramification correspondence** `θ(U^n) = G^n(K^ab/K)` (Serre XV §2)   ·
-  NOT-STARTED — **UNBLOCKED (Pass 98)**: L3.3 is imported, Hasse–Arf is available in project
+  **IN-PROGRESS (Pass 99)**: the source side `Uⁿ` is built (`ClassField/UnitFiltration.lean`),
+  the target side `Gⁿ(𝒪_E)` is identified with upstream's upper groups and carries upper-jump
+  integrality (`ClassField/UpperBridge.lean`), and the finite-level statement is ledgered as
+  **`L34`** (`Statements/L34.lean`, against the Frobenius-normalized Artin family — unique by
+  upstream). Not yet: any case of the proof (first rung: `n = 0`, `θ(U⁰) = G_0`); the `K^ab`
+  form. UNBLOCKED since Pass 98: L3.3 is imported, Hasse–Arf is available in project
   vocabulary (`hasseArf_herbrandPhi`), and ClassFieldTheory does *not* state the
   correspondence (its conductor-side `IsAbelianConductor.*` results are adjacent). **The R1-relevant piece**: what makes the unit filtration —
   hence the valuation, hence eventually the field — visible in `Gal(K^ab/K)` with its

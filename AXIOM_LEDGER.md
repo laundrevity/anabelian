@@ -245,16 +245,24 @@ ledgered here as `FOUNDATIONAL` or `DEBT` like any other.
 - Lake dependency since the Pass-98 prelude commit `38d973b`; Apache 2.0; author Naganori
   Yamaguchi (file headers: "assisted by OpenAI Codex"); only Lake dependency Mathlib.
 - Imported via `import ClassFieldTheory.Theorems.All` in `Anabelian/ClassField/Bridge.lean`
-  (the only project file importing it). Statements are read from
+  (and `…LocalClassFieldTheory.All` in `Anabelian/Statements/L34.lean`; `UpperBridge.lean`
+  imports `Bridge`). Statements are read from
   `.lake/packages/ClassFieldTheory/Lean4/ClassFieldTheory/Theorems/…`.
-- **Used in a project proof:** `ClassFieldTheory.hasseArf` (in `hasseArf_extension`).
-  Available and re-audited but *not yet used*: the rest of the table.
+- **Used in a project proof:** `ClassFieldTheory.hasseArf` (in `hasseArf_extension`, Pass 98);
+  `ClassFieldTheory.isUpperRamificationJump_int` (in
+  `upperRamificationGroup_extensionIntegers_jump_int`, Pass 99);
+  `finiteAbelianLocalReciprocity_family_arithmeticFrobenius` and
+  `finiteAbelianLocalReciprocity_family_ext` (existence/uniqueness of the normalized Artin family
+  that the statement `L34` quantifies over, Pass 99). Available and re-audited but *not yet
+  used*: the rest of the table.
 
 | imported theorem | encodes | `#print axioms` (this build) | caveat |
 |---|---|---|---|
 | `ClassFieldTheory.hasseArf` | Hasse–Arf: `L/K` finite abelian, nonarch. local; lower jump `n` ⟹ `φ(n) ∈ ℤ` (Serre, *Local Fields*, V §7) | `[propext, Classical.choice, Quot.sound]` | takes `[ValuativeRel L] [IsNonarchimedeanLocalField L] [Valuation.HasExtension …]` as instances; the project discharges them (Pass 98) |
-| `ClassFieldTheory.isUpperRamificationJump_int` | upper jumps of abelian `L/K` are integers | standard-only | their `IsUpperRamificationJump` is not yet transported to the project's `G^v` (NOTES P98) |
-| `ClassFieldTheory.finiteAbelianLocalReciprocity` | `∃ artin : Kˣ →ₜ* Gal(L/K)`, surjective, `ker = ` field norms (Serre XIII; Neukirch) | standard-only | **existential** (`∃`): surjective + kernel does *not* pin the map; normalization results (`…_unramifiedNormalization`, `…_family_arithmeticFrobenius`) exist upstream and are not yet consumed |
+| `ClassFieldTheory.isUpperRamificationJump_int` | upper jumps of abelian `L/K` are integers (incl. the endpoint `-1`) | standard-only | stated at universe `Type`; **transported** to the project's `G^v(𝒪_L)` in Pass 99 (`upperRamificationGroup_extensionIntegers_jump_int`) — their jump ↔ the project's right-limit jump on `(-1, ∞)`, and the project's filtration cannot jump at `t < 0` |
+| `ClassFieldTheory.finiteAbelianLocalReciprocity_family_arithmeticFrobenius` | one coherent family `artin E : Kˣ →ₜ* Gal(E/K)` over all finite abelian `E ⊆ K^sep`: surjective, kernel = norms, coherent under inclusion, and on unramified `E` the *inverse* of a uniformizer ↦ arithmetic Frobenius (uniquely) | standard-only | existential (`∃ artin`), stated at `Type`; **the predicate it asserts is `IsNormalizedArtinFamily` (Pass 99)**, and the family is unique by the next row — so no normalization ambiguity remains at finite level. Orientation is geometric (`π ↦ Frob⁻¹`), opposite to Serre; irrelevant for images of subgroups |
+| `ClassFieldTheory.finiteAbelianLocalReciprocity_family_ext` | two coherent families with the norm kernels and the arithmetic-Frobenius normalization are equal | standard-only | gives `isNormalizedArtinFamily_unique` (Pass 99) |
+| `ClassFieldTheory.finiteAbelianLocalReciprocity` | `∃ artin : Kˣ →ₜ* Gal(L/K)`, surjective, `ker = ` field norms (Serre XIII; Neukirch) | standard-only | **existential** (`∃`): surjective + kernel does *not* pin the map; the normalized *family* version (two rows above) is what Pass 99's `L34` uses instead |
 | `ClassFieldTheory.finiteAbelianLocalExistence` | every open finite-index subgroup of `Kˣ` is a norm group | standard-only | existential in the extension (`∃ E : FiniteAbelianLocalExtension K`) |
 | `ClassFieldTheory.profiniteLocalReciprocity` | `Nonempty (TopologicalProfiniteCompletion Kˣ ≃ₜ* G_K^ab)` | standard-only | **`Nonempty`, not the canonical map**: an abstract isomorphism exists; nothing in this statement identifies it with the Artin map or fixes its normalization |
 | `ClassFieldTheory.finiteAbelianGlobalReciprocity` | `Nonempty (FiniteAbelianReciprocityData K L)` — a modulus, Artin map on ray classes, surjective, Frobenius at unramified primes | standard-only | existential (`Nonempty`) |
@@ -263,7 +271,8 @@ ledgered here as `FOUNDATIONAL` or `DEBT` like any other.
 
 - **What this dependency does *not* supply (verified absent in its `Theorems/` tree):**
   Chebotarev density; the local ramification correspondence `θ(U^n) = G^n(K^ab/K)` as such
-  (conductor-side statements `IsAbelianConductor.*` are adjacent); any anabelian statement.
+  (conductor-side statements `IsAbelianConductor.*` are adjacent) — now the project's ledgered
+  statement `L34` (Pass 99); any anabelian statement.
 - **Why not a ledger axiom:** every row is standard-only in the kernel — there is nothing to
   classify. **Why listed anyway:** the project did not prove them, and CLAUDE.md's measure of
   progress is what the project *earns*; this table keeps the imported/earned line visible.
@@ -3934,6 +3943,35 @@ only — `ramificationIdx_comapRingHom` now spells Mathlib's renamed constant
 standard-only; zero project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and
 ledger entries untouched; README/ROADMAP/HANDOFF move to Pass 97 with Pass 98 (the design's P97
 row, the abstract unit filtration) next.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 99 (2026-10-08) — the unit filtration, the upper-group transport, the statement ledger (`L34`); count stays 0 / 0
+
+**No axiom added, none needed.** Three new files (101 project files):
+`Anabelian/ClassField/UnitFiltration.lean` — `unitFiltration K m : Subgroup Kˣ` (`U⁰ = 𝒪ˣ`,
+`Uᵐ = 1 + 𝓂^m`), antitone, `U⁰ = unitGroup`, `unitsQuotEquivResidueUnits : U⁰/U¹ ≃* 𝓀ˣ`, and for
+`m ≥ 1` `unitLayerQuotEquiv : Uᵐ/Uᵐ⁺¹ ≃* Multiplicative 𝓀` with the injective
+`unitLayerQuotHom` / `unitLayerQuotAddHom`; `Anabelian/ClassField/UpperBridge.lean` — their
+`upperRamificationGroup K L t` = the project's for `-1 < t` (at the common subring and at `𝒪_L`
+after `Subgroup.subtype`), `= ⊤` for `t ≤ -1` vs the project's `G_0`, their
+`IsUpperRamificationJump` ↔ the project's right-limit jump on `(-1, ∞)`, and
+**`upperRamificationGroup_extensionIntegers_jump_int`** (upper jumps of the project's `G^v(𝒪_L)` are
+integers; no instance on `L`; universe `Type`); `Anabelian/Statements/L34.lean` — the **statement
+ledger** opens: `L34 : Prop` (`θ_{E/K}(Uⁿ) = Gⁿ(E/K)` at finite level for the normalized Artin
+family; a `def`, no theorem, no `sorry`), with `IsNormalizedArtinFamily` proved inhabited and unique
+from upstream. Full record: [NOTES Pass 99](NOTES.md#pass-99).
+
+**Decision recorded:** the in-project L3.1 unit-quotient program (Pass-95 rows P97–P102) is
+retired; only the unit filtration (P97) is kept, for L3.4. **External dependencies table
+updated:** `isUpperRamificationJump_int` is now *used* (transported); the two family theorems
+are now *used* (for the predicate `L34` quantifies over) and listed with their orientation caveat.
+`scripts/preflight.sh` gains clauses 3b/5 (statement-ledger checks).
+
+**Verification:** `lake build` 10545 jobs, zero warnings; `scripts/preflight.sh` CLEAN; every
+project `#print axioms` and the four consumed imported theorems standard-only. No
+`sorry`/`axiom`/`native_decide`, no heartbeat change, no `respectTransparency` override; all
+pre-existing statements unchanged.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
 
