@@ -7763,3 +7763,113 @@ which the branch's `.gitignore` edit deliberately left unignored). Per-file
 README/ROADMAP/HANDOFF move to Pass 97; the next mathematical pass is **Pass 98**, which
 implements the Pass-95 design's *P97 row* (the abstract DVR unit filtration) — the design's row
 labels P97–P102 are kept as written in the immutable Pass-95 entry and now map to Passes 98–103.
+
+<a id="pass-98"></a>
+
+### Pass 98 (2026-10-08) — the ClassFieldTheory bridge: Hasse–Arf at `𝒪_L`, imported and identified
+
+**Ledger delta: 0 / 0; active count: 0 FOUNDATIONAL / 0 DEBT.** New file
+`Anabelian/ClassField/Bridge.lean` (98 project files). Branch `mathlib-bump`, on top of the
+prelude commit `38d973b` that added the Lake dependency
+`n-yamaguchi-0729/ClassFieldTheory @ 7713795234690681b4406ae198b07aa95e82716a` (Apache 2.0;
+author Naganori Yamaguchi, "assisted by OpenAI Codex" per its file headers; its only Lake
+dependency is Mathlib, pinned compatibly with ours). `lake build` 10542 jobs, zero warnings;
+`scripts/preflight.sh` CLEAN; every `#print axioms` in the new file — ten project
+declarations and eight imported headlines — standard-only. No `sorry`, no `axiom`, no
+`native_decide`, no heartbeat change, no `backward.isDefEq.respectTransparency` override.
+
+#### What is imported, and what that means for the ledger
+
+The dependency is an **external library whose headline theorems carry no non-standard
+axioms**. It is therefore *not* a ledger axiom — the "Active axioms" table stays empty — but
+it *is* a boundary the project now takes from outside, of the species `FOUNDATIONAL` was
+designed to mark. `AXIOM_LEDGER.md` gains an **"External dependencies"** section listing the
+imported theorems the project relies on with their `#print axioms` results, and the caveats
+on which of them are existential. The honest reading: **local class field theory (L3.1–L3.3)
+and Hasse–Arf are now inputs, not project theorems**; the project has not proved them and
+does not claim to. The in-project L3.1 program (the Pass-95 unit-quotient design, rows
+P97–P102) is no longer on the critical path to reciprocity — see the HANDOFF decision note.
+
+#### Deliverable 1 — `hasseArf_extension` (and `hasseArf_herbrandPhi`)
+
+The upstream `ClassFieldTheory.hasseArf` takes `[ValuativeRel L] [TopologicalSpace L]
+[IsNonarchimedeanLocalField L]` and `[Valuation.HasExtension (valuation K) (valuation L)]`
+as *instances on `L`*, and speaks of `(valuation L).valuationSubring`. The project's
+convention (Passes 38–43, D2) is that `L` carries no such instances: its valuative structure is
+the `def` `extensionValuativeRel K L` (induced by `𝒪_L = extensionIntegers K L`), installed by
+`letI` inside proofs only. The bridge:
+
+- `extensionIntegers_comap_algebraMap_eq : (extensionIntegers K L).toSubring.comap (algebraMap
+  K L) = 𝒪[K]` — `𝒪_L ∩ K = 𝒪_K`. Proof: `isIntegral_algebraMap_iff` (descent along `K ↪ L`,
+  the P97 `FaithfulSMul` form) then `Valuation.Integers.mem_of_integral` (a valuation ring is
+  integrally closed in its fraction field) one way, `isIntegral_algebraMap` the other.
+- `hasExtension_extensionValuativeRel` — `Valuation.HasExtension.ofComapInteger` applied to
+  Pass 43's `integer_extensionValuativeRel_eq` (`𝒪[L] = 𝒪_L` under the rung-1 relation) and
+  the lemma above. **This is the discharge the task asked for**: the compatibility is proved
+  from Pass 38–43 bricks, not assumed.
+- `valuationSubring_extensionValuativeRel_eq : (valuation L).valuationSubring =
+  extensionIntegers K L` — the same identity at `ValuationSubring` level, so that the upstream
+  statement's `(valuation L).valuationSubring` can be rewritten to `𝒪_L`.
+- **`hasseArf_extension`** — statement, verbatim:
+
+  ```lean
+  theorem hasseArf_extension [IsAbelianGalois K L] {n : ℕ}
+      (hn : ClassFieldTheory.IsLowerRamificationJump K (extensionIntegers K L) n) :
+      ∃ z : ℤ,
+        ClassFieldTheory.herbrandFunctionAtLowerIndex K (extensionIntegers K L) n = (z : ℚ)
+  ```
+
+  with the file's variables `(K) [Field K] [ValuativeRel K] [TopologicalSpace K]
+  [IsNonarchimedeanLocalField K] (L) [Field L] [Algebra K L] [FiniteDimensional K L]`. No
+  instance on `L`; `IsAbelianGalois K L` supplies `Algebra.IsSeparable K L` for Pass 41's
+  `isNonarchimedeanLocalField_extension`. Proof: four `let`/`have`s install the rung-1 structure,
+  topology, local-field instance and `HasExtension`; `rw [← hA]` rewrites `𝒪_L` back to
+  `(valuation L).valuationSubring` in `hn` and the goal; `exact ClassFieldTheory.hasseArf K L hn`.
+- **`hasseArf_herbrandPhi`** — the same in project vocabulary:
+
+  ```lean
+  theorem hasseArf_herbrandPhi [IsAbelianGalois K L] {n : ℕ}
+      (hn : ramificationGroup K (extensionIntegers K L) n
+        ≠ ramificationGroup K (extensionIntegers K L) (n + 1)) :
+      ∃ z : ℤ, herbrandPhi K (extensionIntegers K L) (n : ℝ) = (z : ℝ)
+  ```
+
+  via the identification below and `Rat.cast_intCast`.
+
+#### Deliverable 2 — the Herbrand identification (verdict: **they agree**, proved)
+
+| ClassFieldTheory | project | relation | lemma |
+|---|---|---|---|
+| `lowerRamificationGroup K A n` (carrier `∀ x, σ•x − x ∈ 𝔪^(n+1)`) | `ramificationGroup K A n` (`(𝔪^(n+1)).inertia`) | equal, carriers definitionally the same (`Iff.rfl`) | `lowerRamificationGroup_eq_ramificationGroup` |
+| `herbrandFunctionAtLowerIndex K A n : ℚ` = `(∑_{Icc 1 n} |G_i|)/|G_0|` | `herbrandPhi K A n` = `∫₀ⁿ dt/(G_0:G_t)` | equal in `ℝ` (P48 `herbrandPhi_natCast` + `Finset.sum_Ico_add'` reindexing) | `herbrandPhi_natCast_eq` |
+| `herbrandFunction K A : ℝ → ℝ` (piecewise linear; `id` on `s < 0`) | `herbrandPhi K A` | **equal as functions** (P48 affine formula on `[⌊s⌋₊, ⌊s⌋₊+1]`; P44 `herbrandPhi_eq_id`) | `herbrandPhi_eq_herbrandFunction` |
+| `inverseHerbrandFunction K L t` = `Function.invFun (herbrandFunction K 𝒪)` | `herbrandPsi K A` = `Function.invFun (herbrandPhi K A)` | equal (`rfl` after the previous row) | `herbrandPsi_eq_invFun_herbrandFunction` |
+| `realLowerRamificationGroup K A s` (carrier `∈ 𝔪^(⌈s+1⌉.toNat)`) | `ramificationGroup K A ⌈s⌉₊` | equal for `-1 < s`; **differ for `s ≤ -1`** (theirs `⊤` = Serre's `G_{-1}`; ours bottoms at `G_0`) | `realLowerRamificationGroup_eq` |
+| `upperRamificationGroup K L t` = real-lower at `inverseHerbrandFunction t` | `upperRamificationGroup K A v` = `G_{⌈ψ v⌉₊}` | agree for `-1 < t` by the two rows above, **modulo transport** across `valuationSubring_extensionValuativeRel_eq` (different-but-equal `ValuationSubring`s, hence different decomposition-group types) — not performed | *next pass* |
+
+The one genuine convention difference is the negative half-line (`G_{-1} = ⊤` vs ℕ-truncation);
+it affects nothing at `t > -1`, which is where all jumps live. The one piece not closed is the
+*type transport* of the upper-group identification (and hence of their
+`IsUpperRamificationJump`/`isUpperRamificationJump_int` against the project's `G^v`): both
+sides are proved to be "the same construction at `A`", but their `upperRamificationGroup` is
+hard-wired to `(valuation L).valuationSubring` under the instance package, so stating the
+equality needs a `letI`-stated transport along `hA`. Deferred — Pass 99 if wanted.
+
+#### Mathlib API that did the work
+
+`Valuation.HasExtension.ofComapInteger` (`RingTheory/Valuation/Extension.lean`),
+`Valuation.Integers.mem_of_integral` + `Valuation.integer.integers`
+(`RingTheory/Valuation/Integral.lean`), `isIntegral_algebraMap_iff` (P97 form),
+`Finset.sum_Ico_add'`, `Nat.floor_le`/`Nat.lt_floor_add_one`, `Int.ceil_add_one`,
+`Int.ceil_toNat`, `Int.lt_ceil`, `Rat.cast_intCast`. Upstream names verified by reading
+`.lake/packages/ClassFieldTheory/Lean4/ClassFieldTheory/{Definitions,Theorems}/HasseArf/*`.
+
+#### Rule-2 / scope
+
+No new `structure`/`class`; no load-bearing-hypothesis claim (the abelian hypothesis is the
+upstream theorem's; no "necessary" claim is made, so no owed witness). D2 respected: the two
+`letI`-stated bricks are the only statements mentioning `extensionValuativeRel`; the two
+headlines and all identification lemmas are instance-free on `L`. Recovers nothing from an
+abstract group; R1–R3 untouched. **Hasse–Arf is imported, not earned** — the pass's own
+mathematics is `𝒪_L ∩ K = 𝒪_K`, the `HasExtension` discharge, and the identification of two
+independently-built Herbrand theories, which is real but small.

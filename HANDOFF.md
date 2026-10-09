@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 97, 2026-10-08)
+# HANDOFF.md — session bootstrap (written after Pass 98, 2026-10-08)
 
 **State:** L2 is complete (Pass 83), consolidated with separation in Pass 84. L3 is
 in progress: `K^ab` (Pass 86), the Herbrand-quotient calculus (Passes 87–90), the cyclic
@@ -8,13 +8,19 @@ the finite-acyclic-kernel reduction and records the complete local unit proof de
 Pass 96 proves that design's field-free layer (stable actions, the regular module,
 filtration lifting). Pass 97 is a governance pass: the Mathlib bump `v4.30.0` →
 `0653561` (Lean `v4.35.0-rc2`), ported statement-preserving on branch `mathlib-bump`.
-Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 97 project files; no open owed witnesses.
-**The next task is Pass 98: the abstract DVR unit filtration `U^m` and its finite
-quotients (the Pass-95 design's P97 row).** The local-field formula `q(Rˣ) = 1` remains
-unproved.
+**Pass 98 is the ClassFieldTheory bridge**: the project depends on
+`n-yamaguchi-0729/ClassFieldTheory @ 7713795` and `ClassField/Bridge.lean` states Hasse–Arf at
+the project's own structures (`hasseArf_extension`, `hasseArf_herbrandPhi`) and identifies the
+two Herbrand theories. L3.1–L3.3 and Hasse–Arf are now **imported, not earned** (ledger
+"External dependencies"). Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 98 project files; no open
+owed witnesses. Branch `mathlib-bump`, not merged to `master`.
+**The next task is Pass 99 (below) — and a decision the user must make about the in-project
+L3.1 program.** The local-field formula `q(Rˣ) = 1` remains unproved in-project.
 
-Read `CLAUDE.md`, the active table and Pass-96/97 entries in `AXIOM_LEDGER.md`, the Pass-97
-status header and L3 ladder in `ROADMAP.md`, the [Pass-97 entry](NOTES.md#pass-97) in
+Read `CLAUDE.md`, the active table, the **"External dependencies" section** and Pass-97/98
+entries in `AXIOM_LEDGER.md`, the Pass-98 status header and L3/L4 ladder in `ROADMAP.md`, the
+[Pass-98 entry](NOTES.md#pass-98) (the bridge, the identification table, what was not closed),
+the [Pass-97 entry](NOTES.md#pass-97) in
 `NOTES.md` (the bump's rename/pattern list — the house idioms for the new Mathlib), the [Pass-95 entry](NOTES.md#pass-95)
 in `NOTES.md` (complete signatures, dependency map, and P96–P102 order), and the
 [Pass-96 entry](NOTES.md#pass-96) (what of it is now proved, and the deviations).
@@ -93,9 +99,58 @@ of `rw` when a `def` wrapping a quotient/bundled carrier has been unfolded, TFAE
 its scalar towers from `IsLocalHom (algebraMap R S)`, and the two-ideal ramification index is
 `ramificationIdx'` while `q.ramificationIdx R` is a new localization-length definition.
 
-## Next task — Pass 98: the abstract unit filtration (design row P97)
+## What Pass 98 supplies
 
-Implement NOTES Pass 95 §4 (its P97 row — numbered Pass 98 after the governance Pass 97),
+`ClassField/Bridge.lean` (imports `ClassFieldTheory.Theorems.All`, `LocalField/Canonical`,
+`Herbrand/UpperNumbering`, `Herbrand/Formula`):
+
+- `extensionIntegers_comap_algebraMap_eq` — `𝒪_L ∩ K = 𝒪_K` (as subrings of `K`).
+- `hasExtension_extensionValuativeRel` — `Valuation.HasExtension (valuation K) (valuation L)`
+  under `letI := extensionValuativeRel K L` (from Pass 43 via `ofComapInteger`).
+- `valuationSubring_extensionValuativeRel_eq` — `(valuation L).valuationSubring = 𝒪_L`.
+- **`hasseArf_extension`** `[IsAbelianGalois K L] (hn : IsLowerRamificationJump K 𝒪_L n) :
+  ∃ z : ℤ, herbrandFunctionAtLowerIndex K 𝒪_L n = z` — no instance on `L`.
+- **`hasseArf_herbrandPhi`** `(hn : ramificationGroup K 𝒪_L n ≠ ramificationGroup K 𝒪_L (n+1)) :
+  ∃ z : ℤ, herbrandPhi K 𝒪_L n = z` — the project-vocabulary form.
+- Identification (general `A : ValuationSubring L`): `lowerRamificationGroup_eq_ramificationGroup`
+  (`Iff.rfl`), `herbrandPhi_natCast_eq`, `herbrandPhi_eq_herbrandFunction` (functions on `ℝ`),
+  `herbrandPsi_eq_invFun_herbrandFunction`, `realLowerRamificationGroup_eq` (`-1 < s`).
+- `#print axioms` on eight imported headlines, re-run every build.
+
+**Upstream idioms (verified):** their `hasseArf`/`upperRamificationGroup`/`inverseHerbrandFunction`
+take `[ValuativeRel L] [TopologicalSpace L] [IsNonarchimedeanLocalField L]
+[Valuation.HasExtension (valuation K) (valuation L)]` as instances and speak of
+`(valuation L).valuationSubring` — install them with the four `let`/`have`s of
+`hasseArf_extension` and rewrite with `valuationSubring_extensionValuativeRel_eq`. Their
+`realLowerRamificationGroup K A s` uses `𝔪^(⌈s+1⌉.toNat)` (Serre's `G_{-1} = ⊤`); ours is
+ℕ-truncated — they differ only for `s ≤ -1`. Their public statements live under
+`.lake/packages/ClassFieldTheory/Lean4/ClassFieldTheory/Theorems/`, definitions under
+`Definitions/`; read, never guess.
+
+## Next task — Pass 99: the upper-numbering transport, and a decision
+
+**(i) Close the one open item of Pass 98.** State and prove, under the `letI` package of
+`hasseArf_extension`, that ClassFieldTheory's `upperRamificationGroup K L t` equals the
+project's `upperRamificationGroup K 𝒪_L t` for `-1 < t`, transported across
+`valuationSubring_extensionValuativeRel_eq` (the two decomposition-group types differ by that
+equality — use `Subgroup.map` along the equiv the equality induces, or restate at the carrier
+level). Then derive upper-jump integrality for the project's `G^v` from their
+`isUpperRamificationJump_int`, and compare their `IsUpperRamificationJump` (right-limit `⨆_{s>t}`)
+with whatever jump notion the project's `Absolute/UpperNumbering` uses. Small; standard-only.
+
+**(ii) Decision for the user (not for a session to take alone).** Reciprocity (L3.1–L3.3) is
+now imported. The in-project unit-quotient program — Pass-95 design rows P97–P102 (abstract
+`U^m`, local action, normal lattice, regular layers, `q(𝒪ˣ) = 1`, `q(Lˣ) = [L:K]`) — was the
+project's route *to* reciprocity. Options: (a) **retire** it and move to **L3.4**, the
+ramification correspondence `θ(U^n) = G^n(K^ab/K)`, which ClassFieldTheory does *not* supply
+and which is the R1-relevant piece; (b) **continue** it as a discharge of the imported boundary
+(earning what is now assumed), accepting that it duplicates upstream work; (c) continue only the
+pieces L3.4 needs (the unit filtration `U^m` itself is needed by L3.4 in any case — row P97 is
+useful under both (a) and (b)). Default if no answer: (c), then (a).
+
+## Superseded next task (kept for the record) — the abstract unit filtration (design row P97)
+
+Implement NOTES Pass 95 §4 (its P97 row),
 in the abstract DVR context
 `(R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]` — no local field:
 
@@ -143,7 +198,7 @@ only; ledger remains 0/0. Fresh file(s); `lake env lean` probes from the project
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## Queue after Pass 98 (design rows P98–P102, i.e. Passes 99–103)
+## Queue (design rows P98–P102) — subject to the Pass-99 decision
 
 Row P98: local action, period, adic transport, and field norm. Row P99: the small normal
 lattice. Row P100: its unit subgroups and complete filtration. Row P101: regular layers and
@@ -151,6 +206,6 @@ acyclicity. Row P102: unit quotient one, both finiteness discharges, and the P94
 quotient formula. The detailed dependencies and scope are in NOTES Pass 95; boundaries
 may split.
 
-The remaining L3.1 bridges (`Rep`, Hilbert 90), L3.2 unramified
-cohomology, and L3.3 reciprocity precede L3.4's ramification correspondence.
-Hasse–Arf remains a separate deferred rung. See ROADMAP for the dependency ladder.
+L3.2 and L3.3 are imported (Pass 98); L3.4's ramification correspondence is unblocked and
+not supplied upstream. Hasse–Arf is imported and identified with the project's filtration
+(Pass 98). See ROADMAP for the dependency ladder.

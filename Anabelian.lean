@@ -3,6 +3,7 @@ import Anabelian.Absolute.Main
 import Anabelian.Absolute.Surjectivity
 import Anabelian.Absolute.Tower
 import Anabelian.Absolute.UpperNumbering
+import Anabelian.ClassField.Bridge
 import Anabelian.ClassField.CyclicPair
 import Anabelian.ClassField.ExactCycle
 import Anabelian.ClassField.FiltrationLifting

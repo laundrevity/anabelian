@@ -229,6 +229,47 @@ Schema: `lemma supported` · `hypothesis claimed load-bearing` · `witness owed`
 
 ---
 
+## External dependencies
+
+**Distinct from axioms, distinct from owed witnesses.** An external Lean library that the project
+imports and whose results it *uses in proofs* is a boundary of the `FOUNDATIONAL` species —
+mathematics taken from outside the project — even when it carries no non-standard axiom. It is
+listed here so the "Active axioms" table's `0 / 0` cannot be read as "the project proved
+everything it rests on". Each imported theorem the project relies on is listed with its
+`#print axioms` result *as verified in this build* (re-run on every `lake build` from
+`Anabelian/ClassField/Bridge.lean`), and with the caveats on its statement's strength. A future
+bump of the dependency must re-verify this table; an axiom appearing upstream would have to be
+ledgered here as `FOUNDATIONAL` or `DEBT` like any other.
+
+### `n-yamaguchi-0729/ClassFieldTheory` @ `7713795234690681b4406ae198b07aa95e82716a`   ·   added Pass 98 (2026-10-08)
+- Lake dependency since the Pass-98 prelude commit `38d973b`; Apache 2.0; author Naganori
+  Yamaguchi (file headers: "assisted by OpenAI Codex"); only Lake dependency Mathlib.
+- Imported via `import ClassFieldTheory.Theorems.All` in `Anabelian/ClassField/Bridge.lean`
+  (the only project file importing it). Statements are read from
+  `.lake/packages/ClassFieldTheory/Lean4/ClassFieldTheory/Theorems/…`.
+- **Used in a project proof:** `ClassFieldTheory.hasseArf` (in `hasseArf_extension`).
+  Available and re-audited but *not yet used*: the rest of the table.
+
+| imported theorem | encodes | `#print axioms` (this build) | caveat |
+|---|---|---|---|
+| `ClassFieldTheory.hasseArf` | Hasse–Arf: `L/K` finite abelian, nonarch. local; lower jump `n` ⟹ `φ(n) ∈ ℤ` (Serre, *Local Fields*, V §7) | `[propext, Classical.choice, Quot.sound]` | takes `[ValuativeRel L] [IsNonarchimedeanLocalField L] [Valuation.HasExtension …]` as instances; the project discharges them (Pass 98) |
+| `ClassFieldTheory.isUpperRamificationJump_int` | upper jumps of abelian `L/K` are integers | standard-only | their `IsUpperRamificationJump` is not yet transported to the project's `G^v` (NOTES P98) |
+| `ClassFieldTheory.finiteAbelianLocalReciprocity` | `∃ artin : Kˣ →ₜ* Gal(L/K)`, surjective, `ker = ` field norms (Serre XIII; Neukirch) | standard-only | **existential** (`∃`): surjective + kernel does *not* pin the map; normalization results (`…_unramifiedNormalization`, `…_family_arithmeticFrobenius`) exist upstream and are not yet consumed |
+| `ClassFieldTheory.finiteAbelianLocalExistence` | every open finite-index subgroup of `Kˣ` is a norm group | standard-only | existential in the extension (`∃ E : FiniteAbelianLocalExtension K`) |
+| `ClassFieldTheory.profiniteLocalReciprocity` | `Nonempty (TopologicalProfiniteCompletion Kˣ ≃ₜ* G_K^ab)` | standard-only | **`Nonempty`, not the canonical map**: an abstract isomorphism exists; nothing in this statement identifies it with the Artin map or fixes its normalization |
+| `ClassFieldTheory.finiteAbelianGlobalReciprocity` | `Nonempty (FiniteAbelianReciprocityData K L)` — a modulus, Artin map on ray classes, surjective, Frobenius at unramified primes | standard-only | existential (`Nonempty`) |
+| `ClassFieldTheory.topologicalGlobalReciprocity` | `Nonempty (idele-class connected-component quotient ≃ₜ* G_K^ab)` | standard-only | `Nonempty`, not the canonical map |
+| `ClassFieldTheory.kroneckerWeber` | abelian `L/ℚ` embeds in some `ℚ(ζ_n)` | standard-only | — |
+
+- **What this dependency does *not* supply (verified absent in its `Theorems/` tree):**
+  Chebotarev density; the local ramification correspondence `θ(U^n) = G^n(K^ab/K)` as such
+  (conductor-side statements `IsAbelianConductor.*` are adjacent); any anabelian statement.
+- **Why not a ledger axiom:** every row is standard-only in the kernel — there is nothing to
+  classify. **Why listed anyway:** the project did not prove them, and CLAUDE.md's measure of
+  progress is what the project *earns*; this table keeps the imported/earned line visible.
+
+---
+
 ## Pass log
 
 ### Pass 0 (2026-05-30) — orientation, inventory, seed lemma
@@ -3893,5 +3934,30 @@ only — `ramificationIdx_comapRingHom` now spells Mathlib's renamed constant
 standard-only; zero project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and
 ledger entries untouched; README/ROADMAP/HANDOFF move to Pass 97 with Pass 98 (the design's P97
 row, the abstract unit filtration) next.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 98 (2026-10-08) — the ClassFieldTheory bridge: Hasse–Arf imported at `𝒪_L`; count stays 0 / 0
+
+**No axiom added, none needed.** New file `Anabelian/ClassField/Bridge.lean` (98 files)
+imports `ClassFieldTheory.Theorems.All` from the new Lake dependency
+`n-yamaguchi-0729/ClassFieldTheory @ 7713795` and proves, standard-only:
+`extensionIntegers_comap_algebraMap_eq` (`𝒪_L ∩ K = 𝒪_K`),
+`hasExtension_extensionValuativeRel` (Mathlib's `Valuation.HasExtension` for the rung-1 relation,
+discharged from Pass 43), `valuationSubring_extensionValuativeRel_eq`, **`hasseArf_extension`**
+and **`hasseArf_herbrandPhi`** (Hasse–Arf at the project's `extensionIntegers K L` /
+`ramificationGroup` / `herbrandPhi`, no instance on `L`), and the identification of the two
+Herbrand theories (`lowerRamificationGroup_eq_ramificationGroup`, `herbrandPhi_natCast_eq`,
+`herbrandPhi_eq_herbrandFunction`, `herbrandPsi_eq_invFun_herbrandFunction`,
+`realLowerRamificationGroup_eq` for `-1 < s`). Full record: [NOTES Pass 98](NOTES.md#pass-98).
+
+**New ledger section "External dependencies"** records the imported headlines with their
+`#print axioms` results (all standard-only in this build) and the existential caveats
+(`profiniteLocalReciprocity`, `finiteAbelianLocalReciprocity`, both global reciprocities are
+`Nonempty`/`∃`, not the canonical map). Hasse–Arf and L3.1–L3.3 are **imported, not earned**.
+
+**Verification:** `lake build` 10542 jobs, zero warnings; `scripts/preflight.sh` CLEAN; ten
+project + eight imported `#print axioms` standard-only. No `sorry`/`axiom`/`native_decide`,
+no heartbeat change, no `respectTransparency` override.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.

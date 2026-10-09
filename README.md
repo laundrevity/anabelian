@@ -23,11 +23,14 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 97 (2026-10-08)
+## Current state — Pass 98 (2026-10-08)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
 Mathlib commit `0653561` (Lean `v4.35.0-rc2`; bumped from `v4.30.0` in Pass 97)
-(`scripts/preflight.sh` CLEAN: 97 project files, 9029 build jobs, warning-free).
+(`scripts/preflight.sh` CLEAN: 98 project files, 10542 build jobs, warning-free). Since Pass 98 the
+project depends on the external Lean library `n-yamaguchi-0729/ClassFieldTheory @ 7713795`
+(local/global class field theory, Hasse–Arf; every imported headline standard-only) — listed in
+`AXIOM_LEDGER.md`'s "External dependencies" section as an honest boundary: **imported, not earned**.
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -51,9 +54,16 @@ The current strata are:
   naturality of the cyclic pair, the acyclicity of the regular module `C[G]`, and
   filtration lifting (`ker f = im g` from separated, complete, layer-exact filtrations).
   Pass 97 is a governance pass (the Mathlib bump), with no mathematical change.
-- **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
-  mono-anabelian reconstruction remain distant targets. No reconstruction or local
-  reciprocity theorem is claimed.
+  **Pass 98 imports local class field theory and Hasse–Arf** from ClassFieldTheory and
+  proves the bridge: `hasseArf_extension` / `hasseArf_herbrandPhi` state Hasse–Arf at the
+  project's `𝒪_L`, `ramificationGroup`, `herbrandPhi` with no instance on `L` (the
+  `HasExtension` compatibility is discharged from Pass 43), and the two Herbrand theories are
+  identified (groups definitionally equal, `φ` equal as real functions, `ψ` equal). L3.1–L3.3
+  are thereby **imported**; L3.4 (the ramification correspondence) is open and unblocked.
+- **L4 — global reciprocity imported (Pass 98), Chebotarev absent.** R1–R3 — NOT-STARTED:
+  local, Neukirch–Uchida, and mono-anabelian reconstruction remain distant targets. No
+  reconstruction theorem is claimed; the reciprocity theorems used are external and
+  existential (`profiniteLocalReciprocity` is `Nonempty`, not the canonical map).
 
 **Current frontier:** `cyclicHerbrandQuotient_units` proves `q(Kˣ) = q(Rˣ) · n`
 for compatible ring automorphisms, carrying `n ≠ 0`, periodicity on `Kˣ`, and explicit
@@ -67,12 +77,13 @@ design's generic layer (`cyclic_exact_of_complete_filtration`, `regular_cyclic_e
 given a `σ`-stable, separated, complete filtration of a subgroup `V₀ ≤ 𝒪_Lˣ` with regular
 layers, both `Ĥ(V₀)` vanish. The arithmetic inputs — the normal-basis lattice, its unit
 subgroups, adic completeness, finite index — remain unproved (rows P97–P101 of the
-Pass-95 design). **Next: Pass 98, the abstract DVR unit filtration `U^m` and its finite
-quotients (the design's P97 row).**
-Class formation and reciprocity remain ahead; Hasse–Arf is separately deferred.
+Pass-95 design) — and, since Pass 98, no longer on the critical path to reciprocity, which
+is imported. **Next: Pass 99 — transport the upper-numbering identification and upper-jump
+integrality to the project's `G^v`, and decide (HANDOFF) whether the in-project unit-quotient
+program continues or L3.4 takes over.** Hasse–Arf is imported and identified (Pass 98).
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-97 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-98 summary above states the current frontier.
 
 ## Build
 
