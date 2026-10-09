@@ -119,7 +119,7 @@ theorem mem_ramificationGroup_iff_lt_lowerIndex {i : ℕ} {σ : A.decompositionS
 theorem mem_ramificationGroup_iff_add_one_le_lowerIndex {i : ℕ}
     {σ : A.decompositionSubgroup K} :
     σ ∈ ramificationGroup K A i ↔ (i : ℕ∞) + 1 ≤ lowerIndex K A σ := by
-  rw [mem_ramificationGroup_iff_lt_lowerIndex, ENat.add_one_le_iff (ENat.coe_ne_top i)]
+  rw [mem_ramificationGroup_iff_lt_lowerIndex, ENat.add_one_le_iff (ENat.natCast_ne_top i)]
 
 /-- `i_G(1) = ∞`: the identity lies in every ramification group. -/
 theorem lowerIndex_one : lowerIndex K A 1 = ⊤ := by

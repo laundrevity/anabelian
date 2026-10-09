@@ -107,7 +107,7 @@ the target of the coming identification bricks. -/
 theorem ramificationIdx_comapRingHom
     {π : ↥(A.comap (algebraMap K' L))} (hπ : Irreducible π) {n : ℕ}
     (hn : addVal ↥A (comapRingHom K' A π) = (n : ℕ∞)) :
-    Ideal.ramificationIdx
+    Ideal.ramificationIdx'
         (IsLocalRing.maximalIdeal ↥(A.comap (algebraMap K' L)))
         (IsLocalRing.maximalIdeal ↥A)
       = n := by
@@ -116,7 +116,7 @@ theorem ramificationIdx_comapRingHom
       = IsLocalRing.maximalIdeal ↥A ^ n := by
     rw [algebraMap_comapAlgebra]
     exact map_maximalIdeal_comapRingHom K' A hπ hn
-  refine Ideal.ramificationIdx_spec (le_of_eq hmap) ?_
+  refine Ideal.ramificationIdx'_spec (le_of_eq hmap) ?_
   rw [hmap]
   intro hle
   obtain ⟨ϖ, hϖ⟩ := IsDiscreteValuationRing.exists_irreducible ↥A

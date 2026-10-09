@@ -65,7 +65,7 @@ theorem herbrandPhiSeq_hasDerivAt_Ioo (g : ℕ → ℝ) (hg : Antitone g) (hg0 :
     filter_upwards [isOpen_Ioo.mem_nhds hu] with x hx
     have hfloor : ⌊x⌋₊ = n := Nat.floor_eq_on_Ico n x ⟨hx.1.le, hx.2⟩
     have hx0 : ¬ x ≤ 0 := not_le.mpr (lt_of_le_of_lt (Nat.cast_nonneg n) hx.1)
-    simp only [herbrandIntegrand, herbrandIndex, if_neg hx0, hfloor]
+    simp only [herbrandIntegrand, herbrandIndex, ite_eq_right hx0, hfloor]
   have hsmaf : StronglyMeasurableAtFilter (herbrandIntegrand g) (𝓝 u) :=
     ⟨univ, univ_mem, by
       rw [Measure.restrict_univ]
@@ -81,7 +81,7 @@ theorem herbrandPhiSeq_hasDerivAt_neg (g : ℕ → ℝ) (hg : Antitone g) (hg0 :
   have heq : herbrandIntegrand g =ᶠ[𝓝 u] fun _ => (1 : ℝ) := by
     filter_upwards [isOpen_Iio.mem_nhds hu] with x hx
     have hxle : x ≤ 0 := (Set.mem_Iio.mp hx).le
-    simp only [herbrandIntegrand, herbrandIndex, if_pos hxle]
+    simp only [herbrandIntegrand, herbrandIndex, ite_eq_left hxle]
     exact div_self (ne_of_gt hg0)
   have hsmaf : StronglyMeasurableAtFilter (herbrandIntegrand g) (𝓝 u) :=
     ⟨univ, univ_mem, by

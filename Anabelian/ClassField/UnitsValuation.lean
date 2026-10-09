@@ -59,7 +59,11 @@ theorem intValuation_irreducible {ϖ : R} (hϖ : Irreducible ϖ) :
     (dvrHeightOneSpectrum R).intValuation ϖ = WithZero.exp (-1 : ℤ) := by
   rw [(dvrHeightOneSpectrum R).intValuation_eq_exp_neg_multiplicity hϖ.ne_zero]
   change WithZero.exp (-(multiplicity (maximalIdeal R) (Ideal.span {ϖ}) : ℤ)) = _
-  rw [hϖ.maximalIdeal_eq, multiplicity_self]
+  have hfm : FiniteMultiplicity (Ideal.span {ϖ}) (Ideal.span {ϖ}) :=
+    FiniteMultiplicity.of_not_isUnit
+      (fun h => hϖ.not_isUnit (Ideal.span_singleton_eq_top.mp (Ideal.isUnit_iff.mp h)))
+      (fun h => hϖ.ne_zero (Ideal.span_singleton_eq_bot.mp h))
+  rw [hϖ.maximalIdeal_eq, multiplicity_self hfm]
   rfl
 
 /-- **THE UNIT VALUATION** `v : Kˣ →* Multiplicative ℤ` of a DVR's fraction field —

@@ -51,12 +51,12 @@ namespace Anabelian
 theorem card_subgroup_eq_card_map_mul {G Q : Type*} [Group G] [Group Q]
     (f : G →* Q) (S : Subgroup G) :
     Nat.card S = Nat.card (S.map f) * Nat.card (f.ker ⊓ S : Subgroup G) := by
-  have h1 := Subgroup.card_eq_card_quotient_mul_card_subgroup (f.restrict S).ker
+  have h1 := Subgroup.card_eq_card_quotient_mul_card_subgroup (f.domRestrict S).ker
   rw [h1]
   congr 1
-  · rw [Nat.card_congr (QuotientGroup.quotientKerEquivRange (f.restrict S)).toEquiv,
-        MonoidHom.restrict_range]
-  · rw [MonoidHom.ker_restrict, ← Subgroup.inf_subgroupOf_right,
+  · rw [Nat.card_congr (QuotientGroup.quotientKerEquivRange (f.domRestrict S)).toEquiv,
+        MonoidHom.domRestrict_range]
+  · rw [MonoidHom.ker_domRestrict, ← Subgroup.inf_subgroupOf_right,
         Nat.card_congr (Subgroup.subgroupOfEquivOfLe inf_le_right).toEquiv]
 
 section Multiplicativity

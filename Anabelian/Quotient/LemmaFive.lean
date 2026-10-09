@@ -196,7 +196,7 @@ theorem map_ramificationGroup_eq_ceil (u : ℕ) :
       = ramificationGroup K
           ((extensionIntegers K L).comap (algebraMap K' L))
           ⌈herbrandPhi K' (extensionIntegers K L) (u : ℝ)⌉₊ := by
-  haveI := Fintype.ofFinite ((extensionIntegers K L).decompositionSubgroup K')
+  have := Fintype.ofFinite ((extensionIntegers K L).decompositionSubgroup K')
   ext τ
   -- surjectivity: σ̄ has a lift s₀
   obtain ⟨s₀, rfl⟩ := decompositionQuotient_extensionIntegers_surjective K K'

@@ -53,7 +53,7 @@ noncomputable instance : Algebra ↥𝒪[K] ↥(extensionIntegers K L) :=
 /-- `𝒪_L` is module-finite over `𝒪[K]` (`L/K` finite separable) — Pass 29's integral-closure
 finiteness, transported to the valuation-subring carrier (global form). -/
 instance [Algebra.IsSeparable K L] : Module.Finite ↥𝒪[K] ↥(extensionIntegers K L) := by
-  haveI hC : Module.Finite ↥𝒪[K] ↥(integralClosure ↥𝒪[K] L) :=
+  have hC : Module.Finite ↥𝒪[K] ↥(integralClosure ↥𝒪[K] L) :=
     IsIntegralClosure.finite ↥𝒪[K] K L ↥(integralClosure ↥𝒪[K] L)
   let e : ↥(integralClosure ↥𝒪[K] L) →ₗ[↥𝒪[K]] ↥(extensionIntegers K L) :=
     { toFun := fun y => ⟨y.1, y.2⟩

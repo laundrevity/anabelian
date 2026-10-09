@@ -84,12 +84,12 @@ theorem exists_lowerIndex_eq_herbrandPhi
           (decompositionQuotient K K' (extensionIntegers K L) s₀)
       ∧ (a : ℝ) = herbrandPhi K' (extensionIntegers K L) ((m : ℝ) - 1)
           + 1 := by
-  haveI := Fintype.ofFinite ((extensionIntegers K L).decompositionSubgroup K')
+  have := Fintype.ofFinite ((extensionIntegers K L).decompositionSubgroup K')
   -- the fiber maximizer and its profile (P65)
   obtain ⟨s₁, hfib, hprof⟩ :=
     exists_fiber_lowerIndex_eq_min K K' (extensionIntegers K L) s₀
   -- j is finite (σ̄ ≠ 1 ⟹ s₁ ≠ 1 + separation at 𝒪_L)
-  haveI := isNoetherianRing_extensionIntegers K L
+  have := isNoetherianRing_extensionIntegers K L
   have hs₁1 : s₁ ≠ 1 := by
     intro h
     rw [h, map_one] at hfib

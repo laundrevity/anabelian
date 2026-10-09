@@ -66,18 +66,34 @@ theorem natCard_ramificationGroup_zero_eq
   have hbot : IsLocalRing.maximalIdeal
       ↥((extensionIntegers K L).comap (algebraMap K' L)) ≠ ⊥ :=
     IsDiscreteValuationRing.not_a_field'
+  -- the residue field of `B` is finite (it embeds in the finite residue field of `𝒪_L`), hence
+  -- perfect, which gives Mathlib's separable-residue-fields hypothesis
+  have : Finite (IsLocalRing.maximalIdeal
+      ↥((extensionIntegers K L).comap (algebraMap K' L))).ResidueField := by
+    let := Ideal.Quotient.field
+      (IsLocalRing.maximalIdeal ↥((extensionIntegers K L).comap (algebraMap K' L)))
+    let := Ideal.Quotient.field (IsLocalRing.maximalIdeal ↥(extensionIntegers K L))
+    have : Finite (↥(extensionIntegers K L)
+        ⧸ IsLocalRing.maximalIdeal ↥(extensionIntegers K L)) :=
+      finite_residueField_extensionIntegers K L
+    have : Finite (↥((extensionIntegers K L).comap (algebraMap K' L))
+        ⧸ IsLocalRing.maximalIdeal
+            ↥((extensionIntegers K L).comap (algebraMap K' L))) :=
+      Finite.of_injective (algebraMap _ (↥(extensionIntegers K L)
+        ⧸ IsLocalRing.maximalIdeal ↥(extensionIntegers K L))) (RingHom.injective _)
+    infer_instance
   rw [ramificationGroup_zero_eq_inertia]
   rw [Ideal.card_inertia_eq_ramificationIdxIn
     (G := ((extensionIntegers K L).decompositionSubgroup K'))
     (IsLocalRing.maximalIdeal
       ↥((extensionIntegers K L).comap (algebraMap K' L)))
-    hbot
     (IsLocalRing.maximalIdeal ↥(extensionIntegers K L))]
   rw [Ideal.ramificationIdxIn_eq_ramificationIdx
     (IsLocalRing.maximalIdeal
       ↥((extensionIntegers K L).comap (algebraMap K' L)))
     (IsLocalRing.maximalIdeal ↥(extensionIntegers K L))
     ((extensionIntegers K L).decompositionSubgroup K')]
+  rw [← Ideal.ramificationIdx'_eq_ramificationIdx _ _ hbot]
   exact ramificationIdx_comapRingHom K' (extensionIntegers K L) hπ hn
 
 /-- **`e' = |H₀|`, `ℕ∞` form**: for any irreducible `π` of `B = 𝒪_L ∩ K'`,

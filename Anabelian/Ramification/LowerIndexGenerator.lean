@@ -124,7 +124,7 @@ theorem lowerIndex_eq_addVal [IsDiscreteValuationRing ↥A] {x : ↥A}
   rw [← mem_ramificationGroup_iff_lt_lowerIndex,
       mem_ramificationGroup_iff_smul_generator_sub_mem K A hgen hfix,
       mem_maximalIdeal_pow_iff_le_addVal]
-  rw [← ENat.add_one_le_iff (ENat.coe_ne_top n)]
+  rw [← ENat.add_one_le_iff (ENat.natCast_ne_top n)]
   norm_cast
 
 end Abstract

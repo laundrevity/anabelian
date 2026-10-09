@@ -153,7 +153,7 @@ theorem herbrandPhiSeq_eq_id (g : ℕ → ℝ) (hg0 : 0 < g 0) {u : ℝ} (hu : u
   have hcongr : Set.EqOn (herbrandIntegrand g) (fun _ => (1:ℝ)) (Set.uIcc 0 u) := by
     intro t ht
     rw [Set.uIcc_of_ge hu] at ht
-    simp only [herbrandIntegrand, herbrandIndex, if_pos ht.2]
+    simp only [herbrandIntegrand, herbrandIndex, ite_eq_left ht.2]
     exact div_self (ne_of_gt hg0)
   rw [intervalIntegral.integral_congr hcongr, intervalIntegral.integral_const]
   simp

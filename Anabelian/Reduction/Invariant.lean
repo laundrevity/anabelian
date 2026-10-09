@@ -5,6 +5,9 @@ Authors: Conor Mahany
 -/
 import Anabelian.Reduction.Integral
 import Mathlib.FieldTheory.Galois.Infinite
+import Mathlib.FieldTheory.IsSepClosed
+import Mathlib.RingTheory.IntegralClosure.IntegrallyClosed
+import Mathlib.RingTheory.Valuation.Integral
 
 /-!
 # Rung L1, discharging the `DEBT`: the fixed-ring `𝒪[K̄]^Gal = 𝒪[K]` + the generality decision (Pass
@@ -98,8 +101,7 @@ instance galoisIntegers_algebraIsInvariant :
     exact congrArg Subtype.val (hb g)
   obtain ⟨k, hk⟩ := IntermediateField.mem_bot.mp hmem
   have hkint : IsIntegral ↥𝒪[K] k := by
-    apply (isIntegral_algebraMap_iff (B := AlgebraicClosure K)
-      (FaithfulSMul.algebraMap_injective K (AlgebraicClosure K))).mp
+    apply (isIntegral_algebraMap_iff (B := AlgebraicClosure K)).mp
     rw [hk]; exact b.2
   obtain ⟨a, ha⟩ := IsIntegrallyClosed.isIntegral_iff.mp hkint
   refine ⟨a, ?_⟩

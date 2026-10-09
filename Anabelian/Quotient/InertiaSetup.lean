@@ -148,20 +148,20 @@ instance isSeparable_residue [Algebra.IsSeparable K L] :
             ↥((extensionIntegers K L).comap (algebraMap K' L)))
       (↥(extensionIntegers K L)
         ⧸ IsLocalRing.maximalIdeal ↥(extensionIntegers K L)) := by
-  letI := Ideal.Quotient.field
+  let := Ideal.Quotient.field
     (IsLocalRing.maximalIdeal ↥((extensionIntegers K L).comap (algebraMap K' L)))
-  letI := Ideal.Quotient.field
+  let := Ideal.Quotient.field
     (IsLocalRing.maximalIdeal ↥(extensionIntegers K L))
-  haveI hfinE : Finite (↥(extensionIntegers K L)
+  have hfinE : Finite (↥(extensionIntegers K L)
       ⧸ IsLocalRing.maximalIdeal ↥(extensionIntegers K L)) :=
     finite_residueField_extensionIntegers K L
-  haveI hfinF : Finite (↥((extensionIntegers K L).comap (algebraMap K' L))
+  have hfinF : Finite (↥((extensionIntegers K L).comap (algebraMap K' L))
       ⧸ IsLocalRing.maximalIdeal
           ↥((extensionIntegers K L).comap (algebraMap K' L))) := by
     refine Finite.of_injective (algebraMap _ (↥(extensionIntegers K L)
       ⧸ IsLocalRing.maximalIdeal ↥(extensionIntegers K L))) ?_
     exact RingHom.injective _
-  haveI : Module.Finite
+  have : Module.Finite
       (↥((extensionIntegers K L).comap (algebraMap K' L))
         ⧸ IsLocalRing.maximalIdeal
             ↥((extensionIntegers K L).comap (algebraMap K' L)))

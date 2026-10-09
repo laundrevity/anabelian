@@ -118,7 +118,7 @@ theorem cyclicHerbrandQuotient_units (s : R ≃+* R) (t : K ≃+* K)
   have hι : ∀ u, ι (σR u) = σK (ι u) := dvrUnitsInclusion_equivariant R K s t hst
   have hv : ∀ x, v (σK x) = (1 : MulAut (Multiplicative ℤ)) (v x) :=
     dvrUnitsValuation_equivariant R K s t hst
-  letI := finite_herbrandH_norm_diff_int n hn
+  let := finite_herbrandH_norm_diff_int n hn
   have hq := herbrandQuotient_mul ι v
     (cyclicDiff σR) (cyclicNorm σR n) (cyclicDiff σK) (cyclicNorm σK n)
     (cyclicDiff 1) (cyclicNorm 1 n)

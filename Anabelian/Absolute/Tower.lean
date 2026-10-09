@@ -82,16 +82,16 @@ theorem leAlgebra_isScalarTower (h : L₁ ≤ L₂) :
 theorem leAlgebra_finiteDimensional (h : L₁ ≤ L₂) :
     letI := leAlgebra L₁ L₂ h
     FiniteDimensional ↥L₁ ↥L₂ := by
-  letI := leAlgebra L₁ L₂ h
-  haveI := leAlgebra_isScalarTower L₁ L₂ h
+  let := leAlgebra L₁ L₂ h
+  have := leAlgebra_isScalarTower L₁ L₂ h
   exact FiniteDimensional.right k ↥L₁ ↥L₂
 
 /-- The `≤`-pair is Galois (`L₂/k` Galois ⟹ `L₂/L₁` Galois, `tower_top`). -/
 theorem leAlgebra_isGalois (h : L₁ ≤ L₂) :
     letI := leAlgebra L₁ L₂ h
     IsGalois ↥L₁ ↥L₂ := by
-  letI := leAlgebra L₁ L₂ h
-  haveI := leAlgebra_isScalarTower L₁ L₂ h
+  let := leAlgebra L₁ L₂ h
+  have := leAlgebra_isScalarTower L₁ L₂ h
   exact IsGalois.tower_top_of_isGalois k ↥L₁ ↥L₂
 
 end Tower
@@ -114,10 +114,10 @@ theorem map_fullUpperRamificationGroup_le (h : L₁ ≤ L₂) (v : ℝ) :
     haveI := leAlgebra_isScalarTower L₁ L₂ h
     (fullUpperRamificationGroup K ↥L₂ v).map (AlgEquiv.restrictNormalHom ↥L₁)
       = fullUpperRamificationGroup K ↥L₁ v := by
-  letI := leAlgebra L₁ L₂ h
-  haveI := leAlgebra_isScalarTower L₁ L₂ h
-  haveI := leAlgebra_finiteDimensional L₁ L₂ h
-  haveI := leAlgebra_isGalois L₁ L₂ h
+  let := leAlgebra L₁ L₂ h
+  have := leAlgebra_isScalarTower L₁ L₂ h
+  have := leAlgebra_finiteDimensional L₁ L₂ h
+  have := leAlgebra_isGalois L₁ L₂ h
   exact map_fullUpperRamificationGroup_eq K ↥L₁ (L := ↥L₂) v
 
 end Compatibility

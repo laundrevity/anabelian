@@ -38,9 +38,9 @@ theorem finite_acyclic_kernel_reduction
     (hfg : ∀ x, f (g x) = 1) (hgf : ∀ x, g (f x) = 1)
     [Subsingleton (herbrandH f' g')] [Subsingleton (herbrandH g' f')] :
     Finite (herbrandH f g) ∧ Finite (herbrandH g f) ∧ herbrandQuotient f g = 1 := by
-  letI : Finite (herbrandH f'' g'') :=
+  let : Finite (herbrandH f'' g'') :=
     inferInstanceAs (Finite (f''.ker ⧸ g''.range.subgroupOf f''.ker))
-  letI : Finite (herbrandH g'' f'') :=
+  let : Finite (herbrandH g'' f'') :=
     inferInstanceAs (Finite (g''.ker ⧸ f''.range.subgroupOf g''.ker))
   have hinj0 : Function.Injective (herbrandHMap f g f'' g'' π hfπ hgπ) := by
     apply (MonoidHom.ker_eq_bot_iff _).mp
@@ -56,8 +56,8 @@ theorem finite_acyclic_kernel_reduction
     rintro x ⟨a, rfl⟩
     have ha : a = 1 := Subsingleton.elim _ _
     simp [ha]
-  letI : Finite (herbrandH f g) := Finite.of_injective _ hinj0
-  letI : Finite (herbrandH g f) := Finite.of_injective _ hinj1
+  let : Finite (herbrandH f g) := Finite.of_injective _ hinj0
+  let : Finite (herbrandH g f) := Finite.of_injective _ hinj1
   have hfg'' : ∀ x, f'' (g'' x) = 1 := by
     intro x
     obtain ⟨y, rfl⟩ := hπ x

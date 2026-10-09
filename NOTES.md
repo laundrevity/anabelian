@@ -7623,3 +7623,143 @@ supplied for `V₀ ≤ 𝒪_Lˣ` with regular layers, then `cyclic_exact_of_comp
 + `regular_cyclic_exact` + `herbrandH_subsingleton_of_exact` give the two `Subsingleton`
 instances that `finite_acyclic_kernel_reduction` consumes. No Hilbert 90, no reciprocity;
 R1–R3 untouched.
+
+<a id="pass-97"></a>
+
+### Pass 97 (2026-10-08) — governance: the Mathlib bump `v4.30.0` → `0653561` (Lean `v4.35.0-rc2`)
+
+**Ledger delta: 0 / 0; active count: 0 FOUNDATIONAL / 0 DEBT.** A governance pass in the
+sense of Pass 42: no new mathematics, no new file, no statement weakened. The project moves
+from Mathlib `v4.30.0` (Lean `v4.30.0`) to Mathlib commit
+`065356127b1dc0016f66b7283ce0ce2c4055aa55` (Lean `v4.35.0-rc2`); `lakefile.toml`,
+`lake-manifest.json` and `lean-toolchain` carry the pin. Branch `mathlib-bump`, not merged to
+`master` in this pass. 97 project files; `lake build` 9029 jobs, zero warnings;
+`scripts/preflight.sh` CLEAN; every `#print axioms` across all 97 files standard-only
+(`propext` / `Classical.choice` / `Quot.sound`, or a subset). No `sorry`, no `axiom`, no
+`native_decide`, no heartbeat change, and **no `backward.isDefEq.respectTransparency`
+override anywhere** (the last resort was never needed).
+
+#### Statement audit (the only statement-text change)
+
+**`Anabelian/Quotient/RamificationIdx.lean`, `ramificationIdx_comapRingHom`.** Mathlib renamed
+the two-ideal ramification index: the old `Ideal.ramificationIdx p P := sSup {n | map f p ≤ P ^ n}`
+is now `Ideal.ramificationIdx' p P` (same body, verified against the `v4.30.0` source), and the
+name `Ideal.ramificationIdx` now denotes a *new* definition `q.ramificationIdx R` (a module
+length in the localization, `Mathlib/RingTheory/RamificationInertia/Ramification.lean`). The
+theorem's statement is therefore spelled `Ideal.ramificationIdx'` — the same mathematical
+statement under the constant's new name, not a weakening (pattern 3 of the bump: a rename with
+a reused name). Every other theorem/def statement and hypothesis in the project is textually
+unchanged; all changes below are inside proofs or imports.
+
+#### Patterns, with the files they touched
+
+1. **`IsGalois K (AlgebraicClosure K)` no longer reachable transitively** from `[PerfectField K]`
+   / `[Finite K]`: the instance chain lives in `Mathlib.FieldTheory.IsSepClosed`. Fix: import it
+   (`Galois/Basic`, `FiniteField/Basic`, `Reduction/Invariant`). Same species: `Invariant` also
+   needed `Mathlib.RingTheory.IntegralClosure.IntegrallyClosed` (for
+   `IsIntegrallyClosed.isIntegral_iff`) and `Mathlib.RingTheory.Valuation.Integral` (the
+   instance `Valuation.Integers.isIntegrallyClosed_integers`, which is what gives
+   `IsIntegrallyClosed 𝒪[K]`; located with a traced `#synth`).
+2. **Concrete-category / `rw`-motive strictness.** `rw`/`simp` now refuse goals that are not
+   type-correct at `implicit` transparency ("not type-correct under the `implicit` transparency
+   level"). This bit wherever a `def` wrapping a quotient or a bundled carrier had been unfolded
+   by an earlier tactic: `FiniteField/ZHatIso` (`GrpCat.of` carrier under `etaFn`),
+   `Reduction/GaloisInertia` (`residueReductionHom` unfolded, `ResidueField` vs
+   `B ⧸ maximalIdeal B`), `Reduction/ResidueIso` (same quotient/`ResidueField` mismatch),
+   `ClassField/Multiplicativity` (three `rw [MonoidHom.mem_ker] at hc` after
+   `QuotientGroup.induction_on`, `herbrandH` vs the raw quotient), and the two `calc` blocks in
+   `ClassField/Snake` and `ClassField/TrivialAction` (`Trans Eq Eq ?m` unresolved because the
+   quotient target was elaborated at the raw type). Fix in every case: apply the lemma as a term
+   (`exact (lemma …).trans …`, `MonoidHom.mem_ker.mp hc`, `(galoisResidueAut K).map_eq_one_iff`,
+   `Iff.trans AddSubgroup.mem_inertia AddSubgroup.mem_inertia.symm`) or state the unfolded goal
+   with `change` and then `rw`. The `set_option backward.isDefEq.respectTransparency false`
+   escape hatch was not used.
+3. **Renames with reused names / shifted conventions.** `Equiv.setCongr` → `Set.equivOfEq`
+   (`FiniteField/Level`, already fixed on the branch); TFAE indices start at 1 —
+   `IsBezout.TFAE … .out 0 1` → `.out 1 2` (`Extension/Uniformizer`),
+   `local_hom_TFAE … .out 4 0` → `.out 5 1` (`Reduction/ResidueIso`);
+   `Ideal.ramificationIdx`/`ramificationIdx_spec` → `ramificationIdx'`/`ramificationIdx'_spec`
+   (`Quotient/RamificationIdx`, see the statement audit).
+4. **Signature changes.** `isIntegral_algebraMap_iff` takes `[FaithfulSMul A B]` instead of an
+   explicit injectivity proof — call it as `(isIntegral_algebraMap_iff (B := _)).mp`
+   (`Extension/Uniformizer`, `LocalField/Canonical`, `Quotient/ComapIntegers`,
+   `Reduction/Invariant`). `Ideal.isMaximal_comap_of_isIntegral_of_isMaximal` now takes the ring
+   hom and its integrality first (`Reduction/ResidueIso`). `multiplicity_self` now takes a
+   `FiniteMultiplicity a a` witness — supplied via `FiniteMultiplicity.of_not_isUnit` with
+   `Ideal.isUnit_iff`/`Ideal.span_singleton_eq_top`/`Ideal.span_singleton_eq_bot`
+   (`ClassField/UnitsValuation`). `MonoidHom.restrict` → `MonoidHom.domRestrict`, with
+   `restrict_range`/`ker_restrict` → `domRestrict_range`/`ker_domRestrict`
+   (`Quotient/CardMultiplicativity`).
+   `Ideal.card_inertia_eq_ramificationIdxIn` dropped its `p ≠ ⊥` argument and now asks for
+   `[Module.Flat R S]` (from `IsDedekindDomain` + `Module.IsTorsionFree`, both already supplied
+   by `Quotient/InertiaSetup`) and `[Algebra.HasSeparableResidueFieldsAt R S p]` (Mathlib's
+   instance from `[Algebra.IsIntegral R S]` + `[PerfectField p.ResidueField]`); `InertiaCard`
+   now proves `Finite p.ResidueField` locally (the residue field of `B` embeds in the finite
+   residue field of `𝒪_L`; Mathlib's `[Finite (R ⧸ I)] → Finite I.ResidueField` instance), from
+   which `PerfectField.ofFinite` closes it, and bridges the two ramification indices with
+   `Ideal.ramificationIdx'_eq_ramificationIdx _ _ hbot`.
+5. **New Mathlib instances replacing hand-rolled structure.** `Extension/ResidueFinite`: Mathlib
+   now provides `Algebra (ResidueField R) (ResidueField S)` and the `IsScalarTower` instances
+   from `[Algebra R S] [IsLocalHom (algebraMap R S)]`; the hand-rolled `letI` algebra
+   structures no longer unify with them (an `IsScalarTower` goal failed to synthesize against the
+   local `letI`), so the proof now supplies
+   `IsLocalHom (algebraMap 𝒪[K] 𝒪_L) := inferInstanceAs (IsLocalHom (extensionAlgebraMap K L))`
+   and lets Mathlib's instances carry the restriction of scalars. `Reduction/ResidueIso`'s
+   algebraicity proof uses `IsLocalRing.residue_surjective` instead of
+   `Ideal.Quotient.mk_surjective` so the lifted element is typed at `ResidueField B`.
+6. **Deprecations (all switched to the new names, never silenced):** `if_pos`/`if_neg` →
+   `ite_eq_left`/`ite_eq_right`, `dif_pos` → `dite_eq_left` (`Ramification/LowerIndexCount`,
+   `Herbrand/Function`, `Herbrand/Formula`, `Herbrand/Slope`, `Extension/InertiaResidueCover`,
+   `ClassField/RegularModule`, `ClassField/FiltrationLifting`); `ENat.coe_ne_top` →
+   `ENat.natCast_ne_top` (`Ramification/LowerIndex`, `LowerIndexCount`, `LowerIndexGenerator`);
+   `Set.mem_setOf_eq` → `Set.mem_ofPred_eq` and `mul_le_one₀` (deprecated with no replacement)
+   → `(mul_le_of_le_one_left _ hx).trans hy` (`Reduction/SpectralValuation`);
+   `Valuation.exists_setOf_restrict_le_iff` → `exists_setOfPred_restrict_le_iff`
+   (`LocalField/Instance`).
+7. **New linters.** `linter.style.haveILetI`: `haveI`/`letI` whose goal is a `Prop` must be
+   `have`/`let` — 164 one-to-one conversions across 35 files (plus a few inside the
+   restructured `ResidueFinite` proof), converted exactly at the flagged lines by a script keyed
+   on the build log; nothing was converted that the linter did not flag.
+   `linter.unusedTactic`: a no-op `change` removed (`Herbrand/Transitivity`). The `show`-style
+   linter: `show` used as a goal change must be `change` (`ClassField/Snake`,
+   `ClassField/TrivialAction`). `simpa` normal form drifted in `Herbrand/UpperNumbering`
+   (`u / g 0` vs `u * (g 0)⁻¹`): replaced by an explicit
+   `rw [integral_const, sub_zero, smul_eq_mul, mul_one_div] at h; exact h`.
+
+#### Per-file changes
+
+Already fixed on the branch before this pass: `Galois/Basic` (import), `FiniteField/Basic`
+(import), `FiniteField/ZHat` (term-mode `zhatToGalois_etaFn`), `FiniteField/Level`
+(`Set.equivOfEq`). This pass:
+
+- `haveI`/`letI` → `have`/`let` only (23 files): `Absolute/{Main,Surjectivity,Tower}`,
+  `ClassField/{FiniteAcyclic,UnitsValuationEquivariance}`,
+  `Extension/{Integers,Monogenic,MonogenicDischarge,WildTame}`, `ForMathlib/ValuativeRelCongr`,
+  `Galois/RationalsNonAbelian`, `LocalField/{SpectralSeam,ValuativeRel,Valued}`,
+  `Quotient/{IndexProfile,InertiaSetup,LemmaFive,NumericalLemmaFive}`,
+  `Reduction/{Continuity,GaloisIntegersLocal,RamificationDegeneracy,ResidueAlgClosed,
+  UnramifiedQuotient}`, plus the same edits inside `FiniteField/{Basic,Level,ZHatIso}`,
+  `Extension/{InertiaResidueCover,ResidueFinite,Uniformizer}`, `LocalField/{Canonical,Instance}`,
+  `Quotient/InertiaCard`, `Reduction/{GaloisInertia,ResidueIso}`, `ClassField/{RegularModule,
+  TrivialAction}`.
+- Substantive proof edits (statements unchanged): `FiniteField/ZHatIso` (pattern 2),
+  `Reduction/Invariant` (patterns 1, 4), `Extension/Uniformizer` (patterns 3, 4),
+  `Reduction/ResidueIso` (patterns 2, 3, 4, 5), `Extension/ResidueFinite` (pattern 5),
+  `Reduction/SpectralValuation` (pattern 6), `Herbrand/UpperNumbering` (pattern 7),
+  `Reduction/GaloisInertia` (pattern 2; `Ideal.ker_stabilizerHom` now lands in
+  `P.inertia (stabilizer G P)` rather than a `subgroupOf`, hence the double `mem_inertia`),
+  `LocalField/Canonical` and `Quotient/ComapIntegers` (pattern 4), `Quotient/InertiaCard`
+  (pattern 4), `Quotient/CardMultiplicativity` (pattern 4), `ClassField/{Snake,TrivialAction,
+  Multiplicativity}` (pattern 2), `ClassField/UnitsValuation` (pattern 4),
+  `Herbrand/Transitivity` (pattern 7), and the pattern-6 renames listed above.
+- Statement text changed (constant renamed, content identical): `Quotient/RamificationIdx`.
+
+#### Verification and governance
+
+`lake build`: 9029 jobs, zero warnings/errors. `scripts/preflight.sh`: CLEAN (clause 0 required
+tracking the two non-ignored `.parley/` session records, `participants.json` and `log.jsonl`,
+which the branch's `.gitignore` edit deliberately left unignored). Per-file
+`lake env lean <file> | grep "depends on axioms"` over all 97 files: standard-only everywhere.
+README/ROADMAP/HANDOFF move to Pass 97; the next mathematical pass is **Pass 98**, which
+implements the Pass-95 design's *P97 row* (the abstract DVR unit filtration) — the design's row
+labels P97–P102 are kept as written in the immutable Pass-95 entry and now map to Passes 98–103.

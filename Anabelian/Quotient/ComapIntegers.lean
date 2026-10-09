@@ -80,7 +80,7 @@ theorem extensionIntegers_comap_eq :
     (extensionIntegers K L).comap (algebraMap K' L) = extensionIntegers K K' := by
   refine SetLike.ext fun c => ?_
   rw [mem_comap, mem_extensionIntegers_iff, mem_extensionIntegers_iff]
-  exact isIntegral_algebraMap_iff ((algebraMap K' L).injective)
+  exact isIntegral_algebraMap_iff (B := L)
 
 /-- The value-preserving ring iso `↥𝒪_{K'} ≃+* ↥(𝒪_L ∩ K')` induced by
 `extensionIntegers_comap_eq`. -/

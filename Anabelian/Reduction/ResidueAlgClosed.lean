@@ -107,7 +107,7 @@ theorem residueField_isAlgClosed_of_integrallyClosed
     (m : Ideal R) [m.IsMaximal] :
     letI : Field (R ⧸ m) := Ideal.Quotient.field m
     IsAlgClosed (R ⧸ m) := by
-  letI : Field (R ⧸ m) := Ideal.Quotient.field m
+  let : Field (R ⧸ m) := Ideal.Quotient.field m
   apply IsAlgClosed.of_exists_root
   intro p hpm hpirr
   -- A monic `p` over `R ⧸ m` lifts to a monic `P` over `R` of the same degree.

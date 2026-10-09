@@ -78,8 +78,8 @@ theorem herbrandPhiSeq_div_le (g : ℕ → ℝ) (hg : Antitone g) (hg1 : ∀ i, 
   have h := intervalIntegral.integral_mono_on hu intervalIntegrable_const
     (herbrandPhiSeq_intervalIntegrable g hg hg0 0 u) hbound
   simp only [herbrandPhiSeq]
-  rw [intervalIntegral.integral_const] at h
-  simpa using h
+  rw [intervalIntegral.integral_const, sub_zero, smul_eq_mul, mul_one_div] at h
+  exact h
 
 /-- **`φ` is surjective** onto `ℝ`: continuous, `→ +∞` at `+∞` (it dominates `u/g_0`) and `→ -∞` at
 `-∞` (it is `id` there). -/

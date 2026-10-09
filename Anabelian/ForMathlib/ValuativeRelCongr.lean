@@ -60,9 +60,9 @@ uniformities making it a uniform additive group and inducing the same topology a
 theorem uniformSpace_eq_of_isUniformAddGroup {G : Type*} [AddCommGroup G]
     (u₁ u₂ : UniformSpace G) (h : u₁.toTopologicalSpace = u₂.toTopologicalSpace)
     (hg₁ : @IsUniformAddGroup G u₁ _) (hg₂ : @IsUniformAddGroup G u₂ _) : u₁ = u₂ := by
-  haveI hr₁ : @IsRightUniformAddGroup G u₁ _ :=
+  have hr₁ : @IsRightUniformAddGroup G u₁ _ :=
     @IsUniformAddGroup.isRightUniformAddGroup G u₁ _ hg₁
-  haveI hr₂ : @IsRightUniformAddGroup G u₂ _ :=
+  have hr₂ : @IsRightUniformAddGroup G u₂ _ :=
     @IsUniformAddGroup.isRightUniformAddGroup G u₂ _ hg₂
   refine UniformSpace.ext ?_
   rw [@uniformity_eq_comap_nhds_zero G u₁ _ hr₁, @uniformity_eq_comap_nhds_zero G u₂ _ hr₂]

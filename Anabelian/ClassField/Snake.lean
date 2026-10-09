@@ -117,9 +117,8 @@ theorem snakePhi_surjective (π : M →* M'') (f'' g'' : M'' →* M'')
     exact x''.2
   refine ⟨⟨x, hxT⟩, ?_⟩
   have h2 : (⟨π x, hxT⟩ : f''.ker) = x'' := Subtype.ext hx
-  calc snakePhi π f'' g'' ⟨x, hxT⟩
-      = QuotientGroup.mk (⟨π x, hxT⟩ : f''.ker) := rfl
-    _ = QuotientGroup.mk x'' := by rw [h2]
+  change QuotientGroup.mk (⟨π x, hxT⟩ : f''.ker) = QuotientGroup.mk x''
+  rw [h2]
 
 /-- `ψ : T →* Ĥ¹(M')` — the pullback hom composed with the projection. -/
 noncomputable def snakePsi (ι : M' →* M) (π : M →* M'') (f' g' : M' →* M')

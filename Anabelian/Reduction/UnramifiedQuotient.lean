@@ -131,7 +131,7 @@ theorem unramifiedQuotient_iso [PerfectField K] :
 by a single element), because the residue field `𝓀[K]` is finite — Pass 2 applied to `𝓀[K]`. -/
 theorem residue_procyclic :
     ∃ g : Field.absoluteGaloisGroup 𝓀[K], (Subgroup.zpowers g).topologicalClosure = ⊤ := by
-  haveI : Fintype 𝓀[K] := Fintype.ofFinite _
+  have : Fintype 𝓀[K] := Fintype.ofFinite _
   exact ⟨_, Anabelian.frobenius_topologicalClosure_eq_top 𝓀[K]⟩
 
 /-- **The payoff.** The unramified quotient of a local field's absolute Galois group is procyclic:
@@ -144,7 +144,7 @@ theorem unramifiedQuotient_procyclic [PerfectField K] :
       (_ : (Field.absoluteGaloisGroup K ⧸ N) ≃* Field.absoluteGaloisGroup 𝓀[K]),
       ∃ g : Field.absoluteGaloisGroup 𝓀[K], (Subgroup.zpowers g).topologicalClosure = ⊤ := by
   obtain ⟨φ, hφ⟩ := residueReduction_surjective K
-  haveI : Fintype 𝓀[K] := Fintype.ofFinite _
+  have : Fintype 𝓀[K] := Fintype.ofFinite _
   exact ⟨φ.ker, inferInstance, QuotientGroup.quotientKerEquivOfSurjective φ hφ,
     _, Anabelian.frobenius_topologicalClosure_eq_top 𝓀[K]⟩
 

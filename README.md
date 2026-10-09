@@ -23,10 +23,11 @@ current state** (see `CLAUDE.md` → "Governance consistency"). Read these in or
 - **`NOTES.md`** — the per-pass record: the Mathlib inventory, what was proved, the ledger delta.
 - **`HANDOFF.md`** — the session bootstrap: the current state and the next task.
 
-## Current state — Pass 96 (2026-09-26)
+## Current state — Pass 97 (2026-10-08)
 
 **Ledger: `0 FOUNDATIONAL / 0 DEBT`; zero `axiom` declarations project-wide.** Clean cached build on
-Mathlib `v4.30.0` (`scripts/preflight.sh` CLEAN: 97 project files, 8573 build jobs, warning-free).
+Mathlib commit `0653561` (Lean `v4.35.0-rc2`; bumped from `v4.30.0` in Pass 97)
+(`scripts/preflight.sh` CLEAN: 97 project files, 9029 build jobs, warning-free).
 Every headline `#print axioms` is standard-only (`propext` / `Classical.choice` / `Quot.sound`); no
 open owed witnesses. *(For the always-current authoritative status see `ROADMAP.md`'s header and
 `AXIOM_LEDGER.md`'s "Active axioms" table; this section mirrors them.)*
@@ -49,6 +50,7 @@ The current strata are:
   Pass 96 proves the design's field-free layer: stable/quotient/layer actions with the
   naturality of the cyclic pair, the acyclicity of the regular module `C[G]`, and
   filtration lifting (`ker f = im g` from separated, complete, layer-exact filtrations).
+  Pass 97 is a governance pass (the Mathlib bump), with no mathematical change.
 - **L4 and R1–R3 — NOT-STARTED.** Global tools and local, Neukirch–Uchida, and
   mono-anabelian reconstruction remain distant targets. No reconstruction or local
   reciprocity theorem is claimed.
@@ -64,12 +66,13 @@ design's generic layer (`cyclic_exact_of_complete_filtration`, `regular_cyclic_e
 `herbrandH_subsingleton_of_exact`, the `restrictAut`/`quotientAut`/`layerAut` actions):
 given a `σ`-stable, separated, complete filtration of a subgroup `V₀ ≤ 𝒪_Lˣ` with regular
 layers, both `Ĥ(V₀)` vanish. The arithmetic inputs — the normal-basis lattice, its unit
-subgroups, adic completeness, finite index — remain unproved (Passes 97–101 of the
-design). **Next: P97, the abstract DVR unit filtration `U^m` and its finite quotients.**
+subgroups, adic completeness, finite index — remain unproved (rows P97–P101 of the
+Pass-95 design). **Next: Pass 98, the abstract DVR unit filtration `U^m` and its finite
+quotients (the design's P97 row).**
 Class formation and reciprocity remain ahead; Hasse–Arf is separately deferred.
 
 The earlier [strata and frontier detail](NOTES.md#pass-93-readme-detail) is preserved
-verbatim in NOTES through Pass 93; the Pass-96 summary above states the current frontier.
+verbatim in NOTES through Pass 93; the Pass-97 summary above states the current frontier.
 
 ## Build
 

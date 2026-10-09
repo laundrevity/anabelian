@@ -144,8 +144,8 @@ theorem levelField_finrank (n : ℕ) [NeZero n] : Module.finrank K (levelField K
     rw [Nat.card_eq_fintype_card, card_rootSet_eq_natDegree (separable_X_pow_card_pow_sub_X K n hn)
         hsplit, FiniteField.X_pow_card_pow_sub_X_natDegree_eq K hn Fintype.one_lt_card]
   have hLFcard : Nat.card (levelField K n) = Fintype.card K ^ n := by
-    rw [← hcardroot]; exact Nat.card_congr (Equiv.setCongr (levelField_coe_eq_rootSet K n hn))
-  haveI : Fintype (levelField K n) := Fintype.ofFinite _
+    rw [← hcardroot]; exact Nat.card_congr (Set.equivOfEq (levelField_coe_eq_rootSet K n hn))
+  have : Fintype (levelField K n) := Fintype.ofFinite _
   have hpow : Fintype.card (levelField K n) = Fintype.card K ^ Module.finrank K (levelField K n) :=
     Module.card_eq_pow_finrank
   rw [← Nat.card_eq_fintype_card, hLFcard] at hpow
@@ -169,7 +169,7 @@ noncomputable def levelRestrict (n : ℕ) [NeZero n] :
 /-- The level projection `r_n` is surjective. -/
 theorem levelRestrict_surjective (n : ℕ) [NeZero n] :
     Function.Surjective (levelRestrict K n) := by
-  haveI : FiniteDimensional K (levelField K n) := Module.Finite.of_finite
+  have : FiniteDimensional K (levelField K n) := Module.Finite.of_finite
   exact AlgEquiv.restrictNormalHom_surjective (AlgebraicClosure K)
 
 /-- **The Frobenius-alignment equation (the compatibility trap).** `r_n` sends the *absolute*
@@ -177,7 +177,7 @@ Frobenius to the Frobenius of `𝔽_{q^n}` — not an arbitrary cyclic generator
 theorem levelRestrict_frobenius (n : ℕ) [NeZero n] :
     levelRestrict K n (absFrobenius K)
       = FiniteField.frobeniusAlgEquivOfAlgebraic K (levelField K n) := by
-  haveI : FiniteDimensional K (levelField K n) := Module.Finite.of_finite
+  have : FiniteDimensional K (levelField K n) := Module.Finite.of_finite
   ext y
   simp only [levelRestrict, AlgEquiv.restrictNormalHom_apply,
     FiniteField.coe_frobeniusAlgEquivOfAlgebraic, IntermediateField.coe_pow]

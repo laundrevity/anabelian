@@ -93,7 +93,7 @@ theorem maximalIdeal_galoisIntegers_sq :
   have hyB : IsIntegral B y :=
     ⟨Polynomial.X ^ 2 - Polynomial.C x, Polynomial.monic_X_pow_sub_C x two_ne_zero, by
       simp [hy2, sub_eq_zero]; rfl⟩
-  haveI : Algebra.IsIntegral ↥𝒪[K] B := integralClosure.AlgebraIsIntegral
+  have : Algebra.IsIntegral ↥𝒪[K] B := integralClosure.AlgebraIsIntegral
   have hy0 : IsIntegral ↥𝒪[K] y := isIntegral_trans _ hyB
   have hymem : y ∈ integralClosure ↥𝒪[K] (AlgebraicClosure K) := hy0
   set Y : B := ⟨y, hymem⟩ with hYdef

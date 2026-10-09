@@ -63,9 +63,9 @@ theorem restrictNormalHom_comp_of_le {M N : FiniteGaloisIntermediateField K E}
     AlgEquiv.restrictNormalHom (F := K) (K₁ := E) M.toIntermediateField σ
       = AlgEquiv.restrictNormalHom (F := K) (K₁ := ↥N) M.toIntermediateField
           (AlgEquiv.restrictNormalHom (F := K) (K₁ := E) N.toIntermediateField σ) := by
-  letI := leAlgebra M N h
-  haveI := leAlgebra_isScalarTower M N h
-  haveI : IsScalarTower ↥M ↥N E := IsScalarTower.of_algebraMap_eq' rfl
+  let := leAlgebra M N h
+  have := leAlgebra_isScalarTower M N h
+  have : IsScalarTower ↥M ↥N E := IsScalarTower.of_algebraMap_eq' rfl
   exact IsScalarTower.AlgEquiv.restrictNormalHom_comp_apply
     ↥M.toIntermediateField ↥N.toIntermediateField σ
 
@@ -78,8 +78,8 @@ theorem mem_fullUpper_of_le [Algebra.IsSeparable K E]
       ∈ fullUpperRamificationGroup K ↥N v) :
     AlgEquiv.restrictNormalHom (F := K) (K₁ := E) M.toIntermediateField σ
       ∈ fullUpperRamificationGroup K ↥M v := by
-  letI := leAlgebra M N h
-  haveI := leAlgebra_isScalarTower M N h
+  let := leAlgebra M N h
+  have := leAlgebra_isScalarTower M N h
   rw [restrictNormalHom_comp_of_le K h σ]
   rw [← map_fullUpperRamificationGroup_le K M N h v]
   exact Subgroup.mem_map_of_mem _ hσ
@@ -115,8 +115,8 @@ theorem map_absoluteUpperRamificationGroup_eq [IsGalois K E]
   have hne : ∀ M, (F M).Nonempty := by
     intro M
     -- lift τ into G^v((L ⊔ M)/K), then to Gal(E/K)
-    letI := leAlgebra L (L ⊔ M) le_sup_left
-    haveI := leAlgebra_isScalarTower L (L ⊔ M) le_sup_left
+    let := leAlgebra L (L ⊔ M) le_sup_left
+    have := leAlgebra_isScalarTower L (L ⊔ M) le_sup_left
     have h81 := map_fullUpperRamificationGroup_le K L (L ⊔ M) le_sup_left v
     rw [← h81] at hτ
     obtain ⟨τ', hτ'mem, hτ'⟩ := Subgroup.mem_map.mp hτ
@@ -143,7 +143,7 @@ theorem map_absoluteUpperRamificationGroup_eq [IsGalois K E]
         (InfiniteGalois.restrictNormalHom_continuous L.toIntermediateField)
   have hdir : Directed (· ⊇ ·) F := fun M₁ M₂ =>
     ⟨M₁ ⊔ M₂, hdown le_sup_left, hdown le_sup_right⟩
-  haveI : Nonempty (FiniteGaloisIntermediateField K E) := ⟨⊥⟩
+  have : Nonempty (FiniteGaloisIntermediateField K E) := ⟨⊥⟩
   obtain ⟨σ, hσ⟩ := IsCompact.nonempty_iInter_of_directed_nonempty_isCompact_isClosed
     F hdir hne (fun M => (hclosed M).isCompact) hclosed
   refine Subgroup.mem_map.mpr ⟨σ, ?_, ?_⟩

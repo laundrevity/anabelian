@@ -90,7 +90,7 @@ theorem rationals_absoluteGaloisGroup_not_commutative :
   have hf_irr : Irreducible f := X_pow_sub_C_irreducible_of_prime Nat.prime_three two_not_cube
   have hf_deg : f.natDegree = 3 := by rw [hf, natDegree_X_pow_sub_C]
   have hf_sep : f.Separable := hf_irr.separable
-  haveI : Fact ((f.map (algebraMap ℚ ℂ)).Splits) := ⟨IsAlgClosed.splits (f.map _)⟩
+  have : Fact ((f.map (algebraMap ℚ ℂ)).Splits) := ⟨IsAlgClosed.splits (f.map _)⟩
   -- It has 3 complex roots and ≤ 1 real root (the cube map is injective on ℝ).
   have hcardC : Fintype.card (f.rootSet ℂ) = 3 := by
     rw [card_rootSet_eq_natDegree hf_sep (IsAlgClosed.splits (f.map _)), hf_deg]
@@ -108,7 +108,7 @@ theorem rationals_absoluteGaloisGroup_not_commutative :
   let e := Fintype.equivFinOfCardEq hcardC
   let χ : f.Gal ≃* Equiv.Perm (Fin 3) :=
     (MulEquiv.ofBijective (galActionHom f ℂ) hbij).trans (Equiv.permCongrHom e)
-  haveI : Fact ((f.map (algebraMap ℚ (AlgebraicClosure ℚ))).Splits) :=
+  have : Fact ((f.map (algebraMap ℚ (AlgebraicClosure ℚ))).Splits) :=
     ⟨IsAlgClosed.splits (f.map _)⟩
   -- Assume commutative; the absolute Galois group surjects onto `f.Gal`, forcing it commutative.
   intro hcomm

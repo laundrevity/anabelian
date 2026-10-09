@@ -78,37 +78,37 @@ theorem locallyCompactSpace_extensionValuativeRel [Algebra.IsSeparable K L] :
     letI := extensionValuativeRel K L
     letI := ValuativeRel.topologicalSpace L
     LocallyCompactSpace L := by
-  letI := extensionValuativeRel K L
+  let := extensionValuativeRel K L
   -- The spectral analytic structure on `K` and `L` (verbatim the Pass-40 chain), installing
   -- the spectral metric topology on `L` as the ambient `TopologicalSpace L`.
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  haveI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI rk : (Valued.v (R := K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  have := isUniformAddGroup_of_addCommGroup (G := K)
+  let rk : (Valued.v (R := K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI nnf : NontriviallyNormedField K :=
+  let nnf : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-  letI nfL : NormedField L := spectralNorm.normedField K L
-  haveI ultL : IsUltrametricDist L :=
+  let nfL : NormedField L := spectralNorm.normedField K L
+  have ultL : IsUltrametricDist L :=
     IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
       (isNonarchimedean_spectralNorm (K := K) (L := L))
-  letI nsL : NormedSpace K L := spectralNorm.normedSpace K L
-  letI vL : Valued L ℝ≥0 := NormedField.toValued
+  let nsL : NormedSpace K L := spectralNorm.normedSpace K L
+  let vL : Valued L ℝ≥0 := NormedField.toValued
   -- `L` is proper (finite-dimensional over the locally compact `K`), hence locally compact, in
   -- the spectral topology.
-  haveI : ProperSpace L := FiniteDimensional.proper K L
+  have : ProperSpace L := FiniteDimensional.proper K L
   -- The rung-1 valuative topology equals the spectral topology.
   have hrel : extensionValuativeRel K L = ValuativeRel.ofValuation (Valued.v (R := L)) :=
     extensionValuativeRel_eq_spectral K L
   have h₂ : @IsValuativeTopology L _ (extensionValuativeRel K L) (by infer_instance) := by
     rw [hrel]
-    letI : ValuativeRel L := ValuativeRel.ofValuation (Valued.v (R := L))
-    haveI : (Valued.v (R := L)).Compatible := Valuation.Compatible.ofValuation _
+    let : ValuativeRel L := ValuativeRel.ofValuation (Valued.v (R := L))
+    have : (Valued.v (R := L)).Compatible := Valuation.Compatible.ofValuation _
     refine IsValuativeTopology.of_zero (fun s => ?_)
     rw [Valued.mem_nhds_zero]
-    simpa using (Valued.v (R := L)).exists_setOf_restrict_le_iff 0 s
+    simpa using (Valued.v (R := L)).exists_setOfPred_restrict_le_iff 0 s
   have h₁ : @IsValuativeTopology L _ (extensionValuativeRel K L)
       (ValuativeRel.topologicalSpace L) := inferInstance
   have htop : (ValuativeRel.topologicalSpace L : TopologicalSpace L) = (by infer_instance) :=
@@ -124,11 +124,11 @@ theorem isNonarchimedeanLocalField_extension [Algebra.IsSeparable K L] :
     letI := extensionValuativeRel K L
     letI := ValuativeRel.topologicalSpace L
     IsNonarchimedeanLocalField L := by
-  letI := extensionValuativeRel K L
-  letI := ValuativeRel.topologicalSpace L
-  haveI := isValuativeTopology_extensionValuativeRel K L
-  haveI := isNontrivial_extensionValuativeRel K L
-  haveI := locallyCompactSpace_extensionValuativeRel K L
+  let := extensionValuativeRel K L
+  let := ValuativeRel.topologicalSpace L
+  have := isValuativeTopology_extensionValuativeRel K L
+  have := isNontrivial_extensionValuativeRel K L
+  have := locallyCompactSpace_extensionValuativeRel K L
   exact { }
 
 -- Reproducible axiom audit (re-runs on every `lake build`). All standard-axioms-only.

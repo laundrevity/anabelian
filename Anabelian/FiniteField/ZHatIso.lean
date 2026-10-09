@@ -70,7 +70,7 @@ variable (K : Type) [Field K] [Fintype K]
 
 /-- The canonical map sends `Ẑ`'s generator `zhatGen = η(ofAdd 1)` to the absolute Frobenius. -/
 lemma zhatToGalois_zhatGen : (Hom.hom (zhatToGalois K)) zhatGen = absFrobenius K := by
-  rw [zhatGen, zhatToGalois_etaFn]; exact zpow_one _
+  exact (zhatToGalois_etaFn K (Multiplicative.ofAdd 1)).trans (zpow_one _)
 
 /-- The composite `χ_m := r_m ∘ zhatToGalois : Ẑ →* Gal(𝔽_{q^m}/K)`. -/
 noncomputable def levelComp (m : ℕ) [NeZero m] :
@@ -89,7 +89,7 @@ in `⟨zhatGen^m⟩` (as `χ_m (zhatGen^k) = 1 ↔ m ∣ k`, using `orderOf (r_m
 lemma ker_levelComp_le (m : ℕ) [NeZero m] {S : Subgroup ZHat}
     (hScl : IsClosed (S : Set ZHat)) (hmem : zhatGen ^ m ∈ S) :
     MonoidHom.ker (levelComp K m) ≤ S := by
-  haveI : FiniteDimensional K (levelField K m) := Module.Finite.of_finite
+  have : FiniteDimensional K (levelField K m) := Module.Finite.of_finite
   have hopen : IsOpen ((MonoidHom.ker (levelComp K m)) : Set ZHat) := by
     have hcont : Continuous ⇑(levelComp K m) := by
       rw [levelComp, MonoidHom.coe_comp]
@@ -131,7 +131,7 @@ theorem zhatToGalois_injective : Function.Injective ⇑(Hom.hom (zhatToGalois K)
   obtain ⟨H, hH⟩ := exist_openNormalSubgroup_sub_open_nhds_of_one
     (isOpen_compl_singleton (x := x)) (Set.mem_compl_singleton_iff.mpr (Ne.symm hne))
   set m := Nat.card (ZHat ⧸ H.toSubgroup)
-  haveI : NeZero m := ⟨Nat.card_pos.ne'⟩
+  have : NeZero m := ⟨Nat.card_pos.ne'⟩
   have hxker : x ∈ MonoidHom.ker (levelComp K m) :=
     MonoidHom.mem_ker.mpr ((congrArg (levelRestrict K m) hx).trans (map_one _))
   have hgm : zhatGen ^ m ∈ H.toSubgroup := by

@@ -114,20 +114,20 @@ noncomputable def extensionIntegers : ValuationSubring L :=
   { (integralClosure ↥𝒪[K] L).toSubring with
     mem_or_inv_mem' := by
       intro x
-      letI := IsTopologicalAddGroup.rightUniformSpace K
-      haveI := isUniformAddGroup_of_addCommGroup (G := K)
-      letI rk : (Valued.v (R := K)).RankOne :=
+      let := IsTopologicalAddGroup.rightUniformSpace K
+      have := isUniformAddGroup_of_addCommGroup (G := K)
+      let rk : (Valued.v (R := K)).RankOne :=
         { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
             MonoidWithZeroHom.ValueGroup₀.embedding
           strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
             MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-      letI nnf : NontriviallyNormedField K :=
+      let nnf : NontriviallyNormedField K :=
         Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-      letI nfL : NormedField L := spectralNorm.normedField K L
-      haveI ultL : IsUltrametricDist L :=
+      let nfL : NormedField L := spectralNorm.normedField K L
+      have ultL : IsUltrametricDist L :=
         IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
           (isNonarchimedean_spectralNorm (K := K) (L := L))
-      letI vL : Valued L ℝ≥0 := NormedField.toValued
+      let vL : Valued L ℝ≥0 := NormedField.toValued
       have hmem : ∀ y : L, y ∈ (integralClosure ↥𝒪[K] L).toSubring ↔
           y ∈ Valued.integer L := by
         intro y
@@ -157,7 +157,7 @@ over the DVR `𝒪[K]`, transported along the carrier identity. With Pass 23, th
 Krull separation hypothesis at `𝒪_L`. -/
 theorem isNoetherianRing_extensionIntegers [Algebra.IsSeparable K L] :
     IsNoetherianRing ↥(extensionIntegers K L) := by
-  haveI h1 : IsNoetherianRing ↥(integralClosure ↥𝒪[K] L) :=
+  have h1 : IsNoetherianRing ↥(integralClosure ↥𝒪[K] L) :=
     IsIntegralClosure.isNoetherianRing ↥𝒪[K] K L ↥(integralClosure ↥𝒪[K] L)
   let e : ↥(integralClosure ↥𝒪[K] L) ≃+* ↥(extensionIntegers K L) :=
     { toFun := fun y => ⟨y.1, y.2⟩
@@ -170,20 +170,20 @@ theorem isNoetherianRing_extensionIntegers [Algebra.IsSeparable K L] :
 finite separable extension of local fields separates. -/
 theorem iInf_ramificationGroup_extensionIntegers [Algebra.IsSeparable K L] :
     (⨅ i : ℕ, ramificationGroup K (extensionIntegers K L) i) = ⊥ := by
-  haveI := isNoetherianRing_extensionIntegers K L
+  have := isNoetherianRing_extensionIntegers K L
   exact iInf_ramificationGroup_eq_bot_of_isNoetherianRing K (extensionIntegers K L)
 
 /-- The decomposition subgroup at `𝒪_L` is **finite** (`L/K` finite): it sits inside the finite
 `L ≃ₐ[K] L`. Discharges the Pass-24/28 finiteness hypotheses at `𝒪_L`. -/
 instance : Finite ↥((extensionIntegers K L).decompositionSubgroup K) := by
-  haveI : Fintype (L ≃ₐ[K] L) := AlgEquiv.fintype K L
+  have : Fintype (L ≃ₐ[K] L) := AlgEquiv.fintype K L
   exact Subtype.finite
 
 /-- **Pass 24's eventual triviality, discharged at `𝒪_L`**: the filtration of a finite separable
 extension of local fields is eventually trivial — some `G_i = ⊥`, proved, not hypothesized. -/
 theorem exists_ramificationGroup_extensionIntegers_eq_bot [Algebra.IsSeparable K L] :
     ∃ i, ramificationGroup K (extensionIntegers K L) i = ⊥ := by
-  haveI := isNoetherianRing_extensionIntegers K L
+  have := isNoetherianRing_extensionIntegers K L
   exact exists_ramificationGroup_eq_bot K (extensionIntegers K L)
     (Ideal.iInf_pow_eq_bot_of_isLocalRing _ Ideal.IsPrime.ne_top')
 

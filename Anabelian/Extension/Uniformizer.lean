@@ -67,12 +67,12 @@ theorem algebraMap_mem_extensionIntegers_iff (x : K) :
   constructor
   · intro h
     have h2 : IsIntegral ↥𝒪[K] x :=
-      (isIntegral_algebraMap_iff (algebraMap K L).injective).mp h
+      (isIntegral_algebraMap_iff (B := L)).mp h
     obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.mp h2
     rw [← hy]
     exact y.2
   · intro h
-    exact (isIntegral_algebraMap_iff (algebraMap K L).injective).mpr
+    exact (isIntegral_algebraMap_iff (B := L)).mpr
       (IsIntegrallyClosed.isIntegral_iff.mpr ⟨⟨x, h⟩, rfl⟩)
 
 /-- `𝒪_L` is **not a field**: the base uniformizer remains a nonzero non-unit (its would-be
@@ -115,9 +115,9 @@ theorem maximalIdeal_extensionIntegers_ne_bot :
 Bezout (valuation ring) ⟹ PID (`IsBezout.TFAE`); local with `𝔪 ≠ ⊥`. -/
 instance isDiscreteValuationRing_extensionIntegers [Algebra.IsSeparable K L] :
     IsDiscreteValuationRing ↥(extensionIntegers K L) := by
-  haveI hnoeth := isNoetherianRing_extensionIntegers K L
-  haveI hpir : IsPrincipalIdealRing ↥(extensionIntegers K L) :=
-    ((IsBezout.TFAE (R := ↥(extensionIntegers K L))).out 0 1).mp hnoeth
+  have hnoeth := isNoetherianRing_extensionIntegers K L
+  have hpir : IsPrincipalIdealRing ↥(extensionIntegers K L) :=
+    ((IsBezout.TFAE (R := ↥(extensionIntegers K L))).out 1 2).mp hnoeth
   exact ⟨maximalIdeal_extensionIntegers_ne_bot K L⟩
 
 /-- **The uniformizer package at `𝒪_L`** — the `(π, hspan, hπ0)` hypothesis triple of every

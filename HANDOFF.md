@@ -1,4 +1,4 @@
-# HANDOFF.md — session bootstrap (written after Pass 96, 2026-09-26)
+# HANDOFF.md — session bootstrap (written after Pass 97, 2026-10-08)
 
 **State:** L2 is complete (Pass 83), consolidated with separation in Pass 84. L3 is
 in progress: `K^ab` (Pass 86), the Herbrand-quotient calculus (Passes 87–90), the cyclic
@@ -6,12 +6,16 @@ pair and `q(ℤ) = n` (Passes 91–92), and the equivariant DVR valuation sequen
 **`q(Kˣ) = q(Rˣ) · n` under explicit hypotheses** (Passes 93–94). Pass 95 proves
 the finite-acyclic-kernel reduction and records the complete local unit proof design;
 Pass 96 proves that design's field-free layer (stable actions, the regular module,
-filtration lifting). Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 97 project files; no open
-owed witnesses. **The next task is Pass 97: the abstract DVR unit filtration `U^m` and
-its finite quotients.** The local-field formula `q(Rˣ) = 1` remains unproved.
+filtration lifting). Pass 97 is a governance pass: the Mathlib bump `v4.30.0` →
+`0653561` (Lean `v4.35.0-rc2`), ported statement-preserving on branch `mathlib-bump`.
+Ledger: **`0 FOUNDATIONAL / 0 DEBT`**; 97 project files; no open owed witnesses.
+**The next task is Pass 98: the abstract DVR unit filtration `U^m` and its finite
+quotients (the Pass-95 design's P97 row).** The local-field formula `q(Rˣ) = 1` remains
+unproved.
 
-Read `CLAUDE.md`, the active table and Pass-96 entry in `AXIOM_LEDGER.md`, the Pass-96
-status header and L3 ladder in `ROADMAP.md`, the [Pass-95 entry](NOTES.md#pass-95)
+Read `CLAUDE.md`, the active table and Pass-96/97 entries in `AXIOM_LEDGER.md`, the Pass-97
+status header and L3 ladder in `ROADMAP.md`, the [Pass-97 entry](NOTES.md#pass-97) in
+`NOTES.md` (the bump's rename/pattern list — the house idioms for the new Mathlib), the [Pass-95 entry](NOTES.md#pass-95)
 in `NOTES.md` (complete signatures, dependency map, and P96–P102 order), and the
 [Pass-96 entry](NOTES.md#pass-96) (what of it is now proved, and the deviations).
 Start with `git status`; work on your own parley branch. `scripts/preflight.sh`
@@ -75,9 +79,24 @@ the layer `MulEquiv`); its output through `herbrandH_subsingleton_of_exact` is t
 `Subsingleton` instances for `finite_acyclic_kernel_reduction` on `1 → V₀ → 𝒪_Lˣ → 𝒪_Lˣ/V₀ → 1`,
 whose four intertwinings are the `restrictAut_coe`/`quotientAut_mk` naturality lemmas.
 
-## Next task — Pass 97: the abstract unit filtration
+## What Pass 97 supplies
 
-Implement NOTES Pass 95 §4 (the P97 row), in the abstract DVR context
+A governance pass: Mathlib `v4.30.0` → commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`
+(Lean `v4.35.0-rc2`). No new mathematics; 55 files edited inside proofs/imports; the one
+statement-text change is the constant rename `Ideal.ramificationIdx` →
+`Ideal.ramificationIdx'` in `ramificationIdx_comapRingHom` (identical definition). New house
+idioms forced by the bump (details in NOTES Pass 97): `have`/`let` for `Prop`-valued binders
+(the `haveILetI` linter), `change` not `show` for goal changes, term-mode application instead
+of `rw` when a `def` wrapping a quotient/bundled carrier has been unfolded, TFAE indices from 1,
+`isIntegral_algebraMap_iff (B := _)`, `ite_eq_left`/`ite_eq_right`, `Set.mem_ofPred_eq`,
+`MonoidHom.domRestrict`. Mathlib now supplies `Algebra (ResidueField R) (ResidueField S)` and
+its scalar towers from `IsLocalHom (algebraMap R S)`, and the two-ideal ramification index is
+`ramificationIdx'` while `q.ramificationIdx R` is a new localization-length definition.
+
+## Next task — Pass 98: the abstract unit filtration (design row P97)
+
+Implement NOTES Pass 95 §4 (its P97 row — numbered Pass 98 after the governance Pass 97),
+in the abstract DVR context
 `(R : Type*) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]` — no local field:
 
 - `unitFiltration R m := (Units.map (Ideal.Quotient.mk (maximalIdeal R ^ m)).toMonoidHom).ker`
@@ -102,7 +121,8 @@ only; ledger remains 0/0. Fresh file(s); `lake env lean` probes from the project
 
 ## Environment (verify, then trust)
 
-- **Toolchain in-loop:** host `lean`/`lake` (v4.30.0). Sandboxed fallback: NOTES P36 recipe.
+- **Toolchain in-loop:** host `lean`/`lake` (Lean `v4.35.0-rc2`, Mathlib `0653561`, since
+  Pass 97). Sandboxed fallback: NOTES P36 recipe.
 - **Pre-commit gate**: `scripts/preflight.sh` — clause 0 clean tree, ≤100-char lines, named
   statement-level `letI`/`haveI` binders, import-chain completeness, warning-free build.
 - **Slow rebuild:** `Anabelian/Quotient/LiftDvd.lean` can take approximately **15 minutes**
@@ -123,11 +143,11 @@ only; ledger remains 0/0. Fresh file(s); `lake env lean` probes from the project
   DVR-on-`B`, P59 `addVal_neg`/`addVal_prod`/dilation.
 - D2 lives entirely inside proofs; P52–63 consumed only `IsIntegral`-level API.
 
-## Queue after P97
+## Queue after Pass 98 (design rows P98–P102, i.e. Passes 99–103)
 
-P98: local action, period, adic transport, and field norm. P99: the small normal
-lattice. P100: its unit subgroups and complete filtration. P101: regular layers and
-acyclicity. P102: unit quotient one, both finiteness discharges, and the P94 field
+Row P98: local action, period, adic transport, and field norm. Row P99: the small normal
+lattice. Row P100: its unit subgroups and complete filtration. Row P101: regular layers and
+acyclicity. Row P102: unit quotient one, both finiteness discharges, and the P94 field
 quotient formula. The detailed dependencies and scope are in NOTES Pass 95; boundaries
 may split.
 

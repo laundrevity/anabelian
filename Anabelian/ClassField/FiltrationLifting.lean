@@ -66,7 +66,7 @@ theorem ker_eq_range_of_filtration (f g : M →* M) (hfg : ∀ x, f (g x) = 1)
       Classical.choose (hlayer i x h.1 (by rw [h.2]; exact one_mem _)) else 1, ?_⟩
     intro i x hxi hfx
     have h : x ∈ F i ∧ f x = 1 := ⟨hxi, hfx⟩
-    simp only [dif_pos h]
+    simp only [dite_eq_left h]
     exact Classical.choose_spec (hlayer i x h.1 (by rw [h.2]; exact one_mem _))
   -- the approximants `xs i ∈ F i ∩ ker f` and the partial products `zs i` of corrections
   obtain ⟨xs, hxs0, hxss⟩ : ∃ xs : ℕ → M, xs 0 = x ∧

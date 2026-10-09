@@ -64,20 +64,20 @@ theorem mem_extensionIntegers_iff_mem_valued_integer :
         (isNonarchimedean_spectralNorm (K := K) (L := L))
     letI : Valued L ℝ≥0 := NormedField.toValued
     ∀ x : L, x ∈ extensionIntegers K L ↔ x ∈ Valued.integer L := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  haveI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI rk : (Valued.v (R := K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  have := isUniformAddGroup_of_addCommGroup (G := K)
+  let rk : (Valued.v (R := K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI nnf : NontriviallyNormedField K :=
+  let nnf : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-  letI nfL : NormedField L := spectralNorm.normedField K L
-  haveI ultL : IsUltrametricDist L :=
+  let nfL : NormedField L := spectralNorm.normedField K L
+  have ultL : IsUltrametricDist L :=
     IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
       (isNonarchimedean_spectralNorm (K := K) (L := L))
-  letI vL : Valued L ℝ≥0 := NormedField.toValued
+  let vL : Valued L ℝ≥0 := NormedField.toValued
   intro x
   have halg : IsIntegral K x := Algebra.IsIntegral.isIntegral x
   rw [Valuation.mem_integer_iff]
@@ -112,20 +112,20 @@ theorem extensionValuativeRel_eq_spectral :
         (isNonarchimedean_spectralNorm (K := K) (L := L))
     letI : Valued L ℝ≥0 := NormedField.toValued
     extensionValuativeRel K L = ValuativeRel.ofValuation (Valued.v (R := L)) := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  haveI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI rk : (Valued.v (R := K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  have := isUniformAddGroup_of_addCommGroup (G := K)
+  let rk : (Valued.v (R := K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI nnf : NontriviallyNormedField K :=
+  let nnf : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-  letI nfL : NormedField L := spectralNorm.normedField K L
-  haveI ultL : IsUltrametricDist L :=
+  let nfL : NormedField L := spectralNorm.normedField K L
+  have ultL : IsUltrametricDist L :=
     IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
       (isNonarchimedean_spectralNorm (K := K) (L := L))
-  letI vL : Valued L ℝ≥0 := NormedField.toValued
+  let vL : Valued L ℝ≥0 := NormedField.toValued
   exact ofValuation_eq_of_same_subring (extensionIntegers K L) (Valued.v (R := L))
     (fun x => (Valuation.mem_integer_iff _ _).symm.trans
       ((mem_extensionIntegers_iff_mem_valued_integer K L x).symm))
@@ -146,17 +146,17 @@ theorem completeSpace_spectral :
       Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
     letI : NormedField L := spectralNorm.normedField K L
     CompleteSpace L := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  haveI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI rk : (Valued.v (R := K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  have := isUniformAddGroup_of_addCommGroup (G := K)
+  let rk : (Valued.v (R := K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp
         MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
         MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI nnf : NontriviallyNormedField K :=
+  let nnf : NontriviallyNormedField K :=
     Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-  letI nfL : NormedField L := spectralNorm.normedField K L
-  letI nsL := spectralNorm.normedSpace K L
+  let nfL : NormedField L := spectralNorm.normedField K L
+  let nsL := spectralNorm.normedSpace K L
   exact FiniteDimensional.complete K L
 
 -- Reproducible axiom audit (re-runs on every `lake build`). All standard-axioms-only.

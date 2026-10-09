@@ -215,10 +215,6 @@ theorem herbrandPhi_comp (u : ℝ) :
         ((extensionIntegers K L).comap (algebraMap K' L))).comp
         (herbrandPhi_continuous K' (extensionIntegers K L))).continuousOn
     · -- equal at 0
-      change herbrandPhi K (extensionIntegers K L) 0
-        = herbrandPhi K
-            ((extensionIntegers K L).comap (algebraMap K' L))
-            (herbrandPhi K' (extensionIntegers K L) 0)
       rw [herbrandPhi_zero K (extensionIntegers K L),
           herbrandPhi_zero K' (extensionIntegers K L),
           herbrandPhi_zero K

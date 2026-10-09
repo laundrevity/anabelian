@@ -5,7 +5,7 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 96 (2026-09-26)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 97 (2026-10-08)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
@@ -35,15 +35,21 @@ progress. L3.2–L3.4, L4, and R1–R3 remain ahead.
 > cyclic corollary `cyclic_exact_of_complete_filtration`; and
 > `herbrandH_subsingleton_of_exact`. All standard-only; no local-field content.
 >
-> **Next — Pass 97:** the abstract DVR unit filtration `U^m = 1 + 𝔪^m` — membership,
+> **P97 (2026-10-08) is a governance pass:** the Mathlib bump `v4.30.0` → `0653561`
+> (Lean `v4.35.0-rc2`), ported statement-preserving (one constant rename in a statement,
+> `Ideal.ramificationIdx` → `Ideal.ramificationIdx'`, same definition); no mathematics
+> added, ledger unchanged ([NOTES Pass 97](NOTES.md#pass-97)).
+>
+> **Next — Pass 98:** the abstract DVR unit filtration `U^m = 1 + 𝔪^m` — membership,
 > antitone, separated, stable, finite quotients from a finite residue field, the depth-one
 > residue equivalence and the depth-`m` coefficient map with its twisted action (NOTES
-> Pass 95 §4). Then P98–P102 per the recorded order. Local reciprocity and the
+> Pass 95 §4, its *P97 row*). Then the design's P98–P102 rows, as Passes 99–103, per the
+> recorded order. Local reciprocity and the
 > reconstruction targets remain unproved. Hasse–Arf is separately deferred. The historical
 > pass record is in `NOTES.md` and `AXIOM_LEDGER.md`.
 
 The earlier [Passes 44–93 summary](NOTES.md#pass-93-roadmap-detail) is preserved
-verbatim in NOTES; the Pass-96 header above states the current frontier.
+verbatim in NOTES; the Pass-97 header above states the current frontier.
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -59,7 +65,8 @@ A structural note on the ladder, because it governs the whole project:
 
 ## L0 — Project floor + first seed   ·   **DONE** (Pass 0)   ·   DEBT: 0
 
-- Fresh Lean 4 + Mathlib project pinned to `v4.30.0`, clean cached build.
+- Fresh Lean 4 + Mathlib project, pinned to Mathlib `0653561` / Lean `v4.35.0-rc2` since
+  Pass 97 (previously `v4.30.0`), clean cached build.
 - Mathlib inventory of all seven foundation areas (`NOTES.md`).
 - One axiom-free, genuinely Galois-theoretic lemma: `Anabelian.fixingSubgroup_injective`
   (faithfulness of the infinite Galois correspondence) + its specialization to the absolute Galois

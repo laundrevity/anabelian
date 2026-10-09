@@ -66,14 +66,14 @@ dream at `|G₀| = p^e·m`, and surjectivity of the iterated Frobenius assemble 
 theorem map_residue_inertiaFixedIntegers_eq_top [Algebra.IsSeparable K L]
     [Finite ↥(ramificationGroup K (extensionIntegers K L) 0)] :
     (inertiaFixedIntegers K L).map (residue ↥(extensionIntegers K L)) = ⊤ := by
-  haveI hfin : Finite (ResidueField ↥(extensionIntegers K L)) :=
+  have hfin : Finite (ResidueField ↥(extensionIntegers K L)) :=
     finite_residueField_extensionIntegers K L
-  haveI := Fintype.ofFinite (ResidueField ↥(extensionIntegers K L))
-  haveI hPrime : Fact (ringChar (ResidueField ↥(extensionIntegers K L))).Prime :=
+  have := Fintype.ofFinite (ResidueField ↥(extensionIntegers K L))
+  have hPrime : Fact (ringChar (ResidueField ↥(extensionIntegers K L))).Prime :=
     ⟨CharP.char_is_prime (ResidueField ↥(extensionIntegers K L))
       (ringChar (ResidueField ↥(extensionIntegers K L)))⟩
-  haveI : Nonempty ↥(ramificationGroup K (extensionIntegers K L) 0) := ⟨1⟩
-  haveI := Fintype.ofFinite ↥(ramificationGroup K (extensionIntegers K L) 0)
+  have : Nonempty ↥(ramificationGroup K (extensionIntegers K L) 0) := ⟨1⟩
+  have := Fintype.ofFinite ↥(ramificationGroup K (extensionIntegers K L) 0)
   obtain ⟨e, m, hpm, hcard⟩ := Nat.exists_eq_pow_mul_and_not_dvd
     (Fintype.card_ne_zero (α := ↥(ramificationGroup K (extensionIntegers K L) 0)))
     (ringChar (ResidueField ↥(extensionIntegers K L))) hPrime.out.ne_one
@@ -122,7 +122,7 @@ theorem map_residue_inertiaFixedIntegers_eq_top [Algebra.IsSeparable K L]
       ← map_pow,
       coeff_expand (expChar_pow_pos (ResidueField ↥(extensionIntegers K L))
         (ringChar (ResidueField ↥(extensionIntegers K L))) e),
-      if_pos (dvd_mul_right _ _),
+      ite_eq_left (dvd_mul_right _ _),
       Nat.mul_div_cancel_left _ (expChar_pow_pos (ResidueField ↥(extensionIntegers K L))
         (ringChar (ResidueField ↥(extensionIntegers K L))) e),
       sub_eq_add_neg, ← map_neg, coeff_X_add_C_pow,

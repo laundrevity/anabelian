@@ -90,18 +90,18 @@ nonarchimedean (`isNonarchimedean_spectralNorm`) and submultiplicative (`spectra
 noncomputable def spectralIntegers : Subring (AlgebraicClosure K) where
   carrier := {x | spectralNorm K (AlgebraicClosure K) x ≤ 1}
   mul_mem' {x y} hx hy := by
-    simp only [Set.mem_setOf_eq] at *
+    simp only [Set.mem_ofPred_eq] at *
     calc spectralNorm K (AlgebraicClosure K) (x * y)
         ≤ spectralNorm K (AlgebraicClosure K) x * spectralNorm K (AlgebraicClosure K) y :=
           spectralNorm_mul (Algebra.IsAlgebraic.isAlgebraic x) (Algebra.IsAlgebraic.isAlgebraic y)
-      _ ≤ 1 := mul_le_one₀ hx (spectralNorm_nonneg _) hy
-  one_mem' := by simp only [Set.mem_setOf_eq, spectralNorm_one, le_refl]
+      _ ≤ 1 := (mul_le_of_le_one_left (spectralNorm_nonneg _) hx).trans hy
+  one_mem' := by simp only [Set.mem_ofPred_eq, spectralNorm_one, le_refl]
   add_mem' {x y} hx hy := by
-    simp only [Set.mem_setOf_eq] at *
+    simp only [Set.mem_ofPred_eq] at *
     exact le_trans (isNonarchimedean_spectralNorm x y) (max_le hx hy)
-  zero_mem' := by simp only [Set.mem_setOf_eq, spectralNorm_zero]; norm_num
+  zero_mem' := by simp only [Set.mem_ofPred_eq, spectralNorm_zero]; norm_num
   neg_mem' {x} hx := by
-    simp only [Set.mem_setOf_eq, spectralNorm_neg (Algebra.IsAlgebraic.isAlgebraic x)] at *
+    simp only [Set.mem_ofPred_eq, spectralNorm_neg (Algebra.IsAlgebraic.isAlgebraic x)] at *
     exact hx
 
 /-- Membership in `𝒪[K̄]` is exactly `spectralNorm ≤ 1`. -/

@@ -99,11 +99,11 @@ theorem valued_integer_extensionValuativeRel :
     letI := IsTopologicalAddGroup.rightUniformSpace L
     haveI := isUniformAddGroup_of_addCommGroup (G := L)
     (Valued.v (R := L)).integer = (extensionIntegers K L).toSubring := by
-  letI := extensionValuativeRel K L
-  letI := ValuativeRel.topologicalSpace L
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  haveI := isUniformAddGroup_of_addCommGroup (G := L)
-  haveI : (extensionIntegers K L).valuation.Compatible :=
+  let := extensionValuativeRel K L
+  let := ValuativeRel.topologicalSpace L
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  have := isUniformAddGroup_of_addCommGroup (G := L)
+  have : (extensionIntegers K L).valuation.Compatible :=
     Valuation.Compatible.ofValuation (extensionIntegers K L).valuation
   exact valued_integer_eq_of_compatible (extensionIntegers K L)
 
@@ -115,11 +115,11 @@ theorem isDiscreteValuationRing_valued_integer [Algebra.IsSeparable K L] :
     letI := IsTopologicalAddGroup.rightUniformSpace L
     haveI := isUniformAddGroup_of_addCommGroup (G := L)
     IsDiscreteValuationRing ↥((Valued.v (R := L)).integer) := by
-  letI := extensionValuativeRel K L
-  letI := ValuativeRel.topologicalSpace L
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  haveI := isUniformAddGroup_of_addCommGroup (G := L)
-  haveI : IsDiscreteValuationRing ↥((extensionIntegers K L).toSubring) :=
+  let := extensionValuativeRel K L
+  let := ValuativeRel.topologicalSpace L
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  have := isUniformAddGroup_of_addCommGroup (G := L)
+  have : IsDiscreteValuationRing ↥((extensionIntegers K L).toSubring) :=
     isDiscreteValuationRing_extensionIntegers K L
   exact isDiscreteValuationRing_of_subring_eq
     (valued_integer_extensionValuativeRel K L).symm
@@ -132,15 +132,15 @@ theorem finite_residueField_valued_integer [Algebra.IsSeparable K L] :
     letI := IsTopologicalAddGroup.rightUniformSpace L
     haveI := isUniformAddGroup_of_addCommGroup (G := L)
     Finite (ResidueField ↥((Valued.v (R := L)).integer)) := by
-  letI := extensionValuativeRel K L
-  letI := ValuativeRel.topologicalSpace L
-  letI := IsTopologicalAddGroup.rightUniformSpace L
-  haveI := isUniformAddGroup_of_addCommGroup (G := L)
-  haveI : IsDiscreteValuationRing ↥((extensionIntegers K L).toSubring) :=
+  let := extensionValuativeRel K L
+  let := ValuativeRel.topologicalSpace L
+  let := IsTopologicalAddGroup.rightUniformSpace L
+  have := isUniformAddGroup_of_addCommGroup (G := L)
+  have : IsDiscreteValuationRing ↥((extensionIntegers K L).toSubring) :=
     isDiscreteValuationRing_extensionIntegers K L
-  haveI : IsDiscreteValuationRing ↥((Valued.v (R := L)).integer) :=
+  have : IsDiscreteValuationRing ↥((Valued.v (R := L)).integer) :=
     isDiscreteValuationRing_of_subring_eq (valued_integer_extensionValuativeRel K L).symm
-  haveI : Finite (ResidueField ↥((extensionIntegers K L).toSubring)) :=
+  have : Finite (ResidueField ↥((extensionIntegers K L).toSubring)) :=
     finite_residueField_extensionIntegers K L
   exact finite_residueField_of_subring_eq (valued_integer_extensionValuativeRel K L).symm
 

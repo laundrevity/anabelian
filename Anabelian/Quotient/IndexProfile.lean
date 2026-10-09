@@ -108,7 +108,7 @@ theorem exists_coset_lowerIndex_eq_min [Finite (A.decompositionSubgroup K')]
           = min (lowerIndex K' A h)
               (lowerIndex K A
                 (s₀ * decompositionRestrict K K' A h₀)) := by
-  haveI := Fintype.ofFinite (A.decompositionSubgroup K')
+  have := Fintype.ofFinite (A.decompositionSubgroup K')
   obtain ⟨h₀, -, hmax⟩ := Finset.exists_max_image Finset.univ
     (fun h' : A.decompositionSubgroup K' =>
       lowerIndex K A (s₀ * decompositionRestrict K K' A h'))

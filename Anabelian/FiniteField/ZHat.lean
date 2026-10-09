@@ -96,7 +96,7 @@ theorem zhatToGalois_surjective : Function.Surjective ⇑(Hom.hom (zhatToGalois 
   have hsub : (Subgroup.zpowers (FiniteField.frobeniusAlgEquivOfAlgebraic K (AlgebraicClosure K)) :
       Set (Gal(AlgebraicClosure K/K))) ⊆ Set.range ⇑(Hom.hom (zhatToGalois K)) := by
     rintro _ ⟨m, rfl⟩
-    exact ⟨etaFn _ (Multiplicative.ofAdd m), by rw [zhatToGalois_etaFn]; rfl⟩
+    exact ⟨etaFn _ (Multiplicative.ofAdd m), zhatToGalois_etaFn K (Multiplicative.ofAdd m)⟩
   have hdense : Dense (Subgroup.zpowers (FiniteField.frobeniusAlgEquivOfAlgebraic K
       (AlgebraicClosure K)) : Set (Gal(AlgebraicClosure K/K))) := by
     rw [dense_iff_closure_eq, ← Subgroup.topologicalClosure_coe,

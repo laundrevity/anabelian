@@ -3876,3 +3876,22 @@ project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and ledger 
 untouched; README/ROADMAP/HANDOFF move to Pass 96 with P97 next.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 97 (2026-10-08) — governance: Mathlib bump `v4.30.0` → `0653561` (Lean `v4.35.0-rc2`); count stays 0 / 0
+
+**No axiom added, none needed; no statement weakened.** A port, not a proof pass: Mathlib
+`v4.30.0` → commit `065356127b1dc0016f66b7283ce0ce2c4055aa55` (Lean `v4.35.0-rc2`), on branch
+`mathlib-bump`. 55 project files edited inside proofs/imports (the full pattern list and per-file
+map are in the [NOTES Pass-97 entry](NOTES.md#pass-97)); one theorem statement changed in text
+only — `ramificationIdx_comapRingHom` now spells Mathlib's renamed constant
+`Ideal.ramificationIdx'` (same definition `sSup {n | map f p ≤ P ^ n}` as the old
+`Ideal.ramificationIdx`, verified against the `v4.30.0` source). No `sorry`, no `axiom`, no
+`native_decide`, no heartbeat change, no `respectTransparency` override.
+
+**Verification:** `lake build` successful (9029 jobs, zero warnings/errors);
+`scripts/preflight.sh` CLEAN (97 files); per-file `#print axioms` sweep over all 97 files
+standard-only; zero project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and
+ledger entries untouched; README/ROADMAP/HANDOFF move to Pass 97 with Pass 98 (the design's P97
+row, the abstract unit filtration) next.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.

@@ -95,7 +95,7 @@ theorem regular_cyclic_exact [Finite G] (g : G) (hgen : Subgroup.zpowers g = ⊤
       (cyclicDiff (regularShift (C := C) g)).range =
         (cyclicNorm (regularShift g) (Nat.card G)).ker := by
   classical
-  haveI : Fintype G := Fintype.ofFinite G
+  have : Fintype G := Fintype.ofFinite G
   have hord : orderOf g = Nat.card G := orderOf_eq_card_of_zpowers_eq_top hgen
   have hnpos : 0 < Nat.card G := Nat.card_pos
   -- every element is `g ^ i` with `i < |G|`, and the exponent is unique
@@ -147,7 +147,7 @@ theorem regular_cyclic_exact [Finite G] (g : G) (hgen : Subgroup.zpowers g = ⊤
       refine ⟨Pi.mulSingle 1 (f 1), ?_⟩
       funext h
       rw [cyclicNorm_regularShift_apply g hgen, Finset.prod_pi_mulSingle',
-        if_pos (Finset.mem_univ _)]
+        ite_eq_left (Finset.mem_univ _)]
       exact (hconst h).symm
   · apply le_antisymm
     · -- differences have trivial norm

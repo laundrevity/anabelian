@@ -69,7 +69,7 @@ theorem card_herbrandH_norm_diff_eq_one (n : ℕ)
     (htf : ∀ x : A, x ^ n = 1 → x = 1) :
     Nat.card (herbrandH (cyclicNorm (1 : MulAut A) n)
       (cyclicDiff (1 : MulAut A))) = 1 := by
-  haveI hsub : Subsingleton ((cyclicNorm (1 : MulAut A) n).ker) := by
+  have hsub : Subsingleton ((cyclicNorm (1 : MulAut A) n).ker) := by
     constructor
     intro a b
     apply Subtype.ext
@@ -80,7 +80,7 @@ theorem card_herbrandH_norm_diff_eq_one (n : ℕ)
       have h2 : cyclicNorm (1 : MulAut A) n b.1 = 1 := b.2
       rwa [cyclicNorm_one_apply] at h2
     rw [htf a.1 ha, htf b.1 hb]
-  haveI : Subsingleton (herbrandH (cyclicNorm (1 : MulAut A) n)
+  have : Subsingleton (herbrandH (cyclicNorm (1 : MulAut A) n)
       (cyclicDiff (1 : MulAut A))) := by
     constructor
     intro a b
@@ -109,8 +109,8 @@ theorem diffKerProj_surjective (n : ℕ) :
   induction c using QuotientGroup.induction_on with | _ y =>
   refine ⟨y.1, ?_⟩
   have h1 : diffKerIncl (A := A) y.1 = y := Subtype.ext rfl
-  calc diffKerProj n y.1 = QuotientGroup.mk (diffKerIncl y.1) := rfl
-    _ = QuotientGroup.mk y := by rw [h1]
+  change QuotientGroup.mk (diffKerIncl y.1) = QuotientGroup.mk y
+  rw [h1]
 
 theorem diffKerProj_ker (n : ℕ) :
     (diffKerProj (A := A) n).ker = (cyclicNorm (1 : MulAut A) n).range := by

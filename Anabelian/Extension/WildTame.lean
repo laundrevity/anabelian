@@ -100,8 +100,8 @@ theorem isPGroup_wildInertia_extensionIntegers (p : ℕ)
     (π : ↥(extensionIntegers K L))
     (hspan : maximalIdeal ↥(extensionIntegers K L) = Ideal.span {π}) (hπ0 : π ≠ 0) :
     IsPGroup p ↥(ramificationGroup K (extensionIntegers K L) 1) := by
-  haveI := charP_residueField_extensionIntegers K L p
-  haveI := isNoetherianRing_extensionIntegers K L
+  have := charP_residueField_extensionIntegers K L p
+  have := isNoetherianRing_extensionIntegers K L
   exact isPGroup_ramificationGroup_one K p
     (Ideal.iInf_pow_eq_bot_of_isLocalRing _ Ideal.IsPrime.ne_top')
     π hspan hπ0
@@ -118,7 +118,7 @@ theorem not_dvd_natCard_tameQuotient_extensionIntegers (p : ℕ) [Fact p.Prime]
     ¬ p ∣ Nat.card (↥(ramificationGroup K (extensionIntegers K L) 0) ⧸
       ((ramificationGroup K (extensionIntegers K L) 1).subgroupOf
         (ramificationGroup K (extensionIntegers K L) 0))) := by
-  haveI := charP_residueField_extensionIntegers K L p
+  have := charP_residueField_extensionIntegers K L p
   exact not_dvd_natCard_tameQuotient K p π hspan hπ0
     (closure_inertiaFixedIntegers_union_uniformizer_eq_top K L π hspan)
     (smul_inertiaFixedIntegers_eq K L)

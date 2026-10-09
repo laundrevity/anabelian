@@ -90,10 +90,10 @@ the
 for free. -/
 instance galoisIntegers_isLocalHom :
     IsLocalHom (algebraMap ↥𝒪[K] ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))) := by
-  haveI : Algebra.IsIntegral ↥𝒪[K] ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) :=
+  have : Algebra.IsIntegral ↥𝒪[K] ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) :=
     integralClosure.AlgebraIsIntegral
-  exact ((local_hom_TFAE _).out 4 0).mp (eq_maximalIdeal
-    (Ideal.isMaximal_comap_of_isIntegral_of_isMaximal
+  exact ((local_hom_TFAE _).out 5 1).mp (eq_maximalIdeal
+    (Ideal.isMaximal_comap_of_isIntegral_of_isMaximal _ Algebra.IsIntegral.isIntegral
       (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))))
 
 set_option synthInstance.maxHeartbeats 800000 in
@@ -115,11 +115,11 @@ noncomputable def galoisResidueEquiv :
     rw [IsScalarTower.algebraMap_apply ↥𝒪[K] B (ResidueField B)]; rfl
   haveI h3b : Algebra.IsAlgebraic 𝓀[K] (ResidueField B) := by
     refine ⟨fun x => ?_⟩
-    obtain ⟨b, rfl⟩ := Ideal.Quotient.mk_surjective x
+    obtain ⟨b, rfl⟩ := IsLocalRing.residue_surjective (R := B) x
     obtain ⟨q, hqm, hqa⟩ := Algebra.IsIntegral.isIntegral (R := ↥𝒪[K]) b
     refine ⟨q.map (algebraMap ↥𝒪[K] 𝓀[K]), (hqm.map _).ne_zero, ?_⟩
     rw [aeval_map_algebraMap 𝓀[K]]
-    have hmk : (Ideal.Quotient.mk (maximalIdeal B)) b
+    have hmk : IsLocalRing.residue B b
         = (IsScalarTower.toAlgHom ↥𝒪[K] B (ResidueField B)) b := rfl
     rw [hmk, aeval_algHom_apply, aeval_def, hqa, map_zero]
   haveI : IsAlgClosure 𝓀[K] (ResidueField B) := ⟨h3c, h3b⟩

@@ -75,8 +75,8 @@ theorem isNontrivial_ofValuation {F Γ : Type*} [Field F] [LinearOrderedCommGrou
     (v : Valuation F Γ) (π : F) (h0 : v π ≠ 0) (h1 : v π < 1) :
     letI := ValuativeRel.ofValuation v
     ValuativeRel.IsNontrivial F := by
-  letI := ValuativeRel.ofValuation v
-  haveI hc : v.Compatible := Valuation.Compatible.ofValuation v
+  let := ValuativeRel.ofValuation v
+  have hc : v.Compatible := Valuation.Compatible.ofValuation v
   refine ⟨⟨valuation F π, ?_, ?_⟩⟩
   · intro h
     have h2 : v π ≤ v 0 := (v.vle_iff_le).mp (valuation_eq_zero_iff.mp h)
@@ -105,8 +105,8 @@ theorem isValuativeTopology_extensionValuativeRel :
     letI := extensionValuativeRel K L
     letI := ValuativeRel.topologicalSpace L
     IsValuativeTopology L := by
-  letI := extensionValuativeRel K L
-  letI := ValuativeRel.topologicalSpace L
+  let := extensionValuativeRel K L
+  let := ValuativeRel.topologicalSpace L
   infer_instance
 
 -- Reproducible axiom audit (re-runs on every `lake build`). All standard-axioms-only.

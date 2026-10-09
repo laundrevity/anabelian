@@ -3,3 +3,7 @@
 *.tar.zst
 /.claude/
 claude.last
+.parley/state.json
+.parley/dispatch.log
+.parley/.lock
+.parley/*.tmp

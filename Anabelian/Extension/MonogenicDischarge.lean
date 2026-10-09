@@ -174,8 +174,8 @@ theorem exists_generator_extensionIntegers [Algebra.IsSeparable K L] :
         (((extensionAlgebraMap K L).range : Set ↥(extensionIntegers K L)) ∪ {x}) = ⊤ := by
   classical
   set R := ↥(extensionIntegers K L) with hR
-  haveI hfin : Finite (ResidueField R) := finite_residueField_extensionIntegers K L
-  haveI := Fintype.ofFinite (ResidueField R)
+  have hfin : Finite (ResidueField R) := finite_residueField_extensionIntegers K L
+  have := Fintype.ofFinite (ResidueField R)
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := (ResidueField R)ˣ)
   obtain ⟨x₀, hx₀⟩ := Ideal.Quotient.mk_surjective ((g : ResidueField R))
   have hx₀res : residue R x₀ = (g : ResidueField R) := hx₀

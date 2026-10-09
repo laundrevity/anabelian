@@ -69,8 +69,8 @@ Pure `Compatible` bookkeeping on the canonical valuation — the `K'`-analogue o
 theorem integer_extensionValuativeRel_eq :
     letI := extensionValuativeRel K K'
     (𝒪[K'] : Subring K') = (extensionIntegers K K').toSubring := by
-  letI := extensionValuativeRel K K'
-  haveI hcomp : (extensionIntegers K K').valuation.Compatible :=
+  let := extensionValuativeRel K K'
+  have hcomp : (extensionIntegers K K').valuation.Compatible :=
     Valuation.Compatible.ofValuation (extensionIntegers K K').valuation
   have key : ∀ x : K', valuation K' x ≤ valuation K' 1 ↔
       (extensionIntegers K K').valuation x ≤ (extensionIntegers K K').valuation 1 := fun x =>
@@ -106,7 +106,7 @@ theorem isIntegral_base_iff (x : L) :
     change ((extensionAlgebraMap K K' r : ↥(extensionIntegers K K')) : K') = _
     rw [coe_extensionAlgebraMap]
   -- the tower `𝒪[K] → 𝒪_{K'} → K'` (needed to reflect integrality through the subring inclusion).
-  haveI sclK' : IsScalarTower ↥𝒪[K] ↥(extensionIntegers K K') K' := by
+  have sclK' : IsScalarTower ↥𝒪[K] ↥(extensionIntegers K K') K' := by
     refine IsScalarTower.of_algebraMap_eq (fun r => ?_)
     have lhs : algebraMap ↥𝒪[K] K' r = algebraMap K K' (r : K) := rfl
     have rhs : algebraMap ↥(extensionIntegers K K') K'
@@ -115,7 +115,7 @@ theorem isIntegral_base_iff (x : L) :
       rw [hcoe r]
     rw [lhs, rhs]
   -- the tower `𝒪[K] → 𝒪_{K'} → L` agrees with the ambient `𝒪[K] → L` (factoring through `K'`).
-  haveI tower : IsScalarTower ↥𝒪[K] ↥(extensionIntegers K K') L := by
+  have tower : IsScalarTower ↥𝒪[K] ↥(extensionIntegers K K') L := by
     refine IsScalarTower.of_algebraMap_eq (fun r => ?_)
     have lhs : algebraMap ↥𝒪[K] L r = algebraMap K L (r : K) := rfl
     have rhs : algebraMap ↥(extensionIntegers K K') L
@@ -125,11 +125,11 @@ theorem isIntegral_base_iff (x : L) :
       rw [hcoe r, ← IsScalarTower.algebraMap_apply K K' L (r : K)]
     rw [lhs, rhs]
   -- `𝒪_{K'}` is integral over `𝒪[K]` (it is the integral closure of `𝒪[K]` in `K'`).
-  haveI hint : Algebra.IsIntegral ↥𝒪[K] ↥(extensionIntegers K K') := by
+  have hint : Algebra.IsIntegral ↥𝒪[K] ↥(extensionIntegers K K') := by
     refine ⟨fun b => ?_⟩
     have hb : IsIntegral ↥𝒪[K] (algebraMap ↥(extensionIntegers K K') K' b) :=
       (mem_extensionIntegers_iff K K' (b : K')).mp b.2
-    exact (isIntegral_algebraMap_iff Subtype.coe_injective).mp hb
+    exact (isIntegral_algebraMap_iff (B := K')).mp hb
   exact ⟨fun hx => hx.tower_top, fun hx => isIntegral_trans x hx⟩
 
 /-- **Base-independence of `𝒪_L`**: the valuation subring `𝒪_L` is the same whether built over the
@@ -140,10 +140,10 @@ theorem extensionIntegers_base_independent [Algebra.IsSeparable K K'] :
     haveI := isNonarchimedeanLocalField_extension K K'
     haveI : FiniteDimensional K L := Module.Finite.trans K' L
     extensionIntegers K L = extensionIntegers K' L := by
-  letI := extensionValuativeRel K K'
-  letI := ValuativeRel.topologicalSpace K'
-  haveI := isNonarchimedeanLocalField_extension K K'
-  haveI : FiniteDimensional K L := Module.Finite.trans K' L
+  let := extensionValuativeRel K K'
+  let := ValuativeRel.topologicalSpace K'
+  have := isNonarchimedeanLocalField_extension K K'
+  have : FiniteDimensional K L := Module.Finite.trans K' L
   -- self-consistency packaged as a ring iso of the two intermediate bases.
   have hSC : (𝒪[K'] : Subring K') = (extensionIntegers K K').toSubring :=
     integer_extensionValuativeRel_eq K K'
@@ -165,10 +165,10 @@ theorem extensionValuativeRel_base_independent [Algebra.IsSeparable K K'] :
     haveI := isNonarchimedeanLocalField_extension K K'
     haveI : FiniteDimensional K L := Module.Finite.trans K' L
     extensionValuativeRel K L = extensionValuativeRel K' L := by
-  letI := extensionValuativeRel K K'
-  letI := ValuativeRel.topologicalSpace K'
-  haveI := isNonarchimedeanLocalField_extension K K'
-  haveI : FiniteDimensional K L := Module.Finite.trans K' L
+  let := extensionValuativeRel K K'
+  let := ValuativeRel.topologicalSpace K'
+  have := isNonarchimedeanLocalField_extension K K'
+  have : FiniteDimensional K L := Module.Finite.trans K' L
   exact congrArg (fun A : ValuationSubring L => ValuativeRel.ofValuation A.valuation)
     (extensionIntegers_base_independent K K' L)
 

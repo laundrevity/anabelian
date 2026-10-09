@@ -159,15 +159,13 @@ set_option maxHeartbeats 1000000 in
 perfect); the imperfect equal-characteristic case is the tracked remainder in `ROADMAP.md`. -/
 theorem residueReductionHom_surjective [PerfectField K] :
     Function.Surjective (residueReductionHom K) := by
-  letI : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
-  haveI : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
-  haveI := continuousSMul_galoisIntegers K
-  haveI := galoisIntegers_algebraIsInvariant K
+  let : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
+  have : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
+  have := continuousSMul_galoisIntegers K
+  have := galoisIntegers_algebraIsInvariant K
   have hsurj := Ideal.Quotient.stabilizerHom_surjective_of_profinite
     (G := AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
     (maximalIdeal ↥𝒪[K]) (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)))
-  rw [residueReductionHom]
-  simp only [MonoidHom.coe_comp, MulEquiv.coe_toMonoidHom]
   exact (galoisResidueAut K).surjective.comp (hsurj.comp (galoisToStabilizer_surjective K))
 
 set_option synthInstance.maxHeartbeats 1000000 in
@@ -211,10 +209,9 @@ theorem ker_residueReductionHom :
     (maximalIdeal ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K))) (maximalIdeal ↥𝒪[K])
     (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)) (galoisToStabilizer K σ)
   rw [MonoidHom.mem_ker] at h
-  rw [MonoidHom.mem_ker, residueReductionHom]
-  simp only [MonoidHom.coe_comp, Function.comp_apply, MulEquiv.coe_toMonoidHom,
-    EmbeddingLike.map_eq_one_iff]
-  exact h.trans Subgroup.mem_subgroupOf
+  rw [MonoidHom.mem_ker]
+  refine ((galoisResidueAut K).map_eq_one_iff).trans (h.trans ?_)
+  exact Iff.trans AddSubgroup.mem_inertia AddSubgroup.mem_inertia.symm
 
 set_option synthInstance.maxHeartbeats 1000000 in
 -- Expensive stabilizer/MulAction instance search (Pass-20/21 note); search cost, not logic.

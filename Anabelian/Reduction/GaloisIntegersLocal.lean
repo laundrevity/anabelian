@@ -182,19 +182,19 @@ along a `RingEquiv` (`RingEquiv.isLocalRing`). The bridge is over the **same `Va
 the prior bricks use. -/
 theorem isLocalRing_galoisIntegers :
     IsLocalRing ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := by
-  letI := IsTopologicalAddGroup.rightUniformSpace K
-  haveI := isUniformAddGroup_of_addCommGroup (G := K)
-  letI rk : (Valued.v (R := K)).RankOne :=
+  let := IsTopologicalAddGroup.rightUniformSpace K
+  have := isUniformAddGroup_of_addCommGroup (G := K)
+  let rk : (Valued.v (R := K)).RankOne :=
     { hom' := IsRankLeOne.nonempty.some.emb (R := K).comp MonoidWithZeroHom.ValueGroup₀.embedding
       strictMono' := IsRankLeOne.nonempty.some.strictMono.comp
           MonoidWithZeroHom.ValueGroup₀.embedding_strictMono }
-  letI nnf : NontriviallyNormedField K := Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
-  letI nfL : NormedField (AlgebraicClosure K) := spectralNorm.normedField K (AlgebraicClosure K)
-  haveI ultL : IsUltrametricDist (AlgebraicClosure K) :=
+  let nnf : NontriviallyNormedField K := Valued.toNontriviallyNormedField K (ValueGroupWithZero K)
+  let nfL : NormedField (AlgebraicClosure K) := spectralNorm.normedField K (AlgebraicClosure K)
+  have ultL : IsUltrametricDist (AlgebraicClosure K) :=
     IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm
       (isNonarchimedean_spectralNorm (K := K) (L := AlgebraicClosure K))
-  letI vL : Valued (AlgebraicClosure K) ℝ≥0 := NormedField.toValued
-  haveI hlr : IsLocalRing ↥(Valued.integer (AlgebraicClosure K)) := inferInstance
+  let vL : Valued (AlgebraicClosure K) ℝ≥0 := NormedField.toValued
+  have hlr : IsLocalRing ↥(Valued.integer (AlgebraicClosure K)) := inferInstance
   have hmem : ∀ x : AlgebraicClosure K,
       x ∈ integralClosure ↥𝒪[K] (AlgebraicClosure K) ↔
         x ∈ Valued.integer (AlgebraicClosure K) := by

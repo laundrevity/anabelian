@@ -6,6 +6,7 @@ Authors: Conor Mahany
 import Mathlib.FieldTheory.Galois.Infinite
 import Mathlib.FieldTheory.AbsoluteGaloisGroup
 import Mathlib.FieldTheory.Perfect
+import Mathlib.FieldTheory.IsSepClosed
 
 /-!
 # Pass 0 seed lemma: faithfulness of the Galois correspondence

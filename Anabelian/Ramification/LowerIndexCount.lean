@@ -51,8 +51,8 @@ theorem enat_min_coe_eq_sum (x : ℕ∞) (m : ℕ) :
   | succ n ih =>
     rw [Finset.sum_range_succ, ← ih]
     rcases lt_or_ge (n : ℕ∞) x with hlt | hge
-    · rw [if_pos hlt]
-      have h1 : ((n : ℕ) : ℕ∞) + 1 ≤ x := ENat.add_one_le_iff (ENat.coe_ne_top n) |>.mpr hlt
+    · rw [ite_eq_left hlt]
+      have h1 : ((n : ℕ) : ℕ∞) + 1 ≤ x := ENat.add_one_le_iff (ENat.natCast_ne_top n) |>.mpr hlt
       have h2 : min x ((n : ℕ) : ℕ∞) = (n : ℕ∞) := min_eq_right (le_of_lt hlt)
       have h3 : min x (((n + 1 : ℕ)) : ℕ∞) = ((n + 1 : ℕ) : ℕ∞) := by
         refine min_eq_right ?_
@@ -61,7 +61,7 @@ theorem enat_min_coe_eq_sum (x : ℕ∞) (m : ℕ) :
       rw [h2, h3]
       push_cast
       ring
-    · rw [if_neg (not_lt.mpr hge)]
+    · rw [ite_eq_right (not_lt.mpr hge)]
       have h2 : min x ((n : ℕ) : ℕ∞) = x := min_eq_left hge
       have h3 : min x (((n + 1 : ℕ)) : ℕ∞) = x := by
         refine min_eq_left (le_trans hge ?_)

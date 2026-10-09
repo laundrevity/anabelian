@@ -113,7 +113,7 @@ theorem iInf_absoluteUpperRamificationGroup_eq_bot [IsGalois K E]
   set L : FiniteGaloisIntermediateField K E :=
     FiniteGaloisIntermediateField.adjoin K ({x} : Set E) with hL
   -- the restriction of σ to L lies in every G^v(L/K), which is eventually ⊥
-  haveI := isNoetherianRing_extensionIntegers K ↥L
+  have := isNoetherianRing_extensionIntegers K ↥L
   have hsep : (⨅ n : ℕ, IsLocalRing.maximalIdeal
       ↥(extensionIntegers K ↥L) ^ n) = ⊥ :=
     Ideal.iInf_pow_eq_bot_of_isLocalRing _ Ideal.IsPrime.ne_top'

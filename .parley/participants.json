@@ -1,0 +1,79 @@
+{
+  "name": "anabelian",
+  "participants": [
+    {
+      "id": "conor",
+      "kind": "human",
+      "role": "chair",
+      "harness": "human",
+      "latency": "human",
+      "capabilities": [
+        "repo",
+        "shell",
+        "web"
+      ],
+      "branch": "master"
+    },
+    {
+      "id": "claude",
+      "kind": "model",
+      "model": "claude-fable-5-1",
+      "harness": "claude-code",
+      "latency": "minutes",
+      "capabilities": [
+        "repo",
+        "shell",
+        "web"
+      ],
+      "worktree": "../anabelian-claude",
+      "branch": "parley/claude",
+      "inline_diff_lines": 80,
+      "session": "resume",
+      "notes": "default flags: --permission-mode acceptEdits --allowedTools \"Bash(git:*)\". Set harness_args to widen, e.g. [\"--permission-mode\",\"acceptEdits\",\"--allowedTools\",\"Bash(git:*)\",\"Bash(lake:*)\"]; harness_args replaces the defaults",
+      "harness_args": [
+        "--permission-mode",
+        "acceptEdits",
+        "--allowedTools",
+        "Bash(git:*)",
+        "Bash(lake:*)"
+      ],
+      "timeout_s": 10800,
+      "extra_args": [
+        "--model",
+        "fable",
+        "--effort",
+        "max"
+      ]
+    },
+    {
+      "id": "codex",
+      "kind": "model",
+      "model": "gpt-6-astra",
+      "harness": "codex-cli",
+      "latency": "minutes",
+      "capabilities": [
+        "repo",
+        "shell"
+      ],
+      "worktree": "../anabelian-codex",
+      "branch": "parley/codex",
+      "inline_diff_lines": 80,
+      "notes": "set model to whatever codex reports. default flags: --full-auto plus the repo's .git as a writable root; set harness_args to change (it replaces the defaults)",
+      "session": "fresh",
+      "timeout_s": 7200,
+      "extra_args": [
+        "-m",
+        "gpt-6-astra",
+        "-c",
+        "model_reasoning_effort=\"max\""
+      ]
+    },
+    {
+      "id": "dispatch",
+      "kind": "tool",
+      "harness": "dispatch",
+      "latency": "seconds",
+      "notes": "the appender's voice: timeouts, rejected turns, rebase conflicts and summaries are `say` records from dispatch"
+    }
+  ]
+}

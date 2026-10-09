@@ -88,7 +88,8 @@ theorem snake_exact_mid
     rfl
   · intro c hc
     induction c using QuotientGroup.induction_on with | _ x =>
-    rw [MonoidHom.mem_ker, herbrandHMap_mk] at hc
+    replace hc := MonoidHom.mem_ker.mp hc
+    rw [herbrandHMap_mk] at hc
     have hc2 := Subgroup.mem_subgroupOf.mp ((QuotientGroup.eq_one_iff _).mp hc)
     obtain ⟨w'', hw''⟩ := hc2
     have hw''' : g'' w'' = π x.1 := hw''
@@ -148,7 +149,7 @@ theorem snake_exact_top
     rfl
   · intro c hc
     induction c using QuotientGroup.induction_on with | _ x'' =>
-    rw [MonoidHom.mem_ker] at hc
+    replace hc := MonoidHom.mem_ker.mp hc
     obtain ⟨x, hx⟩ := hπ x''.1
     have hT : x ∈ f''.ker.comap π := by
       rw [Subgroup.mem_comap, hx]
@@ -207,7 +208,8 @@ theorem snake_exact_bot
     rw [h9, iota_snakePull]
   · intro c hc
     induction c using QuotientGroup.induction_on with | _ y' =>
-    rw [MonoidHom.mem_ker, herbrandHMap_mk] at hc
+    replace hc := MonoidHom.mem_ker.mp hc
+    rw [herbrandHMap_mk] at hc
     have hc2 := Subgroup.mem_subgroupOf.mp ((QuotientGroup.eq_one_iff _).mp hc)
     obtain ⟨x, hx⟩ := hc2
     have hx' : f x = ι y'.1 := hx

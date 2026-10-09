@@ -77,7 +77,7 @@ theorem herbrandSeq_integral_sub_Icc (g : ℕ → ℝ) {n : ℕ} {a b : ℝ}
     have hxn1 : x < (↑n + 1 : ℝ) := lt_of_le_of_ne (le_trans hmem.2 hb) hx
     have hfloor : ⌊x⌋₊ = n := Nat.floor_eq_on_Ico n x ⟨hxn.le, hxn1⟩
     have hx0 : ¬ x ≤ 0 := not_le.mpr (lt_of_le_of_lt (Nat.cast_nonneg n) hxn)
-    simp only [herbrandIntegrand, herbrandIndex, if_neg hx0, hfloor]
+    simp only [herbrandIntegrand, herbrandIndex, ite_eq_right hx0, hfloor]
   rw [intervalIntegral.integral_congr_ae hae, intervalIntegral.integral_const, smul_eq_mul]
 
 /-- The unit-interval value `∫_n^{n+1} dt/(G_0:G_t) = g_{n+1}/g_0`. -/

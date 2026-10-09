@@ -113,8 +113,8 @@ theorem continuousSMul_galoisIntegers :
     letI : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
     ContinuousSMul (AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K)
       ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := by
-  letI : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
-  haveI : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
+  let : TopologicalSpace ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⊥
+  have : DiscreteTopology ↥(integralClosure ↥𝒪[K] (AlgebraicClosure K)) := ⟨rfl⟩
   rw [continuousSMul_iff_stabilizer_isOpen]
   exact galoisStabilizer_isOpen K
 

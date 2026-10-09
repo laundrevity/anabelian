@@ -46,9 +46,9 @@ finite-dimensional space over the finite `𝓀[K]` is finite. -/
 theorem finite_residueField_extensionIntegers [Algebra.IsSeparable K L] :
     Finite (ResidueField ↥(extensionIntegers K L)) := by
   -- 𝒪_L is module-finite over 𝒪[K] (subalgebra result, transported along the carrier identity)
-  haveI hC : Module.Finite ↥𝒪[K] ↥(integralClosure ↥𝒪[K] L) :=
+  have hC : Module.Finite ↥𝒪[K] ↥(integralClosure ↥𝒪[K] L) :=
     IsIntegralClosure.finite ↥𝒪[K] K L ↥(integralClosure ↥𝒪[K] L)
-  letI : Algebra ↥𝒪[K] ↥(extensionIntegers K L) := (extensionAlgebraMap K L).toAlgebra
+  let : Algebra ↥𝒪[K] ↥(extensionIntegers K L) := (extensionAlgebraMap K L).toAlgebra
   let e : ↥(integralClosure ↥𝒪[K] L) →ₗ[↥𝒪[K]] ↥(extensionIntegers K L) :=
     { toFun := fun y => ⟨y.1, y.2⟩
       map_add' := fun _ _ => rfl
@@ -61,27 +61,19 @@ theorem finite_residueField_extensionIntegers [Algebra.IsSeparable K L] :
         refine h1.trans ?_
         rw [IsScalarTower.algebraMap_apply ↥𝒪[K] K L]
         rfl }
-  haveI hOL : Module.Finite ↥𝒪[K] ↥(extensionIntegers K L) :=
+  have hOL : Module.Finite ↥𝒪[K] ↥(extensionIntegers K L) :=
     Module.Finite.of_surjective e (fun z => ⟨⟨z.1, z.2⟩, rfl⟩)
   -- the residue map is a surjective 𝒪[K]-linear map
-  letI : Algebra ↥𝒪[K] (ResidueField ↥(extensionIntegers K L)) :=
-    ((IsLocalRing.residue ↥(extensionIntegers K L)).comp (extensionAlgebraMap K L)).toAlgebra
   let r : ↥(extensionIntegers K L) →ₗ[↥𝒪[K]] ResidueField ↥(extensionIntegers K L) :=
     { toFun := IsLocalRing.residue ↥(extensionIntegers K L)
       map_add' := fun _ _ => map_add _ _ _
-      map_smul' := fun c z => by
-        change IsLocalRing.residue _ ((extensionAlgebraMap K L c) * z) = _
-        rw [map_mul]
-        rfl }
-  haveI hkL : Module.Finite ↥𝒪[K] (ResidueField ↥(extensionIntegers K L)) :=
+      map_smul' := fun _ _ => rfl }
+  have hkL : Module.Finite ↥𝒪[K] (ResidueField ↥(extensionIntegers K L)) :=
     Module.Finite.of_surjective r Ideal.Quotient.mk_surjective
   -- the action factors through 𝓀[K] (the local-hom brick); restrict scalars
-  letI : Algebra (ResidueField ↥𝒪[K]) (ResidueField ↥(extensionIntegers K L)) :=
-    (ResidueField.map (extensionAlgebraMap K L)).toAlgebra
-  haveI : IsScalarTower ↥𝒪[K] (ResidueField ↥𝒪[K])
-      (ResidueField ↥(extensionIntegers K L)) :=
-    IsScalarTower.of_algebraMap_eq (fun _ => rfl)
-  haveI : Module.Finite (ResidueField ↥𝒪[K]) (ResidueField ↥(extensionIntegers K L)) :=
+  have : IsLocalHom (algebraMap ↥𝒪[K] ↥(extensionIntegers K L)) :=
+    inferInstanceAs (IsLocalHom (extensionAlgebraMap K L))
+  have : Module.Finite (ResidueField ↥𝒪[K]) (ResidueField ↥(extensionIntegers K L)) :=
     Module.Finite.of_restrictScalars_finite ↥𝒪[K] _ _
   exact Module.finite_of_finite (ResidueField ↥𝒪[K])
 
