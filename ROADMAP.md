@@ -5,16 +5,17 @@ rung is marked `NOT-STARTED` / `IN-PROGRESS` / `DONE` with its expected `DEBT` c
 rungs are concrete and near; the top rungs are genuinely multi-year and far.** The distance is not
 compressed — saying so is the precondition for ever covering it.
 
-Status as of **Pass 99 (2026-10-08)**. Inventory evidence for every "Mathlib has / lacks X" claim is
+Status as of **Pass 100 (2026-10-08)**. Inventory evidence for every "Mathlib has / lacks X" claim is
 in `NOTES.md` (with real declaration names and file paths). Axiom classification convention — and the
 anti-drift Reclassification rule — are in `AXIOM_LEDGER.md`.
 
-**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 101 project files; one external dependency
+**Ledger: `0 FOUNDATIONAL / 0 DEBT`; 104 project files; one external dependency
 (`ClassFieldTheory @ 7713795`, ledger "External dependencies"); statement ledger: 1 entry
 (`L34`).** L1's proved scope is unchanged; L2 is complete and consolidated (Passes 83–84); L3.0
 is done (Pass 86); **L3.1–L3.3 and Hasse–Arf are IMPORTED (Pass 98)** and the in-project L3.1
 unit-quotient program is **RETIRED (Pass 99)**; **L3.4 is IN-PROGRESS (Pass 99: `Uⁿ` built,
-statement `L34` ledgered)**; Chebotarev (L4) and R1–R3 remain ahead.
+statement `L34` ledgered; Pass 100: the `n = 0` case `θ(U⁰) = G_0` PROVED, general `n` open)**;
+Chebotarev (L4) and R1–R3 remain ahead.
 
 **The statement ledger (governance mechanism, added Pass 99).** `Anabelian/Statements/` holds
 `Prop`-valued `def`s — the statements of target theorems, audited as *statements* (sources, every
@@ -80,16 +81,30 @@ R1–R3 in particular will be.
 > (`IsNormalizedArtinFamily`, proved to exist and be unique from upstream). A statement, not a
 > theorem ([NOTES Pass 99](NOTES.md#pass-99)).
 >
-> **Next — Pass 100:** open the L3.4 proof program for `L34`: inventory what upstream supplies
-> toward `θ(Uⁿ) = Gⁿ` (norm-index results `FiniteAbelianLocalReciprocityIndex`, the unramified
-> normalization, the conductor results `IsAbelianConductor.*`), fix the proof route (Serre XV §2 via
-> the norm-index computation `(Uⁿ : Uⁿ ∩ N Lˣ)` and Hasse–Arf, vs. Lubin–Tate), and prove the
-> **`n = 0` case** `θ(U⁰) = G⁰ = G_0` (the inertia group) as the first rung. Also ledger the
-> `K^ab`-level statement. The reconstruction targets remain unproved. The historical pass record
-> is in `NOTES.md` and `AXIOM_LEDGER.md`.
+> **P100 (2026-10-08) — `L34` at `n = 0`: the image of the units is the inertia group.**
+> `ClassField/L34Inertia.lean`: **`L34_inertia`** — `θ_{E/K}(U⁰) = G⁰(E/K)` verbatim at `n = 0`,
+> for every normalized Artin family and every finite abelian `E ⊆ K^sep` (`L34Case_zero`;
+> `L34_of_forall_L34Case` reduces `L34` to its instances), with the classical reading
+> `θ(𝒪_Kˣ) = inertiaSubgroup(𝒪_E)`. Route: `⊆` through the inertia field `E₀ = E^{G_0}` — proved
+> **unramified** in `ClassField/InertiaField.lean` by the project's own Pass-73 inertia-fixed
+> residue cover (`f(E/E₀) = 1`) plus the imported `|G_0| = e` and `e·f = [L:K]`
+> (`ClassField/InertiaBridge.lean`, where ClassFieldTheory's inertia subgroup is identified with
+> the project's `G_0(𝒪_L)`) — then upstream's "units are norms from an unramified extension" and
+> the family's coherence; `⊇` by the count `[Kˣ : U⁰·N] = f` (`v(N) = f·ℤ`, imported) against
+> `|Gal| = |G_0|·f`. Upstream inventory and route decision recorded in
+> [NOTES Pass 100](NOTES.md#pass-100). The Frobenius normalization is not needed at `n = 0`.
+> General `n` is open; the `K^ab`-level statement is not yet ledgered.
+>
+> **Next — Pass 101:** `L34` at `n ≥ 1`. Fix the route for the ramified half (Serre XV §2 Prop. 4
+> via the norm-index computation `N_{L/K}(Uⁿ_L) = U^{m}_K` for `n = ψ(m)` and Hasse–Arf, vs. the
+> conductor route through upstream's `IsAbelianConductor.*`), inventory the Pass-99 unit layers
+> `Uⁿ/Uⁿ⁺¹ ≃ 𝓀⁺` and Pass-24/27 characters as the matching source/target graded pieces, and prove
+> the first ramified rung (`n = 1`: `θ(U¹) = G¹`, equivalently the tame quotient `G_0/G_1 ≃ U⁰/U¹`
+> through `θ`). Also ledger the `K^ab`-level statement (deferred from Pass 100). The reconstruction
+> targets remain unproved. The historical pass record is in `NOTES.md` and `AXIOM_LEDGER.md`.
 
 The earlier [Passes 44–93 summary](NOTES.md#pass-93-roadmap-detail) is preserved
-verbatim in NOTES; the Pass-99 header above states the current frontier.
+verbatim in NOTES; the Pass-100 header above states the current frontier.
 
 A structural note on the ladder, because it governs the whole project:
 
@@ -709,7 +724,7 @@ theorem** (quotient-compatibility of `G^v`) and its prerequisites.
 - Discharge: `DEBT` to be discharged, or `FOUNDATIONAL` if scoped out. Classical (Serre, *Local
   Fields*) — formalizable but a real body of work. Citation: J.-P. Serre, *Local Fields*, ch. IV.
 
-### L3 — Local class field theory   ·   **DEPENDENCY (ClassFieldTheory @ 7713795, Pass 98) — L3.1–L3.3 and Hasse–Arf imported; L3.4 IN-PROGRESS (Pass 99: `Uⁿ` built, `L34` ledgered); Chebotarev still open**   ·   DEBT: 0 ledgered (external boundary — ledger "External dependencies")
+### L3 — Local class field theory   ·   **DEPENDENCY (ClassFieldTheory @ 7713795, Pass 98) — L3.1–L3.3 and Hasse–Arf imported; L3.4 IN-PROGRESS (Pass 99: `Uⁿ` built, `L34` ledgered; Pass 100: `n = 0` PROVED, general `n` open); Chebotarev still open**   ·   DEBT: 0 ledgered (external boundary — ledger "External dependencies")
 
 **The Pass-85 inventory** (Mathlib pin of July 2026). PRESENT: group cohomology
 (`RepresentationTheory/Homological/GroupCohomology/`) with explicit `H⁰/H¹/H²`
@@ -774,12 +789,17 @@ only at the L3.3 gate, not before.
   fallback (`FOUNDATIONAL` boundary, honestly labeled) if the wall exceeds the project's
   horizon.
 - **L3.4 — the ramification correspondence** `θ(U^n) = G^n(K^ab/K)` (Serre XV §2)   ·
-  **IN-PROGRESS (Pass 99)**: the source side `Uⁿ` is built (`ClassField/UnitFiltration.lean`),
-  the target side `Gⁿ(𝒪_E)` is identified with upstream's upper groups and carries upper-jump
-  integrality (`ClassField/UpperBridge.lean`), and the finite-level statement is ledgered as
-  **`L34`** (`Statements/L34.lean`, against the Frobenius-normalized Artin family — unique by
-  upstream). Not yet: any case of the proof (first rung: `n = 0`, `θ(U⁰) = G_0`); the `K^ab`
-  form. UNBLOCKED since Pass 98: L3.3 is imported, Hasse–Arf is available in project
+  **IN-PROGRESS — `n = 0` PROVED (Pass 100) / general `n` OPEN**: the source side `Uⁿ` is built
+  (`ClassField/UnitFiltration.lean`, Pass 99), the target side `Gⁿ(𝒪_E)` is identified with
+  upstream's upper groups and carries upper-jump integrality (`ClassField/UpperBridge.lean`,
+  Pass 99), the finite-level statement is ledgered as **`L34`** (`Statements/L34.lean`, against
+  the Frobenius-normalized Artin family — unique by upstream), and **the `n = 0` instance is a
+  theorem** (`ClassField/L34Inertia.lean`: `L34_inertia`, `L34Case_zero`; `θ(U⁰) = G⁰ = G_0 =
+  inertia`), built on `ClassField/InertiaBridge.lean` (`G_0(𝒪_L)` = their inertia, `|G_0| = e`,
+  `e·f = n`) and `ClassField/InertiaField.lean` (the inertia field is unramified; units are norms
+  from it). Not yet: `n ≥ 1` (the ramified half — Hasse–Arf plus the norm-index computation
+  `N(Uⁿ_L) = U^{ψ⁻¹…}_K`, where the Frobenius normalization and the conductor enter); the `K^ab`
+  form; the real-indexed form. UNBLOCKED since Pass 98: L3.3 is imported, Hasse–Arf is available in project
   vocabulary (`hasseArf_herbrandPhi`), and ClassFieldTheory does *not* state the
   correspondence (its conductor-side `IsAbelianConductor.*` results are adjacent). **The R1-relevant piece**: what makes the unit filtration —
   hence the valuation, hence eventually the field — visible in `Gal(K^ab/K)` with its

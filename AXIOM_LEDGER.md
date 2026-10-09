@@ -253,8 +253,11 @@ ledgered here as `FOUNDATIONAL` or `DEBT` like any other.
   `upperRamificationGroup_extensionIntegers_jump_int`, Pass 99);
   `finiteAbelianLocalReciprocity_family_arithmeticFrobenius` and
   `finiteAbelianLocalReciprocity_family_ext` (existence/uniqueness of the normalized Artin family
-  that the statement `L34` quantifies over, Pass 99). Available and re-audited but *not yet
-  used*: the rest of the table.
+  that the statement `L34` quantifies over, Pass 99); **Pass 100** (the `n = 0` case of `L34`):
+  the seven rows marked "impl. tree" below — their inertia subgroup with `|inertia| = e`, the
+  fundamental identity `e·f = [L:K]`, the integral-closure / module-finiteness instances, the
+  unramified norm-group computation, and `v(N_{L/K}Lˣ) = f·ℤ`. Available and re-audited but
+  *not yet used*: the rest of the table.
 
 | imported theorem | encodes | `#print axioms` (this build) | caveat |
 |---|---|---|---|
@@ -268,11 +271,23 @@ ledgered here as `FOUNDATIONAL` or `DEBT` like any other.
 | `ClassFieldTheory.finiteAbelianGlobalReciprocity` | `Nonempty (FiniteAbelianReciprocityData K L)` — a modulus, Artin map on ray classes, surjective, Frobenius at unramified primes | standard-only | existential (`Nonempty`) |
 | `ClassFieldTheory.topologicalGlobalReciprocity` | `Nonempty (idele-class connected-component quotient ≃ₜ* G_K^ab)` | standard-only | `Nonempty`, not the canonical map |
 | `ClassFieldTheory.kroneckerWeber` | abelian `L/ℚ` embeds in some `ℚ(ζ_n)` | standard-only | — |
+| `LocalFieldTheory.galoisGroupMaximalIdealInertiaOfIsIntegralClosure_card_eq_ramificationIdx` (impl. tree, `ValuedFieldTheory/…/ResidueGalois.lean`) | `|inertia(𝓂[L])| = 𝓂[L].ramificationIdx 𝒪[K]` for Galois `L/K` (Mathlib's `Ideal.card_inertia_eq_ramificationIdxIn`, instantiated) | standard-only (re-audited in `ClassField/InertiaBridge.lean`) | **used** Pass 100 (`card_ramificationGroup_zero_eq_ramificationIdx`); their inertia subgroup is identified with the project's `G_0(𝒪_L)` (`inertia_eq_map_ramificationGroup_zero`); needs `[IsIntegralClosure 𝒪[L] 𝒪[K] L]` |
+| `LocalFieldTheory.maximalIdeal_ramificationIdx_mul_residue_finrank_eq_finrank_of_isIntegralClosure` (impl. tree, `…/ResidueExtension.lean`) | the fundamental identity `e · [𝓀_L : 𝓀_K] = [L : K]` (Serre I §4 Prop. 10, complete case) | standard-only (re-audited) | **used** Pass 100 (`ramificationIdx_mul_finrank_residueField`); stated with `Ideal.ramificationIdx'`, converted via `Ideal.ramificationIdx'_eq_ramificationIdx` |
+| `LocalFieldTheory.localCompleteDVF_integerRing_isIntegralClosure`, `LocalFieldTheory.integerRing_moduleFinite_of_isIntegralClosure` (impl. tree) | `𝒪[L]` is the integral closure of `𝒪[K]` in `L`, and finite over it, for finite separable `L/K` | standard-only (re-audited) | **used** Pass 100 as the instance package the rows above need; the project's own `𝒪_L = extensionIntegers K L` (Pass 43) is the same ring, so this duplicates Pass 29–37 content in their vocabulary |
+| `LocalClassFieldTheory.normSubgroup_eq_unramifiedNormSubgroup_of_isIntegralClosure` (+ `mem_unramifiedNormSubgroup_iff`, definitional) (impl. tree, `LocalClassFieldTheory/Finite/LocalReciprocity/UnramifiedNormComparison.lean`) | for unramified Galois `L/K`: `N_{L/K}Lˣ = {x ∣ [L:K] ∣ v(x)}` (Serre V §2 Prop. 3: **units are norms from an unramified extension**) | standard-only (re-audited in `ClassField/InertiaField.lean`) | **used** Pass 100 (`unitFiltration_zero_le_fieldNormSubgroup`); its proof *uses* their finite reciprocity (norm quotient has order `[L:K]`), so this row is downstream of the reciprocity rows |
+| `LocalClassFieldTheory.valuationMap_comp_normUnits_range_eq_zmultiples_of_isSeparable` (impl. tree, `…/SeparableNormValuation.lean`) | `v_K(N_{L/K}Lˣ) = f·ℤ`, `f = [𝓀_L : 𝓀_K]` (`v_K ∘ N = f · v_L`, `v_L` surjective) | standard-only (re-audited in `ClassField/L34Inertia.lean`) | **used** Pass 100 (`index_unitFiltration_zero_sup_fieldNormSubgroup`: `[Kˣ : U⁰·N] = f`) |
+| `LocalFieldTheory.IsNonarchimedeanLocalField.{valuationMap, valuationMap_surjective, integerUnitsToFieldUnits_mem_range_iff_valuationMap_eq_zero, valuationMap_ofMul_mul, valuationMap_ofMul_inv}` (impl. tree, `…/ValuationExactSequence.lean`) | the normalized valuation `Kˣ → ℤ`: surjective, kernel `𝒪_Kˣ`, a hom | standard-only | **used** Pass 100 (elementary; the project's Pass-93 valuation sequence is the DVR-generic analogue) |
 
 - **What this dependency does *not* supply (verified absent in its `Theorems/` tree):**
   Chebotarev density; the local ramification correspondence `θ(U^n) = G^n(K^ab/K)` as such
   (conductor-side statements `IsAbelianConductor.*` are adjacent) — now the project's ledgered
-  statement `L34` (Pass 99); any anabelian statement.
+  statement `L34` (Pass 99), **whose `n = 0` case the project proved in Pass 100**; "norm group
+  `⊇ U⁰` ⟹ unramified"; `G_0(L/K) ↠ G_0(M/K)` for subextensions; any anabelian statement.
+- **Implementation-tree rows (Pass 100).** The Pass-100 rows are read from upstream's
+  implementation directories (`LocalClassFieldTheory/`, `ValuedFieldTheory/`), not from
+  `Theorems/`; they are re-audited by `#print axioms` in the consuming project files exactly like
+  the public headlines, and a bump of the dependency must re-verify their *names* as well as their
+  axioms (implementation names are less stable than `Theorems/` names).
 - **Why not a ledger axiom:** every row is standard-only in the kernel — there is nothing to
   classify. **Why listed anyway:** the project did not prove them, and CLAUDE.md's measure of
   progress is what the project *earns*; this table keeps the imported/earned line visible.
@@ -3943,6 +3958,37 @@ only — `ramificationIdx_comapRingHom` now spells Mathlib's renamed constant
 standard-only; zero project `axiom` declarations, zero `sorry`/`admit`. Historical NOTES and
 ledger entries untouched; README/ROADMAP/HANDOFF move to Pass 97 with Pass 98 (the design's P97
 row, the abstract unit filtration) next.
+
+**Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
+
+### Pass 100 (2026-10-08) — `L34` at `n = 0`: `θ(U⁰) = G_0`, the image of the units is inertia; count stays 0 / 0
+
+**No axiom added, none needed.** Three new files (104 project files):
+`Anabelian/ClassField/InertiaBridge.lean` — ClassFieldTheory's inertia subgroup of `Gal(L/K)` **is**
+the project's `G_0(𝒪_L)` (`inertia_eq_map_ramificationGroup_zero`), hence `|G_0(𝒪_L)| = e`
+(`card_ramificationGroup_zero_eq_ramificationIdx`), `e·f = [L:K]`
+(`ramificationIdx_mul_finrank_residueField`), `|Gal(L/K)| = |G_0|·f`;
+`Anabelian/ClassField/InertiaField.lean` — **the fixed field of inertia is unramified**
+(`ramificationIdx_eq_one_of_fieldRange_eq_fixedField`; via Pass 73's inertia-fixed residue cover,
+no `G_0 ↠ G_0` surjectivity needed) and **units are norms from an unramified extension**
+(`unitFiltration_zero_le_fieldNormSubgroup`, upstream's norm-group computation);
+`Anabelian/ClassField/L34Inertia.lean` — **`L34_inertia`**: `θ_{E/K}(U⁰) = G⁰(E/K)` verbatim at
+`n = 0` for every normalized Artin family (`L34Case_zero`; `L34_of_forall_L34Case : (∀ n, L34Case n)
+→ L34`), and the classical reading `θ(𝒪_Kˣ) = inertiaSubgroup` — `⊆` by coherence through the
+unramified `E^{G_0}`, `⊇` by the count `[Kˣ : U⁰·N] = f`. Full record:
+[NOTES Pass 100](NOTES.md#pass-100).
+
+**External dependencies table extended** with the seven newly consumed upstream theorems (all
+implementation-tree names, all standard-only, re-audited in the consuming files): their inertia
+subgroup and `|inertia| = e`; `e·f = [L:K]`; the integral-closure / module-finiteness instances;
+`N_{L/K}Lˣ = {x ∣ [L:K] ∣ v(x)}` for unramified `L/K`; `v(N_{L/K}Lˣ) = f·ℤ`; the normalized
+valuation's elementary API. The family's Frobenius-normalization clause (iii) is *not* used at
+`n = 0`.
+
+**Verification:** `lake build` 10548 jobs, zero warnings; `scripts/preflight.sh` CLEAN; every
+project `#print axioms` and the consumed imported theorems standard-only. No
+`sorry`/`axiom`/`native_decide`, no heartbeat change, no `respectTransparency` override; all
+pre-existing statements unchanged; `Statements/L34.lean` untouched.
 
 **Ledger delta: 0 / 0.** Active count stays **0 FOUNDATIONAL / 0 DEBT**.
 

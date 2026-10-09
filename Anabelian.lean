@@ -9,6 +9,9 @@ import Anabelian.ClassField.ExactCycle
 import Anabelian.ClassField.FiltrationLifting
 import Anabelian.ClassField.FiniteAcyclic
 import Anabelian.ClassField.HerbrandQuotient
+import Anabelian.ClassField.InertiaBridge
+import Anabelian.ClassField.InertiaField
+import Anabelian.ClassField.L34Inertia
 import Anabelian.ClassField.MaximalAbelian
 import Anabelian.ClassField.Multiplicativity
 import Anabelian.ClassField.RegularModule
