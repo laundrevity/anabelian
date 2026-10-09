@@ -16,3 +16,8 @@ rev = "065356127b1dc0016f66b7283ce0ce2c4055aa55"
 
 [[lean_lib]]
 name = "Anabelian"
+
+[[require]]
+name = "ClassFieldTheory"
+git = "https://github.com/n-yamaguchi-0729/ClassFieldTheory"
+rev = "7713795234690681b4406ae198b07aa95e82716a"
